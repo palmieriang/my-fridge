@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import { formatDate, getCountdownParts } from '../api';
+import { formatDate, getCountdownParts } from '../api/api';
 
 const styles = StyleSheet.create({
     card: {

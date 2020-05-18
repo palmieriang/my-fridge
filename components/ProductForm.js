@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableHighlight, TextInput, StyleSheet } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { formatDateTime, saveProduct, deleteProduct } from '../api';
+import { formatDateTime, saveProduct, deleteProduct } from '../api/api';
 
 const styles = StyleSheet.create({
     fieldContainer: {
@@ -24,6 +24,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 5,
+    },
+    buttonDelete: {
+        backgroundColor: '#dc3545',
     },
     buttonText: {
         color: '#fff',
@@ -108,7 +111,7 @@ const ProductForm = ({ navigation, route }) => {
             </TouchableHighlight>
             <TouchableHighlight
                 onPress={handleDeletePress}
-                style={styles.button}
+                style={[styles.button, styles.buttonDelete]}
             >
                 <Text style={styles.buttonText}>Delete</Text>
             </TouchableHighlight>
