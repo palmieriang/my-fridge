@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import { getProducts, getProductById } from '../api';
+import { getProducts, getProductById } from '../api/api';
 
 import ProductCard from './ProductCard';
 
