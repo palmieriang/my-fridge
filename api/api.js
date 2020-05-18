@@ -2,7 +2,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import Constants from 'expo-constants';
-import { seed } from './utils/uuidSeed';
+import { seed } from '../utils/uuidSeed';
 
 const { manifest } = Constants;
 
