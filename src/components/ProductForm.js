@@ -83,7 +83,7 @@ const ProductForm = ({ navigation, route }) => {
                         inputIOS: [styles.text, styles.borderTop],
                         inputAndroid: [styles.text, styles.borderTop],
                     }}
-                    value={existingPlace}
+                    value={place}
                     placeholder={{label: 'Where do you want to add it?'}}
                     onValueChange={(itemValue) => setPlace(itemValue)}
                     items={[
