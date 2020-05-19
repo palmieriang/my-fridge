@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableHighlight, TextInput, StyleSheet } from 'react-native';
+import { View,
+    Text, TouchableHighlight,
+    TextInput,
+    StyleSheet,
+    Picker
+} from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { formatDateTime, saveProduct, deleteProduct } from '../api/api';
+import RNPickerSelect from 'react-native-picker-select';
+import { formatDateTime, saveProduct, deleteProduct } from '../../api/api';
 
 const styles = StyleSheet.create({
     fieldContainer: {
@@ -43,10 +49,12 @@ const ProductForm = ({ navigation, route }) => {
 
     const existingName = params.product?.name || '';
     const existingDate = params.product?.date || '';
+    const existingPlace = params.product?.place || '';
     const existingId = params.product?.id || '';
 
     const [name, setName] = useState('' || existingName);
     const [date, setDate] = useState('' || existingDate);
+    const [place, setPlace] = useState('' || existingPlace);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
     const handleChangeName = (value) => {
@@ -67,9 +75,12 @@ const ProductForm = ({ navigation, route }) => {
     }
 
     const handleAddPress = () => {
-        console.log('Item added');
-        saveProduct(name, date, existingId)
+        if(name.length >= 3 && date) {
+            saveProduct(name, date, place, existingId)
             .then(() => navigation.navigate('list'));
+
+            console.log('Item added');
+        }
     }
 
     const handleDeletePress = () => {
@@ -101,6 +112,18 @@ const ProductForm = ({ navigation, route }) => {
                     mode="datetime"
                     onConfirm={handleDatePicked}
                     onCancel={handleDatePickerHide}
+                />
+                <RNPickerSelect
+                    style={{
+                        inputIOS: [styles.text, styles.borderTop],
+                        inputAndroid: [styles.text, styles.borderTop],
+                    }}
+                    placeholder={{label: 'Where do you want to add it?'}}
+                    onValueChange={(itemValue) => setPlace(itemValue)}
+                    items={[
+                        { label: 'Fridge', value: 'fridge', key: 'fridge' },
+                        { label: 'Freezer', value: 'freezer', key: 'freezer' },
+                    ]}
                 />
             </View>
             <TouchableHighlight

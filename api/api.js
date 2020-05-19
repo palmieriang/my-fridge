@@ -2,7 +2,7 @@ import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import Constants from 'expo-constants';
-import { seed } from '../utils/uuidSeed';
+import { seed } from '../src/utils/uuidSeed';
 
 const { manifest } = Constants;
 
@@ -12,8 +12,9 @@ const api = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts
 
 const url = `http://${api}/products/`;
 
-export function getProducts() {
-  return fetch(url)
+export function getProducts(place) {
+  console.info('place from api', place);
+  return fetch(`${url}?place=${place}`)
     .then(response => response.json())
     .then(products => products.map(product => ({ ...product, date: new Date(product.date) })))
     .catch(error => console.error('Error:', error));
@@ -25,13 +26,14 @@ export function getProductById(id) {
     .catch(error => console.error('Error:', error));
 }
 
-export function saveProduct(name, date, id) {
+export function saveProduct(name, date, place, id) {
   if(id) {
     return fetch(url+id, {
       method: 'PUT',
       body: JSON.stringify({
         name,
         date,
+        place,
         id: id,
       }),
       headers: new Headers({
@@ -46,6 +48,7 @@ export function saveProduct(name, date, id) {
     body: JSON.stringify({
       name,
       date,
+      place,
       id: uuidv4({ random: seed() }),
     }),
     headers: new Headers({

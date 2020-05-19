@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import { getProducts, getProductById } from '../api/api';
+import { getProducts, getProductById } from '../../api/api';
 
 import ProductCard from './ProductCard';
 
@@ -13,12 +13,13 @@ const styles = StyleSheet.create({
     }
 });
 
-const ProductList = ({ navigation }) => {
+const ProductList = ({ navigation, route }) => {
+    const { place } = route.params;
     const [productList, setProductList] = useState([]);
 
     useEffect(() => {
         const updateState = navigation.addListener('focus', () => {
-            getProducts()
+            getProducts(place)
             .then(products => setProductList(products.map(product => ({
                 ...product,
                 timer: Date.now(),
