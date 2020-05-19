@@ -5,14 +5,6 @@ import { getProducts, getProductById } from '../../api/api';
 
 import ProductCard from './ProductCard';
 
-const styles = StyleSheet.create({
-    list: {
-        flex: 1,
-        paddingTop: 20,
-        backgroundColor: '#F3F3F3',
-    }
-});
-
 const ProductList = ({ navigation, route }) => {
     const { place } = route.params;
     const [productList, setProductList] = useState([]);
@@ -71,5 +63,13 @@ const ProductList = ({ navigation, route }) => {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    list: {
+        flex: 1,
+        paddingTop: 20,
+        backgroundColor: '#F3F3F3',
+    }
+});
 
 export default ProductList;

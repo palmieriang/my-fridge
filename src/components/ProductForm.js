@@ -9,41 +9,6 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { formatDateTime, saveProduct, deleteProduct } from '../../api/api';
 
-const styles = StyleSheet.create({
-    fieldContainer: {
-        marginTop: 20,
-        marginBottom: 20,
-        backgroundColor: '#fff',
-    },
-    text: {
-        height: 40,
-        margin: 0,
-        marginRight: 7,
-        paddingLeft: 10,
-    },
-    button: {
-        height: 50,
-        backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
-        alignSelf: 'stretch',
-        margin: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 5,
-    },
-    buttonDelete: {
-        backgroundColor: '#dc3545',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-    borderTop: {
-        borderColor: '#edeeef',
-        borderTopWidth: 0.5,
-    },
-});
-
 const ProductForm = ({ navigation, route }) => {
     const { params } = route;
 
@@ -75,7 +40,7 @@ const ProductForm = ({ navigation, route }) => {
     }
 
     const handleAddPress = () => {
-        if(name.length >= 3 && date) {
+        if(name.length >= 3 && date && place) {
             saveProduct(name, date, place, existingId)
             .then(() => navigation.navigate('list'));
 
@@ -141,5 +106,40 @@ const ProductForm = ({ navigation, route }) => {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    fieldContainer: {
+        marginTop: 20,
+        marginBottom: 20,
+        backgroundColor: '#fff',
+    },
+    text: {
+        height: 40,
+        margin: 0,
+        marginRight: 7,
+        paddingLeft: 10,
+    },
+    button: {
+        height: 50,
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        alignSelf: 'stretch',
+        margin: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5,
+    },
+    buttonDelete: {
+        backgroundColor: '#dc3545',
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 18,
+    },
+    borderTop: {
+        borderColor: '#edeeef',
+        borderTopWidth: 0.5,
+    },
+});
 
 export default ProductForm;
