@@ -83,6 +83,7 @@ const ProductForm = ({ navigation, route }) => {
                         inputIOS: [styles.text, styles.borderTop],
                         inputAndroid: [styles.text, styles.borderTop],
                     }}
+                    value={existingPlace}
                     placeholder={{label: 'Where do you want to add it?'}}
                     onValueChange={(itemValue) => setPlace(itemValue)}
                     items={[
@@ -114,7 +115,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     text: {
-        height: 40,
+        height: 50,
         margin: 0,
         marginRight: 7,
         paddingLeft: 10,
