@@ -2,6 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import ProductList from '../components/ProductList';
 import ProductForm from '../components/ProductForm';
+import Settings from '../components/Settings';
 
 const Stack = createStackNavigator();
 
@@ -39,4 +40,16 @@ export function FreezerStackScreen() {
         />
       </Stack.Navigator>
     );
+}
+
+export function SettingsStackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="settings"
+        component={Settings}
+        options={{ title: 'Settings' }}
+      />
+    </Stack.Navigator>
+  );
 }
