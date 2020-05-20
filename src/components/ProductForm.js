@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { View,
-    Text, TouchableHighlight,
+    Text,
+    TouchableHighlight,
     TextInput,
-    StyleSheet,
-    Picker
+    StyleSheet
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';

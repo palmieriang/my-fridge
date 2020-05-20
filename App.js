@@ -4,7 +4,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { YellowBox } from 'react-native';
 
-import { FridgeStackScreen, FreezerStackScreen } from './src/navigation/navigation';
+import {
+  FridgeStackScreen,
+  FreezerStackScreen,
+  SettingsStackScreen
+} from './src/navigation/navigation';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -19,6 +23,7 @@ export default function App() {
       <Tab.Navigator>
         <Tab.Screen name="Fridge" component={FridgeStackScreen} />
         <Tab.Screen name="Freezer" component={FreezerStackScreen} />
+        <Tab.Screen name="Settings" component={SettingsStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
