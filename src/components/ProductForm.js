@@ -44,7 +44,7 @@ const ProductForm = ({ navigation, route }) => {
     const handleAddPress = () => {
         if(name.length >= 3 && date && place) {
             saveProduct(name, date, place, existingId)
-            .then(() => navigation.navigate('list', { place: 'freezer' }));
+            .then(() => navigation.navigate('list'));
 
             console.log('Item added');
         }
