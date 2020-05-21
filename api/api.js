@@ -13,7 +13,6 @@ const api = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts
 const url = `http://${api}/products/`;
 
 export function getProducts(place) {
-  console.info('place from api', place);
   return fetch(`${url}?place=${place}`)
     .then(response => response.json())
     .then(products => products.map(product => ({ ...product, date: new Date(product.date) })))

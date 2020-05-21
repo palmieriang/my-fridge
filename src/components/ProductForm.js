@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View,
     Text,
     TouchableHighlight,
@@ -8,9 +8,11 @@ import { View,
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { formatDateTime, saveProduct, deleteProduct } from '../../api/api';
+import { LocalizationContext } from '../localization/localization';
 
 const ProductForm = ({ navigation, route }) => {
     const { params } = route;
+    const { t } = useContext(LocalizationContext);
 
     const existingName = params.product?.name || '';
     const existingDate = params.product?.date || '';
@@ -42,7 +44,7 @@ const ProductForm = ({ navigation, route }) => {
     const handleAddPress = () => {
         if(name.length >= 3 && date && place) {
             saveProduct(name, date, place, existingId)
-            .then(() => navigation.navigate('list'));
+            .then(() => navigation.navigate('list', { place: 'freezer' }));
 
             console.log('Item added');
         }
@@ -59,14 +61,14 @@ const ProductForm = ({ navigation, route }) => {
             <View style={styles.fieldContainer}>
                 <TextInput
                     style={styles.text}
-                    placeholder="Product name"
+                    placeholder={t('product')}
                     spellCheck={false}
                     value={name}
                     onChangeText={handleChangeName}
                 />
                 <TextInput
                     style={[styles.text, styles.borderTop]}
-                    placeholder="Expiring date"
+                    placeholder={t('date')}
                     spellCheck={false}
                     value={formatDateTime(date.toString())}
                     editable={!showDatePicker}
@@ -84,7 +86,7 @@ const ProductForm = ({ navigation, route }) => {
                         inputAndroid: [styles.text, styles.borderTop],
                     }}
                     value={place}
-                    placeholder={{label: 'Where do you want to add it?'}}
+                    placeholder={{label: t('place')}}
                     onValueChange={(itemValue) => setPlace(itemValue)}
                     items={[
                         { label: 'Fridge', value: 'fridge', key: 'fridge' },
@@ -96,13 +98,13 @@ const ProductForm = ({ navigation, route }) => {
                 onPress={handleAddPress}
                 style={styles.button}
             >
-                <Text style={styles.buttonText}>Add</Text>
+                <Text style={styles.buttonText}>{t('add')}</Text>
             </TouchableHighlight>
             <TouchableHighlight
                 onPress={handleDeletePress}
                 style={[styles.button, styles.buttonDelete]}
             >
-                <Text style={styles.buttonText}>Delete</Text>
+                <Text style={styles.buttonText}>{t('delete')}</Text>
             </TouchableHighlight>
         </View>
     );
