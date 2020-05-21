@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React, {
-  createContext,
   useState,
   useMemo
 } from 'react';
@@ -36,11 +35,11 @@ export default function App() {
     <LocalizationContext.Provider value={localizationContext}>
       <NavigationContainer>
         <Tab.Navigator>
-          <Tab.Screen name="Fridge" component={FridgeStackScreen} />
+          <Tab.Screen name={localizationContext.t('fridge')} component={FridgeStackScreen} />
           <Tab.Screen name="Freezer" component={FreezerStackScreen} />
-          <Tab.Screen name="Settings" component={SettingsStackScreen} />
+          <Tab.Screen name={localizationContext.t('settings')} component={SettingsStackScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </LocalizationContext.Provider>
-    );
+  );
 }

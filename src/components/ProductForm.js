@@ -86,11 +86,11 @@ const ProductForm = ({ navigation, route }) => {
                         inputAndroid: [styles.text, styles.borderTop],
                     }}
                     value={place}
-                    placeholder={{label: t('place')}}
+                    placeholder={{label: t('choosePlace')}}
                     onValueChange={(itemValue) => setPlace(itemValue)}
                     items={[
-                        { label: 'Fridge', value: 'fridge', key: 'fridge' },
-                        { label: 'Freezer', value: 'freezer', key: 'freezer' },
+                        { label: t('fridge'), value: 'fridge', key: 'fridge' },
+                        { label: t('freezer'), value: 'freezer', key: 'freezer' },
                     ]}
                 />
             </View>

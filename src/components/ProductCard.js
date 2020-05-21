@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { formatDate, getCountdownParts } from '../../api/api';
+import { LocalizationContext } from '../localization/localization';
 
 const ProductCard = ({ product, changeProduct }) => {
+    const { t } = useContext(LocalizationContext);
     const {
         days,
         hours,
@@ -30,25 +32,25 @@ const ProductCard = ({ product, changeProduct }) => {
                             style={styles.counter}
                         >
                             <Text style={styles.counterText}>{days}</Text>
-                            <Text style={styles.counterLabel}>DAYS</Text>
+                            <Text style={styles.counterLabel}>{t('days').toUpperCase()}</Text>
                         </View>
                         <View
                             style={styles.counter}
                         >
                             <Text style={styles.counterText}>{hours}</Text>
-                            <Text style={styles.counterLabel}>HOURS</Text>
+                            <Text style={styles.counterLabel}>{t('hours').toUpperCase()}</Text>
                         </View>
                         <View
                             style={styles.counter}
                         >
                             <Text style={styles.counterText}>{minutes}</Text>
-                            <Text style={styles.counterLabel}>MINUTES</Text>
+                            <Text style={styles.counterLabel}>{t('minutes').toUpperCase()}</Text>
                         </View>
                         <View
                             style={styles.counter}
                         >
                             <Text style={styles.counterText}>{seconds}</Text>
-                            <Text style={styles.counterLabel}>SECONDS</Text>
+                            <Text style={styles.counterLabel}>{t('seconds').toUpperCase()}</Text>
                         </View>
                     </View>
                 </View>
