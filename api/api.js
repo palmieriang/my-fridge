@@ -16,13 +16,13 @@ export function getProducts(place) {
   return fetch(`${url}?place=${place}`)
     .then(response => response.json())
     .then(products => products.map(product => ({ ...product, date: new Date(product.date) })))
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.log('Error making server request: ', error));
 }
 
 export function getProductById(id) {
   return fetch(url+id)
     .then(response => response.json())
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.log('Error getting product by ID: ', error));
 }
 
 export function saveProduct(name, date, place, id) {
@@ -40,7 +40,7 @@ export function saveProduct(name, date, place, id) {
       })
     })
     .then(res => res.json())
-    .catch(error => console.error('Error:', error));
+    .catch(error => console.log('Error modifying product: ', error));
   }
   return fetch(url, {
     method: 'POST',
@@ -55,7 +55,7 @@ export function saveProduct(name, date, place, id) {
     })
   })
   .then(res => res.json())
-  .catch(error => console.error('Error:', error));
+  .catch(error => console.log('Error saving product: ', error));
 }
 
 export function deleteProduct(id) {
@@ -63,7 +63,7 @@ export function deleteProduct(id) {
     method: 'DELETE',
   })
   .then(res => res.json())
-  .catch(error => console.error('Error:', error));
+  .catch(error => console.log('Error deleting product: ', error));
 }
 
 
