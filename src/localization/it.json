@@ -1,0 +1,18 @@
+{
+    "title":"Il mio frigo",
+    "settings":"Impostazioni",
+    "foo":"Fou",
+    "bar":"Bár {{someValue}}",
+    "product":"Nome del prodotto",
+    "date":"Data di scadenza",
+    "choosePlace":"Dove vuoi aggiungerlo?",
+    "add":"Aggiungi",
+    "delete":"Rimuovi",
+    "fridge":"Frigo",
+    "freezer":"Freezer",
+    "days":"Giorni",
+    "hours":"Ore",
+    "minutes":"Minuti",
+    "seconds":"Secondi",
+    "addItem":"Aggiungi"
+}

@@ -1,0 +1,18 @@
+{
+    "title":"My fridge",
+    "settings":"Settings",
+    "foo":"Foo",
+    "bar":"Bar {{someValue}}",
+    "product":"Product name",
+    "date":"Expiring date",
+    "choosePlace":"Where do you want to add it?",
+    "add":"Add",
+    "delete":"Delete",
+    "fridge":"Fridge",
+    "freezer":"Freezer",
+    "days":"Days",
+    "hours":"Hours",
+    "minutes":"Minutes",
+    "seconds":"Seconds",
+    "addItem":"Add item"
+}
