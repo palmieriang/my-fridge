@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { FlatList, StyleSheet, View } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import { getProducts, getProductById } from '../../api/api';
+import { LocalizationContext } from '../localization/localization';
 
 import ProductCard from './ProductCard';
 
 const ProductList = ({ navigation, route }) => {
+    const { t } = useContext(LocalizationContext);
     const { place } = route.params;
     const [productList, setProductList] = useState([]);
 
@@ -15,7 +17,8 @@ const ProductList = ({ navigation, route }) => {
             .then(products => setProductList(products.map(product => ({
                 ...product,
                 timer: Date.now(),
-            }))));
+            }))))
+            .catch(error => console.log('Error on get products list: ', error));
         });
         return updateState;
     }, [navigation]);
@@ -37,7 +40,7 @@ const ProductList = ({ navigation, route }) => {
     const handleChangeProduct = (id) => {
         getProductById(id)
             .then((product) => navigation.navigate('form', {product}))
-            .catch(error => console.error('Error:', error));
+            .catch(error => console.log('Error: ', error));
     };
 
     const handleAddProduct = () => {
@@ -46,13 +49,17 @@ const ProductList = ({ navigation, route }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <FlatList
-                key="list"
-                style={styles.list}
-                data={productList}
-                renderItem={({ item }) => <ProductCard product={item} key={item.id} changeProduct={handleChangeProduct}  />}
-                keyExtractor={item => item.id}
-            />
+            {productList.length > 0 ? (
+                <FlatList
+                    key="list"
+                    style={styles.list}
+                    data={productList}
+                    renderItem={({ item }) => <ProductCard product={item} key={item.id} changeProduct={handleChangeProduct}  />}
+                    keyExtractor={item => item.id}
+                />
+            ) : (
+                <Text style={styles.text}>{t('error')}</Text>
+            )}
 
             <ActionButton
                 key="fab"
@@ -69,6 +76,13 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingTop: 20,
         backgroundColor: '#F3F3F3',
+    },
+    text: {
+        height: 50,
+        margin: 0,
+        marginRight: 7,
+        paddingLeft: 20,
+        marginTop: 20,
     }
 });
 

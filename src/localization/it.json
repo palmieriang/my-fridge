@@ -14,5 +14,6 @@
     "hours":"Ore",
     "minutes":"Minuti",
     "seconds":"Secondi",
-    "addItem":"Aggiungi"
+    "addItem":"Aggiungi",
+    "error":"Assicurati che il server sia in esecuzione: npm run backend oppure, inizia ad aggiungere prodotti al frigorifero."
 }
