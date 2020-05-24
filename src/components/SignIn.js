@@ -7,33 +7,53 @@ import {
     View
 } from 'react-native';
 import { AuthContext } from '../authentication/authentication';
+import LottieAnimation from '../animations/LottieAnimation';
 
 const SignIn = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [playAnimation, setPlayAnimation] = useState(false);
 
     const { signIn } = useContext(AuthContext);
 
+    const handleSignIn = () => {
+        if(username.length > 3 && password.length > 3) {
+            setPlayAnimation(true);
+        }
+    }
+
+    const signInAfterAnimation = () => {
+        signIn({ username, password })
+    }
+
     return (
         <View style={{ flex: 1 }}>
-            <Text style={styles.text}>SignIn</Text>
+            <View style={styles.animationContainer}>
+                <LottieAnimation
+                    animationEnd={signInAfterAnimation}
+                    autoplay={false}
+                    loop={false}
+                    name="door"
+                    play={playAnimation}
+                />
+            </View>
             <View style={styles.fieldContainer}>
                 <TextInput
                     style={styles.text}
-                    placeholder="Username"
+                    placeholder="Username (minimum 3 characters)"
                     value={username}
                     onChangeText={setUsername}
                 />
                 <TextInput
                     style={[styles.text, styles.borderTop]}
-                    placeholder="Password"
+                    placeholder="Password (minimum 3 characters)"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
                 />
             </View>
             <TouchableHighlight
-                onPress={() => signIn({ username, password })}
+                onPress={handleSignIn}
                 style={styles.button}
             >
                 <Text style={styles.buttonText}>Sign in</Text>
@@ -71,6 +91,10 @@ const styles = StyleSheet.create({
     borderTop: {
         borderColor: '#edeeef',
         borderTopWidth: 0.5,
+    },
+    animationContainer: {
+        backgroundColor: '#fff',
+        height: 450,
     },
 });
 
