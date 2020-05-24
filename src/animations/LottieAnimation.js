@@ -15,17 +15,13 @@ const LottieAnimation = ({ loop, name, play, animationEnd }) => {
         }
     }, [play]);
 
-    const handleAnimationFinish = () => {
-        animationEnd();
-    }
-
     if (name in ANIMATIONS) {
         return (
             <LottieView
                 ref={lottieRef}
                 source={ANIMATIONS[name]}
                 loop={loop}
-                onAnimationFinish={handleAnimationFinish}
+                onAnimationFinish={animationEnd}
             />
         );
     }
