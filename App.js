@@ -101,7 +101,6 @@ export default function App() {
     }), []
   );
 
-
   // localization
   const [locale, setLocale] = useState(loadLocale.locale);
   const localizationContext = useMemo(
