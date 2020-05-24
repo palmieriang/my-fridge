@@ -4,6 +4,7 @@ import { LocalizationContext } from '../localization/localization';
 import ProductList from '../components/ProductList';
 import ProductForm from '../components/ProductForm';
 import Settings from '../components/Settings';
+import SignIn from '../components/SignIn';
 
 const Stack = createStackNavigator();
 
@@ -56,6 +57,18 @@ export function SettingsStackScreen() {
         name="settings"
         component={Settings}
         options={{ title: t('settings') }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export function SingInStackScreen() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="signin"
+        component={SignIn}
+        options={{ title: 'Login' }}
       />
     </Stack.Navigator>
   );
