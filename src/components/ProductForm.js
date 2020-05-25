@@ -76,7 +76,7 @@ const ProductForm = ({ navigation, route }) => {
                 />
                 <DateTimePickerModal
                     isVisible={showDatePicker}
-                    mode="datetime"
+                    mode="date"
                     onConfirm={handleDatePicked}
                     onCancel={handleDatePickerHide}
                 />
