@@ -98,7 +98,11 @@ const ProductForm = ({ navigation, route }) => {
                 onPress={handleAddPress}
                 style={styles.button}
             >
-                <Text style={styles.buttonText}>{t('add')}</Text>
+                {existingId ? (
+                    <Text style={styles.buttonText}>{t('modify')}</Text>
+                ) : (
+                    <Text style={styles.buttonText}>{t('add')}</Text>
+                )}
             </TouchableHighlight>
             <TouchableHighlight
                 onPress={handleDeletePress}
