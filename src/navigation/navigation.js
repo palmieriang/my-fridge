@@ -22,7 +22,9 @@ export function FridgeStackScreen() {
       <Stack.Screen
         name="form"
         component={ProductForm}
-        options={{ title: t('addItem') }}
+        options={({ route }) => ({
+          title: route.params.title
+        })}
       />
     </Stack.Navigator>
   );

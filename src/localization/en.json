@@ -16,5 +16,6 @@
     "minutes":"Minutes",
     "seconds":"Seconds",
     "addItem":"Add item",
+    "modifyItem":"Modify item",
     "error":"Please make sure the server is running: npm run backend or, start adding products to the fridge."
 }
