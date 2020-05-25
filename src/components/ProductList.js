@@ -39,12 +39,17 @@ const ProductList = ({ navigation, route }) => {
 
     const handleChangeProduct = (id) => {
         getProductById(id)
-            .then((product) => navigation.navigate('form', {product}))
+            .then((product) => navigation.navigate('form', {
+                product,
+                title: t('modifyItem'),
+            }))
             .catch(error => console.log('Error: ', error));
     };
 
     const handleAddProduct = () => {
-        navigation.navigate('form', {});
+        navigation.navigate('form', {
+            title: t('addItem'),
+        });
     };
 
     return (
