@@ -17,5 +17,10 @@
     "seconds":"Seconds",
     "addItem":"Add item",
     "modifyItem":"Modify item",
-    "error":"Please make sure the server is running: npm run backend or, start adding products to the fridge."
+    "error":"Please make sure the server is running: npm run backend or, start adding products to the fridge.",
+    "cancel":"Cancel",
+    "chooseLanguage":"Choose a language",
+    "changeLanguage":"Change language",
+    "english":"English",
+    "italian":"Italian"
 }
