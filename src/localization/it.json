@@ -17,5 +17,10 @@
     "seconds":"Secondi",
     "addItem":"Aggiungi prodotto",
     "modifyItem":"Modifica prodotto",
-    "error":"Assicurati che il server sia in esecuzione: npm run backend oppure, inizia ad aggiungere prodotti al frigorifero."
+    "error":"Assicurati che il server sia in esecuzione: npm run backend oppure, inizia ad aggiungere prodotti al frigorifero.",
+    "cancel":"Cancella",
+    "chooseLanguage":"Sceglia una lingua",
+    "changeLanguage":"Cambia lingua",
+    "english":"Inglese",
+    "italian":"Italiano"
 }

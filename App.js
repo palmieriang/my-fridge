@@ -8,8 +8,7 @@ import React, {
 } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-// import AsyncStorage from '@react-native-community/async-storage';
-import { YellowBox } from 'react-native';
+import { AsyncStorage, YellowBox } from 'react-native';
 import { loadLocale, LocalizationContext } from './src/localization/localization'
 import {
   FridgeStackScreen,
