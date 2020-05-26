@@ -9,13 +9,14 @@ const Settings = () => {
         { section: true, label: t('chooseLanguage'), key: 'title'},
         { label: t('english'), value: 'en', key: 'english' },
         { label: t('italian'), value: 'it', key: 'italian' },
+        { label: t('french'), value: 'fr', key: 'french' },
     ];
 
     return (
         <View style={{ flex: 1, alignItems: 'center' }}>
             <Text style={{ marginTop: 15, marginBottom: 15 }}>
                 Current locale: {locale}.{' '}
-                {locale !== 'en' && locale !== 'it'
+                {locale !== 'en' && locale !== 'it' && locale !== 'fr'
                 ? 'Translations will fall back to "en" because none available'
                 : null}
             </Text>

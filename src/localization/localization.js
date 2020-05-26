@@ -6,9 +6,10 @@ export const LocalizationContext = createContext();
 
 const en = require('./en.json');
 const it = require('./it.json');
+const fr = require('./fr.json');
 
 i18n.fallbacks = true;
-i18n.translations = { it, en };
+i18n.translations = { fr, it, en };
 i18n.locale = Localization.locale;
 
 // This will log 'en' for me, as I'm an English speaker
