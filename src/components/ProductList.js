@@ -79,7 +79,7 @@ const ProductList = ({ navigation, route }) => {
 const styles = StyleSheet.create({
     list: {
         flex: 1,
-        paddingTop: 20,
+        paddingTop: 10,
         backgroundColor: '#F3F3F3',
     },
     text: {

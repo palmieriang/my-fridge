@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React, {
-  Fragment,
   useEffect,
   useState,
   useMemo,
@@ -8,7 +7,7 @@ import React, {
 } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { AsyncStorage, YellowBox } from 'react-native';
+import { AsyncStorage, StyleSheet, View, YellowBox } from 'react-native';
 import { loadLocale, LocalizationContext } from './src/localization/localization'
 import {
   FridgeStackScreen,
@@ -17,6 +16,7 @@ import {
   SingInStackScreen
 } from './src/navigation/navigation';
 import { AuthContext } from './src/authentication/authentication';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -115,13 +115,34 @@ export default function App() {
     <AuthContext.Provider value={authContext}>
       <LocalizationContext.Provider value={localizationContext}>
         <NavigationContainer>
-          {state.userToken ? (
-            <Tab.Navigator>
-              <Fragment>
-                <Tab.Screen name={localizationContext.t('fridge')} component={FridgeStackScreen} />
-                <Tab.Screen name="Freezer" component={FreezerStackScreen} />
-                <Tab.Screen name={localizationContext.t('settings')} component={SettingsStackScreen} />
-              </Fragment>
+          {!state.userToken ? (
+            <Tab.Navigator
+              screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color, size }) => {
+                  let iconName;
+
+                  if (route.name === 'Fridge' || route.name === 'Freezer') {
+                    iconName = focused ? 'md-snow' : 'ios-snow';
+                  } else if (route.name === 'Settings') {
+                    iconName = focused ? 'ios-list-box' : 'ios-list';
+                  }
+
+                  return (
+                    <View style={styles.tabIcon}>
+                      <Ionicons name={iconName} size={size} color={color} />
+                      {route.name === 'Freezer' && <Ionicons name={iconName} size={size} color={color} />}
+                    </View>
+                  );
+                },
+              })}
+              tabBarOptions={{
+                activeTintColor: 'rgba(231, 76, 60, 1)',
+                inactiveTintColor: 'black',
+              }}
+            >
+              <Tab.Screen name={localizationContext.t('fridge')} component={FridgeStackScreen} />
+              <Tab.Screen name="Freezer" component={FreezerStackScreen} />
+              <Tab.Screen name={localizationContext.t('settings')} component={SettingsStackScreen} />
             </Tab.Navigator>
           ) : (
             <SingInStackScreen />
@@ -131,3 +152,11 @@ export default function App() {
     </AuthContext.Provider>
   );
 }
+
+const styles = StyleSheet.create({
+  tabIcon: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+  }
+});
