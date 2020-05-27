@@ -16,7 +16,9 @@ import {
   SingInStackScreen
 } from './src/navigation/navigation';
 import { AuthContext } from './src/authentication/authentication';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import freezer from './assets/freezer.svg';
+import settings from './assets/settings.svg';
+import SvgUri from "expo-svg-uri";
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -119,18 +121,20 @@ export default function App() {
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
-                  let iconName;
+                  let iconSource;
 
                   if (route.name === 'Fridge' || route.name === 'Freezer') {
-                    iconName = focused ? 'md-snow' : 'ios-snow';
+                    iconSource = freezer;
                   } else if (route.name === 'Settings') {
-                    iconName = focused ? 'ios-list-box' : 'ios-list';
+                    iconSource = settings;
                   }
 
                   return (
                     <View style={styles.tabIcon}>
-                      <Ionicons name={iconName} size={size} color={color} />
-                      {route.name === 'Freezer' && <Ionicons name={iconName} size={size} color={color} />}
+                      <SvgUri width="18" height="18" source={iconSource} fill={color} fillAll={true} />
+                      {route.name === 'Freezer' &&
+                        <SvgUri width="18" height="18" source={iconSource} fill={color} fillAll={true} />
+                      }
                     </View>
                   );
                 },
