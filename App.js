@@ -16,9 +16,8 @@ import {
   SingInStackScreen
 } from './src/navigation/navigation';
 import { AuthContext } from './src/authentication/authentication';
-import freezer from './assets/freezer.svg';
-import settings from './assets/settings.svg';
-import SvgUri from "expo-svg-uri";
+import FreezerIcon from './assets/freezer.svg';
+import SettingsIcon from './assets/settings.svg';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -113,6 +112,8 @@ export default function App() {
     [locale]
   );
 
+  const { t } = localizationContext;
+
   return (
     <AuthContext.Provider value={authContext}>
       <LocalizationContext.Provider value={localizationContext}>
@@ -121,19 +122,20 @@ export default function App() {
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
-                  let iconSource;
+                  let IconName;
+                  size = focused ? size : '22';
 
-                  if (route.name === 'Fridge' || route.name === 'Freezer') {
-                    iconSource = freezer;
-                  } else if (route.name === 'Settings') {
-                    iconSource = settings;
+                  if (route.name === t('fridge') || route.name === t('freezer')) {
+                    IconName = FreezerIcon;
+                  } else if (route.name === t('settings')) {
+                    IconName = SettingsIcon;
                   }
 
                   return (
                     <View style={styles.tabIcon}>
-                      <SvgUri width="18" height="18" source={iconSource} fill={color} fillAll={true} />
-                      {route.name === 'Freezer' &&
-                        <SvgUri width="18" height="18" source={iconSource} fill={color} fillAll={true} />
+                      <IconName width={size} height={size} fill={color} />
+                      {route.name === t('freezer') &&
+                        <IconName width={size} height={size} fill={color} />
                       }
                     </View>
                   );
@@ -142,11 +144,13 @@ export default function App() {
               tabBarOptions={{
                 activeTintColor: 'rgba(231, 76, 60, 1)',
                 inactiveTintColor: 'black',
+                showIcon: true,
+                showLabel: true,
               }}
             >
-              <Tab.Screen name={localizationContext.t('fridge')} component={FridgeStackScreen} />
-              <Tab.Screen name="Freezer" component={FreezerStackScreen} />
-              <Tab.Screen name={localizationContext.t('settings')} component={SettingsStackScreen} />
+              <Tab.Screen name={t('fridge')} component={FridgeStackScreen} />
+              <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
+              <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
             </Tab.Navigator>
           ) : (
             <SingInStackScreen />
