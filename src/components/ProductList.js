@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import PropTypes from 'prop-types';
 import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import { getProducts, getProductById } from '../../api/api';
@@ -90,5 +91,12 @@ const styles = StyleSheet.create({
         marginTop: 20,
     }
 });
+
+ProductList.propTypes = {
+    navigation: PropTypes.shape({
+        navigate: PropTypes.func.isRequired,
+    }).isRequired,
+    route: PropTypes.object.isRequired,
+};
 
 export default ProductList;
