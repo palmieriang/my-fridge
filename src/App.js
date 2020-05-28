@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+import { registerRootComponent } from 'expo';
 import React, {
   useEffect,
   useState,
@@ -8,16 +9,16 @@ import React, {
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AsyncStorage, StyleSheet, View, YellowBox } from 'react-native';
-import { loadLocale, LocalizationContext } from './src/localization/localization'
+import { loadLocale, LocalizationContext } from './localization/localization';
 import {
   FridgeStackScreen,
   FreezerStackScreen,
   SettingsStackScreen,
   SingInStackScreen
-} from './src/navigation/navigation';
-import { AuthContext } from './src/authentication/authentication';
-import FreezerIcon from './assets/freezer.svg';
-import SettingsIcon from './assets/settings.svg';
+} from './navigation/navigation';
+import { AuthContext } from './authentication/authentication';
+import FreezerIcon from '../assets/freezer.svg';
+import SettingsIcon from '../assets/settings.svg';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -118,7 +119,7 @@ export default function App() {
     <AuthContext.Provider value={authContext}>
       <LocalizationContext.Provider value={localizationContext}>
         <NavigationContainer>
-          {!state.userToken ? (
+          {state.userToken ? (
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
@@ -160,6 +161,8 @@ export default function App() {
     </AuthContext.Provider>
   );
 }
+
+registerRootComponent(App);
 
 const styles = StyleSheet.create({
   tabIcon: {
