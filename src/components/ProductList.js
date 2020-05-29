@@ -4,6 +4,7 @@ import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import { getProducts, getProductById } from '../../api/api';
 import { LocalizationContext } from '../localization/localization';
+import { Swipeable } from 'react-native-gesture-handler';
 
 import ProductCard from './ProductCard';
 
@@ -53,6 +54,22 @@ const ProductList = ({ navigation, route }) => {
         });
     };
 
+    const handleLeftAction = () => {
+        return (
+            <View style={styles.swipe}>
+                <Text>Completed</Text>
+            </View>
+        );
+    }
+
+    const handleRightAction = () => {
+        return (
+            <View style={styles.swipe}>
+                <Text>Removed</Text>
+            </View>
+        );
+    }
+
     return (
         <View style={{ flex: 1 }}>
             {productList.length > 0 ? (
@@ -60,7 +77,16 @@ const ProductList = ({ navigation, route }) => {
                     key="list"
                     style={styles.list}
                     data={productList}
-                    renderItem={({ item }) => <ProductCard product={item} key={item.id} changeProduct={handleChangeProduct}  />}
+                    renderItem={({ item }) => (
+                        <Swipeable
+                            renderLeftActions={handleLeftAction}
+                            renderRightActions={handleRightAction}
+                            onSwipeableLeftOpen={() => console.log('opening')}
+                            onSwipeableRightOpen={() => console.log('closing')}
+                        >
+                            <ProductCard product={item} key={item.id} changeProduct={handleChangeProduct}  />
+                        </Swipeable>
+                    )}
                     keyExtractor={item => item.id}
                 />
             ) : (
@@ -89,6 +115,13 @@ const styles = StyleSheet.create({
         marginRight: 7,
         paddingLeft: 20,
         marginTop: 20,
+    },
+    swipe: {
+        backgroundColor: 'green',
+        // flex: 1,
+        alignContent: 'center',
+        marginTop: 5,
+        marginBottom: 5,
     }
 });
 
