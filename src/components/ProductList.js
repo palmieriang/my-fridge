@@ -2,9 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import { getProducts, getProductById } from '../../api/api';
+import { getProducts, getProductById, deleteProduct } from '../../api/api';
 import { LocalizationContext } from '../localization/localization';
-import { Swipeable } from 'react-native-gesture-handler';
 
 import ProductCard from './ProductCard';
 
@@ -15,12 +14,7 @@ const ProductList = ({ navigation, route }) => {
 
     useEffect(() => {
         const updateState = navigation.addListener('focus', () => {
-            getProducts(place)
-            .then(products => setProductList(products.map(product => ({
-                ...product,
-                timer: Date.now(),
-            }))))
-            .catch(error => console.log('Error on get products list: ', error));
+            getProductsFromApi(place);
         });
         return updateState;
     }, [navigation]);
@@ -39,6 +33,15 @@ const ProductList = ({ navigation, route }) => {
         }
     }, [productList]);
 
+    const getProductsFromApi = (place) => {
+        getProducts(place)
+        .then(products => setProductList(products.map(product => ({
+            ...product,
+            timer: Date.now(),
+        }))))
+        .catch(error => console.log('Error on get products list: ', error));
+    };
+
     const handleChangeProduct = (id) => {
         getProductById(id)
             .then((product) => navigation.navigate('form', {
@@ -54,20 +57,9 @@ const ProductList = ({ navigation, route }) => {
         });
     };
 
-    const handleLeftAction = () => {
-        return (
-            <View style={styles.swipe}>
-                <Text>Completed</Text>
-            </View>
-        );
-    }
-
-    const handleRightAction = () => {
-        return (
-            <View style={styles.swipe}>
-                <Text>Removed</Text>
-            </View>
-        );
+    const handleDelete = (id) => {
+        deleteProduct(id);
+        getProductsFromApi(place);
     }
 
     return (
@@ -78,14 +70,7 @@ const ProductList = ({ navigation, route }) => {
                     style={styles.list}
                     data={productList}
                     renderItem={({ item }) => (
-                        <Swipeable
-                            renderLeftActions={handleLeftAction}
-                            renderRightActions={handleRightAction}
-                            onSwipeableLeftOpen={() => console.log('opening')}
-                            onSwipeableRightOpen={() => console.log('closing')}
-                        >
-                            <ProductCard product={item} key={item.id} changeProduct={handleChangeProduct}  />
-                        </Swipeable>
+                        <ProductCard product={item} key={item.id} changeProduct={handleChangeProduct} deleteProduct={handleDelete} />
                     )}
                     keyExtractor={item => item.id}
                 />
@@ -115,13 +100,6 @@ const styles = StyleSheet.create({
         marginRight: 7,
         paddingLeft: 20,
         marginTop: 20,
-    },
-    swipe: {
-        backgroundColor: 'green',
-        // flex: 1,
-        alignContent: 'center',
-        marginTop: 5,
-        marginBottom: 5,
     }
 });
 

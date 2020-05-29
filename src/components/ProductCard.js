@@ -3,8 +3,9 @@ import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { formatDate, getCountdownParts } from '../../api/api';
 import { LocalizationContext } from '../localization/localization';
+import { Swipeable } from 'react-native-gesture-handler';
 
-const ProductCard = ({ product, changeProduct }) => {
+const ProductCard = ({ product, changeProduct, deleteProduct }) => {
     const { t } = useContext(LocalizationContext);
     const { days } = getCountdownParts(product.date);
 
@@ -12,19 +13,47 @@ const ProductCard = ({ product, changeProduct }) => {
         changeProduct(product.id);
     };
 
+    const handleDeletePress = () => {
+        console.log('Item deleted from swipe');
+        deleteProduct(product.id);
+    }
+
+    const handleLeftAction = () => {
+        return (
+            <View style={styles.swipe}>
+                <Text>Completed</Text>
+            </View>
+        );
+    }
+
+    const handleRightAction = () => {
+        return (
+            <View style={styles.swipe}>
+                <Text>Removed</Text>
+            </View>
+        );
+    }
+
     return (
-         <View>
-            <TouchableHighlight onPress={handleChange} >
-                <View style={styles.card}>
-                    <Text style={styles.date}>{formatDate(product.date)}</Text>
-                    <Text style={styles.title}>{product.name}</Text>
-                    <View style={styles.counterContainer}>
-                        <Text style={styles.counterText}>{days}</Text>
-                        <Text style={styles.counterLabel}>{t('days').toUpperCase()}</Text>
+        <Swipeable
+            renderLeftActions={handleLeftAction}
+            renderRightActions={handleRightAction}
+            onSwipeableLeftOpen={handleDeletePress}
+            onSwipeableRightOpen={() => console.log('closing')}
+        >
+            <View>
+                <TouchableHighlight onPress={handleChange} >
+                    <View style={styles.card}>
+                        <Text style={styles.date}>{formatDate(product.date)}</Text>
+                        <Text style={styles.title}>{product.name}</Text>
+                        <View style={styles.counterContainer}>
+                            <Text style={styles.counterText}>{days}</Text>
+                            <Text style={styles.counterLabel}>{t('days').toUpperCase()}</Text>
+                        </View>
                     </View>
-                </View>
-            </TouchableHighlight>
-        </View>
+                </TouchableHighlight>
+            </View>
+        </Swipeable>
     );
 }
 
@@ -67,6 +96,13 @@ const styles = StyleSheet.create({
         fontWeight: '100',
         marginLeft: 10,
     },
+    swipe: {
+        backgroundColor: 'green',
+        // flex: 1,
+        alignContent: 'center',
+        marginTop: 5,
+        marginBottom: 5,
+    }
 });
 
 export default ProductCard;
