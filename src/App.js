@@ -80,7 +80,7 @@ export default function App() {
     bootstrapAsync();
   }, []);
 
-  authContext = useMemo(
+  const authContext = useMemo(
     () => ({
       signIn: async data => {
         // In a production app, we need to send some data (usually username, password) to server and get a token
