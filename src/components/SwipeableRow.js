@@ -39,9 +39,10 @@ const SwipeableRow = ({ children, modifyFunction, deleteFunction }) => {
         return (
           <Animated.View style={{ flex: 1, transform: [{ translateX: trans }] }}>
             <RectButton
-              style={[styles.rightAction, { backgroundColor: color }]}
-              onPress={callback}>
-              <Text style={styles.actionText}>{text}</Text>
+                style={[styles.rightAction, { backgroundColor: color }]}
+                onPress={callback}
+            >
+                <Text style={styles.actionText}>{text}</Text>
             </RectButton>
           </Animated.View>
         );
@@ -75,6 +76,8 @@ const SwipeableRow = ({ children, modifyFunction, deleteFunction }) => {
 
 SwipeableRow.propTypes = {
     children: PropTypes.element.isRequired,
+    modifyFunction: PropTypes.func.isRequired,
+    deleteFunction: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
