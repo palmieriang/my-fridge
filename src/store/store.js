@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useMemo, useReducer } from 'react';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const initialState = {
     isLoading: true,
@@ -38,8 +39,6 @@ const AuthProvider = ({ children }) => {
         userToken: null,
     });
 
-    console.log('state inside store.js', state);
-
     useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
@@ -47,8 +46,8 @@ const AuthProvider = ({ children }) => {
 
             try {
                 userToken = await AsyncStorage.getItem('userToken');
-            } catch (e) {
-                // Restoring token failed
+            } catch (error) {
+                console.log('Restoring token failed ', error);
             }
 
             // After restoring token, we may need to validate it in production apps
