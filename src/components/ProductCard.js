@@ -32,7 +32,7 @@ const ProductCard = ({ product, changeProduct, deleteProduct }) => {
                         <Text style={styles.date}>{formatDate(product.date)}</Text>
                         <Text style={styles.title}>{product.name}</Text>
                         {expired ? (
-                            <Text style={styles.expired}>Expired</Text>
+                            <Text style={styles.expired}>{t('expired')}</Text>
                         ) : (
                             <View style={styles.counterContainer}>
                                 <Text style={styles.counterText}>{days}</Text>
