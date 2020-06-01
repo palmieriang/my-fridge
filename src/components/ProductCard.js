@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { formatDate, getCountdownParts } from '../../api/api';
@@ -6,8 +6,15 @@ import { LocalizationContext } from '../localization/localization';
 import SwipeableRow from './SwipeableRow';
 
 const ProductCard = ({ product, changeProduct, deleteProduct }) => {
+    const [expired, setExpired] = useState(false);
     const { t } = useContext(LocalizationContext);
     const { days } = getCountdownParts(product.date);
+
+    useEffect(() => {
+        if(days < 0) {
+            setExpired(true);
+        }
+    }, []);
 
     const handleChange = () => {
         changeProduct(product.id);
@@ -24,10 +31,14 @@ const ProductCard = ({ product, changeProduct, deleteProduct }) => {
                     <View style={styles.card}>
                         <Text style={styles.date}>{formatDate(product.date)}</Text>
                         <Text style={styles.title}>{product.name}</Text>
-                        <View style={styles.counterContainer}>
-                            <Text style={styles.counterText}>{days}</Text>
-                            <Text style={styles.counterLabel}>{t('days').toUpperCase()}</Text>
-                        </View>
+                        {expired ? (
+                            <Text style={styles.expired}>Expired</Text>
+                        ) : (
+                            <View style={styles.counterContainer}>
+                                <Text style={styles.counterText}>{days}</Text>
+                                <Text style={styles.counterLabel}>{t('days').toUpperCase()}</Text>
+                            </View>
+                        )}
                     </View>
                 </TouchableHighlight>
             </View>
@@ -73,6 +84,13 @@ const styles = StyleSheet.create({
         fontSize: 13,
         fontWeight: '100',
         marginLeft: 10,
+    },
+    expired: {
+        color: 'rgba(231, 76, 60, 1)',
+        fontSize: 30,
+        textTransform: 'uppercase',
+        fontFamily: 'Courier',
+        fontWeight: '500',
     },
 });
 
