@@ -7,7 +7,7 @@ import { View,
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
-import { formatDateTime, saveProduct, deleteProduct } from '../../api/api';
+import { formatDate, saveProduct, deleteProduct } from '../../api/api';
 import { LocalizationContext } from '../localization/localization';
 
 const ProductForm = ({ navigation, route }) => {
@@ -70,7 +70,7 @@ const ProductForm = ({ navigation, route }) => {
                     style={[styles.text, styles.borderTop]}
                     placeholder={t('date')}
                     spellCheck={false}
-                    value={formatDateTime(date.toString())}
+                    value={formatDate(date.toString())}
                     editable={!showDatePicker}
                     onFocus={handleDatePress}
                 />
