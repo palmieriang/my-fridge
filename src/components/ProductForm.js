@@ -18,6 +18,7 @@ const ProductForm = ({ navigation, route }) => {
     const existingDate = params.product?.date || '';
     const existingPlace = params.product?.place || '';
     const existingId = params.product?.id || '';
+    const initPickerDate = existingDate ? new Date(existingDate) : new Date();
 
     const [name, setName] = useState('' || existingName);
     const [date, setDate] = useState('' || existingDate);
@@ -33,7 +34,7 @@ const ProductForm = ({ navigation, route }) => {
     }
 
     const handleDatePicked = (date) => {
-        setDate(date);
+        setDate(formatDate(date));
         handleDatePickerHide();
     }
 
@@ -75,6 +76,7 @@ const ProductForm = ({ navigation, route }) => {
                     onFocus={handleDatePress}
                 />
                 <DateTimePickerModal
+                    date={initPickerDate}
                     isVisible={showDatePicker}
                     mode="date"
                     onConfirm={handleDatePicked}

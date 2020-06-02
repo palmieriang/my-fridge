@@ -2,25 +2,25 @@
   "products": [
     {
       "name": "First product",
-      "date": "2020-09-01T09:43:24.000Z",
+      "date": "1 Sep 2020",
       "place": "fridge",
       "id": "001c9b6d-00a9-465c-a2d3-afb7176a0a87"
     },
     {
       "name": "Second product",
-      "date": "2020-09-29T13:45:18.000Z",
+      "date": "29 Sep 2020",
       "place": "fridge",
       "id": "001c9b7d-00a9-565c-a2d3-afb7176a0a89"
     },
     {
       "name": "Third product",
-      "date": "2020-05-30T11:55:32.000Z",
+      "date": "30 May 2020",
       "place": "freezer",
       "id": "085fbfb7-6d84-4b16-a8cf-02e3d9b19c9a"
     },
     {
       "name": "Forth Product",
-      "date": "2020-06-01T09:43:24.594Z",
+      "date": "1 Jun 2020",
       "place": "fridge",
       "id": "16130f00-1000-4411-8f03-030f15050b0f"
     }
