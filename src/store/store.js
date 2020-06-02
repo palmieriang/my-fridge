@@ -8,7 +8,7 @@ const initialState = {
 };
 
 const store = createContext(initialState);
-const { Provider } = store;
+const { Provider, Consumer } = store;
 
 const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(
@@ -82,7 +82,13 @@ const AuthProvider = ({ children }) => {
         }), []
     );
 
-    return <Provider value={{ state, dispatch, authContext }}>{children}</Provider>;
+    return (
+        <Provider value={{ state, dispatch, authContext }}>
+            <Consumer>
+                {children}
+            </Consumer>
+        </Provider>
+    );
 };
 
 export { store, AuthProvider };

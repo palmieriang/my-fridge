@@ -6,15 +6,16 @@ import {
     TouchableHighlight,
     View
 } from 'react-native';
-import { AuthContext } from '../authentication/authentication';
 import LottieAnimation from '../animations/LottieAnimation';
+
+import { store } from '../store/store';
 
 const SignIn = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [playAnimation, setPlayAnimation] = useState(false);
 
-    const { signIn } = useContext(AuthContext);
+    const { authContext } = useContext(store);
 
     const handleSignIn = () => {
         if(username.length > 3 && password.length > 3) {
@@ -23,7 +24,7 @@ const SignIn = () => {
     }
 
     const signInAfterAnimation = () => {
-        signIn({ username, password })
+        authContext.signIn({ username, password })
     }
 
     return (
