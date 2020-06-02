@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { LocalizationContext } from '../localization/localization';
+import { Button, StyleSheet, Text, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
+import { LocalizationContext } from '../localization/localization';
+import { store } from '../store/store';
 
 const Settings = () => {
     const { t, locale, setLocale } = useContext(LocalizationContext);
@@ -11,6 +12,12 @@ const Settings = () => {
         { label: t('italian'), value: 'it', key: 'italian' },
         { label: t('french'), value: 'fr', key: 'french' },
     ];
+
+    const { authContext } = useContext(store);
+
+    const handleLogOut = () => {
+        authContext.signOut();
+    };
 
     return (
         <View style={{ flex: 1, alignItems: 'center' }}>
@@ -29,6 +36,12 @@ const Settings = () => {
                 onChange={(option) => setLocale(option.value)}
                 style={styles.languageContainer}
             />
+            <View style={styles.logout}>
+                <Button
+                    title="Logout"
+                    onPress={handleLogOut}
+                />
+            </View>
         </View>
     );
 }
@@ -40,6 +53,9 @@ const styles = StyleSheet.create({
     initValueTextStyle: {
         color: 'black',
     },
+    logout: {
+        marginTop: 20,
+    }
 });
 
 export default Settings;
