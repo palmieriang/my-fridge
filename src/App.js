@@ -5,7 +5,6 @@ import React, {
   useState,
   useMemo,
   useReducer,
-  useContext,
 } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -17,8 +16,7 @@ import {
   SettingsStackScreen,
   SingInStackScreen
 } from './navigation/navigation';
-// import { AuthContext } from './authentication/authentication';
-import { store, AuthProvider } from './store/store';
+import { AuthContext } from './authentication/authentication';
 import FreezerIcon from '../assets/freezer.svg';
 import SettingsIcon from '../assets/settings.svg';
 
@@ -31,8 +29,77 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   // authentication
-  const globalState = useContext(store);
-  console.log('globalState app.js ', globalState);
+  const [state, dispatch] = useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'RESTORE_TOKEN':
+        return {
+          ...prevState,
+          userToken: action.token,
+          isLoading: false,
+        };
+        case 'SIGN_IN':
+        return {
+          ...prevState,
+          isSignout: false,
+          userToken: action.token,
+        };
+        case 'SIGN_OUT':
+        return {
+          ...prevState,
+          isSignout: true,
+          userToken: null,
+        };
+      }
+    }, {
+      isLoading: true,
+      isSignout: false,
+      userToken: null,
+    }
+  );
+
+  useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      let userToken;
+
+      try {
+          userToken = await AsyncStorage.getItem('userToken');
+      } catch (error) {
+          console.log('Restoring token failed ', error);
+      }
+
+      // After restoring token, we may need to validate it in production apps
+
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+    };
+
+    bootstrapAsync();
+  }, []);
+
+const authContext = useMemo(
+  () => ({
+    signIn: async data => {
+    // In a production app, we need to send some data (usually username, password) to server and get a token
+    // We will also need to handle errors if sign in failed
+    // After getting token, we need to persist the token using `AsyncStorage`
+    // In the example, we'll use a dummy token
+
+    dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+    },
+    signOut: () => dispatch({ type: 'SIGN_OUT' }),
+    signUp: async data => {
+    // In a production app, we need to send user data to server and get a token
+    // We will also need to handle errors if sign up failed
+    // After getting token, we need to persist the token using `AsyncStorage`
+    // In the example, we'll use a dummy token
+
+    dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+    },
+  }), []
+);
 
   // localization
   const [locale, setLocale] = useState(loadLocale.locale);
@@ -48,10 +115,10 @@ export default function App() {
   const { t } = localizationContext;
 
   return (
-    <AuthProvider>
+    <AuthContext.Provider value={authContext}>
       <LocalizationContext.Provider value={localizationContext}>
         <NavigationContainer>
-          {globalState.userToken ? (
+          {state.userToken ? (
             <Tab.Navigator
               screenOptions={({ route }) => ({
                 tabBarIcon: ({ focused, color, size }) => {
@@ -90,10 +157,10 @@ export default function App() {
           )}
         </NavigationContainer>
       </LocalizationContext.Provider>
-    </AuthProvider>
+    </AuthContext.Provider>
   );
 }
-
+ 
 registerRootComponent(App);
 
 const styles = StyleSheet.create({

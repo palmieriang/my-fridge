@@ -7,7 +7,6 @@ import {
     View
 } from 'react-native';
 import { AuthContext } from '../authentication/authentication';
-import { store, AuthProvider } from '../store/store';
 import LottieAnimation from '../animations/LottieAnimation';
 
 const SignIn = () => {
@@ -15,20 +14,16 @@ const SignIn = () => {
     const [password, setPassword] = useState('');
     const [playAnimation, setPlayAnimation] = useState(false);
 
-    const globalState = useContext(store);
-    const { dispatch } = globalState;
-    console.log('globalState signin ', globalState);
-  
+    const { signIn } = useContext(AuthContext);
 
     const handleSignIn = () => {
-        // if(username.length > 3 && password.length > 3) {
+        if(username.length > 3 && password.length > 3) {
             setPlayAnimation(true);
-        // }
+        }
     }
 
     const signInAfterAnimation = () => {
-        // dispatch({ type: 'SIGN_IN' })
-        globalState.authContext.signIn({ username, password })
+        signIn({ username, password })
     }
 
     return (
