@@ -20,10 +20,10 @@ const Registration = ({ navigation }) => {
 
     const handleRegistration = () => {
         console.info('Registered');
-    };
+    }
 
     const handleGoToLogin = () => {
-        navigation.navigate('Login')
+        navigation.navigate('signin');
     }
 
     return (
@@ -40,7 +40,7 @@ const Registration = ({ navigation }) => {
                         onChangeText={setFullName}
                     />
                     <TextInput
-                        style={styles.text}
+                        style={[styles.text, styles.borderTop]}
                         placeholder="Username (minimum 3 characters)"
                         value={username}
                         onChangeText={setUsername}
