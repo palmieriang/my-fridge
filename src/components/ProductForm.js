@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { View,
+import {
     Text,
-    TouchableHighlight,
+    TouchableOpacity,
     TextInput,
+    View,
     StyleSheet
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -59,91 +60,90 @@ const ProductForm = ({ navigation, route }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={styles.fieldContainer}>
-                <TextInput
-                    style={styles.text}
-                    placeholder={t('product')}
-                    spellCheck={false}
-                    value={name}
-                    onChangeText={handleChangeName}
-                />
-                <TextInput
-                    style={[styles.text, styles.borderTop]}
-                    placeholder={t('date')}
-                    spellCheck={false}
-                    value={formatDate(date.toString())}
-                    editable={!showDatePicker}
-                    onFocus={handleDatePress}
-                />
-                <DateTimePickerModal
-                    date={initPickerDate}
-                    isVisible={showDatePicker}
-                    mode="date"
-                    onConfirm={handleDatePicked}
-                    onCancel={handleDatePickerHide}
-                />
-                <RNPickerSelect
-                    style={{
-                        inputIOS: [styles.text, styles.borderTop],
-                        inputAndroid: [styles.text, styles.borderTop],
-                    }}
-                    value={place}
-                    placeholder={{label: t('choosePlace')}}
-                    onValueChange={(itemValue) => setPlace(itemValue)}
-                    items={[
-                        { label: t('fridge'), value: 'fridge', key: 'fridge' },
-                        { label: t('freezer'), value: 'freezer', key: 'freezer' },
-                    ]}
-                />
-            </View>
-            <TouchableHighlight
+            <TextInput
+                style={styles.input}
+                placeholder={t('product')}
+                spellCheck={false}
+                value={name}
+                onChangeText={handleChangeName}
+            />
+            <TextInput
+                style={styles.input}
+                placeholder={t('date')}
+                spellCheck={false}
+                value={formatDate(date.toString())}
+                editable={!showDatePicker}
+                onFocus={handleDatePress}
+            />
+            <DateTimePickerModal
+                date={initPickerDate}
+                isVisible={showDatePicker}
+                mode="date"
+                onConfirm={handleDatePicked}
+                onCancel={handleDatePickerHide}
+            />
+            <RNPickerSelect
+                style={{
+                    inputIOS: [styles.input],
+                    inputAndroid: [styles.text],
+                }}
+                value={place}
+                placeholder={{label: t('choosePlace')}}
+                onValueChange={(itemValue) => setPlace(itemValue)}
+                items={[
+                    { label: t('fridge'), value: 'fridge', key: 'fridge' },
+                    { label: t('freezer'), value: 'freezer', key: 'freezer' },
+                ]}
+            />
+            <TouchableOpacity
                 onPress={handleAddPress}
                 style={styles.button}
             >
                 {existingId ? (
-                    <Text style={styles.buttonText}>{t('modify')}</Text>
+                    <Text style={styles.buttonTitle}>{t('modify')}</Text>
                 ) : (
-                    <Text style={styles.buttonText}>{t('add')}</Text>
+                    <Text style={styles.buttonTitle}>{t('add')}</Text>
                 )}
-            </TouchableHighlight>
-            <TouchableHighlight
+            </TouchableOpacity>
+            <TouchableOpacity
                 onPress={handleDeletePress}
                 style={[styles.button, styles.buttonDelete]}
             >
-                <Text style={styles.buttonText}>{t('delete')}</Text>
-            </TouchableHighlight>
+                <Text style={styles.buttonTitle}>{t('delete')}</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    fieldContainer: {
-        marginTop: 20,
-        marginBottom: 20,
-        backgroundColor: '#fff',
-    },
-    text: {
-        height: 50,
-        margin: 0,
-        marginRight: 7,
-        paddingLeft: 10,
+    input: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        height: 48,
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 30,
+        marginRight: 30,
+        overflow: 'hidden',
+        paddingLeft: 16,
     },
     button: {
-        height: 50,
+        alignItems: "center",
         backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
-        alignSelf: 'stretch',
-        margin: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
         borderRadius: 5,
+        justifyContent: 'center',
+        height: 48,
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 20,
+    },
+    buttonTitle: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     buttonDelete: {
         backgroundColor: '#dc3545',
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
     },
     borderTop: {
         borderColor: '#edeeef',
