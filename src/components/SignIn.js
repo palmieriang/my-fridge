@@ -4,9 +4,10 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableHighlight,
+    TouchableOpacity,
     View
 } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LottieAnimation from '../animations/LottieAnimation';
 
 import { store } from '../store/store';
@@ -34,82 +35,97 @@ const SignIn = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={styles.animationContainer}>
-                <LottieAnimation
-                    animationEnd={signInAfterAnimation}
-                    autoplay={false}
-                    loop={false}
-                    name="door"
-                    play={playAnimation}
-                />
-            </View>
-            <View style={styles.fieldContainer}>
+            <KeyboardAwareScrollView
+                style={{ flex: 1, width: '100%' }}
+                keyboardShouldPersistTaps="always"
+            >
+                <View style={styles.animationContainer}>
+                    <LottieAnimation
+                        animationEnd={signInAfterAnimation}
+                        autoplay={false}
+                        loop={false}
+                        name="door"
+                        play={playAnimation}
+                    />
+                </View>
                 <TextInput
-                    style={styles.text}
-                    placeholder="Username (minimum 3 characters)"
+                    style={styles.input}
+                    placeholder="Username"
+                    placeholderTextColor="#aaaaaa"
                     value={username}
                     onChangeText={setUsername}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
                 />
                 <TextInput
-                    style={[styles.text, styles.borderTop]}
-                    placeholder="Password (minimum 3 characters)"
+                    style={styles.input}
+                    placeholder="Password"
+                    placeholderTextColor="#aaaaaa"
                     value={password}
                     onChangeText={setPassword}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
                     secureTextEntry
                 />
-            </View>
-            <TouchableHighlight
-                onPress={handleSignIn}
-                style={styles.button}
-            >
-                <Text style={styles.buttonText}>Sign in</Text>
-            </TouchableHighlight>
-            <View style={styles.createAccount}>
-                <Button
-                    title="Create account"
-                    onPress={handleCreateAccount}
-                />
-            </View>
+                <TouchableOpacity
+                    onPress={handleSignIn}
+                    style={styles.button}
+                >
+                    <Text style={styles.buttonTitle}>Sign in</Text>
+                </TouchableOpacity>
+
+                <View style={styles.footerView}>
+                    <Text style={styles.footerText}>New user? <Text onPress={handleCreateAccount} style={styles.footerLink}>Create an account</Text></Text>
+                </View>
+            </KeyboardAwareScrollView>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
-    fieldContainer: {
-        marginTop: 20,
-        marginBottom: 20,
-        backgroundColor: '#fff',
-    },
-    text: {
-        height: 50,
-        margin: 0,
-        marginRight: 7,
-        paddingLeft: 10,
+    input: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        height: 48,
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 30,
+        marginRight: 30,
+        overflow: 'hidden',
+        paddingLeft: 16,
     },
     button: {
-        height: 50,
-        backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
-        alignSelf: 'stretch',
-        margin: 10,
-        justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#48BBEC',
         borderRadius: 5,
+        justifyContent: 'center',
+        height: 48,
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 20,
     },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
-    },
-    borderTop: {
-        borderColor: '#edeeef',
-        borderTopWidth: 0.5,
+    buttonTitle: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
     animationContainer: {
         backgroundColor: '#fff',
         height: 450,
     },
-    createAccount: {
-        marginTop: 20,
+    footerView: {
+        alignItems: 'center',
+        flex: 1,
+        marginTop: 20
+    },
+    footerText: {
+        color: '#2e2e2d',
+        fontSize: 16,
+    },
+    footerLink: {
+        color: '#48BBEC',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 
