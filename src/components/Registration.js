@@ -3,7 +3,7 @@ import {
     StyleSheet,
     Text,
     TextInput,
-    TouchableHighlight,
+    TouchableOpacity,
     View
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -12,7 +12,7 @@ import { store } from '../store/store';
 
 const Registration = ({ navigation }) => {
     const [fullName, setFullName] = useState('')
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
 
@@ -27,47 +27,57 @@ const Registration = ({ navigation }) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.container}>
             <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always"
             >
-                <View style={styles.fieldContainer}>
-                    <TextInput
-                        style={styles.text}
-                        placeholder="Full name"
-                        value={fullName}
-                        onChangeText={setFullName}
-                    />
-                    <TextInput
-                        style={[styles.text, styles.borderTop]}
-                        placeholder="Username (minimum 3 characters)"
-                        value={username}
-                        onChangeText={setUsername}
-                    />
-                    <TextInput
-                        style={[styles.text, styles.borderTop]}
-                        placeholder="Password (minimum 3 characters)"
-                        value={password}
-                        onChangeText={setPassword}
-                        secureTextEntry
-                    />
-                    <TextInput
-                        style={[styles.text, styles.borderTop]}
-                        placeholder="Confirm password"
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        secureTextEntry
-                    />
-                </View>
-                <TouchableHighlight
-                    onPress={handleRegistration}
+                <TextInput
+                    style={styles.input}
+                    placeholder="Full Name"
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={setFullName}
+                    value={fullName}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="E-mail"
+                    placeholderTextColor="#aaaaaa"
+                    onChangeText={setEmail}
+                    value={email}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    secureTextEntry
+                    placeholder="Password"
+                    onChangeText={setPassword}
+                    value={password}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholderTextColor="#aaaaaa"
+                    secureTextEntry
+                    placeholder="Confirm Password"
+                    onChangeText={setConfirmPassword}
+                    value={confirmPassword}
+                    underlineColorAndroid="transparent"
+                    autoCapitalize="none"
+                />
+                <TouchableOpacity
                     style={styles.button}
+                    onPress={handleRegistration}
                 >
-                    <Text style={styles.buttonText}>Create account</Text>
-                </TouchableHighlight>
-                <View>
-                    <Text>Already got an account? <Text onPress={handleGoToLogin}>Log in</Text></Text>
+                    <Text style={styles.buttonTitle}>Create account</Text>
+                </TouchableOpacity>
+                <View style={styles.footerView}>
+                    <Text style={styles.footerText}>Already got an account? <Text onPress={handleGoToLogin} style={styles.footerLink}>Log in</Text></Text>
                 </View>
             </KeyboardAwareScrollView>
         </View>
@@ -75,34 +85,49 @@ const Registration = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    fieldContainer: {
-        marginTop: 20,
-        marginBottom: 20,
-        backgroundColor: '#fff',
+    container: {
+        alignItems: 'center',
+        flex: 1,
     },
-    text: {
-        height: 50,
-        margin: 0,
-        marginRight: 7,
-        paddingLeft: 10,
+    input: {
+        backgroundColor: 'white',
+        borderRadius: 5,
+        height: 48,
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 30,
+        marginRight: 30,
+        overflow: 'hidden',
+        paddingLeft: 16,
     },
     button: {
-        height: 50,
+        alignItems: "center",
         backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
-        alignSelf: 'stretch',
-        margin: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
         borderRadius: 5,
+        justifyContent: 'center',
+        height: 48,
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 20,
     },
-    buttonText: {
-        color: '#fff',
-        fontSize: 18,
+    buttonTitle: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
-    borderTop: {
-        borderColor: '#edeeef',
-        borderTopWidth: 0.5,
+    footerView: {
+        alignItems: 'center',
+        flex: 1,
+        marginTop: 20,
+    },
+    footerText: {
+        color: '#2e2e2d',
+        fontSize: 16,
+    },
+    footerLink: {
+        color: '#48BBEC',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 
