@@ -5,6 +5,7 @@ import ProductList from '../components/ProductList';
 import ProductForm from '../components/ProductForm';
 import Settings from '../components/Settings';
 import SignIn from '../components/SignIn';
+import Registration from '../components/Registration';
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,11 @@ export function SingInStackScreen() {
         name="signin"
         component={SignIn}
         options={{ title: 'Login' }}
+      />
+      <Stack.Screen
+        name="registration"
+        component={Registration}
+        options={{ title: 'Create account' }}
       />
     </Stack.Navigator>
   );

@@ -1,5 +1,6 @@
 import React, { useState, useContext } from 'react';
 import {
+    Button,
     StyleSheet,
     Text,
     TextInput,
@@ -10,7 +11,7 @@ import LottieAnimation from '../animations/LottieAnimation';
 
 import { store } from '../store/store';
 
-const SignIn = () => {
+const SignIn = ({ navigation }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [playAnimation, setPlayAnimation] = useState(false);
@@ -25,6 +26,10 @@ const SignIn = () => {
 
     const signInAfterAnimation = () => {
         authContext.signIn({ username, password })
+    }
+
+    const handleCreateAccount = () => {
+        navigation.navigate('registration');
     }
 
     return (
@@ -59,6 +64,12 @@ const SignIn = () => {
             >
                 <Text style={styles.buttonText}>Sign in</Text>
             </TouchableHighlight>
+            <View style={styles.createAccount}>
+                <Button
+                    title="Create account"
+                    onPress={handleCreateAccount}
+                />
+            </View>
         </View>
     );
 };
@@ -96,6 +107,9 @@ const styles = StyleSheet.create({
     animationContainer: {
         backgroundColor: '#fff',
         height: 450,
+    },
+    createAccount: {
+        marginTop: 20,
     },
 });
 
