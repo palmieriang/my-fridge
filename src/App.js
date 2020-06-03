@@ -83,8 +83,8 @@ export default function App() {
               <SingInStackScreen />
             )}
           </NavigationContainer>
-        </LocalizationContext.Provider>)
-      }
+        </LocalizationContext.Provider>
+      )}
     </AuthProvider>
   );
 }
