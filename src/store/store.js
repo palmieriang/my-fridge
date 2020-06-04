@@ -1,5 +1,9 @@
 import React, { createContext, useEffect, useMemo, useReducer } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
+import { firebase } from '../firebase/config';
+import {decode, encode} from 'base-64';
+if (!global.btoa) { global.btoa = encode };
+if (!global.atob) { global.atob = decode };
 
 const initialState = {
     isLoading: true,
@@ -59,13 +63,41 @@ const AuthProvider = ({ children }) => {
 
     const authContext = useMemo(
         () => ({
-            signIn: async data => {
+            signIn: async ({ email, password }) => {
             // In a production app, we need to send some data (usually username, password) to server and get a token
             // We will also need to handle errors if sign in failed
             // After getting token, we need to persist the token using `AsyncStorage`
             // In the example, we'll use a dummy token
 
-            dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+                firebase
+                .auth()
+                .signInWithEmailAndPassword(email, password)
+                .then((response) => {
+                    console.log(response.user.id);
+                    const uid = response.user.uid
+                    const usersRef = firebase.firestore().collection('users')
+                    usersRef
+                        .doc(uid)
+                        .get()
+                        .then(firestoreDocument => {
+                            if (!firestoreDocument.exists) {
+                                alert("User does not exist anymore.")
+                                return;
+                            }
+                            const user = firestoreDocument.data()
+                            navigation.navigate('list', {user})
+                        })
+                        .catch(error => {
+                            alert(error)
+                            console.log('2')
+                        });
+                })
+                .catch(error => {
+                    alert(error)
+                    console.log('1')
+                })
+
+                dispatch({ type: 'SIGN_IN', token: email });
             },
             signOut: () => dispatch({ type: 'SIGN_OUT' }),
             signUp: async data => {
@@ -74,7 +106,34 @@ const AuthProvider = ({ children }) => {
             // After getting token, we need to persist the token using `AsyncStorage`
             // In the example, we'll use a dummy token
 
-            dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+                if (password !== confirmPassword) {
+                    alert("Passwords don't match.")
+                    return
+                }
+                firebase
+                    .auth()
+                    .createUserWithEmailAndPassword(email, password, fullName)
+                    .then((response) => {
+                        const uid = response.user.uid
+                        const data = {
+                            id: uid,
+                            email,
+                            fullName,
+                        };
+                        const usersRef = firebase.firestore().collection('users')
+                        usersRef
+                            .doc(uid)
+                            .set(data)
+                            .then(() => {
+                                navigation.navigate('signin', {user: data})
+                            })
+                            .catch((error) => {
+                                alert(error)
+                            });
+                    })
+                    .catch((error) => {
+                        alert(error)
+                });
             },
         }), []
     );
