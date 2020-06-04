@@ -19,7 +19,9 @@ const Registration = ({ navigation }) => {
     const { authContext } = useContext(store);
 
     const handleRegistration = () => {
-        authContext.signUp({ email, password, fullName });
+        authContext
+            .signUp({ fullName, email, password, confirmPassword })
+            .then(() => navigation.navigate('signin'));
     }
 
     const handleGoToLogin = () => {

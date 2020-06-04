@@ -73,7 +73,6 @@ const AuthProvider = ({ children }) => {
                 .auth()
                 .signInWithEmailAndPassword(email, password)
                 .then((response) => {
-                    console.log(response.user.id);
                     const uid = response.user.uid
                     const usersRef = firebase.firestore().collection('users')
                     usersRef
@@ -100,7 +99,7 @@ const AuthProvider = ({ children }) => {
                 dispatch({ type: 'SIGN_IN', token: email });
             },
             signOut: () => dispatch({ type: 'SIGN_OUT' }),
-            signUp: async data => {
+            signUp: async ({ fullName, email, password, confirmPassword }) => {
             // In a production app, we need to send user data to server and get a token
             // We will also need to handle errors if sign up failed
             // After getting token, we need to persist the token using `AsyncStorage`
@@ -112,7 +111,7 @@ const AuthProvider = ({ children }) => {
                 }
                 firebase
                     .auth()
-                    .createUserWithEmailAndPassword(email, password, fullName)
+                    .createUserWithEmailAndPassword(email, password)
                     .then((response) => {
                         const uid = response.user.uid
                         const data = {
