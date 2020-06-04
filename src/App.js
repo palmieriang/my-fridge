@@ -16,6 +16,9 @@ import {
 } from './navigation/navigation';
 import FreezerIcon from '../assets/freezer.svg';
 import SettingsIcon from '../assets/settings.svg';
+import {decode, encode} from 'base-64';
+if (!global.btoa) { global.btoa = encode };
+if (!global.atob) { global.atob = decode };
 
 import { AuthProvider } from './store/store';
 
