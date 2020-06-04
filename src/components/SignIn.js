@@ -13,20 +13,20 @@ import LottieAnimation from '../animations/LottieAnimation';
 import { store } from '../store/store';
 
 const SignIn = ({ navigation }) => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [playAnimation, setPlayAnimation] = useState(false);
 
     const { authContext } = useContext(store);
 
     const handleSignIn = () => {
-        if(username.length > 3 && password.length > 3) {
+        if(email.length > 3 && password.length > 3) {
             setPlayAnimation(true);
         }
     }
 
     const signInAfterAnimation = () => {
-        authContext.signIn({ username, password })
+        authContext.signIn({ email, password });
     }
 
     const handleCreateAccount = () => {
@@ -50,10 +50,10 @@ const SignIn = ({ navigation }) => {
                 </View>
                 <TextInput
                     style={styles.input}
-                    placeholder="Username"
+                    placeholder="Email"
                     placeholderTextColor="#aaaaaa"
-                    value={username}
-                    onChangeText={setUsername}
+                    value={email}
+                    onChangeText={setEmail}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
                 />
