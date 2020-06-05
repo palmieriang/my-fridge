@@ -42,7 +42,11 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
             if (user?.emailVerified) {
-                dispatch({ type: 'RESTORE_TOKEN', token: user.uid });
+                user.getIdToken(true).then((idToken) => {
+                    dispatch({ type: 'RESTORE_TOKEN', token: idToken });
+                }).catch((error) => {
+                    console.log('Restoring token failed', error);
+                });
             } else {
                 console.log('Restoring token failed');
             }
@@ -59,8 +63,11 @@ const AuthProvider = ({ children }) => {
 
                 firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((response) => {
-                    console.log(response.user);
-                    dispatch({ type: 'SIGN_IN', token: response.user.uid });
+                    response.user.getIdToken(true).then((idToken) => {
+                        dispatch({ type: 'SIGN_IN', token: idToken });
+                    }).catch((error) => {
+                        console.log('Current user error', error);
+                    });
                 })
                 .catch(function(error) {
                     var errorCode = error.code;
@@ -102,8 +109,8 @@ const AuthProvider = ({ children }) => {
                 .catch(function(error) {
                     var errorCode = error.code;
                     var errorMessage = error.message;
-                    console.info('errorCode', errorCode);
-                    console.info('errorMessage', errorMessage);
+                    console.info('errorCode ', errorCode);
+                    console.info('errorMessage ', errorMessage);
                 });
             },
         }), []
