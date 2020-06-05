@@ -41,8 +41,7 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
-            if (user?.uid) {
-                console.info('user 1', user);
+            if (user?.emailVerified) {
                 dispatch({ type: 'RESTORE_TOKEN', token: user.uid });
             } else {
                 console.log('Restoring token failed');
@@ -90,6 +89,16 @@ const AuthProvider = ({ children }) => {
                 }
 
                 firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then(() => {
+                    var user = firebase.auth().currentUser;
+
+                    user.sendEmailVerification()
+                    .then(() => {
+                        console.log('Verification email sent.');
+                    }).catch(function(error) {
+                        console.log('Verification email not sent.', error);
+                    });
+                })
                 .catch(function(error) {
                     var errorCode = error.code;
                     var errorMessage = error.message;
