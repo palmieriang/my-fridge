@@ -40,27 +40,14 @@ const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
-        // const usersRef = firebase.firestore().collection('users');
-        // firebase.auth().onAuthStateChanged(user => {
-        //     if (user) {
-        //         console.info('user', user);
-        //         dispatch({ type: 'RESTORE_TOKEN', token: user.uid });
-
-        //         usersRef
-        //         .doc(user.uid)
-        //         .get()
-        //         .then((document) => {
-        //             const userData = document.data()
-        //             console.info('userData', userData);
-        //             dispatch({ type: 'RESTORE_TOKEN', token: userData });
-        //         })
-        //         .catch((error) => {
-        //             setLoading(false)
-        //         });
-        //     } else {
-        //         console.log('Restoring token failed');
-        //     }
-        // });
+        firebase.auth().onAuthStateChanged(user => {
+            if (user?.uid) {
+                console.info('user 1', user);
+                dispatch({ type: 'RESTORE_TOKEN', token: user.uid });
+            } else {
+                console.log('Restoring token failed');
+            }
+        });
     }, []);
 
     const authContext = useMemo(
@@ -71,43 +58,27 @@ const AuthProvider = ({ children }) => {
             // After getting token, we need to persist the token using `AsyncStorage`
             // In the example, we'll use a dummy token
 
-                firebase
-                .auth()
-                .signInWithEmailAndPassword(email, password)
+                firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((response) => {
-                    const uid = response.user.uid;
-                    const usersRef = firebase.firestore().collection('users')
-                    usersRef
-                        .doc(uid)
-                        .get()
-                        .then(firestoreDocument => {
-                            if (!firestoreDocument.exists) {
-                                alert("User does not exist anymore.")
-                                return;
-                            }
-                            const user = firestoreDocument.data()
-                            dispatch({ type: 'SIGN_IN', token: email });
-                            navigation.navigate('list', {user})
-                        })
-                        .catch(error => {
-                            alert(error);
-                            console.log('2', error);
-                        });
+                    console.log(response.user);
+                    dispatch({ type: 'SIGN_IN', token: response.user.uid });
                 })
-                .catch(error => {
-                    alert(error);
-                    console.log('1', error);
-                })
+                .catch(function(error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.info('errorCode', errorCode);
+                    console.info('errorMessage', errorMessage);
+                });
             },
             signOut: () => {
                 firebase.auth().signOut().then(function() {
-                    console.log('Sign-out successful ');
+                    console.log('Sign-out successful');
                     dispatch({ type: 'SIGN_OUT' });
                 }).catch(function(error) {
-                    console.log('Sign-out error ', error);
+                    console.log('Sign-out ', error);
                 });
             },
-            signUp: async ({ fullName, email, password, confirmPassword }) => {
+            signUp: async ({ email, password, confirmPassword }) => {
             // In a production app, we need to send user data to server and get a token
             // We will also need to handle errors if sign up failed
             // After getting token, we need to persist the token using `AsyncStorage`
@@ -117,32 +88,14 @@ const AuthProvider = ({ children }) => {
                     alert("Passwords don't match.")
                     return
                 }
-                firebase
-                    .auth()
-                    .createUserWithEmailAndPassword(email, password)
-                    .then((response) => {
-                        const uid = response.user.uid
-                        const data = {
-                            id: uid,
-                            email,
-                            fullName,
-                        };
-                        const usersRef = firebase.firestore().collection('users')
-                        usersRef
-                            .doc(uid)
-                            .set(data)
-                            .then(() => {
-                                navigation.navigate('signin', {user: data})
-                            })
-                            .catch((error) => {
-                                alert(error);
-                                console.log('2 registration ', error);
-                            });
-                    })
-                    .catch((error) => {
-                        alert(error);
-                        console.log('1 registration ', error);
-                    });
+
+                firebase.auth().createUserWithEmailAndPassword(email, password)
+                .catch(function(error) {
+                    var errorCode = error.code;
+                    var errorMessage = error.message;
+                    console.info('errorCode', errorCode);
+                    console.info('errorMessage', errorMessage);
+                });
             },
         }), []
     );
