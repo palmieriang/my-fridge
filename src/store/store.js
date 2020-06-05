@@ -1,5 +1,4 @@
 import React, { createContext, useEffect, useMemo, useReducer } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
 import { firebase } from '../firebase/config';
 import {decode, encode} from 'base-64';
 if (!global.btoa) { global.btoa = encode };
@@ -41,24 +40,27 @@ const AuthProvider = ({ children }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
-        // Fetch the token from storage then navigate to our appropriate place
-        const bootstrapAsync = async () => {
-            let userToken;
+        // const usersRef = firebase.firestore().collection('users');
+        // firebase.auth().onAuthStateChanged(user => {
+        //     if (user) {
+        //         console.info('user', user);
+        //         dispatch({ type: 'RESTORE_TOKEN', token: user.uid });
 
-            try {
-                userToken = await AsyncStorage.getItem('userToken');
-            } catch (error) {
-                console.log('Restoring token failed ', error);
-            }
-
-            // After restoring token, we may need to validate it in production apps
-
-            // This will switch to the App screen or Auth screen and this loading
-            // screen will be unmounted and thrown away.
-            dispatch({ type: 'RESTORE_TOKEN', token: userToken });
-        };
-
-        bootstrapAsync();
+        //         usersRef
+        //         .doc(user.uid)
+        //         .get()
+        //         .then((document) => {
+        //             const userData = document.data()
+        //             console.info('userData', userData);
+        //             dispatch({ type: 'RESTORE_TOKEN', token: userData });
+        //         })
+        //         .catch((error) => {
+        //             setLoading(false)
+        //         });
+        //     } else {
+        //         console.log('Restoring token failed');
+        //     }
+        // });
     }, []);
 
     const authContext = useMemo(
@@ -73,7 +75,7 @@ const AuthProvider = ({ children }) => {
                 .auth()
                 .signInWithEmailAndPassword(email, password)
                 .then((response) => {
-                    const uid = response.user.uid
+                    const uid = response.user.uid;
                     const usersRef = firebase.firestore().collection('users')
                     usersRef
                         .doc(uid)
@@ -84,21 +86,27 @@ const AuthProvider = ({ children }) => {
                                 return;
                             }
                             const user = firestoreDocument.data()
+                            dispatch({ type: 'SIGN_IN', token: email });
                             navigation.navigate('list', {user})
                         })
                         .catch(error => {
-                            alert(error)
-                            console.log('2')
+                            alert(error);
+                            console.log('2', error);
                         });
                 })
                 .catch(error => {
-                    alert(error)
-                    console.log('1')
+                    alert(error);
+                    console.log('1', error);
                 })
-
-                dispatch({ type: 'SIGN_IN', token: email });
             },
-            signOut: () => dispatch({ type: 'SIGN_OUT' }),
+            signOut: () => {
+                firebase.auth().signOut().then(function() {
+                    console.log('Sign-out successful ');
+                    dispatch({ type: 'SIGN_OUT' });
+                }).catch(function(error) {
+                    console.log('Sign-out error ', error);
+                });
+            },
             signUp: async ({ fullName, email, password, confirmPassword }) => {
             // In a production app, we need to send user data to server and get a token
             // We will also need to handle errors if sign up failed
@@ -127,12 +135,14 @@ const AuthProvider = ({ children }) => {
                                 navigation.navigate('signin', {user: data})
                             })
                             .catch((error) => {
-                                alert(error)
+                                alert(error);
+                                console.log('2 registration ', error);
                             });
                     })
                     .catch((error) => {
-                        alert(error)
-                });
+                        alert(error);
+                        console.log('1 registration ', error);
+                    });
             },
         }), []
     );
