@@ -13,7 +13,8 @@ const Settings = () => {
         { label: t('french'), value: 'fr', key: 'french' },
     ];
 
-    const { authContext } = useContext(store);
+    const { state, authContext } = useContext(store);
+    const { user } = state;
 
     const handleLogOut = () => {
         authContext.signOut();
@@ -21,6 +22,7 @@ const Settings = () => {
 
     return (
         <View style={{ flex: 1, alignItems: 'center' }}>
+            <Text style={{ marginTop: 15, marginBottom: 15 }}>Welcome {user.email}</Text>
             <Text style={{ marginTop: 15, marginBottom: 15 }}>
                 Current locale: {locale}.{' '}
                 {locale !== 'en' && locale !== 'it' && locale !== 'fr'

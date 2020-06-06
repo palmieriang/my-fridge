@@ -8,6 +8,7 @@ const initialState = {
     isLoading: true,
     isSignout: false,
     userToken: null,
+    user: null,
 };
 
 const reducer = (prevState, action) => {
@@ -17,18 +18,21 @@ const reducer = (prevState, action) => {
             ...prevState,
             userToken: action.token,
             isLoading: false,
+            user: action.user,
         };
         case 'SIGN_IN':
         return {
             ...prevState,
             isSignout: false,
             userToken: action.token,
+            user: action.user,
         };
         case 'SIGN_OUT':
         return {
             ...prevState,
             isSignout: true,
             userToken: null,
+            user: null,
         }
     };
 }
@@ -43,7 +47,7 @@ const AuthProvider = ({ children }) => {
         firebase.auth().onAuthStateChanged(user => {
             if (user?.emailVerified) {
                 user.getIdToken(true).then((idToken) => {
-                    dispatch({ type: 'RESTORE_TOKEN', token: idToken });
+                    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
                 }).catch((error) => {
                     console.log('Restoring token failed', error);
                 });
@@ -64,7 +68,7 @@ const AuthProvider = ({ children }) => {
                 firebase.auth().signInWithEmailAndPassword(email, password)
                 .then((response) => {
                     response.user.getIdToken(true).then((idToken) => {
-                        dispatch({ type: 'SIGN_IN', token: idToken });
+                        dispatch({ type: 'SIGN_IN', token: idToken, user: response.user });
                     }).catch((error) => {
                         console.log('Current user error', error);
                     });
