@@ -41,7 +41,7 @@ const store = createContext(initialState);
 const { Provider, Consumer } = store;
 
 const AuthProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [authState, dispatch] = useReducer(reducer, initialState);
 
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
@@ -121,7 +121,7 @@ const AuthProvider = ({ children }) => {
     );
 
     return (
-        <Provider value={{ state, dispatch, authContext }}>
+        <Provider value={{ authState, dispatch, authContext }}>
             <Consumer>
                 {children}
             </Consumer>
