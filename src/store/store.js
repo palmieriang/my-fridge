@@ -104,11 +104,11 @@ const AuthProvider = ({ children }) => {
                     var user = firebase.auth().currentUser;
 
                     user.sendEmailVerification()
-                    .then(() => {
-                        console.log('Verification email sent.');
-                    }).catch(function(error) {
-                        console.log('Verification email not sent.', error);
-                    });
+                        .then(() => {
+                            console.log('Verification email sent.');
+                        }).catch(function(error) {
+                            console.log('Verification email not sent.', error);
+                        });
                 })
                 .catch(function(error) {
                     var errorCode = error.code;
