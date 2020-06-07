@@ -45,10 +45,10 @@ export default function App() {
 
   return (
     <AuthProvider>
-      { ({state}) => (
+      { ({authState}) => (
         <LocalizationContext.Provider value={localizationContext}>
           <NavigationContainer>
-            {state.userToken ? (
+            {authState.userToken ? (
               <Tab.Navigator
                 screenOptions={({ route }) => ({
                   tabBarIcon: ({ focused, color, size }) => {

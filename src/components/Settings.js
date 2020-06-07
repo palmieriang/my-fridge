@@ -13,8 +13,8 @@ const Settings = () => {
         { label: t('french'), value: 'fr', key: 'french' },
     ];
 
-    const { state, authContext } = useContext(store);
-    const { user } = state;
+    const { authState, authContext } = useContext(store);
+    const { user } = authState;
 
     const handleLogOut = () => {
         authContext.signOut();
