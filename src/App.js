@@ -20,7 +20,7 @@ import {decode, encode} from 'base-64';
 if (!global.btoa) { global.btoa = encode };
 if (!global.atob) { global.atob = decode };
 
-import { AuthProvider } from './store/store';
+import { AuthProvider } from './store/authStore';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',

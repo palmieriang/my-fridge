@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
-import { store } from '../store/store';
+import { authStore } from '../store/authStore';
 
 const Registration = ({ navigation }) => {
     const [fullName, setFullName] = useState('')
@@ -16,7 +16,7 @@ const Registration = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('')
 
-    const { authContext } = useContext(store);
+    const { authContext } = useContext(authStore);
 
     const handleRegistration = () => {
         authContext

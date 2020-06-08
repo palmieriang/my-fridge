@@ -37,8 +37,8 @@ const reducer = (prevState, action) => {
     };
 }
 
-const store = createContext(initialState);
-const { Provider, Consumer } = store;
+const authStore = createContext(initialState);
+const { Provider, Consumer } = authStore;
 
 const AuthProvider = ({ children }) => {
     const [authState, dispatch] = useReducer(reducer, initialState);
@@ -103,6 +103,7 @@ const AuthProvider = ({ children }) => {
                 .then(() => {
                     var user = firebase.auth().currentUser;
 
+                    // send verification email
                     user.sendEmailVerification()
                         .then(() => {
                             console.log('Verification email sent.');
@@ -129,4 +130,4 @@ const AuthProvider = ({ children }) => {
     );
 };
 
-export { store, AuthProvider };
+export { authStore, AuthProvider };
