@@ -10,14 +10,14 @@ import {
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import LottieAnimation from '../animations/LottieAnimation';
 
-import { store } from '../store/store';
+import { authStore } from '../store/authStore';
 
 const SignIn = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [playAnimation, setPlayAnimation] = useState(false);
 
-    const { authContext } = useContext(store);
+    const { authContext } = useContext(authStore);
 
     const handleSignIn = () => {
         if(email.length > 3 && password.length > 3) {
