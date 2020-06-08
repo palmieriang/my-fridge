@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { formatDate, getCountdownParts } from '../../api/api';
-import { LocalizationContext } from '../localization/localization';
+import { localeStore } from '../store/localeStore';
 import SwipeableRow from './SwipeableRow';
 
 const ProductCard = ({ product, changeProduct, deleteProduct }) => {
     const [expired, setExpired] = useState(false);
-    const { t } = useContext(LocalizationContext);
+    const { localizationContext: { t } } = useContext(localeStore);
     const { days } = getCountdownParts(product.date);
 
     useEffect(() => {

@@ -1,13 +1,9 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
-import React, {
-  useState,
-  useMemo,
-} from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, YellowBox } from 'react-native';
-import { loadLocale, LocalizationContext } from './localization/localization';
 import {
   FridgeStackScreen,
   FreezerStackScreen,
@@ -21,6 +17,7 @@ if (!global.btoa) { global.btoa = encode };
 if (!global.atob) { global.atob = decode };
 
 import { AuthProvider } from './store/authStore';
+import { LocaleProvider } from './store/localeStore';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -30,68 +27,58 @@ YellowBox.ignoreWarnings([
 const Tab = createBottomTabNavigator();
 
 export default function App() {
-  // localization
-  const [locale, setLocale] = useState(loadLocale.locale);
-  const localizationContext = useMemo(
-    () => ({
-      t: (scope, options) => loadLocale.t(scope, { locale, ...options }),
-      locale,
-      setLocale,
-    }),
-    [locale]
-  );
-
-  const { t } = localizationContext;
 
   return (
     <AuthProvider>
-      { ({authState}) => (
-        <LocalizationContext.Provider value={localizationContext}>
-          <NavigationContainer>
-            {authState.userToken ? (
-              <Tab.Navigator
-                screenOptions={({ route }) => ({
-                  tabBarIcon: ({ focused, color, size }) => {
-                    let IconName;
-                    size = focused ? size : '22';
+      {({authState}) => (
+        <LocaleProvider>
+          {({localizationContext: { t }}) => (
+            <NavigationContainer>
+              {authState.userToken ? (
+                <Tab.Navigator
+                  screenOptions={({ route }) => ({
+                    tabBarIcon: ({ focused, color, size }) => {
+                      let IconName;
+                      size = focused ? size : '22';
 
-                    if (route.name === t('fridge') || route.name === t('freezer')) {
-                      IconName = FreezerIcon;
-                    } else if (route.name === t('settings')) {
-                      IconName = SettingsIcon;
-                    }
+                      if (route.name === t('fridge') || route.name === t('freezer')) {
+                        IconName = FreezerIcon;
+                      } else if (route.name === t('settings')) {
+                        IconName = SettingsIcon;
+                      }
 
-                    return (
-                      <View style={styles.tabIcon}>
-                        <IconName width={size} height={size} fill={color} />
-                        {route.name === t('freezer') &&
+                      return (
+                        <View style={styles.tabIcon}>
                           <IconName width={size} height={size} fill={color} />
-                        }
-                      </View>
-                    );
-                  },
-                })}
-                tabBarOptions={{
-                  activeTintColor: 'rgba(231, 76, 60, 1)',
-                  inactiveTintColor: 'black',
-                  showIcon: true,
-                  showLabel: true,
-                }}
-              >
-                <Tab.Screen name={t('fridge')} component={FridgeStackScreen} />
-                <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
-                <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
-              </Tab.Navigator>
-            ) : (
-              <SingInStackScreen />
-            )}
-          </NavigationContainer>
-        </LocalizationContext.Provider>
+                          {route.name === t('freezer') &&
+                            <IconName width={size} height={size} fill={color} />
+                          }
+                        </View>
+                      );
+                    },
+                  })}
+                  tabBarOptions={{
+                    activeTintColor: 'rgba(231, 76, 60, 1)',
+                    inactiveTintColor: 'black',
+                    showIcon: true,
+                    showLabel: true,
+                  }}
+                >
+                  <Tab.Screen name={t('fridge')} component={FridgeStackScreen} />
+                  <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
+                  <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
+                </Tab.Navigator>
+              ) : (
+                <SingInStackScreen />
+              )}
+            </NavigationContainer>
+          )}
+        </LocaleProvider>
       )}
     </AuthProvider>
   );
 }
- 
+
 registerRootComponent(App);
 
 const styles = StyleSheet.create({

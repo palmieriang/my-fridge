@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import { LocalizationContext } from '../localization/localization';
+import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 
 const Settings = () => {
-    const { t, locale, setLocale } = useContext(LocalizationContext);
+    const { localizationContext: { t }, locale, setLocale } = useContext(localeStore);
     const  languageData = [
         { section: true, label: t('chooseLanguage'), key: 'title'},
         { label: t('english'), value: 'en', key: 'english' },

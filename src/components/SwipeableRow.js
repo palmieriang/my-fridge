@@ -1,11 +1,11 @@
 import React, { useContext, useRef } from 'react';
 import { Animated, Text, View, StyleSheet, I18nManager } from 'react-native';
 import PropTypes from 'prop-types';
-import { LocalizationContext } from '../localization/localization';
+import { localeStore } from '../store/localeStore';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 
 const SwipeableRow = ({ children, modifyFunction, deleteFunction }) => {
-    const { t } = useContext(LocalizationContext);
+    const { localizationContext: { t } } = useContext(localeStore);
     const swipeableRef = useRef();
 
     const renderLeftActions = (progress, dragX) => {
