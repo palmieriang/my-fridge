@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import { getProducts, getProductById, deleteProduct } from '../../api/api';
-import { LocalizationContext } from '../localization/localization';
+import { localeStore } from '../store/localeStore';
 
 import ProductCard from './ProductCard';
 
 const ProductList = ({ navigation, route }) => {
-    const { t } = useContext(LocalizationContext);
+    const { localizationContext: { t } } = useContext(localeStore);
     const { place } = route.params;
     const [productList, setProductList] = useState([]);
 

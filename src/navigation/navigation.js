@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { LocalizationContext } from '../localization/localization';
+import { localeStore } from '../store/localeStore';
 import ProductList from '../components/ProductList';
 import ProductForm from '../components/ProductForm';
 import Settings from '../components/Settings';
@@ -10,7 +10,7 @@ import Registration from '../components/Registration';
 const Stack = createStackNavigator();
 
 export function FridgeStackScreen() {
-  const { t } = useContext(LocalizationContext);
+  const { localizationContext: { t } } = useContext(localeStore);
 
   return (
     <Stack.Navigator>
@@ -32,7 +32,7 @@ export function FridgeStackScreen() {
 }
 
 export function FreezerStackScreen() {
-  const { t } = useContext(LocalizationContext);
+  const { localizationContext: { t } } = useContext(localeStore);
 
   return (
     <Stack.Navigator>
@@ -52,7 +52,7 @@ export function FreezerStackScreen() {
 }
 
 export function SettingsStackScreen() {
-  const { t } = useContext(LocalizationContext);
+  const { localizationContext: { t } } = useContext(localeStore);
 
   return (
     <Stack.Navigator>

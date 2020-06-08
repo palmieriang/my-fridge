@@ -9,11 +9,11 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { formatDate, saveProduct, deleteProduct } from '../../api/api';
-import { LocalizationContext } from '../localization/localization';
+import { localeStore } from '../store/localeStore';
 
 const ProductForm = ({ navigation, route }) => {
     const { params } = route;
-    const { t } = useContext(LocalizationContext);
+    const { localizationContext: { t } } = useContext(localeStore);
 
     const existingName = params.product?.name || '';
     const existingDate = params.product?.date || '';
