@@ -30,11 +30,11 @@ export default function App() {
 
   return (
     <AuthProvider>
-      {({authState}) => (
+      {({authState: { userToken }}) => (
         <LocaleProvider>
           {({localizationContext: { t }}) => (
             <NavigationContainer>
-              {authState.userToken ? (
+              {userToken ? (
                 <Tab.Navigator
                   screenOptions={({ route }) => ({
                     tabBarIcon: ({ focused, color, size }) => {
