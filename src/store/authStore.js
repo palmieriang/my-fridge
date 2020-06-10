@@ -39,6 +39,7 @@ const reducer = (prevState, action) => {
 
 const authStore = createContext(initialState);
 const { Provider, Consumer } = authStore;
+const db = firebase.firestore();
 
 const AuthProvider = ({ children }) => {
     const [authState, dispatch] = useReducer(reducer, initialState);
@@ -88,7 +89,7 @@ const AuthProvider = ({ children }) => {
                     console.log('Sign-out ', error);
                 });
             },
-            signUp: async ({ email, password, confirmPassword }) => {
+            signUp: async ({ fullName, email, password, confirmPassword }) => {
             // In a production app, we need to send user data to server and get a token
             // We will also need to handle errors if sign up failed
             // After getting token, we need to persist the token using `AsyncStorage`
@@ -100,22 +101,35 @@ const AuthProvider = ({ children }) => {
                 }
 
                 firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((response) => {
+                    const uid = response.user.uid
+                    const data = {
+                        id: uid,
+                        email,
+                        fullName,
+                    };
+                    // add more user data inside firestore
+                    return db.collection('users')
+                        .doc(uid)
+                        .set(data)
+                        .catch((error) => {
+                            alert(error);
+                            console.log('set data error: ', error);
+                        });
+                })
                 .then(() => {
-                    var user = firebase.auth().currentUser;
-
                     // send verification email
+                    var user = firebase.auth().currentUser;
                     user.sendEmailVerification()
                         .then(() => {
                             console.log('Verification email sent.');
-                        }).catch(function(error) {
+                        }).catch((error) => {
                             console.log('Verification email not sent.', error);
                         });
                 })
-                .catch(function(error) {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    console.info('errorCode ', errorCode);
-                    console.info('errorMessage ', errorMessage);
+                .catch((error) => {
+                    alert(error);
+                    console.info('error ', error);
                 });
             },
         }), []
