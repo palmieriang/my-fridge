@@ -12,9 +12,13 @@ import {
 } from './navigation/navigation';
 import FreezerIcon from '../assets/freezer.svg';
 import SettingsIcon from '../assets/settings.svg';
-import {decode, encode} from 'base-64';
-if (!global.btoa) { global.btoa = encode };
-if (!global.atob) { global.atob = decode };
+
+import { decode, encode } from 'base-64'
+global.crypto = require("@firebase/firestore");
+global.crypto.getRandomValues = byteArray => { for (let i = 0; i < byteArray.length; i++) { byteArray[i] = Math.floor(256 * Math.random()); } }
+
+if (!global.btoa) { global.btoa = encode; }
+if (!global.atob) { global.atob = decode; }
 
 import { AuthProvider } from './store/authStore';
 import { LocaleProvider } from './store/localeStore';
