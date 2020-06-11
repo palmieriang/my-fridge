@@ -1,8 +1,5 @@
 import React, { createContext, useEffect, useMemo, useReducer } from 'react';
 import { firebase } from '../firebase/config';
-import {decode, encode} from 'base-64';
-if (!global.btoa) { global.btoa = encode };
-if (!global.atob) { global.atob = decode };
 
 const initialState = {
     isLoading: true,
@@ -75,10 +72,8 @@ const AuthProvider = ({ children }) => {
                     });
                 })
                 .catch(function(error) {
-                    var errorCode = error.code;
-                    var errorMessage = error.message;
-                    console.info('errorCode', errorCode);
-                    console.info('errorMessage', errorMessage);
+                    alert(error.message);
+                    console.info('Sign in error: ', error.message);
                 });
             },
             signOut: () => {
@@ -86,7 +81,7 @@ const AuthProvider = ({ children }) => {
                     console.log('Sign-out successful');
                     dispatch({ type: 'SIGN_OUT' });
                 }).catch(function(error) {
-                    console.log('Sign-out ', error);
+                    console.log('Sign-out error: ', error.message);
                 });
             },
             signUp: async ({ fullName, email, password, confirmPassword }) => {
@@ -119,9 +114,10 @@ const AuthProvider = ({ children }) => {
                 })
                 .then(() => {
                     // send verification email
-                    var user = firebase.auth().currentUser;
+                    const user = firebase.auth().currentUser;
                     user.sendEmailVerification()
                         .then(() => {
+                            alert('Please verify your account.');
                             console.log('Verification email sent.');
                         }).catch((error) => {
                             console.log('Verification email not sent.', error);
@@ -129,7 +125,7 @@ const AuthProvider = ({ children }) => {
                 })
                 .catch((error) => {
                     alert(error);
-                    console.info('error ', error);
+                    console.info('error ', JSON.stringify(error));
                 });
             },
         }), []
