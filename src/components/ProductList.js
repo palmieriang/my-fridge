@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import { getProductById, deleteProduct } from '../../api/api';
+import { deleteProduct } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { firebase } from '../firebase/config';
@@ -62,11 +62,17 @@ const ProductList = ({ navigation, route }) => {
     };
 
     const handleChangeProduct = (id) => {
-        getProductById(id)
-            .then((product) => navigation.navigate('form', {
-                product,
-                title: t('modifyItem'),
-            }))
+        productRef
+            .doc(id)
+            .get()
+            .then((response) => {
+                const product = response.data();
+
+                navigation.navigate('form', {
+                    product,
+                    title: t('modifyItem'),
+                })
+            })
             .catch(error => console.log('Error: ', error));
     };
 
