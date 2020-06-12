@@ -2,22 +2,24 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import { getProducts, getProductById, deleteProduct } from '../../api/api';
 import { localeStore } from '../store/localeStore';
+import { authStore } from '../store/authStore';
+import { firebase } from '../firebase/config';
 
 import ProductCard from './ProductCard';
 
 const ProductList = ({ navigation, route }) => {
     const { localizationContext: { t } } = useContext(localeStore);
+    const { authState: { user } } = useContext(authStore);
     const { place } = route.params;
     const [productList, setProductList] = useState([]);
 
+    const productRef = firebase.firestore().collection('products');
+    const userID = user.uid;
+
     useEffect(() => {
-        const updateState = navigation.addListener('focus', () => {
-            getProductsFromApi(place);
-        });
-        return updateState;
-    }, [navigation]);
+        getProductsFromApi(userID, place)
+    }, []);
 
     useEffect(() => {
         if (productList.length > 0) {
@@ -33,21 +35,44 @@ const ProductList = ({ navigation, route }) => {
         }
     }, [productList]);
 
-    const getProductsFromApi = (place) => {
-        getProducts(place)
-        .then(products => setProductList(products.map(product => ({
-            ...product,
-            timer: Date.now(),
-        }))))
-        .catch(error => console.log('Error on get products list: ', error));
+    const getProductsFromApi = (userID, place) => {
+        productRef
+            .where("authorID", "==", userID)
+            .where("place", "==", place)
+            .orderBy('createdAt', 'desc')
+            .onSnapshot(
+                querySnapshot => {
+                    const newProducts = []
+                    querySnapshot.forEach(doc => {
+                        const product = doc.data();
+                        product.id = doc.id;
+                        newProducts.push(product);
+                    });
+                    setProductList(newProducts.map(product => ({
+                        ...product,
+                        date: new Date(product.date),
+                        timer: Date.now(),
+                    })))
+                },
+                error => {
+                    console.log(error)
+                }
+            )
     };
 
     const handleChangeProduct = (id) => {
-        getProductById(id)
-            .then((product) => navigation.navigate('form', {
-                product,
-                title: t('modifyItem'),
-            }))
+        productRef
+            .doc(id)
+            .get()
+            .then((response) => {
+                const product = response.data();
+
+                navigation.navigate('form', {
+                    id,
+                    product,
+                    title: t('modifyItem'),
+                })
+            })
             .catch(error => console.log('Error: ', error));
     };
 
@@ -58,8 +83,9 @@ const ProductList = ({ navigation, route }) => {
     };
 
     const handleDelete = (id) => {
-        deleteProduct(id);
-        getProductsFromApi(place);
+        productRef
+            .doc(id)
+            .delete();
     }
 
     return (

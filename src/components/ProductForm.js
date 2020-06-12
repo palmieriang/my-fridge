@@ -4,27 +4,72 @@ import {
     TouchableOpacity,
     TextInput,
     View,
-    StyleSheet
+    StyleSheet,
+    YellowBox,
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
-import { formatDate, saveProduct, deleteProduct } from '../../api/api';
+import { formatDate } from '../../api/api';
 import { localeStore } from '../store/localeStore';
+import { authStore } from '../store/authStore';
+import { firebase } from '../firebase/config';
+
+YellowBox.ignoreWarnings([
+    'Non-serializable values were found in the navigation state',
+]);
 
 const ProductForm = ({ navigation, route }) => {
     const { params } = route;
     const { localizationContext: { t } } = useContext(localeStore);
+    const { authState: { user } } = useContext(authStore);
 
     const existingName = params.product?.name || '';
     const existingDate = params.product?.date || '';
     const existingPlace = params.product?.place || '';
-    const existingId = params.product?.id || '';
+    const existingId = params?.id || '';
     const initPickerDate = existingDate ? new Date(existingDate) : new Date();
 
     const [name, setName] = useState('' || existingName);
     const [date, setDate] = useState('' || existingDate);
     const [place, setPlace] = useState('' || existingPlace);
     const [showDatePicker, setShowDatePicker] = useState(false);
+
+    const productRef = firebase.firestore().collection('products');
+    const userID = user.uid;
+
+    const handleAddPress = () => {
+        if (name.length >= 3 && date && place) {
+            const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+            const data = {
+                name,
+                date,
+                place,
+                authorID: userID,
+                createdAt: timestamp,
+            };
+            if(existingId) {
+                productRef
+                    .doc(existingId)
+                    .set(data)
+                    .then(_doc => {
+                        navigation.navigate('list');
+                    })
+                    .catch((error) => {
+                        alert(error)
+                    });
+            } else {
+                productRef
+                    .doc()
+                    .set(data)
+                    .then(_doc => {
+                        navigation.navigate('list');
+                    })
+                    .catch((error) => {
+                        alert(error)
+                    });
+            }
+        }
+    };
 
     const handleChangeName = (value) => {
         setName(value);
@@ -43,19 +88,21 @@ const ProductForm = ({ navigation, route }) => {
         setShowDatePicker(false);
     }
 
-    const handleAddPress = () => {
-        if(name.length >= 3 && date && place) {
-            saveProduct(name, date, place, existingId)
-            .then(() => navigation.navigate('list'));
-
-            console.log('Item added');
-        }
-    }
-
     const handleDeletePress = () => {
+        if(existingId) {
+            productRef
+                .doc(existingId)
+                .delete()
+                .then(() => navigation.navigate('list'))
+                .catch(error => console.log('Error: ', error));
+        } else {
+            productRef
+                .doc()
+                .delete()
+                .then(() => navigation.navigate('list'))
+                .catch(error => console.log('Error: ', error));
+        }
         console.log('Item deleted');
-        deleteProduct(existingId)
-            .then(() => navigation.navigate('list'));
     }
 
     return (
