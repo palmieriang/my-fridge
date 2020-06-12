@@ -17,22 +17,17 @@ const ProductForm = ({ navigation, route }) => {
     const { params } = route;
     const { localizationContext: { t } } = useContext(localeStore);
     const { authState: { user } } = useContext(authStore);
-    console.info('user ', user.uid);
-    console.info('---------------------------');
 
     const existingName = params.product?.name || '';
     const existingDate = params.product?.date || '';
     const existingPlace = params.product?.place || '';
-    const existingId = params.product?.id || '';
+    const existingId = params?.id || '';
     const initPickerDate = existingDate ? new Date(existingDate) : new Date();
 
     const [name, setName] = useState('' || existingName);
     const [date, setDate] = useState('' || existingDate);
     const [place, setPlace] = useState('' || existingPlace);
     const [showDatePicker, setShowDatePicker] = useState(false);
-
-
-
 
     const productRef = firebase.firestore().collection('products');
     const userID = user.uid;
@@ -56,7 +51,7 @@ const ProductForm = ({ navigation, route }) => {
     //         )
     // }, []);
 
-    const onAddButtonPress = () => {
+    const handleAddPress = () => {
         if (name.length >= 3 && date && place) {
             const timestamp = firebase.firestore.FieldValue.serverTimestamp();
             const data = {
@@ -77,9 +72,6 @@ const ProductForm = ({ navigation, route }) => {
         }
     };
 
-
-
-
     const handleChangeName = (value) => {
         setName(value);
     }
@@ -97,18 +89,11 @@ const ProductForm = ({ navigation, route }) => {
         setShowDatePicker(false);
     }
 
-    const handleAddPress = () => {
-        if(name.length >= 3 && date && place) {
-            saveProduct(name, date, place, existingId)
-            .then(() => navigation.navigate('list'));
-
-            console.log('Item added');
-        }
-    }
-
     const handleDeletePress = () => {
-        console.log('Item deleted');
-        deleteProduct(existingId)
+        console.log('Item deleted ');
+        productRef
+            .doc(existingId)
+            .delete()
             .then(() => navigation.navigate('list'));
     }
 
@@ -150,7 +135,7 @@ const ProductForm = ({ navigation, route }) => {
                 ]}
             />
             <TouchableOpacity
-                onPress={onAddButtonPress}
+                onPress={handleAddPress}
                 style={styles.button}
             >
                 {existingId ? (
