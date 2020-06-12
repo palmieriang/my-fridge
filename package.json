@@ -5,8 +5,7 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject",
-    "backend": "json-server --watch db.json --port 3000"
+    "eject": "expo eject"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.11.0",
@@ -19,7 +18,7 @@
     "expo": "~37.0.3",
     "expo-constants": "^9.0.0",
     "expo-localization": "~8.1.0",
-    "firebase": "^7.14.6",
+    "firebase": "7.9.0",
     "i": "^0.3.6",
     "i18n-js": "^3.5.1",
     "lottie-ios": "^3.1.8",
@@ -41,14 +40,12 @@
     "react-native-screens": "~2.2.0",
     "react-native-svg": "11.0.1",
     "react-native-svg-transformer": "^0.14.3",
-    "react-native-web": "~0.11.7",
-    "uuid": "^8.0.0"
+    "react-native-web": "~0.11.7"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
-    "babel-preset-expo": "~8.1.0",
-    "json-server": "^0.16.1"
+    "babel-preset-expo": "~8.1.0"
   },
   "private": true
 }
