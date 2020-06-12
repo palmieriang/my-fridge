@@ -1,17 +1,22 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     Text,
     TouchableOpacity,
     TextInput,
     View,
-    StyleSheet
+    StyleSheet,
+    YellowBox,
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
-import { formatDate, saveProduct, deleteProduct } from '../../api/api';
+import { formatDate } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { firebase } from '../firebase/config';
+
+YellowBox.ignoreWarnings([
+    'Non-serializable values were found in the navigation state',
+]);
 
 const ProductForm = ({ navigation, route }) => {
     const { params } = route;
@@ -32,25 +37,6 @@ const ProductForm = ({ navigation, route }) => {
     const productRef = firebase.firestore().collection('products');
     const userID = user.uid;
 
-    // useEffect(() => {
-    //     productRef
-    //         .where("authorID", "==", userID)
-    //         .orderBy('createdAt', 'desc')
-    //         .onSnapshot(
-    //             querySnapshot => {
-    //                 const newProducts = []
-    //                 querySnapshot.forEach(doc => {
-    //                     const product = doc.data()
-    //                     product.id = doc.id
-    //                     newProducts.push(product)
-    //                 });
-    //             },
-    //             error => {
-    //                 console.log(error)
-    //             }
-    //         )
-    // }, []);
-
     const handleAddPress = () => {
         if (name.length >= 3 && date && place) {
             const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -61,14 +47,27 @@ const ProductForm = ({ navigation, route }) => {
                 authorID: userID,
                 createdAt: timestamp,
             };
-            productRef
-                .add(data)
-                .then(_doc => {
-                    navigation.navigate('list');
-                })
-                .catch((error) => {
-                    alert(error)
-                });
+            if(existingId) {
+                productRef
+                    .doc(existingId)
+                    .set(data)
+                    .then(_doc => {
+                        navigation.navigate('list');
+                    })
+                    .catch((error) => {
+                        alert(error)
+                    });
+            } else {
+                productRef
+                    .doc()
+                    .set(data)
+                    .then(_doc => {
+                        navigation.navigate('list');
+                    })
+                    .catch((error) => {
+                        alert(error)
+                    });
+            }
         }
     };
 
@@ -90,11 +89,20 @@ const ProductForm = ({ navigation, route }) => {
     }
 
     const handleDeletePress = () => {
-        console.log('Item deleted ');
-        productRef
-            .doc(existingId)
-            .delete()
-            .then(() => navigation.navigate('list'));
+        if(existingId) {
+            productRef
+                .doc(existingId)
+                .delete()
+                .then(() => navigation.navigate('list'))
+                .catch(error => console.log('Error: ', error));
+        } else {
+            productRef
+                .doc()
+                .delete()
+                .then(() => navigation.navigate('list'))
+                .catch(error => console.log('Error: ', error));
+        }
+        console.log('Item deleted');
     }
 
     return (
