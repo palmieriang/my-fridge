@@ -19,7 +19,7 @@ const ProductList = ({ navigation, route }) => {
 
     useEffect(() => {
         getProductsFromApi(userID, place)
-     }, []);
+    }, []);
 
     useEffect(() => {
         if (productList.length > 0) {
