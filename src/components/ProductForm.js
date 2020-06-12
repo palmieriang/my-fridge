@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     Text,
     TouchableOpacity,
@@ -10,10 +10,15 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
 import { formatDate, saveProduct, deleteProduct } from '../../api/api';
 import { localeStore } from '../store/localeStore';
+import { authStore } from '../store/authStore';
+import { firebase } from '../firebase/config';
 
 const ProductForm = ({ navigation, route }) => {
     const { params } = route;
     const { localizationContext: { t } } = useContext(localeStore);
+    const { authState: { user } } = useContext(authStore);
+    console.info('user ', user.uid);
+    console.info('---------------------------');
 
     const existingName = params.product?.name || '';
     const existingDate = params.product?.date || '';
@@ -25,6 +30,55 @@ const ProductForm = ({ navigation, route }) => {
     const [date, setDate] = useState('' || existingDate);
     const [place, setPlace] = useState('' || existingPlace);
     const [showDatePicker, setShowDatePicker] = useState(false);
+
+
+
+
+    const productRef = firebase.firestore().collection('products');
+    const userID = user.uid;
+
+    // useEffect(() => {
+    //     productRef
+    //         .where("authorID", "==", userID)
+    //         .orderBy('createdAt', 'desc')
+    //         .onSnapshot(
+    //             querySnapshot => {
+    //                 const newProducts = []
+    //                 querySnapshot.forEach(doc => {
+    //                     const product = doc.data()
+    //                     product.id = doc.id
+    //                     newProducts.push(product)
+    //                 });
+    //             },
+    //             error => {
+    //                 console.log(error)
+    //             }
+    //         )
+    // }, []);
+
+    const onAddButtonPress = () => {
+        if (name.length >= 3 && date && place) {
+            const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+            const data = {
+                name,
+                date,
+                place,
+                authorID: userID,
+                createdAt: timestamp,
+            };
+            productRef
+                .add(data)
+                .then(_doc => {
+                    navigation.navigate('list');
+                })
+                .catch((error) => {
+                    alert(error)
+                });
+        }
+    };
+
+
+
 
     const handleChangeName = (value) => {
         setName(value);
@@ -96,7 +150,7 @@ const ProductForm = ({ navigation, route }) => {
                 ]}
             />
             <TouchableOpacity
-                onPress={handleAddPress}
+                onPress={onAddButtonPress}
                 style={styles.button}
             >
                 {existingId ? (
