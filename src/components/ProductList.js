@@ -60,6 +60,12 @@ const ProductList = ({ navigation, route }) => {
             )
     };
 
+    const handleAddProduct = () => {
+        navigation.navigate('form', {
+            title: t('addItem'),
+        });
+    };
+
     const handleChangeProduct = (id) => {
         productRef
             .doc(id)
@@ -76,16 +82,19 @@ const ProductList = ({ navigation, route }) => {
             .catch(error => console.log('Error: ', error));
     };
 
-    const handleAddProduct = () => {
-        navigation.navigate('form', {
-            title: t('addItem'),
-        });
-    };
-
     const handleDelete = (id) => {
         productRef
             .doc(id)
             .delete();
+    }
+
+    const handleFreezeProduct = (id) => {
+        const moveTo = place === 'fridge' ? 'freezer' : 'fridge';
+        productRef
+            .doc(id)
+            .update({
+                place: moveTo,
+            });
     }
 
     return (
@@ -96,7 +105,12 @@ const ProductList = ({ navigation, route }) => {
                     style={styles.list}
                     data={productList}
                     renderItem={({ item }) => (
-                        <ProductCard product={item} key={item.id} changeProduct={handleChangeProduct} deleteProduct={handleDelete} />
+                        <ProductCard
+                            product={item} key={item.id}
+                            changeProduct={handleChangeProduct}
+                            deleteProduct={handleDelete}
+                            freezeProduct={handleFreezeProduct}
+                        />
                     )}
                     keyExtractor={item => item.id}
                 />
