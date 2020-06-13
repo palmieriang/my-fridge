@@ -5,7 +5,7 @@ import { formatDate, getCountdownParts } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import SwipeableRow from './SwipeableRow';
 
-const ProductCard = ({ product, changeProduct, deleteProduct }) => {
+const ProductCard = ({ product, changeProduct, deleteProduct, freezeProduct }) => {
     const [expired, setExpired] = useState(false);
     const { localizationContext: { t } } = useContext(localeStore);
     const { days } = getCountdownParts(product.date);
@@ -24,8 +24,17 @@ const ProductCard = ({ product, changeProduct, deleteProduct }) => {
         deleteProduct(product.id);
     };
 
+    const handleFreeze = () => {
+        freezeProduct(product.id);
+    }
+
     return (
-        <SwipeableRow modifyFunction={handleChange} deleteFunction={handleDelete}>
+        <SwipeableRow
+            modifyFunction={handleChange}
+            deleteFunction={handleDelete}
+            freezeFunction={handleFreeze}
+            place={product.place}
+        >
             <View>
                 <TouchableHighlight onPress={handleChange} >
                     <View style={styles.card}>

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { localeStore } from '../store/localeStore';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 
-const SwipeableRow = ({ children, modifyFunction, deleteFunction }) => {
+const SwipeableRow = ({ children, modifyFunction, deleteFunction, freezeFunction, place }) => {
     const { localizationContext: { t } } = useContext(localeStore);
     const swipeableRef = useRef();
 
@@ -15,7 +15,7 @@ const SwipeableRow = ({ children, modifyFunction, deleteFunction }) => {
         });
 
         return (
-            <RectButton style={styles.leftAction} onPress={close}>
+            <RectButton style={styles.leftAction} onPress={freezeFunction}>
                 <Animated.Text
                     style={[
                         styles.actionText,
@@ -24,7 +24,7 @@ const SwipeableRow = ({ children, modifyFunction, deleteFunction }) => {
                         },
                     ]}
                 >
-                    {t('freeze')}
+                    {place === 'fridge' ? t('freeze') : t('fridge')}
                 </Animated.Text>
             </RectButton>
         );
