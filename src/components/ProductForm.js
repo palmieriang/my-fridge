@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     buttonDelete: {
-        backgroundColor: '#dc3545',
+        backgroundColor: '#e74c3c',
     },
     borderTop: {
         borderColor: '#edeeef',
