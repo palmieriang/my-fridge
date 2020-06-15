@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import { localeStore } from '../store/localeStore';
-import { authStore } from '../store/authStore';
+import Profile from './Profile';
 
 const Settings = () => {
     const { localizationContext: { t }, locale, setLocale } = useContext(localeStore);
@@ -13,16 +13,13 @@ const Settings = () => {
         { label: t('french'), value: 'fr', key: 'french' },
     ];
 
-    const { authState, authContext } = useContext(authStore);
-    const { user } = authState;
-
     const handleLogOut = () => {
         authContext.signOut();
     };
 
     return (
         <View style={{ flex: 1, alignItems: 'center' }}>
-            <Text style={{ marginTop: 15, marginBottom: 15 }}>Welcome {user.email}</Text>
+            <Profile />
             <Text style={{ marginTop: 15, marginBottom: 15 }}>
                 Current locale: {locale}.{' '}
                 {locale !== 'en' && locale !== 'it' && locale !== 'fr'
