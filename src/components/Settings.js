@@ -3,16 +3,25 @@ import { Button, StyleSheet, Text, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
+import { themeStore } from '../store/themeStore';
 import Profile from './Profile';
 
 const Settings = () => {
     const { localizationContext: { t }, locale, setLocale } = useContext(localeStore);
     const { authContext } = useContext(authStore);
-    const  languageData = [
+    const { toggleTheme } = useContext(themeStore);
+
+    const languageData = [
         { section: true, label: t('chooseLanguage'), key: 'title'},
         { label: t('english'), value: 'en', key: 'english' },
         { label: t('italian'), value: 'it', key: 'italian' },
         { label: t('french'), value: 'fr', key: 'french' },
+    ];
+
+    const themeData = [
+        { section: true, label: 'Change theme', key: 'title'},
+        { label: 'Dark', value: 'dark', key: 'dark' },
+        { label: 'Light', value: 'light', key: 'light' },
     ];
 
     const handleLogOut = () => {
@@ -35,7 +44,16 @@ const Settings = () => {
                 initValue={t('changeLanguage')}
                 initValueTextStyle={styles.initValueTextStyle}
                 onChange={(option) => setLocale(option.value)}
-                style={styles.languageContainer}
+                style={styles.selectorContainer}
+            />
+            <ModalSelector
+                animationType="fade"
+                cancelText={t('cancel')}
+                data={themeData}
+                initValue="Change theme"
+                initValueTextStyle={styles.initValueTextStyle}
+                onChange={toggleTheme}
+                style={styles.selectorContainer}
             />
             <View style={styles.logout}>
                 <Button
@@ -48,8 +66,9 @@ const Settings = () => {
 }
 
 const styles = StyleSheet.create({
-    languageContainer: {
+    selectorContainer: {
         marginTop: 20,
+        minWidth: 200,
     },
     initValueTextStyle: {
         color: 'black',
