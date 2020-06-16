@@ -1,17 +1,30 @@
 import React, { createContext, useState } from 'react';
 
-const themeStore = createContext();
+const themes = {
+  light: {
+    foreground: '#ffffff',
+    background: '#F3F3F3',
+    text: 'black',
+  },
+  dark: {
+    foreground: '#242424',
+    background: '#131313',
+    text: 'white',
+  },
+};
+
+const themeStore = createContext(themes.light);
 const { Provider } = themeStore;
 
 const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
+  const [theme, setTheme] = useState(themes.light);
 
   const toggleTheme = () => {
-    if (theme === 'light') {
-      setTheme('dark');
-    } else {
-      setTheme('light');
-    }
+    setTheme(theme => (
+      theme === themes.dark
+        ? themes.light
+        : themes.dark
+    ));
   }
 
   return (
