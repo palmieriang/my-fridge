@@ -9,7 +9,7 @@ import Profile from './Profile';
 const Settings = () => {
     const { localizationContext: { t }, locale, setLocale } = useContext(localeStore);
     const { authContext } = useContext(authStore);
-    const { toggleTheme } = useContext(themeStore);
+    const { theme, toggleTheme } = useContext(themeStore);
 
     const languageData = [
         { section: true, label: t('chooseLanguage'), key: 'title'},
@@ -29,9 +29,9 @@ const Settings = () => {
     };
 
     return (
-        <View style={{ flex: 1, alignItems: 'center' }}>
+        <View style={{ flex: 1, alignItems: 'center', backgroundColor: theme.background }}>
             <Profile />
-            <Text style={{ marginTop: 15, marginBottom: 15 }}>
+            <Text style={{ marginTop: 15, marginBottom: 15, color: theme.text }}>
                 Current locale: {locale}.{' '}
                 {locale !== 'en' && locale !== 'it' && locale !== 'fr'
                 ? 'Translations will fall back to "en" because none available'
@@ -67,6 +67,8 @@ const Settings = () => {
 
 const styles = StyleSheet.create({
     selectorContainer: {
+        backgroundColor: '#fff',
+        borderRadius: 5,
         marginTop: 20,
         minWidth: 200,
     },
