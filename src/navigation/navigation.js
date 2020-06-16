@@ -9,11 +9,28 @@ import Registration from '../components/Registration';
 
 const Stack = createStackNavigator();
 
+const screenOptions = {
+  headerStyle: {
+    backgroundColor: '#e74c3c',
+    shadowColor: 'transparent',
+    shadowRadius: 0,
+    shadowOffset: {
+      height: 0,
+    }
+  },
+  headerTintColor: '#fff',
+  headerTitleStyle: {
+    fontWeight: 'bold',
+  },
+}
+
 export function FridgeStackScreen() {
   const { localizationContext: { t } } = useContext(localeStore);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={screenOptions}
+    >
       <Stack.Screen
         name="list"
         component={ProductList}
@@ -35,7 +52,9 @@ export function FreezerStackScreen() {
   const { localizationContext: { t } } = useContext(localeStore);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={screenOptions}
+    >
       <Stack.Screen
         name="list"
         component={ProductList}
@@ -55,7 +74,9 @@ export function SettingsStackScreen() {
   const { localizationContext: { t } } = useContext(localeStore);
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={screenOptions}
+    >
       <Stack.Screen
         name="settings"
         component={Settings}
