@@ -4,6 +4,7 @@ import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
+import { themeStore } from '../store/themeStore';
 import { firebase } from '../firebase/config';
 
 import ProductCard from './ProductCard';
@@ -11,6 +12,8 @@ import ProductCard from './ProductCard';
 const ProductList = ({ navigation, route }) => {
     const { localizationContext: { t } } = useContext(localeStore);
     const { authState: { user } } = useContext(authStore);
+    const { theme } = useContext(themeStore);
+
     const { place } = route.params;
     const [productList, setProductList] = useState([]);
 
@@ -102,7 +105,7 @@ const ProductList = ({ navigation, route }) => {
             {productList.length > 0 ? (
                 <FlatList
                     key="list"
-                    style={styles.list}
+                    style={[ styles.list, { backgroundColor: theme.background }]}
                     data={productList}
                     renderItem={({ item }) => (
                         <ProductCard
@@ -132,7 +135,6 @@ const styles = StyleSheet.create({
     list: {
         flex: 1,
         paddingTop: 10,
-        backgroundColor: '#F3F3F3',
     },
     text: {
         height: 50,
