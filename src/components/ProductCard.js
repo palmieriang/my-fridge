@@ -3,11 +3,15 @@ import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { formatDate, getCountdownParts } from '../../api/api';
 import { localeStore } from '../store/localeStore';
+import { themeStore } from '../store/themeStore';
 import SwipeableRow from './SwipeableRow';
 
 const ProductCard = ({ product, changeProduct, deleteProduct, freezeProduct }) => {
     const [expired, setExpired] = useState(false);
+
     const { localizationContext: { t } } = useContext(localeStore);
+    const { theme } = useContext(themeStore);
+
     const { days } = getCountdownParts(product.date);
 
     useEffect(() => {
@@ -37,15 +41,15 @@ const ProductCard = ({ product, changeProduct, deleteProduct, freezeProduct }) =
         >
             <View>
                 <TouchableHighlight onPress={handleChange} >
-                    <View style={styles.card}>
-                        <Text style={styles.date}>{formatDate(product.date)}</Text>
-                        <Text style={styles.title}>{product.name}</Text>
+                    <View style={[styles.card, { backgroundColor: theme.foreground }]}>
+                        <Text style={[styles.date, { color: theme.text }]}>{formatDate(product.date)}</Text>
+                        <Text style={[styles.title, { color: theme.text }]}>{product.name}</Text>
                         {expired ? (
                             <Text style={styles.expired}>{t('expired')}</Text>
                         ) : (
                             <View style={styles.counterContainer}>
-                                <Text style={styles.counterText}>{days}</Text>
-                                <Text style={styles.counterLabel}>{t('days').toUpperCase()}</Text>
+                                <Text style={[styles.counterText, { color: theme.text }]}>{days}</Text>
+                                <Text style={[styles.counterLabel, { color: theme.text }]}>{t('days').toUpperCase()}</Text>
                             </View>
                         )}
                     </View>
@@ -64,7 +68,6 @@ ProductCard.propTypes = {
 
 const styles = StyleSheet.create({
     card: {
-        backgroundColor: '#fff',
         flex: 1,
         padding: 15,
         margin: 10,
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     expired: {
-        color: 'rgba(231, 76, 60, 1)',
+        color: '#e74c3c',
         fontSize: 30,
         textTransform: 'uppercase',
         fontFamily: 'Courier',
