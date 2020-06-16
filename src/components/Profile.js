@@ -43,6 +43,7 @@ const Profile = () => {
 const styles = StyleSheet.create({
     profile: {
         alignItems: 'center',
+        backgroundColor: '#e74c3c',
         paddingBottom: 30,
         width: '100%',
     },
@@ -50,6 +51,7 @@ const styles = StyleSheet.create({
         marginTop: 30,
     },
     profileField: {
+        color: '#fff',
         marginTop: 20,
     }
 });
