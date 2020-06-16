@@ -12,6 +12,7 @@ import RNPickerSelect from 'react-native-picker-select';
 import { formatDate } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
+import { themeStore } from '../store/themeStore';
 import { firebase } from '../firebase/config';
 
 YellowBox.ignoreWarnings([
@@ -22,6 +23,7 @@ const ProductForm = ({ navigation, route }) => {
     const { params } = route;
     const { localizationContext: { t } } = useContext(localeStore);
     const { authState: { user } } = useContext(authStore);
+    const { theme } = useContext(themeStore);
 
     const existingName = params.product?.name || '';
     const existingDate = params.product?.date || '';
@@ -106,7 +108,7 @@ const ProductForm = ({ navigation, route }) => {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: theme.background }}>
             <TextInput
                 style={styles.input}
                 placeholder={t('product')}
