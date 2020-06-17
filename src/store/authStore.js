@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useMemo, useReducer } from 'react';
+import React, { createContext, useEffect, useMemo, useReducer, useState } from 'react';
 import { firebase } from '../firebase/config';
 
 const initialState = {
@@ -40,7 +40,9 @@ const db = firebase.firestore();
 
 const AuthProvider = ({ children }) => {
     const [authState, dispatch] = useReducer(reducer, initialState);
+    const [userData, setUserData] = useState({});
 
+    // Persistent login credentials
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
             if (user?.emailVerified) {
@@ -51,6 +53,23 @@ const AuthProvider = ({ children }) => {
                 });
             } else {
                 console.log('Restoring token failed');
+            }
+        });
+    }, []);
+
+    // Retrieve data from users collection
+    useEffect(() => {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user?.emailVerified) {
+                const userRef = firebase.firestore().collection('users');
+                userRef
+                    .doc(user.uid)
+                    .get()
+                    .then((response) => {
+                        const userData = response.data();
+                        setUserData(userData);
+                    })
+                    .catch(error => console.log('Error: ', error));
             }
         });
     }, []);
@@ -102,6 +121,7 @@ const AuthProvider = ({ children }) => {
                         id: uid,
                         email,
                         fullName,
+                        theme: 'light',
                     };
                     // add more user data inside firestore
                     return db.collection('users')
@@ -132,7 +152,7 @@ const AuthProvider = ({ children }) => {
     );
 
     return (
-        <Provider value={{ authState, dispatch, authContext }}>
+        <Provider value={{ authState, dispatch, authContext, userData }}>
             <Consumer>
                 {children}
             </Consumer>
