@@ -12,16 +12,18 @@ const Settings = () => {
     const { theme, toggleTheme } = useContext(themeStore);
 
     const languageData = [
-        { section: true, label: t('chooseLanguage'), key: 'title'},
+        { section: true, label: t('chooseLanguage'), key: 'title' },
         { label: t('english'), value: 'en', key: 'english' },
         { label: t('italian'), value: 'it', key: 'italian' },
         { label: t('french'), value: 'fr', key: 'french' },
     ];
 
     const themeData = [
-        { section: true, label: 'Change theme', key: 'title'},
-        { label: 'Dark Red', value: 'darkRed', key: 'darkRed' },
+        { section: true, label: 'Change theme', key: 'title' },
         { label: 'Light Red', value: 'lightRed', key: 'lightRed' },
+        { label: 'Light Blue', value: 'lightBlue', key: 'lightBlue' },
+        { label: 'Dark Red', value: 'darkRed', key: 'darkRed' },
+        { label: 'Dark Blue', value: 'darkBlue', key: 'darkBlue' },
     ];
 
     const handleLogOut = () => {
