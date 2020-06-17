@@ -45,7 +45,7 @@ const ProductCard = ({ product, changeProduct, deleteProduct, freezeProduct }) =
                         <Text style={[styles.date, { color: theme.text }]}>{formatDate(product.date)}</Text>
                         <Text style={[styles.title, { color: theme.text }]}>{product.name}</Text>
                         {expired ? (
-                            <Text style={styles.expired}>{t('expired')}</Text>
+                            <Text style={[styles.expired, { color: theme.primary }]}>{t('expired')}</Text>
                         ) : (
                             <View style={styles.counterContainer}>
                                 <Text style={[styles.counterText, { color: theme.text }]}>{days}</Text>
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
     },
     expired: {
-        color: '#e74c3c',
         fontSize: 30,
         textTransform: 'uppercase',
         fontFamily: 'Courier',

@@ -20,8 +20,8 @@ const Settings = () => {
 
     const themeData = [
         { section: true, label: 'Change theme', key: 'title'},
-        { label: 'Dark', value: 'dark', key: 'dark' },
-        { label: 'Light', value: 'light', key: 'light' },
+        { label: 'Dark Red', value: 'darkRed', key: 'darkRed' },
+        { label: 'Light Red', value: 'lightRed', key: 'lightRed' },
     ];
 
     const handleLogOut = () => {

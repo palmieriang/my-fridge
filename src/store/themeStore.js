@@ -2,32 +2,46 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import { authStore } from './authStore';
 
 const themes = {
-  light: {
+  lightRed: {
     foreground: '#ffffff',
     background: '#F3F3F3',
     text: 'black',
+    primary: '#e74c3c',
   },
-  dark: {
+  lightBlue: {
+    foreground: '#ffffff',
+    background: '#F3F3F3',
+    text: 'black',
+    primary: '#48bbec',
+  },
+  darkRed: {
     foreground: '#242424',
     background: '#131313',
     text: 'white',
+    primary: '#e74c3c',
+  },
+  darkBlue: {
+    foreground: '#242424',
+    background: '#131313',
+    text: 'white',
+    primary: '#48bbec',
   },
 };
 
-const themeStore = createContext(themes.light);
+const themeStore = createContext(themes.lightRed);
 const { Provider } = themeStore;
 
 const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState(themes.light);
+  const [theme, setTheme] = useState(themes.lightRed);
 
   const { userData } = useContext(authStore);
   const themeFromFirebase = userData.theme;
 
   const toggleTheme = () => {
     setTheme(theme => (
-      theme === themes.dark
-        ? themes.light
-        : themes.dark
+      theme === themes.darkRed
+        ? themes.lightRed
+        : themes.darkRed
     ));
   }
 
