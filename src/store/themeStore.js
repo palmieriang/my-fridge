@@ -29,7 +29,7 @@ const themes = {
 };
 
 const themeStore = createContext(themes.lightRed);
-const { Provider } = themeStore;
+const { Provider, Consumer } = themeStore;
 
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(themes.lightRed);
@@ -49,7 +49,9 @@ const ThemeProvider = ({ children }) => {
 
   return (
     <Provider value={{ theme, setTheme, toggleTheme }}>
-      {children}
+      <Consumer>
+        {children}
+      </Consumer>
     </Provider>
   );
 };

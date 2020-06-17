@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, YellowBox } from 'react-native';
@@ -39,45 +39,47 @@ export default function App() {
         <LocaleProvider>
           {({localizationContext: { t }}) => (
             <ThemeProvider>
-              <NavigationContainer>
-                {userToken ? (
-                  <Tab.Navigator
-                    screenOptions={({ route }) => ({
-                      tabBarIcon: ({ focused, color, size }) => {
-                        let IconName;
-                        size = focused ? size : '22';
-
-                        if (route.name === t('fridge') || route.name === t('freezer')) {
-                          IconName = FreezerIcon;
-                        } else if (route.name === t('settings')) {
-                          IconName = SettingsIcon;
-                        }
-
-                        return (
-                          <View style={styles.tabIcon}>
-                            <IconName width={size} height={size} fill={color} />
-                            {route.name === t('freezer') &&
+              {({ theme: { primary } }) => (
+                <NavigationContainer>
+                  {userToken ? (
+                    <Tab.Navigator
+                      screenOptions={({ route }) => ({
+                        tabBarIcon: ({ focused, color, size }) => {
+                          let IconName;
+                          size = focused ? size : '22';
+  
+                          if (route.name === t('fridge') || route.name === t('freezer')) {
+                            IconName = FreezerIcon;
+                          } else if (route.name === t('settings')) {
+                            IconName = SettingsIcon;
+                          }
+  
+                          return (
+                            <View style={styles.tabIcon}>
                               <IconName width={size} height={size} fill={color} />
-                            }
-                          </View>
-                        );
-                      },
-                    })}
-                    tabBarOptions={{
-                      activeTintColor: '#e74c3c',
-                      inactiveTintColor: 'black',
-                      showIcon: true,
-                      showLabel: true,
-                    }}
-                  >
-                    <Tab.Screen name={t('fridge')} component={FridgeStackScreen} />
-                    <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
-                    <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
-                  </Tab.Navigator>
-                ) : (
-                  <SingInStackScreen />
-                )}
-              </NavigationContainer>
+                              {route.name === t('freezer') &&
+                                <IconName width={size} height={size} fill={color} />
+                              }
+                            </View>
+                          );
+                        },
+                      })}
+                      tabBarOptions={{
+                        activeTintColor: primary,
+                        inactiveTintColor: 'black',
+                        showIcon: true,
+                        showLabel: true,
+                      }}
+                    >
+                      <Tab.Screen name={t('fridge')} component={FridgeStackScreen} />
+                      <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
+                      <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
+                    </Tab.Navigator>
+                  ) : (
+                    <SingInStackScreen />
+                  )}
+                </NavigationContainer>
+              )}
             </ThemeProvider>
           )}
         </LocaleProvider>
