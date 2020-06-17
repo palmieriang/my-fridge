@@ -1,29 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { authStore } from '../store/authStore';
-import { firebase } from '../firebase/config';
 import UserIcon from '../../assets/user.svg';
 
 const Profile = () => {
-    const { authState: { user } } = useContext(authStore);
-    const [userData, setUserData] = useState({});
-    const userRef = firebase.firestore().collection('users');
-    const userID = user.uid;
-
-    useEffect(() => {
-        getUserData(userID)
-    }, []);
-
-    const getUserData = (userID) => {
-        userRef
-            .doc(userID)
-            .get()
-            .then((response) => {
-                const userData = response.data();
-                setUserData(userData);
-            })
-            .catch(error => console.log('Error: ', error));
-    };
+    const { userData } = useContext(authStore);
 
     return (
         <View style={styles.profile}>
