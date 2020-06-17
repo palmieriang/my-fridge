@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { localeStore } from '../store/localeStore';
+import { themeStore } from '../store/themeStore';
 import ProductList from '../components/ProductList';
 import ProductForm from '../components/ProductForm';
 import Settings from '../components/Settings';
@@ -11,7 +12,6 @@ const Stack = createStackNavigator();
 
 const screenOptions = {
   headerStyle: {
-    backgroundColor: '#e74c3c',
     shadowColor: 'transparent',
     shadowRadius: 0,
     shadowOffset: {
@@ -26,10 +26,11 @@ const screenOptions = {
 
 export function FridgeStackScreen() {
   const { localizationContext: { t } } = useContext(localeStore);
+  const { theme: { primary } } = useContext(themeStore);
 
   return (
     <Stack.Navigator
-      screenOptions={screenOptions}
+      screenOptions={{ ...screenOptions, headerStyle: {...screenOptions.headerStyle, backgroundColor: primary} }}
     >
       <Stack.Screen
         name="list"
@@ -50,10 +51,11 @@ export function FridgeStackScreen() {
 
 export function FreezerStackScreen() {
   const { localizationContext: { t } } = useContext(localeStore);
+  const { theme: { primary } } = useContext(themeStore);
 
   return (
     <Stack.Navigator
-      screenOptions={screenOptions}
+      screenOptions={{ ...screenOptions, headerStyle: {...screenOptions.headerStyle, backgroundColor: primary} }}
     >
       <Stack.Screen
         name="list"
@@ -72,10 +74,11 @@ export function FreezerStackScreen() {
 
 export function SettingsStackScreen() {
   const { localizationContext: { t } } = useContext(localeStore);
+  const { theme: { primary } } = useContext(themeStore);
 
   return (
     <Stack.Navigator
-      screenOptions={screenOptions}
+      screenOptions={{ ...screenOptions, headerStyle: {...screenOptions.headerStyle, backgroundColor: primary} }}
     >
       <Stack.Screen
         name="settings"
