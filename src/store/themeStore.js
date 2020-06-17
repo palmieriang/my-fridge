@@ -1,4 +1,5 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { authStore } from './authStore';
 
 const themes = {
   light: {
@@ -19,6 +20,9 @@ const { Provider } = themeStore;
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(themes.light);
 
+  const { userData } = useContext(authStore);
+  const themeFromFirebase = userData.theme;
+
   const toggleTheme = () => {
     setTheme(theme => (
       theme === themes.dark
@@ -26,6 +30,12 @@ const ThemeProvider = ({ children }) => {
         : themes.dark
     ));
   }
+
+  useEffect(() => {
+    if (themeFromFirebase) {
+      setTheme(themes[themeFromFirebase]);
+    }
+  }, [themeFromFirebase]);
 
   return (
     <Provider value={{ theme, setTheme, toggleTheme }}>
