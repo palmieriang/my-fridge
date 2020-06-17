@@ -37,12 +37,8 @@ const ThemeProvider = ({ children }) => {
   const { userData } = useContext(authStore);
   const themeFromFirebase = userData.theme;
 
-  const toggleTheme = () => {
-    setTheme(theme => (
-      theme === themes.darkRed
-        ? themes.lightRed
-        : themes.darkRed
-    ));
+  const toggleTheme = (chosenTheme) => {
+    setTheme(themes[chosenTheme.value]);
   }
 
   useEffect(() => {
