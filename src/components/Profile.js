@@ -1,13 +1,15 @@
 import React, { useContext } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { authStore } from '../store/authStore';
+import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
 
 const Profile = () => {
     const { userData } = useContext(authStore);
+    const { theme } = useContext(themeStore);
 
     return (
-        <View style={styles.profile}>
+        <View style={[styles.profile, { backgroundColor: theme.primary }]}>
             <View style={styles.pictureContainer}>
                 {userData.avatar ? (
                     <Image source={userData.avatar} />
@@ -24,7 +26,6 @@ const Profile = () => {
 const styles = StyleSheet.create({
     profile: {
         alignItems: 'center',
-        backgroundColor: '#e74c3c',
         paddingBottom: 30,
         width: '100%',
     },
