@@ -45,7 +45,7 @@ const AuthProvider = ({ children }) => {
     // Persistent login credentials
     useEffect(() => {
         firebase.auth().onAuthStateChanged(user => {
-            if (user?.emailVerified) {
+            if (user) {
                 user.getIdToken(true).then((idToken) => {
                     dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
                 }).catch((error) => {
@@ -121,7 +121,7 @@ const AuthProvider = ({ children }) => {
                         id: uid,
                         email,
                         fullName,
-                        theme: 'light',
+                        theme: 'lightRed',
                     };
                     // add more user data inside firestore
                     return db.collection('users')
