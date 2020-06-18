@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { authStore } from './authStore';
+import { firebase } from '../firebase/config';
 
 const themes = {
   lightRed: {
@@ -28,6 +29,17 @@ const themes = {
   },
 };
 
+const changeFirebaseTheme = (userId, theme) => {
+  const userRef = firebase.firestore().collection('users');
+  const data = {
+    theme
+  };
+  userRef
+    .doc(userId)
+    .set(data, { merge: true })
+    .catch(error => console.log('Error: ', error));
+}
+
 const themeStore = createContext(themes.lightRed);
 const { Provider, Consumer } = themeStore;
 
@@ -39,6 +51,7 @@ const ThemeProvider = ({ children }) => {
 
   const toggleTheme = (chosenTheme) => {
     setTheme(themes[chosenTheme.value]);
+    changeFirebaseTheme(userData.id, chosenTheme.value);
   }
 
   useEffect(() => {

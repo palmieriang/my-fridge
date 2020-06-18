@@ -53,7 +53,7 @@ export default function App() {
                           } else if (route.name === t('settings')) {
                             IconName = SettingsIcon;
                           }
-  
+
                           return (
                             <View style={styles.tabIcon}>
                               <IconName width={size} height={size} fill={color} />
