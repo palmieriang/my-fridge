@@ -124,7 +124,7 @@ const ProductList = ({ navigation, route }) => {
             <ActionButton
                 key="fab"
                 onPress={handleAddProduct}
-                buttonColor="rgba(231, 76, 60, 1)"
+                buttonColor={theme.primary}
                 hideShadow
             />
         </View>
