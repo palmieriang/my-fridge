@@ -1,4 +1,10 @@
-import React, { createContext, useEffect, useMemo, useReducer, useState } from 'react';
+import React,
+{ createContext,
+    useEffect,
+    useMemo,
+    useReducer,
+    useState
+} from 'react';
 import { firebase } from '../firebase/config';
 
 const initialState = {
@@ -121,6 +127,7 @@ const AuthProvider = ({ children }) => {
                         id: uid,
                         email,
                         fullName,
+                        locale: 'en',
                         theme: 'lightRed',
                     };
                     // add more user data inside firestore
