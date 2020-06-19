@@ -8,8 +8,8 @@ import Profile from './Profile';
 
 const Settings = () => {
     const { localizationContext: { t }, locale, setLocale } = useContext(localeStore);
-    const { authContext } = useContext(authStore);
-    const { theme, toggleTheme } = useContext(themeStore);
+    const { authContext, userData: { id } } = useContext(authStore);
+    const { theme, themeContext: { changeTheme } } = useContext(themeStore);
 
     const languageData = [
         { section: true, label: t('chooseLanguage'), key: 'title' },
@@ -28,6 +28,11 @@ const Settings = () => {
 
     const handleLogOut = () => {
         authContext.signOut();
+    };
+
+    const handleTheme = (theme) => {
+        const newTheme = theme.value;
+        changeTheme({newTheme, id});
     };
 
     return (
@@ -54,7 +59,7 @@ const Settings = () => {
                 data={themeData}
                 initValue="Change theme"
                 initValueTextStyle={styles.initValueTextStyle}
-                onChange={toggleTheme}
+                onChange={handleTheme}
                 style={styles.selectorContainer}
             />
             <View style={styles.logout}>

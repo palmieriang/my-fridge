@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
 import { authStore } from './authStore';
 import { firebase } from '../firebase/config';
 
@@ -29,17 +29,6 @@ const themes = {
   },
 };
 
-const changeFirebaseTheme = (userId, theme) => {
-  const userRef = firebase.firestore().collection('users');
-  const data = {
-    theme
-  };
-  userRef
-    .doc(userId)
-    .set(data, { merge: true })
-    .catch(error => console.log('Error: ', error));
-}
-
 const themeStore = createContext(themes.lightRed);
 const { Provider, Consumer } = themeStore;
 
@@ -49,19 +38,32 @@ const ThemeProvider = ({ children }) => {
   const { userData } = useContext(authStore);
   const themeFromFirebase = userData.theme;
 
-  const toggleTheme = (chosenTheme) => {
-    setTheme(themes[chosenTheme.value]);
-    changeFirebaseTheme(userData.id, chosenTheme.value);
-  }
-
   useEffect(() => {
     if (themeFromFirebase) {
       setTheme(themes[themeFromFirebase]);
     }
   }, [themeFromFirebase]);
 
+  const themeContext = useMemo(
+    () => ({
+        changeTheme: async ({ newTheme, id }) => {
+          const userRef = firebase.firestore().collection('users');
+          const data = {
+            theme: newTheme
+          };
+          userRef
+            .doc(id)
+            .set(data, { merge: true })
+            .then(() => {
+              setTheme(themes[newTheme]);
+            })
+            .catch(error => console.log('Error: ', error));
+        },
+    }), []
+  );
+
   return (
-    <Provider value={{ theme, setTheme, toggleTheme }}>
+    <Provider value={{ theme, setTheme, themeContext }}>
       <Consumer>
         {children}
       </Consumer>
