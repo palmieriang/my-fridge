@@ -7,7 +7,7 @@ import { themeStore } from '../store/themeStore';
 import Profile from './Profile';
 
 const Settings = () => {
-    const { localizationContext: { t }, locale, setLocale } = useContext(localeStore);
+    const { localizationContext: { t, changeLocale }, locale } = useContext(localeStore);
     const { authContext, userData: { id } } = useContext(authStore);
     const { theme, themeContext: { changeTheme } } = useContext(themeStore);
 
@@ -35,6 +35,11 @@ const Settings = () => {
         changeTheme({newTheme, id});
     };
 
+    const handleLocale = (locale) => {
+        const newLocale = locale.value;
+        changeLocale({newLocale, id});
+    };
+
     return (
         <View style={{ flex: 1, alignItems: 'center', backgroundColor: theme.background }}>
             <Profile />
@@ -50,7 +55,7 @@ const Settings = () => {
                 data={languageData}
                 initValue={t('changeLanguage')}
                 initValueTextStyle={styles.initValueTextStyle}
-                onChange={(option) => setLocale(option.value)}
+                onChange={handleLocale}
                 style={styles.selectorContainer}
             />
             <ModalSelector
