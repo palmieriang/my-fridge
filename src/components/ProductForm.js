@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
-import { formatDate } from '../../api/api';
+import { formatDate, saveProduct, modifyProduct } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
@@ -50,25 +50,15 @@ const ProductForm = ({ navigation, route }) => {
                 createdAt: timestamp,
             };
             if(existingId) {
-                productRef
-                    .doc(existingId)
-                    .set(data)
-                    .then(_doc => {
-                        navigation.navigate('list');
-                    })
-                    .catch((error) => {
-                        alert(error)
-                    });
+                modifyProduct(data, existingId)
+                .then(_doc => {
+                    navigation.navigate('list');
+                })
             } else {
-                productRef
-                    .doc()
-                    .set(data)
-                    .then(_doc => {
-                        navigation.navigate('list');
-                    })
-                    .catch((error) => {
-                        alert(error)
-                    });
+                saveProduct(data)
+                .then(_doc => {
+                    navigation.navigate('list');
+                })
             }
         }
     };

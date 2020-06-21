@@ -22,7 +22,6 @@ export function saveProduct({ name, date, place, authorID }) {
 }
 
 export function modifyProduct({ name, date, place, authorID }, existingId) {
-  console.info(name, date, place, authorID, existingId);
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   const data = {
     name,
