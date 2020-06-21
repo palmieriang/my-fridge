@@ -41,13 +41,11 @@ const ProductForm = ({ navigation, route }) => {
 
     const handleAddPress = () => {
         if (name.length >= 3 && date && place) {
-            const timestamp = firebase.firestore.FieldValue.serverTimestamp();
             const data = {
                 name,
                 date,
                 place,
                 authorID: userID,
-                createdAt: timestamp,
             };
             if(existingId) {
                 modifyProduct(data, existingId)
