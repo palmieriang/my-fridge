@@ -38,6 +38,13 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     });
 }
 
+export function deleteProduct(existingId) {
+  return productRef
+    .doc(existingId)
+      .delete()
+      .catch(error => console.log('Error: ', error));
+}
+
 export function formatDate(dateString) {
   const parsed = moment(new Date(dateString));
 
