@@ -85,12 +85,6 @@ const ProductList = ({ navigation, route }) => {
             .catch(error => console.log('Error: ', error));
     };
 
-    const handleDelete = (id) => {
-        productRef
-            .doc(id)
-            .delete();
-    }
-
     const handleFreezeProduct = (id) => {
         const moveTo = place === 'fridge' ? 'freezer' : 'fridge';
         productRef
@@ -111,7 +105,6 @@ const ProductList = ({ navigation, route }) => {
                         <ProductCard
                             product={item} key={item.id}
                             changeProduct={handleChangeProduct}
-                            deleteProduct={handleDelete}
                             freezeProduct={handleFreezeProduct}
                         />
                     )}
