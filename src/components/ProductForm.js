@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
-import { formatDate, saveProduct, modifyProduct } from '../../api/api';
+import { formatDate, saveProduct, modifyProduct, deleteProduct } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
@@ -49,14 +49,16 @@ const ProductForm = ({ navigation, route }) => {
             };
             if(existingId) {
                 modifyProduct(data, existingId)
-                .then(_doc => {
-                    navigation.navigate('list');
-                })
+                    .then(_doc => {
+                        navigation.navigate('list');
+                    })
+                    .catch(error => console.log('Error: ', error));
             } else {
                 saveProduct(data)
-                .then(_doc => {
-                    navigation.navigate('list');
-                })
+                    .then(_doc => {
+                        navigation.navigate('list');
+                    })
+                    .catch(error => console.log('Error: ', error));
             }
         }
     };
@@ -80,17 +82,11 @@ const ProductForm = ({ navigation, route }) => {
 
     const handleDeletePress = () => {
         if(existingId) {
-            productRef
-                .doc(existingId)
-                .delete()
+            deleteProduct(existingId)
                 .then(() => navigation.navigate('list'))
                 .catch(error => console.log('Error: ', error));
         } else {
-            productRef
-                .doc()
-                .delete()
-                .then(() => navigation.navigate('list'))
-                .catch(error => console.log('Error: ', error));
+            navigation.navigate('list');
         }
         console.log('Item deleted');
     }
