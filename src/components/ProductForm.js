@@ -13,7 +13,6 @@ import { formatDate, saveProduct, modifyProduct, deleteProduct } from '../../api
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
-import { firebase } from '../firebase/config';
 
 YellowBox.ignoreWarnings([
     'Non-serializable values were found in the navigation state',
@@ -36,7 +35,6 @@ const ProductForm = ({ navigation, route }) => {
     const [place, setPlace] = useState('' || existingPlace);
     const [showDatePicker, setShowDatePicker] = useState(false);
 
-    const productRef = firebase.firestore().collection('products');
     const userID = user.uid;
 
     const handleAddPress = () => {
