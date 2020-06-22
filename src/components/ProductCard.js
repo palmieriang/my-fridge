@@ -17,8 +17,10 @@ const ProductCard = ({ product, changeProduct, deleteProduct, freezeProduct }) =
     useEffect(() => {
         if(days < 0) {
             setExpired(true);
+        } else {
+            setExpired(false);
         }
-    }, []);
+    });
 
     const handleChange = () => {
         changeProduct(product.id);
