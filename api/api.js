@@ -21,6 +21,13 @@ export function saveProduct({ name, date, place, authorID }) {
     });
 }
 
+export function getProductById(id) {
+  return productRef
+    .doc(id)
+    .get()
+    .catch(error => console.log('Error: ', error));
+}
+
 export function modifyProduct({ name, date, place, authorID }, existingId) {
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   const data = {
