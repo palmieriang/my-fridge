@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
+import { getProductById } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
@@ -70,9 +71,7 @@ const ProductList = ({ navigation, route }) => {
     };
 
     const handleChangeProduct = (id) => {
-        productRef
-            .doc(id)
-            .get()
+        getProductById(id)
             .then((response) => {
                 const product = response.data();
 
