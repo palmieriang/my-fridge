@@ -1,22 +1,54 @@
-import React, { useContext } from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
+import React, { useContext, useState, useEffect } from 'react';
+import { View, Text, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
 
 const Profile = () => {
+    const [image, setImage] = useState(null);
+
     const { userData } = useContext(authStore);
     const { theme } = useContext(themeStore);
 
+    useEffect(() => {
+        (async () => {
+            if (Constants.platform.ios) {
+                const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+                if (status !== 'granted') {
+                    alert('Sorry, we need camera roll permissions to make this work!');
+                }
+            }
+        })();
+    }, []);
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+
+        console.log(result);
+
+        if (!result.cancelled) {
+            setImage(result.uri);
+        }
+    };
+
     return (
         <View style={[styles.profile, { backgroundColor: theme.primary }]}>
-            <View style={styles.pictureContainer}>
-                {userData.avatar ? (
-                    <Image source={userData.avatar} />
-                ) : (
-                    <UserIcon width={100} height={100}/>
-                )}
-            </View>
+            <TouchableOpacity onPress={pickImage}>
+                <View style={styles.pictureContainer} onPress={pickImage}>
+                    {image ? (
+                        <Image source={{ uri: image }} style={styles.picture} />
+                    ) : (
+                        <UserIcon width={150} height={150}/>
+                    )}
+                </View>
+            </TouchableOpacity>
             <Text style={styles.profileField}>{userData.fullName}</Text>
             <Text style={styles.profileField}>{userData.email}</Text>
         </View>
@@ -31,6 +63,11 @@ const styles = StyleSheet.create({
     },
     pictureContainer: {
         marginTop: 30,
+    },
+    picture: {
+        height: 150,
+        width: 150,
+        borderRadius: 100,
     },
     profileField: {
         color: '#fff',
