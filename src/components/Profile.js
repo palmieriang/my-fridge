@@ -1,20 +1,17 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, Button, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
-import { firebase, storage } from '../firebase/config';
+import { uploadImageToFirebase } from '../../api/api';
 
 const Profile = () => {
     const [image, setImage] = useState(null);
 
     const { userData } = useContext(authStore);
     const { theme } = useContext(themeStore);
-
-    const imagesRef = storage.ref();
-    // console.info('profile', imagesRef);
 
     useEffect(() => {
         (async () => {
@@ -37,37 +34,10 @@ const Profile = () => {
 
         let filename = result.uri.split('/').pop();
 
-        console.log(result);
-        console.log(filename);
-
         if (!result.cancelled) {
             setImage(result.uri);
-            // const profileRef = imagesRef.child(filename);
-            // profileRef.put(result);
             uploadImageToFirebase(result.uri, userData.id);
         }
-    };
-
-    const uploadImageToFirebase = async (uri, userUID) => {
-
-        const blob = await new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = () => {
-                resolve(xhr.response);
-            };
-            xhr.responseType = 'blob';
-            xhr.open('GET', uri, true);
-            xhr.send(null);
-        });
-    
-        const ref = firebase
-            .storage()
-            .ref()
-            .child(`profiles/${userUID}`);
-    
-        let snapshot = await ref.put(blob);
-    
-        return await snapshot.ref.getDownloadURL();
     };
 
     return (
