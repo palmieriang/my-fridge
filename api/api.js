@@ -45,6 +45,15 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     });
 }
 
+export function moveProduct(id, place) {
+  return productRef
+    .doc(id)
+    .update({
+      place,
+    })
+    .catch(error => console.log('Error: ', error));
+}
+
 export function deleteProduct(existingId) {
   return productRef
     .doc(existingId)
