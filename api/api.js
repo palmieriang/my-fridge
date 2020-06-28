@@ -3,6 +3,7 @@ import moment from 'moment';
 import { firebase } from '../src/firebase/config';
 
 const productRef = firebase.firestore().collection('products');
+const imagesRef = firebase.storage().ref();
 
 export function saveProduct({ name, date, place, authorID }) {
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -60,6 +61,24 @@ export function deleteProduct(existingId) {
       .delete()
       .catch(error => console.log('Error: ', error));
 }
+
+export const uploadImageToFirebase = async (uri, userUID) => {
+  const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = () => {
+          resolve(xhr.response);
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+  });
+
+  const ref = imagesRef.child(`profileImages/${userUID}`);
+
+  let snapshot = await ref.put(blob);
+
+  return await snapshot.ref.getDownloadURL();
+};
 
 export function formatDate(dateString) {
   const parsed = moment(new Date(dateString));
