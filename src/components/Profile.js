@@ -6,12 +6,15 @@ import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
 import { uploadImageToFirebase } from '../../api/api';
+import { firebase } from '../firebase/config';
 
 const Profile = () => {
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState({});
 
     const { userData } = useContext(authStore);
     const { theme } = useContext(themeStore);
+
+    const imagesRef = firebase.storage().ref();
 
     useEffect(() => {
         (async () => {
@@ -24,6 +27,16 @@ const Profile = () => {
         })();
     }, []);
 
+    useEffect(() => {
+        imagesRef.child(`profileImages/${userData.id}`).getDownloadURL()
+        .then((url) => {
+            setImage({
+                uri: url,
+            });
+        })
+        .catch(error => console.log('Error: ', error));
+    }, [])
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -33,7 +46,9 @@ const Profile = () => {
         });
 
         if (!result.cancelled) {
-            setImage(result.uri);
+            setImage({
+                uri: result.uri,
+            });
             uploadImageToFirebase(result.uri, userData.id);
         }
     };
@@ -42,8 +57,8 @@ const Profile = () => {
         <View style={[styles.profile, { backgroundColor: theme.primary }]}>
             <TouchableOpacity onPress={pickImage}>
                 <View style={styles.pictureContainer} onPress={pickImage}>
-                    {image ? (
-                        <Image source={{ uri: image }} style={styles.picture} />
+                    {image.uri ? (
+                        <Image source={image} style={styles.picture} />
                     ) : (
                         <UserIcon width={150} height={150}/>
                     )}
