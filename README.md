@@ -1,5 +1,5 @@
 # my-fridge
 
-npm run start
+npm i
 
-npm run backend
+npm start
