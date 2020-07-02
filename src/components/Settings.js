@@ -19,7 +19,7 @@ const Settings = () => {
     ];
 
     const themeData = [
-        { section: true, label: 'Change theme', key: 'title' },
+        { section: true, label: t('changeTheme'), key: 'title' },
         { label: 'Light Red', value: 'lightRed', key: 'lightRed' },
         { label: 'Light Blue', value: 'lightBlue', key: 'lightBlue' },
         { label: 'Dark Red', value: 'darkRed', key: 'darkRed' },
@@ -62,7 +62,7 @@ const Settings = () => {
                 animationType="fade"
                 cancelText={t('cancel')}
                 data={themeData}
-                initValue="Change theme"
+                initValue={t('changeTheme')}
                 initValueTextStyle={styles.initValueTextStyle}
                 onChange={handleTheme}
                 style={styles.selectorContainer}
