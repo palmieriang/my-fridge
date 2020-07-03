@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, TouchableHighlight, View, StyleSheet } from 'react-native';
+import { Text, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { formatDate, getCountdownParts, deleteProduct } from '../../api/api';
 import { localeStore } from '../store/localeStore';
@@ -42,7 +42,7 @@ const ProductCard = ({ product, changeProduct, freezeProduct }) => {
             place={product.place}
         >
             <View>
-                <TouchableHighlight onPress={handleChange} >
+                <TouchableWithoutFeedback onPress={handleChange} >
                     <View style={[styles.card, { backgroundColor: theme.foreground }]}>
                         <Text style={[styles.date, { color: theme.text }]}>{formatDate(product.date)}</Text>
                         <Text style={[styles.title, { color: theme.text }]}>{product.name}</Text>
@@ -55,7 +55,7 @@ const ProductCard = ({ product, changeProduct, freezeProduct }) => {
                             </View>
                         )}
                     </View>
-                </TouchableHighlight>
+                </TouchableWithoutFeedback>
             </View>
         </SwipeableRow>
     );
