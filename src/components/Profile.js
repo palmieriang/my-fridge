@@ -5,16 +5,21 @@ import Constants from 'expo-constants';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
-import { uploadImageToFirebase } from '../../api/api';
+import { uploadImageToFirebase, getProfileImageFromFirebase } from '../../api/api';
 import { firebase } from '../firebase/config';
 
+const imagesRef = firebase.storage().ref();
+
 const Profile = () => {
+    const [upload, setUpload] = useState({
+        loading: false,
+        progress: 0,
+    });
+
     const [image, setImage] = useState({});
 
     const { userData } = useContext(authStore);
     const { theme } = useContext(themeStore);
-
-    const imagesRef = firebase.storage().ref();
 
     useEffect(() => {
         (async () => {
@@ -28,7 +33,7 @@ const Profile = () => {
     }, []);
 
     useEffect(() => {
-        imagesRef.child(`profileImages/${userData.id}`).getDownloadURL()
+        getProfileImageFromFirebase(userData.id)
         .then((url) => {
             setImage({
                 uri: url,
@@ -36,6 +41,40 @@ const Profile = () => {
         })
         .catch(error => console.log('Error: ', error));
     }, [])
+
+    const uploadProgress = ratio => Math.round(ratio * 100);
+
+    const monitorFileUpload = uploadTask => {
+        uploadTask.on('state_changed', (snapshot) => {
+            const progress = uploadProgress(
+                snapshot.bytesTransferred / snapshot.totalBytes
+            );
+            console.log('Upload is ' + progress + '% done');
+            console.info('snapshot.state ', snapshot.state);
+
+            switch (snapshot.state) {
+                case firebase.storage.TaskState.PAUSED: // or 'paused'
+                    console.log('Upload is paused');
+                    break;
+                case firebase.storage.TaskState.RUNNING: // or 'running'
+                    console.log('Upload is running');
+                    setImage({});
+                    setUpload({ loading: true, progress });
+                    break;
+            }
+        }, error => {
+            console.log('Error: ', error)
+        }, () => {
+            getProfileImageFromFirebase(userData.id)
+            .then((url) => {
+                console.log('File available at', url);
+                setImage({
+                    uri: url,
+                });
+            })
+            setUpload({ loading: false });
+        });
+    };
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -46,10 +85,18 @@ const Profile = () => {
         });
 
         if (!result.cancelled) {
-            setImage({
-                uri: result.uri,
+            const blob = await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.onload = () => {
+                  resolve(xhr.response);
+                };
+                xhr.responseType = 'blob';
+                xhr.open('GET', result.uri, true);
+                xhr.send(null);
             });
-            uploadImageToFirebase(result.uri, userData.id);
+
+            const uploadTask = imagesRef.child(`profileImages/${userData.id}`).put(blob);
+            monitorFileUpload(uploadTask);
         }
     };
 
