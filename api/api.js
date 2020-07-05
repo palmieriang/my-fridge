@@ -64,13 +64,13 @@ export function deleteProduct(existingId) {
 
 export const uploadImageToFirebase = async (uri, userUID) => {
   const blob = await new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.onload = () => {
-          resolve(xhr.response);
-      };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
-      xhr.send(null);
+    const xhr = new XMLHttpRequest();
+    xhr.onload = () => {
+      resolve(xhr.response);
+    };
+    xhr.responseType = 'blob';
+    xhr.open('GET', uri, true);
+    xhr.send(null);
   });
 
   const ref = imagesRef.child(`profileImages/${userUID}`);
@@ -79,6 +79,12 @@ export const uploadImageToFirebase = async (uri, userUID) => {
 
   return await snapshot.ref.getDownloadURL();
 };
+
+export function getProfileImageFromFirebase(userUID) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .getDownloadURL();
+}
 
 export function formatDate(dateString) {
   const parsed = moment(new Date(dateString));
