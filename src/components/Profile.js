@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
+import * as Progress from 'react-native-progress';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
@@ -104,6 +105,7 @@ const Profile = () => {
         <View style={[styles.profile, { backgroundColor: theme.primary }]}>
             <TouchableOpacity onPress={pickImage}>
                 <View style={styles.pictureContainer} onPress={pickImage}>
+                    {upload.loading && <Progress.Bar progress={upload.progress} width={150} />}
                     {image.uri ? (
                         <Image source={image} style={styles.picture} />
                     ) : (
