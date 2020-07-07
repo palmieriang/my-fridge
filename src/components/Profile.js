@@ -17,7 +17,7 @@ const Profile = () => {
         progress: 0,
     });
 
-    const [image, setImage] = useState({});
+    const [image, setImage] = useState({ uri: null });
 
     const { userData } = useContext(authStore);
     const { theme } = useContext(themeStore);
@@ -69,11 +69,9 @@ const Profile = () => {
             getProfileImageFromFirebase(userData.id)
             .then((url) => {
                 console.log('File available at', url);
-                setImage({
-                    uri: url,
-                });
+                setImage({ uri: url });
+                setUpload({ loading: false });
             })
-            setUpload({ loading: false });
         });
     };
 
@@ -95,8 +93,11 @@ const Profile = () => {
                 xhr.open('GET', result.uri, true);
                 xhr.send(null);
             });
+            const metadata = {
+                contentType: 'image/jpeg',
+            };
 
-            const uploadTask = imagesRef.child(`profileImages/${userData.id}`).put(blob);
+            const uploadTask = imagesRef.child(`profileImages/${userData.id}`).put(blob, metadata);
             monitorFileUpload(uploadTask);
         }
     };
@@ -105,11 +106,16 @@ const Profile = () => {
         <View style={[styles.profile, { backgroundColor: theme.primary }]}>
             <TouchableOpacity onPress={pickImage}>
                 <View style={styles.pictureContainer} onPress={pickImage}>
-                    {upload.loading && <Progress.Bar progress={upload.progress} width={150} />}
-                    {image.uri ? (
+                    {!upload.loading && image.uri &&
                         <Image source={image} style={styles.picture} />
-                    ) : (
+                    }
+                    {!upload.loading && !image.uri &&
                         <UserIcon width={150} height={150}/>
+                    }
+                    {upload.loading && (
+                        <View style={styles.progressContainer}>
+                            <Progress.Bar progress={upload.progress} width={150} />
+                        </View>
                     )}
                 </View>
             </TouchableOpacity>
@@ -136,6 +142,11 @@ const styles = StyleSheet.create({
     profileField: {
         color: '#fff',
         marginTop: 20,
+    },
+    progressContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        maxHeight: 150,
     }
 });
 
