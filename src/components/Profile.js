@@ -36,9 +36,7 @@ const Profile = () => {
     useEffect(() => {
         getProfileImageFromFirebase(userData.id)
         .then((url) => {
-            setImage({
-                uri: url,
-            });
+            setImage({ uri: url });
         })
         .catch(error => console.log('Error: ', error));
     }, [])
@@ -51,7 +49,6 @@ const Profile = () => {
                 snapshot.bytesTransferred / snapshot.totalBytes
             );
             console.log('Upload is ' + progress + '% done');
-            console.info('snapshot.state ', snapshot.state);
 
             switch (snapshot.state) {
                 case firebase.storage.TaskState.PAUSED: // or 'paused'
