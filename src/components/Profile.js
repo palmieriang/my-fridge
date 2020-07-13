@@ -8,6 +8,7 @@ import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
 import { uploadImageToFirebase, getProfileImageFromFirebase } from '../../api/api';
 import { firebase } from '../firebase/config';
+import DeleteIcon from '../../assets/close.svg';
 
 const imagesRef = firebase.storage().ref();
 
@@ -99,12 +100,27 @@ const Profile = () => {
         }
     };
 
+    const deleteProfileImg = () => {
+        imagesRef.child(`profileImages/${userData.id}`).delete()
+            .then(() => {
+                setImage({});
+            }).catch((error) => {
+                console.info('Error: ', error);
+            });
+    }
+
     return (
         <View style={[styles.profile, { backgroundColor: theme.primary }]}>
             <TouchableOpacity onPress={pickImage}>
                 <View style={styles.pictureContainer} onPress={pickImage}>
                     {!upload.loading && image.uri &&
-                        <Image source={image} style={styles.picture} />
+                        <View>
+                            <Image source={image} style={styles.picture} />
+                            <DeleteIcon
+                                style={styles.deleteIcon}
+                                width={24} height={24} fill="#fff"
+                                onPress={deleteProfileImg} />
+                        </View>
                     }
                     {!upload.loading && !image.uri &&
                         <UserIcon width={150} height={150}/>
@@ -135,6 +151,7 @@ const styles = StyleSheet.create({
         height: 150,
         width: 150,
         borderRadius: 100,
+        position: 'relative',
     },
     profileField: {
         color: '#fff',
@@ -144,6 +161,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         maxHeight: 150,
+    },
+    deleteIcon: {
+        bottom: 0,
+        position: 'absolute',
+        right: 0,
     }
 });
 
