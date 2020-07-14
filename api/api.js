@@ -86,6 +86,12 @@ export function getProfileImageFromFirebase(userUID) {
     .getDownloadURL();
 }
 
+export function deleteProfileImage(userUID) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .delete();
+}
+
 export function formatDate(dateString) {
   const parsed = moment(new Date(dateString));
 
