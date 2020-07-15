@@ -6,7 +6,7 @@ import * as Progress from 'react-native-progress';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
-import { uploadImageToFirebase, getProfileImageFromFirebase } from '../../api/api';
+import { uploadImageToFirebase, getProfileImageFromFirebase, deleteProfileImage } from '../../api/api';
 import { firebase } from '../firebase/config';
 import DeleteIcon from '../../assets/close.svg';
 
@@ -101,7 +101,7 @@ const Profile = () => {
     };
 
     const deleteProfileImg = () => {
-        imagesRef.child(`profileImages/${userData.id}`).delete()
+        deleteProfileImage(userData.id)
             .then(() => {
                 setImage({});
             }).catch((error) => {
