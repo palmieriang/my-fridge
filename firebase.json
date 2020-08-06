@@ -15,5 +15,8 @@
       "**/.*",
       "**/node_modules/**"
     ]
+  },
+  "react-native": {
+    "ml_vision_ocr_model": true
   }
 }
