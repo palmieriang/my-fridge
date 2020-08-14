@@ -7,6 +7,7 @@ import ProductForm from '../components/ProductForm';
 import Settings from '../components/Settings';
 import SignIn from '../components/SignIn';
 import Registration from '../components/Registration';
+import CameraRecognition from '../components/CameraRecognition';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,13 @@ export function FridgeStackScreen() {
           title: route.params.title
         })}
       />
+      <Stack.Screen
+        name="scan"
+        component={CameraRecognition}
+        options={({ route }) => ({
+          title: route.params.title
+        })}
+      />
     </Stack.Navigator>
   );
 }
@@ -67,6 +75,13 @@ export function FreezerStackScreen() {
         name="form"
         component={ProductForm}
         options={{ title: t('add') }}
+      />
+      <Stack.Screen
+        name="scan"
+        component={CameraRecognition}
+        options={({ route }) => ({
+          title: route.params.title
+        })}
       />
     </Stack.Navigator>
   );

@@ -6,6 +6,7 @@ import {
     View,
     StyleSheet,
     YellowBox,
+    Button,
 } from 'react-native';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import RNPickerSelect from 'react-native-picker-select';
@@ -89,6 +90,12 @@ const ProductForm = ({ navigation, route }) => {
         console.log('Item deleted');
     }
 
+    const handleScanProduct = () => {
+        navigation.navigate('scan', {
+            title: 'Scan',
+        });
+    }
+
     return (
         <View style={{ flex: 1, backgroundColor: theme.background }}>
             <TextInput
@@ -126,6 +133,12 @@ const ProductForm = ({ navigation, route }) => {
                     { label: t('freezer'), value: 'freezer', key: 'freezer' },
                 ]}
             />
+            <View style={styles.logout}>
+                <Button
+                    title="Scan"
+                    onPress={handleScanProduct}
+                />
+            </View>
             <TouchableOpacity
                 onPress={handleAddPress}
                 style={styles.button}
