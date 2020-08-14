@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, ScrollView } from 'react-native';
 import { RNCamera } from 'react-native-camera';
 
 const CameraRecognition = ({ navigation }) => {
@@ -11,7 +11,7 @@ const CameraRecognition = ({ navigation }) => {
 
     const takePicture = async () => {
         const options = { quality: 0.8, base64: true, skipProcessing: true, forceUpOrientation: true };
-        const data = await this.camera.takePictureAsync(options);
+        const data = await camera.takePictureAsync(options);
 
         // for on-device (Supports Android and iOS)
 
