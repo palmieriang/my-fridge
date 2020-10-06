@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, ScrollView, Platform } from 'react-native';
 import { Camera } from 'expo-camera';
@@ -11,6 +11,8 @@ const CameraRecognition = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const { height, width } = Dimensions.get('window');
+
+  const cameraRef = useRef(null);
 
   const [hasPermission, setHasPermission] = useState(null);
   const [type, setType] = useState(Camera.Constants.Type.back);
@@ -29,10 +31,18 @@ const CameraRecognition = () => {
     return <Text>No access to camera</Text>;
   }
 
+  const takePicture = async () => {
+    const options = { quality: 0.5, base64: true };
+    if (cameraRef) {
+      // const data = await cameraRef.current.takePictureAsync(options);
+      const data = await cameraRef.current.takePictureAsync();
+      console.log(data);
+    }
+  };
 
   // const takePicture = async () => {
   //     const options = { quality: 0.8, base64: true, skipProcessing: true, forceUpOrientation: true };
-  //     const data = await camera.takePictureAsync(options);
+  //     const data = await cameraRef.current.takePictureAsync(options);
 
   //     // for on-device (Supports Android and iOS)
 
@@ -75,13 +85,6 @@ const CameraRecognition = () => {
     </View>
   );
 
-  const takePicture = async function(camera) {
-    const options = { quality: 0.5, base64: true };
-    const data = await camera.takePictureAsync(options);
-    //  eslint-disable-next-line
-    console.log(data.uri);
-  };
-
   const handleCancel = () => {
     setModalVisible(false);
   };
@@ -113,12 +116,17 @@ const CameraRecognition = () => {
   return (
     <View style={{ flex: 1 }}>
 
-      <Camera style={{ minHeight: 450 }} type={type}>
+      <Camera
+        ref={cameraRef}
+        style={{ flex: 1 }}
+        type={type}
+      >
         <View
           style={{
             flex: 1,
             backgroundColor: 'transparent',
             flexDirection: 'row',
+            justifyContent: 'space-around',
           }}>
           <TouchableOpacity
             style={{
@@ -135,15 +143,20 @@ const CameraRecognition = () => {
             }}>
             <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
           </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 0.1,
+              alignSelf: 'flex-end',
+              alignItems: 'center',
+            }}
+            onPress={takePicture}
+            >
+            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Snap </Text>
+          </TouchableOpacity>
         </View>
       </Camera>
 
       {renderModal()}
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={takePicture} style={styles.capture}>
-          <Text style={styles.buttonText}> SNAP </Text>
-        </TouchableOpacity>
-      </View>
     </View>
   );
 };
