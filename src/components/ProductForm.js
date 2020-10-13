@@ -91,9 +91,7 @@ const ProductForm = ({ navigation, route }) => {
     }
 
     const handleScanProduct = () => {
-        navigation.navigate('scan', {
-            title: 'Scan',
-        });
+        navigation.navigate('scan');
     }
 
     return (

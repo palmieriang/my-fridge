@@ -49,9 +49,7 @@ export function FridgeStackScreen() {
       <Stack.Screen
         name="scan"
         component={CameraRecognition}
-        options={({ route }) => ({
-          title: route.params.title
-        })}
+        options={{ title: 'Scan' }}
       />
     </Stack.Navigator>
   );

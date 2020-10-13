@@ -1,10 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Modal, ScrollView, Platform } from 'react-native';
-import { Camera } from 'expo-camera';
+import React, { useState, useEffect, useRef } from "react";
+import PropTypes from "prop-types";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  Modal,
+  ScrollView,
+  Platform
+} from "react-native";
+import { Camera } from "expo-camera";
 // import { RNCamera } from 'react-native-camera';
 // import { utils } from '@react-native-firebase/app';
 // import vision from '@react-native-firebase/ml-vision';
+import RNMlKit from "react-native-firebase-mlkit";
+import RNTextDetector from "react-native-text-detector";
 
 const CameraRecognition = () => {
   const [text, setText] = useState([]);
@@ -31,34 +42,47 @@ const CameraRecognition = () => {
     return <Text>No access to camera</Text>;
   }
 
+  // const takePicture = async () => {
+  //   const options = { quality: 0.5, base64: true };
+  //   if (cameraRef) {
+  //     // const data = await cameraRef.current.takePictureAsync(options);
+  //     const data = await cameraRef.current.takePictureAsync();
+  //     console.log(data);
+  //   }
+  // };
+
   const takePicture = async () => {
-    const options = { quality: 0.5, base64: true };
+    const options = {
+      quality: 0.8,
+      base64: true,
+      skipProcessing: true,
+      forceUpOrientation: true
+    };
+    // const data = await cameraRef.current.takePictureAsync(options);
     if (cameraRef) {
       // const data = await cameraRef.current.takePictureAsync(options);
       const data = await cameraRef.current.takePictureAsync();
-      console.log(data);
+      // console.log(data);
     }
+
+    const deviceTextRecognition = await RNTextDetector.detectFromUri(data.uri);
+    console.log('Text Recognition ', deviceTextRecognition);
+
+    // for on-device (Supports Android and iOS)
+
+    // const deviceTextRecognition = await RNMlKit.deviceTextRecognition(data.uri);
+    // console.log('Text Recognition On-Device', deviceTextRecognition);
+
+    // setText(deviceTextRecognition);
+    // setModalVisible(true);
+
+    // alert('Texto identificado ' + JSON.stringify(deviceTextRecognition))
+
+    // for cloud (At the moment supports only Android)
+
+    // const cloudTextRecognition = await RNMlKit.cloudTextRecognition(data.uri);
+    // console.log('Text Recognition Cloud', cloudTextRecognition);
   };
-
-  // const takePicture = async () => {
-  //     const options = { quality: 0.8, base64: true, skipProcessing: true, forceUpOrientation: true };
-  //     const data = await cameraRef.current.takePictureAsync(options);
-
-  //     // for on-device (Supports Android and iOS)
-
-  //     const deviceTextRecognition = await RNMlKit.deviceTextRecognition(data.uri); 
-  //     console.log('Text Recognition On-Device', deviceTextRecognition);
-
-  //     setText(deviceTextRecognition);
-  //     setModalVisible(true);
-
-  //     // alert('Texto identificado ' + JSON.stringify(deviceTextRecognition))
-
-  //     // for cloud (At the moment supports only Android)
-
-  //     // const cloudTextRecognition = await RNMlKit.cloudTextRecognition(data.uri);
-  //     // console.log('Text Recognition Cloud', cloudTextRecognition);
-  // };
 
   async function processDocument(localPath) {
     const processed = await vision().textRecognizerProcessImage(localPath);
@@ -78,7 +102,7 @@ const CameraRecognition = () => {
         flex: 1,
         backgroundColor: 'lightgreen',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
       }}
     >
       <Text>Waiting</Text>
@@ -92,17 +116,19 @@ const CameraRecognition = () => {
   const renderModal = () => {
     return (
       <Modal animationType="slide" transparent={false} visible={modalVisible}>
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <View
+          style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+        >
           <View style={{ width: width - 50, height: height - 70 }}>
             <ScrollView>
-                {text.map(blockVision => (
-                  <View style={styles.textContainer} key={blockVision.lineText}>
-                    <Text>Element Text : {blockVision.elementText}</Text>
-                    <Text>Line Text : {blockVision.lineText}</Text>
-                    <Text>Result Text : {blockVision.resultText}</Text>
-                    <Text>Block Text : {blockVision.blockText}</Text>
-                  </View>
-                ))}
+              {text.map(blockVision => (
+                <View style={styles.textContainer} key={blockVision.lineText}>
+                  <Text>Element Text : {blockVision.elementText}</Text>
+                  <Text>Line Text : {blockVision.lineText}</Text>
+                  <Text>Result Text : {blockVision.resultText}</Text>
+                  <Text>Block Text : {blockVision.blockText}</Text>
+                </View>
+              ))}
             </ScrollView>
           </View>
           <TouchableOpacity onPress={handleCancel}>
@@ -111,28 +137,25 @@ const CameraRecognition = () => {
         </View>
       </Modal>
     );
-  }
+  };
 
   return (
     <View style={{ flex: 1 }}>
-
-      <Camera
-        ref={cameraRef}
-        style={{ flex: 1 }}
-        type={type}
-      >
+      <Camera ref={cameraRef} style={{ flex: 1 }} type={type}>
         <View
           style={{
             flex: 1,
             backgroundColor: 'transparent',
             flexDirection: 'row',
             justifyContent: 'space-around',
-          }}>
+            width: '100%'
+          }}
+        >
           <TouchableOpacity
             style={{
               flex: 0.1,
               alignSelf: 'flex-end',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
             onPress={() => {
               setType(
@@ -140,18 +163,25 @@ const CameraRecognition = () => {
                   ? Camera.Constants.Type.front
                   : Camera.Constants.Type.back
               );
-            }}>
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Flip </Text>
+            }}
+          >
+            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+              {" "}
+              Flip{" "}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={{
               flex: 0.1,
               alignSelf: 'flex-end',
-              alignItems: 'center',
+              alignItems: 'center'
             }}
             onPress={takePicture}
-            >
-            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Snap </Text>
+          >
+            <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
+              {" "}
+              Snap{" "}
+            </Text>
           </TouchableOpacity>
         </View>
       </Camera>
@@ -164,29 +194,29 @@ const CameraRecognition = () => {
 const styles = StyleSheet.create({
   preview: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
+    alignSelf: 'flex-end',
+    alignItems: 'center'
   },
   capture: {
-    alignSelf: 'center',
+    alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 5,
     flex: 0,
     padding: 15,
     paddingHorizontal: 20,
-    margin: 20,
+    margin: 20
   },
   buttonText: {
-    fontSize: 14,
+    fontSize: 14
   },
   textContainer: {
-    marginBottom: 30,
+    marginBottom: 30
   },
   modalView: {
     alignItems: 'center',
     backgroundColor: '#FFF',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center'
+  }
 });
 
 export default CameraRecognition;
