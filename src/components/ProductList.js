@@ -25,20 +25,6 @@ const ProductList = ({ navigation, route }) => {
         getProductsFromApi(userID, place)
     }, []);
 
-    useEffect(() => {
-        if (productList.length > 0) {
-            const intervalId = setInterval(() => { //assign interval to a variaable to clear it
-                setProductList(productList.map(product => ({
-                        ...product,
-                        timer: Date.now(),
-                    })),
-                );
-            }, 1000)
-
-            return () => clearInterval(intervalId); //This is important
-        }
-    }, [productList]);
-
     const getProductsFromApi = (userID, place) => {
         productRef
             .where("authorID", "==", userID)
