@@ -2,6 +2,7 @@ import 'react-native-get-random-values';
 import moment from 'moment';
 import { firebase } from '../src/firebase/config';
 
+const userRef = firebase.firestore().collection('users');
 const productRef = firebase.firestore().collection('products');
 const imagesRef = firebase.storage().ref();
 
@@ -115,6 +116,16 @@ export function deleteProfileImage(userUID) {
   return imagesRef
     .child(`profileImages/${userUID}`)
     .delete();
+}
+
+export function changeColor(newTheme, id) {
+  const data = {
+    theme: newTheme
+  };
+  return userRef
+    .doc(id)
+    .set(data, { merge: true })
+    .catch(error => console.log('Error: ', error));
 }
 
 export function formatDate(dateString) {
