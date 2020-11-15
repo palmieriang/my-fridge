@@ -6,6 +6,8 @@ const userRef = firebase.firestore().collection('users');
 const productRef = firebase.firestore().collection('products');
 const imagesRef = firebase.storage().ref();
 
+// Products
+
 export function saveProduct({ name, date, place, authorID }) {
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
   const data = {
@@ -88,6 +90,8 @@ export function deleteProduct(existingId) {
       .catch(error => console.log('Error: ', error));
 }
 
+// Settings
+
 export const uploadImageToFirebase = async (uri, userUID) => {
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -127,6 +131,18 @@ export function changeColor(newTheme, id) {
     .set(data, { merge: true })
     .catch(error => console.log('Error: ', error));
 }
+
+export function changeLanguage(newLocale, id) {
+  const data = {
+    locale: newLocale
+  };
+  return userRef
+    .doc(id)
+    .set(data, { merge: true })
+    .catch(error => console.log('Error: ', error));
+}
+
+// Utils
 
 export function formatDate(dateString) {
   const parsed = moment(new Date(dateString));
