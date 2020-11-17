@@ -6,7 +6,6 @@ import { getProductById, getProductsFromApi } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
-import { firebase } from '../firebase/config';
 
 import ProductCard from './ProductCard';
 
@@ -18,7 +17,6 @@ const ProductList = ({ navigation, route }) => {
     const { place } = route.params;
     const [productList, setProductList] = useState([]);
 
-    const productRef = firebase.firestore().collection('products');
     const userID = user.uid;
 
     useEffect(() => {
@@ -56,11 +54,7 @@ const ProductList = ({ navigation, route }) => {
 
     const handleFreezeProduct = (id) => {
         const moveTo = place === 'fridge' ? 'freezer' : 'fridge';
-        productRef
-            .doc(id)
-            .update({
-                place: moveTo,
-            });
+        moveProduct(id, moveTo);
     }
 
     return (
