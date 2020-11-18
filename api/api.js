@@ -50,6 +50,30 @@ export const getProductsFromApi = (userID, place) => {
   )
 };
 
+export const getAllProducts = (userID) => {
+  return new Promise(
+    resolve => {
+      productRef
+        .where('authorID', '==', userID)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(
+          querySnapshot => {
+            const newProducts = [];
+            querySnapshot.forEach(doc => {
+              const product = doc.data();
+              product.id = doc.id;
+              newProducts.push(product);
+            });
+            resolve(newProducts);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
+  )
+};
+
 export function getProductById(id) {
   return productRef
     .doc(id)
