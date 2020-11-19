@@ -10,6 +10,7 @@ import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import { authStore } from './authStore';
 import { firebase } from '../firebase/config';
+import { changeLanguage } from '../../api/api';
 
 const en = require('../localization/en.json');
 const it = require('../localization/it.json');
@@ -42,13 +43,7 @@ const LocaleProvider = ({ children }) => {
       locale,
       setLocale,
       changeLocale: async ({ newLocale, id }) => {
-        const userRef = firebase.firestore().collection('users');
-        const data = {
-          locale: newLocale
-        };
-        userRef
-          .doc(id)
-          .set(data, { merge: true })
+        changeLanguage(newLocale, id)
           .then(() => {
             setLocale(newLocale);
           })

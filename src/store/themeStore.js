@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
+import { changeColor } from '../../api/api';
 import { authStore } from './authStore';
-import { firebase } from '../firebase/config';
 
 const themes = {
   lightRed: {
@@ -35,8 +35,8 @@ const { Provider, Consumer } = themeStore;
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(themes.lightRed);
 
-  const { userData } = useContext(authStore);
-  const themeFromFirebase = userData.theme;
+  // destructure theme from userData and rename it as themeFromFirebase
+  const { userData: {theme: themeFromFirebase}} = useContext(authStore);
 
   useEffect(() => {
     if (themeFromFirebase) {
@@ -46,19 +46,13 @@ const ThemeProvider = ({ children }) => {
 
   const themeContext = useMemo(
     () => ({
-        changeTheme: async ({ newTheme, id }) => {
-          const userRef = firebase.firestore().collection('users');
-          const data = {
-            theme: newTheme
-          };
-          userRef
-            .doc(id)
-            .set(data, { merge: true })
-            .then(() => {
-              setTheme(themes[newTheme]);
-            })
-            .catch(error => console.log('Error: ', error));
-        },
+      changeTheme: ({ newTheme, id }) => {
+        changeColor(newTheme, id)
+          .then(() => {
+            setTheme(themes[newTheme]);
+          })
+          .catch(error => console.log('Error: ', error));
+      },
     }), []
   );
 
