@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Text, StyleSheet, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import { getProductById } from '../../api/api';
+import { getProductById, getProductsFromApi } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
-import { firebase } from '../firebase/config';
 
 import ProductCard from './ProductCard';
 
@@ -18,37 +17,20 @@ const ProductList = ({ navigation, route }) => {
     const { place } = route.params;
     const [productList, setProductList] = useState([]);
 
-    const productRef = firebase.firestore().collection('products');
     const userID = user.uid;
 
     useEffect(() => {
         getProductsFromApi(userID, place)
-    }, []);
-
-    const getProductsFromApi = (userID, place) => {
-        productRef
-            .where("authorID", "==", userID)
-            .where("place", "==", place)
-            .orderBy('createdAt', 'desc')
-            .onSnapshot(
-                querySnapshot => {
-                    const newProducts = []
-                    querySnapshot.forEach(doc => {
-                        const product = doc.data();
-                        product.id = doc.id;
-                        newProducts.push(product);
-                    });
-                    setProductList(newProducts.map(product => ({
-                        ...product,
-                        date: new Date(product.date),
-                        timer: Date.now(),
-                    })))
-                },
-                error => {
-                    console.log(error)
-                }
-            )
-    };
+            .then(response => {
+                const newList = response.map(product => ({
+                    ...product,
+                    date: new Date(product.date),
+                    timer: Date.now()
+                }))
+                setProductList(newList);
+            })
+            .catch(error => console.log('Error: ', error));
+    }, [productList]);
 
     const handleAddProduct = () => {
         navigation.navigate('form', {
@@ -72,11 +54,7 @@ const ProductList = ({ navigation, route }) => {
 
     const handleFreezeProduct = (id) => {
         const moveTo = place === 'fridge' ? 'freezer' : 'fridge';
-        productRef
-            .doc(id)
-            .update({
-                place: moveTo,
-            });
+        moveProduct(id, moveTo);
     }
 
     return (

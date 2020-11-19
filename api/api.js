@@ -2,8 +2,11 @@ import 'react-native-get-random-values';
 import moment from 'moment';
 import { firebase } from '../src/firebase/config';
 
+const userRef = firebase.firestore().collection('users');
 const productRef = firebase.firestore().collection('products');
 const imagesRef = firebase.storage().ref();
+
+// Products
 
 export function saveProduct({ name, date, place, authorID }) {
   const timestamp = firebase.firestore.FieldValue.serverTimestamp();
@@ -21,6 +24,55 @@ export function saveProduct({ name, date, place, authorID }) {
       alert(error)
     });
 }
+
+export const getProductsFromApi = (userID, place) => {
+  return new Promise(
+    resolve => {
+      productRef
+        .where('authorID', '==', userID)
+        .where('place', '==', place)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(
+          querySnapshot => {
+            const newProducts = [];
+            querySnapshot.forEach(doc => {
+              const product = doc.data();
+              product.id = doc.id;
+              newProducts.push(product);
+            });
+            resolve(newProducts);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
+  )
+};
+
+export const getAllProducts = (userID) => {
+  return new Promise(
+    resolve => {
+      productRef
+        .where('authorID', '==', userID)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(
+          querySnapshot => {
+            const newProducts = [];
+            querySnapshot.forEach(doc => {
+              const product = doc.data();
+              product.id = doc.id;
+              newProducts.push(product);
+            });
+            resolve(newProducts);
+          },
+          error => {
+            console.log(error);
+          }
+        );
+    }
+  )
+};
 
 export function getProductById(id) {
   return productRef
@@ -62,6 +114,8 @@ export function deleteProduct(existingId) {
       .catch(error => console.log('Error: ', error));
 }
 
+// Settings
+
 export const uploadImageToFirebase = async (uri, userUID) => {
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -91,6 +145,28 @@ export function deleteProfileImage(userUID) {
     .child(`profileImages/${userUID}`)
     .delete();
 }
+
+export function changeColor(newTheme, id) {
+  const data = {
+    theme: newTheme
+  };
+  return userRef
+    .doc(id)
+    .set(data, { merge: true })
+    .catch(error => console.log('Error: ', error));
+}
+
+export function changeLanguage(newLocale, id) {
+  const data = {
+    locale: newLocale
+  };
+  return userRef
+    .doc(id)
+    .set(data, { merge: true })
+    .catch(error => console.log('Error: ', error));
+}
+
+// Utils
 
 export function formatDate(dateString) {
   const parsed = moment(new Date(dateString));
