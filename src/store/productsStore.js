@@ -1,72 +1,37 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { getCountdownParts } from '../../api/api';
-import { firebase } from '../firebase/config';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { getAllProducts } from '../../api/api';
 import { authStore } from './authStore';
 
 const productsStore = createContext();
 const { Provider, Consumer } = productsStore;
 
-const productRef = firebase.firestore().collection('products');
-
 const ProductsProvider = ({ children }) => {
   const { authState: { user } } = useContext(authStore);
 
-  const [expiredItems, setExpiredItems] = useState(null);
   const [productsList, setProductsList] = useState([]);
+  const userID = user?.uid;
 
   useEffect(() => {
     if (user) {
-      const userID = user.uid;
-      getProductsFromApi(userID);
+      getProducts(userID);
     }
   }, [user]);
 
-  useEffect(() => {
-    if (productsList) {
-      countExpiredItems();
-    }
-  }, [productsList]);
+  const getProducts = (userID) => {
+    getAllProducts(userID)
+      .then(response => {
+        const newProducts = response.map(product => ({
+          ...product,
+          date: new Date(product.date),
+        }))
 
-  const getProductsFromApi = (userID) => {
-    productRef
-      .where('authorID', '==', userID)
-      .where("place", "==", 'fridge')
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(
-        querySnapshot => {
-          const newProducts = [];
-          querySnapshot.forEach(doc => {
-            const product = doc.data();
-            product.id = doc.id;
-            newProducts.push(product);
-          });
-          setProductsList(
-            newProducts.map(product => ({
-              ...product,
-              date: new Date(product.date),
-              timer: Date.now()
-            }))
-          );
-        },
-        error => {
-          console.log(error);
-        }
-      );
-  };
-
-  const countExpiredItems = () => {
-    let counter = null;
-    for (let i = 0; i < productsList.length; i++) {
-      const { days } = getCountdownParts(productsList[i].date);
-      if (days < 0) {
-        counter++;
-      }
-    }
-    setExpiredItems(counter);
+        setProductsList(newProducts);
+      })
+      .catch(error => console.log('Error: ', error));
   };
 
   return (
-    <Provider value={{ expiredItems, productsList }}>
+    <Provider value={{ productsList }}>
       <Consumer>
         {children}
       </Consumer>
