@@ -9,6 +9,10 @@ const imagesRef = firebase.storage().ref();
 
 // Auth
 
+export function authSignOut() {
+  return firebase.auth().signOut();
+}
+
 export function persistentLogin() {
   return new Promise(
     resolve => {
