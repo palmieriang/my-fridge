@@ -2,9 +2,43 @@ import 'react-native-get-random-values';
 import moment from 'moment';
 import { firebase } from '../src/firebase/config';
 
-const userRef = firebase.firestore().collection('users');
-const productRef = firebase.firestore().collection('products');
+const db = firebase.firestore();
+const userRef = db.collection('users');
+const productRef = db.collection('products');
 const imagesRef = firebase.storage().ref();
+
+// Auth
+
+export function persistentLogin() {
+  return new Promise(
+    resolve => {
+      firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+          user.getIdToken(true)
+            .then((idToken) => {
+              resolve({
+                user,
+                idToken
+              })
+            })
+            .catch((error) => {
+              console.log('Restoring token failed', error);
+          });
+        }
+      })
+    }
+  );
+}
+
+export function getUserData(userID) {
+  return userRef
+    .doc(userID)
+    .get()
+    .then((response) => {
+      return response.data();
+    })
+    .catch(error => console.log('Error: ', error));
+}
 
 // Products
 
