@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getAllProducts } from '../../api/api';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import { getAllProducts, saveProduct } from '../../api/api';
 import { authStore } from './authStore';
 
 const productsStore = createContext();
@@ -30,8 +30,18 @@ const ProductsProvider = ({ children }) => {
       .catch(error => console.log('Error: ', error));
   };
 
+  const productsContext = useMemo(() => ({
+    handleSaveProduct: async data => {
+      return saveProduct(data)
+        .then(() => {
+          getProducts(userID);
+        })
+        .catch(error => console.log('Error: ', error));
+    }
+  }));
+
   return (
-    <Provider value={{ productsList }}>
+    <Provider value={{ productsList, productsContext }}>
       <Consumer>
         {children}
       </Consumer>
