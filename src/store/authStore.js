@@ -6,7 +6,7 @@ import React,
     useState
 } from 'react';
 import { firebase } from '../firebase/config';
-import { persistentLogin, getUserData } from '../../api/api';
+import { persistentLogin, getUserData, authSignOut } from '../../api/api';
 
 const initialState = {
     isLoading: true,
@@ -79,16 +79,16 @@ const AuthProvider = ({ children }) => {
                         console.log('Current user error', error);
                     });
                 })
-                .catch(function(error) {
+                .catch((error) => {
                     alert(error.message);
                     console.info('Sign in error: ', error.message);
                 });
             },
             signOut: () => {
-                firebase.auth().signOut().then(function() {
+                authSignOut().then(() => {
                     console.log('Sign-out successful');
                     dispatch({ type: 'SIGN_OUT' });
-                }).catch(function(error) {
+                }).catch((error) => {
                     console.log('Sign-out error: ', error.message);
                 });
             },
