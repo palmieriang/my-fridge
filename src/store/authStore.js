@@ -5,8 +5,7 @@ import React,
     useReducer,
     useState
 } from 'react';
-import { firebase } from '../firebase/config';
-import { persistentLogin, getUserData, authSignIn , authSignOut, createUser } from '../../api/api';
+import { persistentLogin, getUserData, authSignIn , authSignOut, createUser, sendVerificationEmail } from '../../api/api';
 
 const initialState = {
     isLoading: true,
@@ -43,7 +42,6 @@ const reducer = (prevState, action) => {
 
 const authStore = createContext(initialState);
 const { Provider, Consumer } = authStore;
-const db = firebase.firestore();
 
 const AuthProvider = ({ children }) => {
     const [authState, dispatch] = useReducer(reducer, initialState);
@@ -96,9 +94,7 @@ const AuthProvider = ({ children }) => {
 
                 createUser(fullName, email, password)
                 .then(() => {
-                    // send verification email
-                    const user = firebase.auth().currentUser;
-                    user.sendEmailVerification()
+                    sendVerificationEmail()
                         .then(() => {
                             alert('Please verify your account.');
                             console.log('Verification email sent.');
