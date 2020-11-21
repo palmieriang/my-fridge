@@ -1,5 +1,4 @@
-import React,
-{
+import React, {
   createContext,
   useMemo,
   useState,
@@ -9,7 +8,6 @@ import React,
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
 import { authStore } from './authStore';
-import { firebase } from '../firebase/config';
 import { changeLanguage } from '../../api/api';
 
 const en = require('../localization/en.json');
@@ -48,16 +46,14 @@ const LocaleProvider = ({ children }) => {
             setLocale(newLocale);
           })
           .catch(error => console.log('Error: ', error));
-      },
+      }
     }),
     [locale]
   );
 
   return (
     <Provider value={{ locale, setLocale, localizationContext }}>
-      <Consumer>
-        {children}
-      </Consumer>
+      <Consumer>{children}</Consumer>
     </Provider>
   );
 };
