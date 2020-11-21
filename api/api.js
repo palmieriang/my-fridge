@@ -85,6 +85,11 @@ export function getUserData(userID) {
     .catch(error => console.log('Error: ', error));
 }
 
+export function sendVerificationEmail() {
+  const user = firebase.auth().currentUser;
+  return user.sendEmailVerification();
+}
+
 // Products
 
 export function saveProduct({ name, date, place, authorID }) {
