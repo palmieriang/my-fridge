@@ -5,7 +5,7 @@ import React,
     useReducer,
     useState
 } from 'react';
-import { firebase } from '../firebase/config';
+import { persistentLogin, getUserData, authSignIn , authSignOut, createUser, sendVerificationEmail } from '../../api/api';
 
 const initialState = {
     isLoading: true,
@@ -42,7 +42,6 @@ const reducer = (prevState, action) => {
 
 const authStore = createContext(initialState);
 const { Provider, Consumer } = authStore;
-const db = firebase.firestore();
 
 const AuthProvider = ({ children }) => {
     const [authState, dispatch] = useReducer(reducer, initialState);
@@ -50,99 +49,52 @@ const AuthProvider = ({ children }) => {
 
     // Persistent login credentials
     useEffect(() => {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                user.getIdToken(true).then((idToken) => {
-                    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
-                }).catch((error) => {
-                    console.log('Restoring token failed', error);
-                });
-            } else {
-                console.log('Restoring token failed');
-            }
-        });
-    }, []);
-
-    // Retrieve data from users collection
-    useEffect(() => {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user?.emailVerified) {
-                const userRef = firebase.firestore().collection('users');
-                userRef
-                    .doc(user.uid)
-                    .get()
-                    .then((response) => {
-                        const userData = response.data();
+        persistentLogin()
+            .then(({ idToken, user }) => {
+                getUserData(user.uid)
+                    .then(userData => {
                         setUserData(userData);
                     })
                     .catch(error => console.log('Error: ', error));
-            }
-        });
+
+                setTimeout(() => {
+                    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
+                }, 500);
+            })
+            .catch((error) => {
+                console.log('Restoring token failed', error);
+            });
     }, []);
 
     const authContext = useMemo(
         () => ({
             signIn: async ({ email, password }) => {
-            // In a production app, we need to send some data (usually username, password) to server and get a token
-            // We will also need to handle errors if sign in failed
-            // After getting token, we need to persist the token using `AsyncStorage`
-            // In the example, we'll use a dummy token
-
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((response) => {
-                    response.user.getIdToken(true).then((idToken) => {
-                        dispatch({ type: 'SIGN_IN', token: idToken, user: response.user });
-                    }).catch((error) => {
-                        console.log('Current user error', error);
-                    });
+                authSignIn(email, password)
+                .then(({ idToken, user }) => {
+                    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
                 })
-                .catch(function(error) {
+                .catch((error) => {
                     alert(error.message);
                     console.info('Sign in error: ', error.message);
                 });
             },
             signOut: () => {
-                firebase.auth().signOut().then(function() {
+                authSignOut().then(() => {
                     console.log('Sign-out successful');
                     dispatch({ type: 'SIGN_OUT' });
-                }).catch(function(error) {
+                }).catch((error) => {
                     console.log('Sign-out error: ', error.message);
                 });
             },
             signUp: async ({ fullName, email, password, confirmPassword }) => {
-            // In a production app, we need to send user data to server and get a token
-            // We will also need to handle errors if sign up failed
-            // After getting token, we need to persist the token using `AsyncStorage`
-            // In the example, we'll use a dummy token
-
                 if (password !== confirmPassword) {
                     alert("Passwords don't match.")
                     return
                 }
 
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((response) => {
-                    const uid = response.user.uid
-                    const data = {
-                        id: uid,
-                        email,
-                        fullName,
-                        locale: 'en',
-                        theme: 'lightRed',
-                    };
-                    // add more user data inside firestore
-                    return db.collection('users')
-                        .doc(uid)
-                        .set(data)
-                        .catch((error) => {
-                            alert(error);
-                            console.log('set data error: ', error);
-                        });
-                })
+                createUser(fullName, email, password)
                 .then(() => {
-                    // send verification email
-                    const user = firebase.auth().currentUser;
-                    user.sendEmailVerification()
+                    sendVerificationEmail()
                         .then(() => {
                             alert('Please verify your account.');
                             console.log('Verification email sent.');
