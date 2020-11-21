@@ -11,7 +11,7 @@
     "days":"Days",
     "delete":"Delete",
     "english":"English",
-    "error":"Please make sure the server is running: npm run backend or, start adding products to the fridge.",
+    "error":"Start adding products to the fridge.",
     "expired":"Expired",
     "foo":"Foo",
     "french":"French",
