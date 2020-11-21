@@ -1,122 +1,127 @@
-import React,
-{ createContext,
-    useEffect,
-    useMemo,
-    useReducer,
-    useState
+import React, {
+  createContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState
 } from 'react';
-import { persistentLogin, getUserData, authSignIn , authSignOut, createUser, sendVerificationEmail } from '../../api/api';
+import {
+  persistentLogin,
+  getUserData,
+  authSignIn,
+  authSignOut,
+  createUser,
+  sendVerificationEmail
+} from '../../api/api';
 
 const initialState = {
-    isLoading: true,
-    isSignout: false,
-    userToken: null,
-    user: null,
+  isLoading: true,
+  isSignout: false,
+  userToken: null,
+  user: null
 };
 
 const reducer = (prevState, action) => {
-    switch (action.type) {
-        case 'RESTORE_TOKEN':
-        return {
-            ...prevState,
-            userToken: action.token,
-            isLoading: false,
-            user: action.user,
-        };
-        case 'SIGN_IN':
-        return {
-            ...prevState,
-            isSignout: false,
-            userToken: action.token,
-            user: action.user,
-        };
-        case 'SIGN_OUT':
-        return {
-            ...prevState,
-            isSignout: true,
-            userToken: null,
-            user: null,
-        }
-    };
-}
+  switch (action.type) {
+    case 'RESTORE_TOKEN':
+      return {
+        ...prevState,
+        userToken: action.token,
+        isLoading: false,
+        user: action.user
+      };
+    case 'SIGN_IN':
+      return {
+        ...prevState,
+        isSignout: false,
+        userToken: action.token,
+        user: action.user
+      };
+    case 'SIGN_OUT':
+      return {
+        ...prevState,
+        isSignout: true,
+        userToken: null,
+        user: null
+      };
+  }
+};
 
 const authStore = createContext(initialState);
 const { Provider, Consumer } = authStore;
 
 const AuthProvider = ({ children }) => {
-    const [authState, dispatch] = useReducer(reducer, initialState);
-    const [userData, setUserData] = useState({});
+  const [authState, dispatch] = useReducer(reducer, initialState);
+  const [userData, setUserData] = useState({});
 
-    // Persistent login credentials
-    useEffect(() => {
-        persistentLogin()
-            .then(({ idToken, user }) => {
-                getUserData(user.uid)
-                    .then(userData => {
-                        setUserData(userData);
-                    })
-                    .catch(error => console.log('Error: ', error));
+  // Persistent login credentials
+  useEffect(async () => {
+    let idToken;
+    let user;
+    let userData;
+    try {
+      ({ idToken, user } = await persistentLogin());
+      userData = await getUserData(user.uid);
+    } catch (error) {
+      console.log('Restoring token failed', error);
+    }
+    setUserData(userData);
+    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
+  }, []);
 
-                setTimeout(() => {
-                    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
-                }, 500);
-            })
-            .catch((error) => {
-                console.log('Restoring token failed', error);
-            });
-    }, []);
+  const authContext = useMemo(
+    () => ({
+      signIn: async ({ email, password }) => {
+        authSignIn(email, password)
+          .then(({ idToken, user }) => {
+            dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
+          })
+          .catch(error => {
+            alert(error.message);
+            console.info('Sign in error: ', error.message);
+          });
+      },
+      signOut: () => {
+        authSignOut()
+          .then(() => {
+            console.log('Sign-out successful');
+            dispatch({ type: 'SIGN_OUT' });
+          })
+          .catch(error => {
+            console.log('Sign-out error: ', error.message);
+          });
+      },
+      signUp: async ({ fullName, email, password, confirmPassword }) => {
+        if (password !== confirmPassword) {
+          alert("Passwords don't match.");
+          return;
+        }
 
-    const authContext = useMemo(
-        () => ({
-            signIn: async ({ email, password }) => {
-                authSignIn(email, password)
-                .then(({ idToken, user }) => {
-                    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
-                })
-                .catch((error) => {
-                    alert(error.message);
-                    console.info('Sign in error: ', error.message);
-                });
-            },
-            signOut: () => {
-                authSignOut().then(() => {
-                    console.log('Sign-out successful');
-                    dispatch({ type: 'SIGN_OUT' });
-                }).catch((error) => {
-                    console.log('Sign-out error: ', error.message);
-                });
-            },
-            signUp: async ({ fullName, email, password, confirmPassword }) => {
-                if (password !== confirmPassword) {
-                    alert("Passwords don't match.")
-                    return
-                }
+        createUser(fullName, email, password)
+          .then(() => {
+            sendVerificationEmail()
+              .then(() => {
+                alert('Please verify your account.');
+                console.log('Verification email sent.');
+              })
+              .catch(error => {
+                console.log('Verification email not sent.', error);
+              });
+          })
+          .catch(error => {
+            alert(error);
+            console.info('error ', JSON.stringify(error));
+          });
+      }
+    }),
+    []
+  );
 
-                createUser(fullName, email, password)
-                .then(() => {
-                    sendVerificationEmail()
-                        .then(() => {
-                            alert('Please verify your account.');
-                            console.log('Verification email sent.');
-                        }).catch((error) => {
-                            console.log('Verification email not sent.', error);
-                        });
-                })
-                .catch((error) => {
-                    alert(error);
-                    console.info('error ', JSON.stringify(error));
-                });
-            },
-        }), []
-    );
-
-    return (
-        <Provider value={{ authState, dispatch, authContext, userData }}>
-            <Consumer>
-                {children}
-            </Consumer>
-        </Provider>
-    );
+  return (
+    <Provider value={{ authState, dispatch, authContext, userData }}>
+      <Consumer>{children}</Consumer>
+    </Provider>
+  );
 };
 
 export { authStore, AuthProvider };
