@@ -6,7 +6,7 @@ import React,
     useState
 } from 'react';
 import { firebase } from '../firebase/config';
-import { persistentLogin, getUserData, authSignOut } from '../../api/api';
+import { persistentLogin, getUserData, authSignIn , authSignOut } from '../../api/api';
 
 const initialState = {
     isLoading: true,
@@ -71,13 +71,9 @@ const AuthProvider = ({ children }) => {
     const authContext = useMemo(
         () => ({
             signIn: async ({ email, password }) => {
-                firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((response) => {
-                    response.user.getIdToken(true).then((idToken) => {
-                        dispatch({ type: 'SIGN_IN', token: idToken, user: response.user });
-                    }).catch((error) => {
-                        console.log('Current user error', error);
-                    });
+                authSignIn(email, password)
+                .then(({ idToken, user }) => {
+                    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
                 })
                 .catch((error) => {
                     alert(error.message);
