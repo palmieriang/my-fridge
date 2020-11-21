@@ -6,7 +6,7 @@ import React,
     useState
 } from 'react';
 import { firebase } from '../firebase/config';
-import { persistentLogin, getUserData, authSignIn , authSignOut } from '../../api/api';
+import { persistentLogin, getUserData, authSignIn , authSignOut, createUser } from '../../api/api';
 
 const initialState = {
     isLoading: true,
@@ -94,25 +94,7 @@ const AuthProvider = ({ children }) => {
                     return
                 }
 
-                firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((response) => {
-                    const uid = response.user.uid
-                    const data = {
-                        id: uid,
-                        email,
-                        fullName,
-                        locale: 'en',
-                        theme: 'lightRed',
-                    };
-                    // add more user data inside firestore
-                    return db.collection('users')
-                        .doc(uid)
-                        .set(data)
-                        .catch((error) => {
-                            alert(error);
-                            console.log('set data error: ', error);
-                        });
-                })
+                createUser(fullName, email, password)
                 .then(() => {
                     // send verification email
                     const user = firebase.auth().currentUser;
