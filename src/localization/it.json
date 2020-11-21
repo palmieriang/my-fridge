@@ -11,7 +11,7 @@
     "days":"Giorni",
     "delete":"Rimuovi",
     "english":"Inglese",
-    "error":"Assicurati che il server sia in esecuzione: npm run backend oppure, inizia ad aggiungere prodotti al frigorifero.",
+    "error":"Inizia ad aggiungere prodotti al frigorifero.",
     "expired":"Scaduto",
     "foo":"Fou",
     "freeze":"Congela",
