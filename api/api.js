@@ -9,6 +9,40 @@ const imagesRef = firebase.storage().ref();
 
 // Auth
 
+export function createUser(fullName, email, password) {
+  return firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then((response) => {
+      const uid = response.user.uid
+      const data = {
+          id: uid,
+          email,
+          fullName,
+          locale: 'en',
+          theme: 'lightRed',
+      };
+      addUserData(uid, data);
+    })
+    .catch(error => console.log('Error: ', error));
+}
+
+export function authSignIn(email, password) {
+  return new Promise(resolve => {
+    firebase.auth().signInWithEmailAndPassword(email, password)
+      .then(({user}) => {
+        user.getIdToken(true)
+          .then(idToken => {
+            resolve({
+              user,
+              idToken
+            });
+          })
+          .catch(error => {
+            console.log('Restoring token failed', error);
+          });
+      });
+  });
+}
+
 export function authSignOut() {
   return firebase.auth().signOut();
 }
@@ -32,6 +66,13 @@ export function persistentLogin() {
       })
     }
   );
+}
+
+export function addUserData(uid, data) {
+  return userRef
+    .doc(uid)
+    .set(data)
+    .catch(error => console.log('Error: ', error));
 }
 
 export function getUserData(userID) {
