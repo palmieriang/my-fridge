@@ -5,7 +5,12 @@ import React, {
   useEffect,
   useMemo
 } from 'react';
-import { getAllProducts, saveProduct, getProductById } from '../../api/api';
+import {
+  getAllProducts,
+  saveProduct,
+  getProductById,
+  modifyProduct
+} from '../../api/api';
 import { authStore } from './authStore';
 
 const productsStore = createContext();
@@ -51,6 +56,13 @@ const ProductsProvider = ({ children }) => {
         .then(response => {
           const product = response.data();
           return product;
+        })
+        .catch(error => console.log('Error: ', error));
+    },
+    handleModifyProduct: async (data, id) => {
+      return modifyProduct(data, id)
+        .then(() => {
+          getProducts(userID);
         })
         .catch(error => console.log('Error: ', error));
     }
