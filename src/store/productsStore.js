@@ -1,12 +1,20 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
-import { getAllProducts, saveProduct } from '../../api/api';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useMemo
+} from 'react';
+import { getAllProducts, saveProduct, getProductById } from '../../api/api';
 import { authStore } from './authStore';
 
 const productsStore = createContext();
 const { Provider, Consumer } = productsStore;
 
 const ProductsProvider = ({ children }) => {
-  const { authState: { user } } = useContext(authStore);
+  const {
+    authState: { user }
+  } = useContext(authStore);
 
   const [productsList, setProductsList] = useState([]);
   const userID = user?.uid;
@@ -17,13 +25,13 @@ const ProductsProvider = ({ children }) => {
     }
   }, [user]);
 
-  const getProducts = (userID) => {
+  const getProducts = userID => {
     getAllProducts(userID)
       .then(response => {
         const newProducts = response.map(product => ({
           ...product,
-          date: new Date(product.date),
-        }))
+          date: new Date(product.date)
+        }));
 
         setProductsList(newProducts);
       })
@@ -37,14 +45,20 @@ const ProductsProvider = ({ children }) => {
           getProducts(userID);
         })
         .catch(error => console.log('Error: ', error));
+    },
+    handleGetProduct: async id => {
+      return getProductById(id)
+        .then(response => {
+          const product = response.data();
+          return product;
+        })
+        .catch(error => console.log('Error: ', error));
     }
   }));
 
   return (
     <Provider value={{ productsList, productsContext }}>
-      <Consumer>
-        {children}
-      </Consumer>
+      <Consumer>{children}</Consumer>
     </Provider>
   );
 };
