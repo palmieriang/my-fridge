@@ -99,14 +99,10 @@ const AuthProvider = ({ children }) => {
 
         createUser(fullName, email, password)
           .then(() => {
-            sendVerificationEmail()
-              .then(() => {
-                alert('Please verify your account.');
-                console.log('Verification email sent.');
-              })
-              .catch(error => {
-                console.log('Verification email not sent.', error);
-              });
+            sendVerificationEmail();
+          })
+          .then(() => {
+            alert('Please verify your account.');
           })
           .catch(error => {
             alert(error);
