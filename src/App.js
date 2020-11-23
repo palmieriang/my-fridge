@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
-import React, { useContext } from 'react';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, YellowBox } from 'react-native';
@@ -12,6 +12,7 @@ import {
 } from './navigation/navigation';
 import FreezerIcon from '../assets/freezer.svg';
 import SettingsIcon from '../assets/settings.svg';
+import { getCountdownParts } from '../api/api';
 
 import { decode, encode } from 'base-64'
 global.crypto = require("@firebase/firestore");
@@ -23,6 +24,7 @@ if (!global.atob) { global.atob = decode; }
 import { AuthProvider } from './store/authStore';
 import { LocaleProvider } from './store/localeStore';
 import { ThemeProvider } from './store/themeStore';
+import { ProductsProvider } from './store/productsStore';
 
 YellowBox.ignoreWarnings([
   'Warning: componentWillMount is deprecated',
@@ -30,6 +32,23 @@ YellowBox.ignoreWarnings([
 ]);
 
 const Tab = createBottomTabNavigator();
+
+const countExpiredItems = (productsList) => {
+  if (!productsList.length) {
+    return null;
+  }
+
+  let counter = null;
+  for (let i = 0; i < productsList.length; i++) {
+    if (productsList[i].place === 'fridge') {
+      const { days } = getCountdownParts(productsList[i].date);
+      if (days < 0) {
+        counter++;
+      }
+    }
+  }
+  return counter;
+};
 
 export default function App() {
 
@@ -39,46 +58,53 @@ export default function App() {
         <LocaleProvider>
           {({localizationContext: { t }}) => (
             <ThemeProvider>
-              {({ theme: { primary } }) => (
-                <NavigationContainer>
-                  {userToken ? (
-                    <Tab.Navigator
-                      screenOptions={({ route }) => ({
-                        tabBarIcon: ({ focused, color, size }) => {
-                          let IconName;
-                          size = focused ? size : '22';
-  
-                          if (route.name === t('fridge') || route.name === t('freezer')) {
-                            IconName = FreezerIcon;
-                          } else if (route.name === t('settings')) {
-                            IconName = SettingsIcon;
-                          }
+              {({ theme: { primary }}) => (
+                <ProductsProvider>
+                  {({productsList }) => (
+                    <NavigationContainer>
+                      {userToken ? (
+                        <Tab.Navigator
+                          screenOptions={({ route }) => ({
+                            tabBarIcon: ({ focused, color, size }) => {
+                              let IconName;
+                              size = focused ? size : '22';
 
-                          return (
-                            <View style={styles.tabIcon}>
-                              <IconName width={size} height={size} fill={color} />
-                              {route.name === t('freezer') &&
-                                <IconName width={size} height={size} fill={color} />
+                              if (
+                                route.name === t('fridge') ||
+                                route.name === t('freezer')
+                              ) {
+                                IconName = FreezerIcon;
+                              } else if (route.name === t('settings')) {
+                                IconName = SettingsIcon;
                               }
-                            </View>
-                          );
-                        },
-                      })}
-                      tabBarOptions={{
-                        activeTintColor: primary,
-                        inactiveTintColor: 'black',
-                        showIcon: true,
-                        showLabel: true,
-                      }}
-                    >
-                      <Tab.Screen name={t('fridge')} component={FridgeStackScreen} />
-                      <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
-                      <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
-                    </Tab.Navigator>
-                  ) : (
-                    <SingInStackScreen />
+
+                              return (
+                                <View style={styles.tabIcon}>
+                                  <IconName width={size} height={size} fill={color} />
+                                  {route.name === t('freezer') && (
+                                    <IconName width={size} height={size} fill={color} />
+                                  )}
+                                </View>
+                              );
+                            },
+                          })}
+                          tabBarOptions={{
+                            activeTintColor: primary,
+                            inactiveTintColor: 'black',
+                            showIcon: true,
+                            showLabel: true,
+                          }}
+                        >
+                          <Tab.Screen name={t('fridge')} component={FridgeStackScreen} options={{tabBarBadge: countExpiredItems(productsList)}} />
+                          <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
+                          <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
+                        </Tab.Navigator>
+                      ) : (
+                        <SingInStackScreen />
+                      )}
+                    </NavigationContainer>
                   )}
-                </NavigationContainer>
+                </ProductsProvider>
               )}
             </ThemeProvider>
           )}
