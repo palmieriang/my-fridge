@@ -10,7 +10,8 @@ import {
   saveProduct,
   getProductById,
   modifyProduct,
-  deleteProduct
+  deleteProduct,
+  moveProduct
 } from '../../api/api';
 import { authStore } from './authStore';
 
@@ -69,6 +70,13 @@ const ProductsProvider = ({ children }) => {
     },
     handleDeleteProduct: id => {
       return deleteProduct(id)
+        .then(() => {
+          getProducts(userID);
+        })
+        .catch(error => console.log('Error: ', error));
+    },
+    handleFreezeProduct: (id, moveTo) => {
+      moveProduct(id, moveTo)
         .then(() => {
           getProducts(userID);
         })
