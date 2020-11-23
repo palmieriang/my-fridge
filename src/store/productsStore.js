@@ -9,7 +9,8 @@ import {
   getAllProducts,
   saveProduct,
   getProductById,
-  modifyProduct
+  modifyProduct,
+  deleteProduct
 } from '../../api/api';
 import { authStore } from './authStore';
 
@@ -61,6 +62,13 @@ const ProductsProvider = ({ children }) => {
     },
     handleModifyProduct: async (data, id) => {
       return modifyProduct(data, id)
+        .then(() => {
+          getProducts(userID);
+        })
+        .catch(error => console.log('Error: ', error));
+    },
+    handleDeleteProduct: id => {
+      return deleteProduct(id)
         .then(() => {
           getProducts(userID);
         })
