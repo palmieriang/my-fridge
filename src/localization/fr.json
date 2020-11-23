@@ -11,7 +11,7 @@
     "days":"Journées",
     "delete":"Supprimer",
     "english":"Anglais",
-    "error":"Veuillez vous assurer que le serveur fonctionne: npm run backend ou, commencez à ajouter des produits au réfrigérateur.",
+    "error":"Commencez à ajouter des produits au réfrigérateur.",
     "expired":"Expiré",
     "foo":"Foo",
     "freeze":"Geler",
