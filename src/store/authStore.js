@@ -55,18 +55,20 @@ const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState({});
 
   // Persistent login credentials
-  useEffect(async () => {
-    let idToken;
-    let user;
-    let userData;
-    try {
-      ({ idToken, user } = await persistentLogin());
-      userData = await getUserData(user.uid);
-    } catch (error) {
-      console.log('Restoring token failed', error);
-    }
-    setUserData(userData);
-    dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
+  useEffect(() => {
+    (async () => {
+      let idToken;
+      let user;
+      let userData;
+      try {
+        ({ idToken, user } = await persistentLogin());
+        userData = await getUserData(user.uid);
+      } catch (error) {
+        console.log('Restoring token failed', error);
+      }
+      setUserData(userData);
+      dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
+    })();
   }, []);
 
   const authContext = useMemo(
@@ -84,7 +86,6 @@ const AuthProvider = ({ children }) => {
       signOut: () => {
         authSignOut()
           .then(() => {
-            console.log('Sign-out successful');
             dispatch({ type: 'SIGN_OUT' });
           })
           .catch(error => {
@@ -99,17 +100,13 @@ const AuthProvider = ({ children }) => {
 
         createUser(fullName, email, password)
           .then(() => {
-            sendVerificationEmail()
-              .then(() => {
-                alert('Please verify your account.');
-                console.log('Verification email sent.');
-              })
-              .catch(error => {
-                console.log('Verification email not sent.', error);
-              });
+            sendVerificationEmail();
+          })
+          .then(() => {
+            alert('Please verify your account.');
           })
           .catch(error => {
-            alert(error);
+            alert(error.message);
             console.info('error ', JSON.stringify(error));
           });
       }
