@@ -2,9 +2,98 @@ import 'react-native-get-random-values';
 import moment from 'moment';
 import { firebase } from '../src/firebase/config';
 
-const userRef = firebase.firestore().collection('users');
-const productRef = firebase.firestore().collection('products');
+const db = firebase.firestore();
+const userRef = db.collection('users');
+const productRef = db.collection('products');
 const imagesRef = firebase.storage().ref();
+
+// Auth
+
+export function createUser(fullName, email, password) {
+  return firebase
+    .auth()
+    .createUserWithEmailAndPassword(email, password)
+    .then(response => {
+      const uid = response.user.uid;
+      const data = {
+        id: uid,
+        email,
+        fullName,
+        locale: 'en',
+        theme: 'lightRed'
+      };
+      addUserData(uid, data);
+    })
+    .catch(error => console.log('Error: ', error));
+}
+
+export function authSignIn(email, password) {
+  let user;
+
+  return new Promise(resolve => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(({ user }) => {
+        user.getIdToken(true);
+      })
+      .then(idToken => {
+        resolve({
+          user,
+          idToken
+        });
+      })
+      .catch(error => {
+        console.log('Restoring token failed', error);
+      });
+  });
+}
+
+export function authSignOut() {
+  return firebase.auth().signOut();
+}
+
+export function persistentLogin() {
+  return new Promise(resolve => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        user
+          .getIdToken(true)
+          .then(idToken => {
+            resolve({
+              user,
+              idToken
+            });
+          })
+          .catch(error => {
+            console.log('Restoring token failed', error);
+          });
+      }
+    });
+  });
+}
+
+export function addUserData(uid, data) {
+  return userRef
+    .doc(uid)
+    .set(data)
+    .catch(error => console.log('Error: ', error));
+}
+
+export function getUserData(userID) {
+  return userRef
+    .doc(userID)
+    .get()
+    .then(response => {
+      return response.data();
+    })
+    .catch(error => console.log('Error: ', error));
+}
+
+export function sendVerificationEmail() {
+  const user = firebase.auth().currentUser;
+  return user.sendEmailVerification();
+}
 
 // Products
 
@@ -15,63 +104,59 @@ export function saveProduct({ name, date, place, authorID }) {
     date,
     place,
     authorID,
-    createdAt: timestamp,
+    createdAt: timestamp
   };
   return productRef
     .doc()
     .set(data)
-    .catch((error) => {
-      alert(error)
+    .catch(error => {
+      alert(error);
     });
 }
 
 export const getProductsFromApi = (userID, place) => {
-  return new Promise(
-    resolve => {
-      productRef
-        .where('authorID', '==', userID)
-        .where('place', '==', place)
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(
-          querySnapshot => {
-            const newProducts = [];
-            querySnapshot.forEach(doc => {
-              const product = doc.data();
-              product.id = doc.id;
-              newProducts.push(product);
-            });
-            resolve(newProducts);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-    }
-  )
+  return new Promise(resolve => {
+    productRef
+      .where('authorID', '==', userID)
+      .where('place', '==', place)
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(
+        querySnapshot => {
+          const newProducts = [];
+          querySnapshot.forEach(doc => {
+            const product = doc.data();
+            product.id = doc.id;
+            newProducts.push(product);
+          });
+          resolve(newProducts);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  });
 };
 
-export const getAllProducts = (userID) => {
-  return new Promise(
-    resolve => {
-      productRef
-        .where('authorID', '==', userID)
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(
-          querySnapshot => {
-            const newProducts = [];
-            querySnapshot.forEach(doc => {
-              const product = doc.data();
-              product.id = doc.id;
-              newProducts.push(product);
-            });
-            resolve(newProducts);
-          },
-          error => {
-            console.log(error);
-          }
-        );
-    }
-  )
+export const getAllProducts = userID => {
+  return new Promise(resolve => {
+    productRef
+      .where('authorID', '==', userID)
+      .orderBy('createdAt', 'desc')
+      .onSnapshot(
+        querySnapshot => {
+          const newProducts = [];
+          querySnapshot.forEach(doc => {
+            const product = doc.data();
+            product.id = doc.id;
+            newProducts.push(product);
+          });
+          resolve(newProducts);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+  });
 };
 
 export function getProductById(id) {
@@ -88,13 +173,13 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     date,
     place,
     authorID,
-    createdAt: timestamp,
+    createdAt: timestamp
   };
   return productRef
     .doc(existingId)
     .set(data)
-    .catch((error) => {
-      alert(error)
+    .catch(error => {
+      alert(error);
     });
 }
 
@@ -102,7 +187,7 @@ export function moveProduct(id, place) {
   return productRef
     .doc(id)
     .update({
-      place,
+      place
     })
     .catch(error => console.log('Error: ', error));
 }
@@ -110,8 +195,8 @@ export function moveProduct(id, place) {
 export function deleteProduct(existingId) {
   return productRef
     .doc(existingId)
-      .delete()
-      .catch(error => console.log('Error: ', error));
+    .delete()
+    .catch(error => console.log('Error: ', error));
 }
 
 // Settings
@@ -135,15 +220,11 @@ export const uploadImageToFirebase = async (uri, userUID) => {
 };
 
 export function getProfileImageFromFirebase(userUID) {
-  return imagesRef
-    .child(`profileImages/${userUID}`)
-    .getDownloadURL();
+  return imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
 }
 
 export function deleteProfileImage(userUID) {
-  return imagesRef
-    .child(`profileImages/${userUID}`)
-    .delete();
+  return imagesRef.child(`profileImages/${userUID}`).delete();
 }
 
 export function changeColor(newTheme, id) {
@@ -189,12 +270,14 @@ export function formatDateTime(dateString) {
 }
 
 export function getCountdownParts(eventDate) {
-  const duration = moment.duration(moment(new Date(eventDate)).diff(new Date()));
+  const duration = moment.duration(
+    moment(new Date(eventDate)).diff(new Date())
+  );
 
   return {
     days: parseInt(duration.as('days')),
     hours: duration.get('hours'),
     minutes: duration.get('minutes'),
-    seconds: duration.get('seconds'),
+    seconds: duration.get('seconds')
   };
 }
