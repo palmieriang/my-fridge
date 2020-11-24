@@ -3,7 +3,7 @@ import { registerRootComponent } from 'expo';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, View, YellowBox } from 'react-native';
+import { StyleSheet, View, LogBox } from 'react-native';
 import {
   FridgeStackScreen,
   FreezerStackScreen,
@@ -26,9 +26,9 @@ import { LocaleProvider } from './store/localeStore';
 import { ThemeProvider } from './store/themeStore';
 import { ProductsProvider } from './store/productsStore';
 
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
   'Warning: componentWillMount is deprecated',
-  'Warning: componentWillReceiveProps has been renamed',
+  'Warning: componentWillReceiveProps has been renamed'
 ]);
 
 const Tab = createBottomTabNavigator();
