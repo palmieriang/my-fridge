@@ -78,6 +78,9 @@ typings/
 # Next.js build output
 .next
 
+# Expo settings
+.expo
+
 # Nuxt.js build / generate output
 .nuxt
 dist

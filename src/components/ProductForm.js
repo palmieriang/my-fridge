@@ -5,7 +5,7 @@ import {
   TextInput,
   View,
   StyleSheet,
-  YellowBox
+  LogBox
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
@@ -15,7 +15,7 @@ import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import { productsStore } from '../store/productsStore';
 
-YellowBox.ignoreWarnings([
+LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state'
 ]);
 
