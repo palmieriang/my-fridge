@@ -1,22 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Text, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { useNavigation } from '@react-navigation/native';
 import { formatDate, getCountdownParts } from '../../api/api';
 import { localeStore } from '../store/localeStore';
 import { themeStore } from '../store/themeStore';
 import { productsStore } from '../store/productsStore';
 import SwipeableRow from './SwipeableRow';
 
-const ProductCard = ({ product, changeProduct, freezeProduct }) => {
+const ProductCard = ({ product }) => {
+  const { date, id, name, place } = product;
+
   const [expired, setExpired] = useState(false);
 
+  const navigation = useNavigation();
   const {
-    localizationContext: { t }
+    localizationContext: { t },
   } = useContext(localeStore);
   const { theme } = useContext(themeStore);
   const { productsContext } = useContext(productsStore);
 
-  const { days } = getCountdownParts(product.date);
+  const { days } = getCountdownParts(date);
 
   useEffect(() => {
     if (days < 0) {
@@ -27,15 +31,25 @@ const ProductCard = ({ product, changeProduct, freezeProduct }) => {
   });
 
   const handleChange = () => {
-    changeProduct(product.id);
-  };
-
-  const handleDelete = () => {
-    productsContext.handleDeleteProduct(product.id);
+    productsContext
+      .handleGetProduct(id)
+      .then((product) => {
+        navigation.navigate('form', {
+          id,
+          product,
+          title: t('modifyItem'),
+        });
+      })
+      .catch((error) => console.log('Error: ', error));
   };
 
   const handleFreeze = () => {
-    freezeProduct(product.id);
+    const moveTo = place === 'fridge' ? 'freezer' : 'fridge';
+    productsContext.handleFreezeProduct(id, moveTo);
+  };
+
+  const handleDelete = () => {
+    productsContext.handleDeleteProduct(id);
   };
 
   return (
@@ -43,17 +57,15 @@ const ProductCard = ({ product, changeProduct, freezeProduct }) => {
       modifyFunction={handleChange}
       deleteFunction={handleDelete}
       freezeFunction={handleFreeze}
-      place={product.place}
+      place={place}
     >
       <View>
         <TouchableWithoutFeedback onPress={handleChange}>
           <View style={[styles.card, { backgroundColor: theme.foreground }]}>
             <Text style={[styles.date, { color: theme.text }]}>
-              {formatDate(product.date)}
+              {formatDate(date)}
             </Text>
-            <Text style={[styles.title, { color: theme.text }]}>
-              {product.name}
-            </Text>
+            <Text style={[styles.title, { color: theme.text }]}>{name}</Text>
             {expired ? (
               <Text style={[styles.expired, { color: theme.primary }]}>
                 {t('expired')}
@@ -78,8 +90,8 @@ const ProductCard = ({ product, changeProduct, freezeProduct }) => {
 ProductCard.propTypes = {
   product: PropTypes.shape({
     name: PropTypes.string.isRequired,
-    date: PropTypes.instanceOf(Date)
-  })
+    date: PropTypes.instanceOf(Date),
+  }),
 };
 
 const styles = StyleSheet.create({
@@ -88,37 +100,37 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 10,
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
   },
   date: {
     fontWeight: '200',
     fontSize: 15,
-    marginBottom: 10
+    marginBottom: 10,
   },
   title: {
     fontSize: 15,
     fontWeight: '300',
-    marginBottom: 10
+    marginBottom: 10,
   },
   counterContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'baseline'
+    alignItems: 'baseline',
   },
   counterText: {
-    fontSize: 40
+    fontSize: 40,
   },
   counterLabel: {
     fontSize: 13,
     fontWeight: '100',
-    marginLeft: 10
+    marginLeft: 10,
   },
   expired: {
     fontSize: 30,
     textTransform: 'uppercase',
     fontFamily: 'Courier',
-    fontWeight: '500'
-  }
+    fontWeight: '500',
+  },
 });
 
 export default ProductCard;
