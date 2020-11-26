@@ -3,7 +3,7 @@ import React, {
   useEffect,
   useMemo,
   useReducer,
-  useState
+  useState,
 } from 'react';
 import {
   persistentLogin,
@@ -11,14 +11,15 @@ import {
   authSignIn,
   authSignOut,
   createUser,
-  sendVerificationEmail
+  sendVerificationEmail,
+  sendResetPassword,
 } from '../../api/api';
 
 const initialState = {
   isLoading: true,
   isSignout: false,
   userToken: null,
-  user: null
+  user: null,
 };
 
 const reducer = (prevState, action) => {
@@ -28,21 +29,21 @@ const reducer = (prevState, action) => {
         ...prevState,
         userToken: action.token,
         isLoading: false,
-        user: action.user
+        user: action.user,
       };
     case 'SIGN_IN':
       return {
         ...prevState,
         isSignout: false,
         userToken: action.token,
-        user: action.user
+        user: action.user,
       };
     case 'SIGN_OUT':
       return {
         ...prevState,
         isSignout: true,
         userToken: null,
-        user: null
+        user: null,
       };
   }
 };
@@ -78,7 +79,7 @@ const AuthProvider = ({ children }) => {
           .then(({ idToken, user }) => {
             dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
           })
-          .catch(error => {
+          .catch((error) => {
             alert(error.message);
             console.info('Sign in error: ', error.message);
           });
@@ -88,7 +89,7 @@ const AuthProvider = ({ children }) => {
           .then(() => {
             dispatch({ type: 'SIGN_OUT' });
           })
-          .catch(error => {
+          .catch((error) => {
             console.log('Sign-out error: ', error.message);
           });
       },
@@ -105,11 +106,21 @@ const AuthProvider = ({ children }) => {
           .then(() => {
             alert('Please verify your account.');
           })
-          .catch(error => {
+          .catch((error) => {
             alert(error.message);
             console.info('error ', JSON.stringify(error));
           });
-      }
+      },
+      resetPassword: (email) => {
+        sendResetPassword(email)
+          .then(() => {
+            alert('Please check your account.');
+          })
+          .catch((error) => {
+            alert(error.message);
+            console.info('error ', JSON.stringify(error));
+          });
+      },
     }),
     []
   );
