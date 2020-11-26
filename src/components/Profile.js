@@ -74,7 +74,7 @@ const Profile = () => {
         console.log('Error: ', error);
       },
       () => {
-        getProfileImageFromFirebase(userData.id).then((url) => {
+        uploadTask.snapshot.ref.getDownloadURL().then((url) => {
           console.log('File available at', url);
           setImage({ uri: url });
           setUpload({ loading: false });
@@ -143,7 +143,7 @@ const Profile = () => {
           )}
           {upload.loading && (
             <View style={styles.progressContainer}>
-              <Progress.Bar progress={upload.progress} width={150} />
+              <Progress.Bar progress={upload.progress / 100} width={150} />
             </View>
           )}
         </View>
