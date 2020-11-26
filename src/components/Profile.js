@@ -10,11 +10,9 @@ import {
   uploadImageToFirebase,
   getProfileImageFromFirebase,
   deleteProfileImage,
+  uploadTaskFromApi,
 } from '../../api/api';
-import { firebase } from '../firebase/config';
 import DeleteIcon from '../../assets/close.svg';
-
-const imagesRef = firebase.storage().ref();
 
 const Profile = () => {
   const [upload, setUpload] = useState({
@@ -54,19 +52,17 @@ const Profile = () => {
     uploadTask.on(
       'state_changed',
       (snapshot) => {
-        const progress = uploadProgress(
-          snapshot.bytesTransferred / snapshot.totalBytes
-        );
-        console.log('Upload is ' + progress + '% done');
+        const progress = snapshot.bytesTransferred / snapshot.totalBytes;
+        console.log('Upload is ' + uploadProgress(progress) + '% done');
+
+        setUpload({ loading: true, progress });
 
         switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
+          case 'paused': // or firebase.storage.TaskState.PAUSED
             console.log('Upload is paused');
             break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
+          case 'running': // or firebase.storage.TaskState.RUNNING
             console.log('Upload is running');
-            setImage({});
-            setUpload({ loading: true, progress });
             break;
         }
       },
@@ -105,10 +101,9 @@ const Profile = () => {
         contentType: 'image/jpeg',
       };
 
-      const uploadTask = imagesRef
-        .child(`profileImages/${userData.id}`)
-        .put(blob, metadata);
+      const uploadTask = uploadTaskFromApi(userData.id, blob, metadata);
       monitorFileUpload(uploadTask);
+      setImage({});
     }
   };
 
@@ -143,7 +138,7 @@ const Profile = () => {
           )}
           {upload.loading && (
             <View style={styles.progressContainer}>
-              <Progress.Bar progress={upload.progress / 100} width={150} />
+              <Progress.Bar progress={upload.progress} width={150} />
             </View>
           )}
         </View>
