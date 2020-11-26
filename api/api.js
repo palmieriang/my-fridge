@@ -206,7 +206,7 @@ export function deleteProduct(existingId) {
 
 // Settings
 
-export const uploadImageToFirebase = async (uri, userUID) => {
+export async function uploadImageToFirebase(uri, userUID) {
   const blob = await new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.onload = () => {
@@ -216,16 +216,29 @@ export const uploadImageToFirebase = async (uri, userUID) => {
     xhr.open('GET', uri, true);
     xhr.send(null);
   });
+  const metadata = {
+    contentType: 'image/jpeg',
+  };
 
   const ref = imagesRef.child(`profileImages/${userUID}`);
 
-  let snapshot = await ref.put(blob);
+  let snapshot = await ref.put(blob, metadata);
 
   return await snapshot.ref.getDownloadURL();
-};
+}
 
-export function getProfileImageFromFirebase(userUID) {
-  return imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
+export function uploadTaskFromApi(id, blob, metadata) {
+  return imagesRef.child(`profileImages/${id}`).put(blob, metadata);
+}
+
+export async function getProfileImageFromFirebase(userUID) {
+  let url;
+  try {
+    url = await imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
+  } catch (error) {
+    console.log(error.message);
+  }
+  return url;
 }
 
 export function deleteProfileImage(userUID) {
