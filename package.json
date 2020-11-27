@@ -49,6 +49,7 @@
     "@babel/plugin-proposal-optional-chaining": "^7.9.0",
     "babel-preset-expo": "~8.1.0",
     "prettier": "^2.2.0"
+    "react-native-image-progress": "^1.1.1",
   },
   "private": true
 }
