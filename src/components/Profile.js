@@ -1,16 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
+import Image from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
-import {
-  getProfileImageFromFirebase,
-  deleteProfileImage,
-  uploadTaskFromApi,
-} from '../../api/api';
+import { uploadTaskFromApi } from '../../api/api';
 import DeleteIcon from '../../assets/close.svg';
 
 const Profile = () => {
@@ -19,9 +16,11 @@ const Profile = () => {
     progress: 0,
   });
 
-  const [image, setImage] = useState({ uri: null });
-
-  const { userData } = useContext(authStore);
+  const {
+    userData,
+    authContext,
+    authState: { profileImg },
+  } = useContext(authStore);
   const { theme } = useContext(themeStore);
 
   useEffect(() => {
@@ -35,14 +34,6 @@ const Profile = () => {
         }
       }
     })();
-  }, []);
-
-  useEffect(() => {
-    getProfileImageFromFirebase(userData.id)
-      .then((url) => {
-        setImage({ uri: url });
-      })
-      .catch((error) => console.log('Error: ', error));
   }, []);
 
   const uploadProgress = (ratio) => Math.round(ratio * 100);
@@ -71,7 +62,7 @@ const Profile = () => {
       () => {
         uploadTask.snapshot.ref.getDownloadURL().then((url) => {
           console.log('File available at', url);
-          setImage({ uri: url });
+          authContext.updateProfileImage(url);
           setUpload({ loading: false });
         });
       }
@@ -102,27 +93,24 @@ const Profile = () => {
 
       const uploadTask = uploadTaskFromApi(userData.id, blob, metadata);
       monitorFileUpload(uploadTask);
-      setImage({});
     }
   };
 
   const deleteProfileImg = () => {
-    deleteProfileImage(userData.id)
-      .then(() => {
-        setImage({});
-      })
-      .catch((error) => {
-        console.info('Error: ', error);
-      });
+    authContext.deleteImage(userData.id);
   };
 
   return (
     <View style={[styles.profile, { backgroundColor: theme.primary }]}>
       <TouchableOpacity onPress={pickImage}>
-        <View style={styles.pictureContainer} onPress={pickImage}>
-          {!upload.loading && image.uri && (
+        <View style={styles.pictureContainer}>
+          {!upload.loading && profileImg && (
             <View>
-              <Image source={image} style={styles.picture} />
+              <Image
+                source={{ uri: profileImg }}
+                imageStyle={styles.picture}
+                indicator={Progress.Bar}
+              />
               <DeleteIcon
                 style={styles.deleteIcon}
                 width={24}
@@ -132,7 +120,7 @@ const Profile = () => {
               />
             </View>
           )}
-          {!upload.loading && !image.uri && (
+          {!upload.loading && !profileImg && (
             <UserIcon width={150} height={150} />
           )}
           {upload.loading && (
