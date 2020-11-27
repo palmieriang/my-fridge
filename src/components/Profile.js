@@ -7,7 +7,6 @@ import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import UserIcon from '../../assets/user.svg';
 import {
-  uploadImageToFirebase,
   getProfileImageFromFirebase,
   deleteProfileImage,
   uploadTaskFromApi,

@@ -206,27 +206,6 @@ export function deleteProduct(existingId) {
 
 // Settings
 
-export async function uploadImageToFirebase(uri, userUID) {
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = () => {
-      resolve(xhr.response);
-    };
-    xhr.responseType = 'blob';
-    xhr.open('GET', uri, true);
-    xhr.send(null);
-  });
-  const metadata = {
-    contentType: 'image/jpeg',
-  };
-
-  const ref = imagesRef.child(`profileImages/${userUID}`);
-
-  let snapshot = await ref.put(blob, metadata);
-
-  return await snapshot.ref.getDownloadURL();
-}
-
 export function uploadTaskFromApi(id, blob, metadata) {
   return imagesRef.child(`profileImages/${id}`).put(blob, metadata);
 }
