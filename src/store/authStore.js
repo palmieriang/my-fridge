@@ -13,6 +13,8 @@ import {
   createUser,
   sendVerificationEmail,
   sendResetPassword,
+  getProfileImageFromFirebase,
+  deleteProfileImage,
 } from '../../api/api';
 
 const initialState = {
@@ -20,6 +22,7 @@ const initialState = {
   isSignout: false,
   userToken: null,
   user: null,
+  profileImg: null,
 };
 
 const reducer = (prevState, action) => {
@@ -45,6 +48,11 @@ const reducer = (prevState, action) => {
         userToken: null,
         user: null,
       };
+    case 'PROFILE_IMG':
+      return {
+        ...prevState,
+        profileImg: action.imgUrl,
+      };
   }
 };
 
@@ -64,6 +72,7 @@ const AuthProvider = ({ children }) => {
       try {
         ({ idToken, user } = await persistentLogin());
         userData = await getUserData(user.uid);
+        authContext.getProfileImage(user.uid);
       } catch (error) {
         console.log('Restoring token failed', error);
       }
@@ -119,6 +128,27 @@ const AuthProvider = ({ children }) => {
           .catch((error) => {
             alert(error.message);
             console.info('error ', JSON.stringify(error));
+          });
+      },
+      getProfileImage: (id) => {
+        getProfileImageFromFirebase(id)
+          .then((url) => {
+            dispatch({ type: 'PROFILE_IMG', imgUrl: url });
+          })
+          .catch((error) => {
+            console.log('Profile img error: ', error.message);
+          });
+      },
+      updateProfileImage: (url) => {
+        dispatch({ type: 'PROFILE_IMG', imgUrl: url });
+      },
+      deleteImage: (id) => {
+        deleteProfileImage(id)
+          .then(() => {
+            dispatch({ type: 'PROFILE_IMG', imgUrl: null });
+          })
+          .catch((error) => {
+            console.log('Delete profile img error: ', error.message);
           });
       },
     }),
