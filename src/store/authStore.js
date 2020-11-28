@@ -67,24 +67,22 @@ const AuthProvider = ({ children }) => {
   // Persistent login credentials
   useEffect(() => {
     (async () => {
-      let unsubscribe;
+      let idToken;
+      let user;
       let userData;
       try {
-        unsubscribe = await persistentLogin();
-        userData = await getUserData(unsubscribe.user.uid);
-        authContext.getProfileImage(unsubscribe.user.uid);
+        ({ idToken, user } = await persistentLogin());
+        userData = await getUserData(user.uid);
+        authContext.getProfileImage(user.uid);
       } catch (error) {
         console.log('Restoring token failed', error);
       }
       setUserData(userData);
       dispatch({
         type: 'RESTORE_TOKEN',
-        token: unsubscribe.idToken,
-        user: unsubscribe.user,
+        token: idToken,
+        user,
       });
-      return () => {
-        unsubscribe();
-      };
     })();
   }, []);
 
