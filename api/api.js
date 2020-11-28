@@ -28,16 +28,17 @@ export function createUser(fullName, email, password) {
 }
 
 export function authSignIn(email, password) {
-  let user;
-
-  return new Promise((resolve) => {
+  return new Promise(async (resolve) => {
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then(({ user }) => {
-        user.getIdToken(true);
+        return {
+          user,
+          idToken: user.getIdToken(true),
+        };
       })
-      .then((idToken) => {
+      .then(({ user, idToken }) => {
         resolve({
           user,
           idToken,
