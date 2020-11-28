@@ -47,6 +47,7 @@ const reducer = (prevState, action) => {
         isSignout: true,
         userToken: null,
         user: null,
+        profileImg: null,
       };
     case 'PROFILE_IMG':
       return {
@@ -66,18 +67,24 @@ const AuthProvider = ({ children }) => {
   // Persistent login credentials
   useEffect(() => {
     (async () => {
-      let idToken;
-      let user;
+      let unsubscribe;
       let userData;
       try {
-        ({ idToken, user } = await persistentLogin());
-        userData = await getUserData(user.uid);
-        authContext.getProfileImage(user.uid);
+        unsubscribe = await persistentLogin();
+        userData = await getUserData(unsubscribe.user.uid);
+        authContext.getProfileImage(unsubscribe.user.uid);
       } catch (error) {
         console.log('Restoring token failed', error);
       }
       setUserData(userData);
-      dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
+      dispatch({
+        type: 'RESTORE_TOKEN',
+        token: unsubscribe.idToken,
+        user: unsubscribe.user,
+      });
+      return () => {
+        unsubscribe();
+      };
     })();
   }, []);
 
