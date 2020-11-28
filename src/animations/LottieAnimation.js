@@ -3,28 +3,29 @@ import LottieView from 'lottie-react-native';
 import DoorAnimation from './15131-elevator-doors.json';
 
 const ANIMATIONS = {
-    door: DoorAnimation,
+  door: DoorAnimation,
 };
 
-const LottieAnimation = ({ loop, name, play, animationEnd }) => {
-    const lottieRef = useRef();
+const LottieAnimation = ({ loop, name, play, animationEnd, style }) => {
+  const lottieRef = useRef();
 
-    useEffect(() => {
-        if(lottieRef.current && play) {
-            lottieRef.current.play();
-        }
-    }, [play]);
-
-    if (name in ANIMATIONS) {
-        return (
-            <LottieView
-                ref={lottieRef}
-                source={ANIMATIONS[name]}
-                loop={loop}
-                onAnimationFinish={animationEnd}
-            />
-        );
+  useEffect(() => {
+    if (lottieRef.current && play) {
+      lottieRef.current.play();
     }
+  }, [play]);
+
+  if (name in ANIMATIONS) {
+    return (
+      <LottieView
+        ref={lottieRef}
+        source={ANIMATIONS[name]}
+        loop={loop}
+        onAnimationFinish={animationEnd}
+        style={style}
+      />
+    );
+  }
 };
 
 export default LottieAnimation;
