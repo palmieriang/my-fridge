@@ -77,6 +77,7 @@ const SignIn = ({ navigation }) => {
             loop={false}
             name="door"
             play={playAnimation}
+            style={styles.animation}
           />
         </View>
         <TextInput
@@ -164,6 +165,9 @@ const styles = StyleSheet.create({
   },
   animationContainer: {
     backgroundColor: '#fff',
+    alignItems: 'center',
+  },
+  animation: {
     height: 450,
   },
   footerView: {
