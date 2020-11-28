@@ -84,14 +84,17 @@ const AuthProvider = ({ children }) => {
   const authContext = useMemo(
     () => ({
       signIn: async ({ email, password }) => {
-        authSignIn(email, password)
-          .then(({ idToken, user }) => {
-            dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
-          })
-          .catch((error) => {
-            alert(error.message);
-            console.info('Sign in error: ', error.message);
-          });
+        let idToken;
+        let user;
+        let userData;
+        try {
+          ({ idToken, user } = await authSignIn(email, password));
+          userData = await getUserData(user.uid);
+        } catch (error) {
+          console.log('Sign in error', error.message);
+        }
+        setUserData(userData);
+        dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
       },
       signOut: () => {
         authSignOut()
