@@ -30,8 +30,8 @@ const reducer = (prevState, action) => {
     case 'RESTORE_TOKEN':
       return {
         ...prevState,
-        userToken: action.token,
         isLoading: false,
+        userToken: action.token,
         user: action.user,
       };
     case 'SIGN_IN':
@@ -99,7 +99,7 @@ const AuthProvider = ({ children }) => {
           console.log('Sign in error', error.message);
         }
         setUserData(userData);
-        dispatch({ type: 'RESTORE_TOKEN', token: idToken, user });
+        dispatch({ type: 'SIGN_IN', token: idToken, user });
       },
       signOut: () => {
         authSignOut()
