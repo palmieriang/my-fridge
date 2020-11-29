@@ -30,15 +30,14 @@ const ProductForm = ({ navigation, route }) => {
   const { theme } = useContext(themeStore);
   const { productsContext } = useContext(productsStore);
 
-  const existingName = params.product?.name || '';
-  const existingDate = params.product?.date || '';
-  const existingPlace = params.product?.place || '';
   const existingId = params?.id || '';
-  const initPickerDate = existingDate ? new Date(existingDate) : new Date();
+  const initPickerDate = params.product?.date
+    ? new Date(params.product?.date)
+    : new Date();
 
-  const [name, setName] = useState('' || existingName);
-  const [date, setDate] = useState('' || existingDate);
-  const [place, setPlace] = useState('' || existingPlace);
+  const [name, setName] = useState(params.product?.name || '');
+  const [date, setDate] = useState(params.product?.date || '');
+  const [place, setPlace] = useState(params.product?.place || '');
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const userID = user.uid;
