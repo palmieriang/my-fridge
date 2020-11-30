@@ -95,6 +95,7 @@ const AuthProvider = ({ children }) => {
         try {
           ({ idToken, user } = await authSignIn(email, password));
           userData = await getUserData(user.uid);
+          authContext.getProfileImage(user.uid);
         } catch (error) {
           console.log('Sign in error', error.message);
         }
