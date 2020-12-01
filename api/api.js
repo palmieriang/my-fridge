@@ -97,7 +97,6 @@ export function sendVerificationEmail() {
 }
 
 export function sendResetPassword(email) {
-  console.log('email from api', email);
   return firebase.auth().sendPasswordResetEmail(email);
 }
 
@@ -120,7 +119,7 @@ export function saveProduct({ name, date, place, authorID }) {
     });
 }
 
-export const getProductsFromApi = (userID, place) => {
+export const getProductsFromPlace = (userID, place) => {
   return new Promise((resolve) => {
     productRef
       .where('authorID', '==', userID)
@@ -145,18 +144,18 @@ export const getProductsFromApi = (userID, place) => {
 
 export const getAllProducts = (userID) => {
   return new Promise((resolve) => {
-    productRef
+    const unsubscribe = productRef
       .where('authorID', '==', userID)
       .orderBy('createdAt', 'desc')
       .onSnapshot(
         (querySnapshot) => {
-          const newProducts = [];
+          const products = [];
           querySnapshot.forEach((doc) => {
             const product = doc.data();
             product.id = doc.id;
-            newProducts.push(product);
+            products.push(product);
           });
-          resolve(newProducts);
+          resolve({ products, unsubscribe });
         },
         (error) => {
           console.log(error);
