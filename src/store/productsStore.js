@@ -48,17 +48,6 @@ const ProductsProvider = ({ children }) => {
     setProductsList(allProducts);
 
     return unsubscribe();
-
-    // getAllProducts(userID)
-    //   .then(({ products, unsubscribe }) => {
-    //     const allProducts = products.map((product) => ({
-    //       ...product,
-    //       date: new Date(product.date),
-    //     }));
-    //     setProductsList(allProducts);
-    //     return unsubscribe();
-    //   })
-    //   .catch((error) => console.log('Error: ', error));
   };
 
   const productsContext = useMemo(() => ({
