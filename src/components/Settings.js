@@ -7,89 +7,101 @@ import { themeStore } from '../store/themeStore';
 import Profile from './Profile';
 
 const Settings = () => {
-    const { localizationContext: { t, changeLocale }, locale } = useContext(localeStore);
-    const { authContext, userData: { id } } = useContext(authStore);
-    const { theme, themeContext: { changeTheme } } = useContext(themeStore);
+  const {
+    localizationContext: { t, changeLocale },
+    locale,
+  } = useContext(localeStore);
+  const {
+    authContext,
+    userData: { id },
+  } = useContext(authStore);
+  const {
+    theme,
+    themeContext: { changeTheme },
+  } = useContext(themeStore);
 
-    const languageData = [
-        { section: true, label: t('chooseLanguage'), key: 'title' },
-        { label: t('english'), value: 'en', key: 'english' },
-        { label: t('italian'), value: 'it', key: 'italian' },
-        { label: t('french'), value: 'fr', key: 'french' },
-    ];
+  const languageData = [
+    { section: true, label: t('chooseLanguage'), key: 'title' },
+    { label: t('english'), value: 'en', key: 'english' },
+    { label: t('italian'), value: 'it', key: 'italian' },
+    { label: t('french'), value: 'fr', key: 'french' },
+  ];
 
-    const themeData = [
-        { section: true, label: t('changeTheme'), key: 'title' },
-        { label: 'Light Red', value: 'lightRed', key: 'lightRed' },
-        { label: 'Light Blue', value: 'lightBlue', key: 'lightBlue' },
-        { label: 'Dark Red', value: 'darkRed', key: 'darkRed' },
-        { label: 'Dark Blue', value: 'darkBlue', key: 'darkBlue' },
-    ];
+  const themeData = [
+    { section: true, label: t('changeTheme'), key: 'title' },
+    { label: 'Light Red', value: 'lightRed', key: 'lightRed' },
+    { label: 'Light Blue', value: 'lightBlue', key: 'lightBlue' },
+    { label: 'Dark Red', value: 'darkRed', key: 'darkRed' },
+    { label: 'Dark Blue', value: 'darkBlue', key: 'darkBlue' },
+  ];
 
-    const handleLogOut = () => {
-        authContext.signOut();
-    };
+  const handleLogOut = () => {
+    authContext.signOut();
+  };
 
-    const handleTheme = (theme) => {
-        const newTheme = theme.value;
-        changeTheme({newTheme, id});
-    };
+  const handleTheme = (theme) => {
+    const newTheme = theme.value;
+    changeTheme({ newTheme, id });
+  };
 
-    const handleLocale = (locale) => {
-        const newLocale = locale.value;
-        changeLocale({newLocale, id});
-    };
+  const handleLocale = (locale) => {
+    const newLocale = locale.value;
+    changeLocale({ newLocale, id });
+  };
 
-    return (
-        <View style={{ flex: 1, alignItems: 'center', backgroundColor: theme.background }}>
-            <Profile />
-            <Text style={{ marginTop: 15, marginBottom: 15, color: theme.text }}>
-                Current locale: {locale}.{' '}
-                {locale !== 'en' && locale !== 'it' && locale !== 'fr'
-                ? 'Translations will fall back to "en" because none available'
-                : null}
-            </Text>
-            <ModalSelector
-                animationType="fade"
-                cancelText={t('cancel')}
-                data={languageData}
-                initValue={t('changeLanguage')}
-                initValueTextStyle={styles.initValueTextStyle}
-                onChange={handleLocale}
-                style={styles.selectorContainer}
-            />
-            <ModalSelector
-                animationType="fade"
-                cancelText={t('cancel')}
-                data={themeData}
-                initValue={t('changeTheme')}
-                initValueTextStyle={styles.initValueTextStyle}
-                onChange={handleTheme}
-                style={styles.selectorContainer}
-            />
-            <View style={styles.logout}>
-                <Button
-                    title="Logout"
-                    onPress={handleLogOut}
-                />
-            </View>
-        </View>
-    );
-}
+  return (
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        backgroundColor: theme.background,
+      }}
+    >
+      <Profile />
+      <Text style={{ marginTop: 15, marginBottom: 15, color: theme.text }}>
+        Current locale: {locale}.{' '}
+        {locale !== 'en' && locale !== 'it' && locale !== 'fr'
+          ? 'Translations will fall back to "en" because none available'
+          : null}
+      </Text>
+      <ModalSelector
+        animationType="fade"
+        cancelText={t('cancel')}
+        data={languageData}
+        initValue={t('changeLanguage')}
+        initValueTextStyle={styles.initValueTextStyle}
+        onChange={handleLocale}
+        style={styles.selectorContainer}
+      />
+      <ModalSelector
+        animationType="fade"
+        cancelText={t('cancel')}
+        data={themeData}
+        initValue={t('changeTheme')}
+        initValueTextStyle={styles.initValueTextStyle}
+        onChange={handleTheme}
+        style={styles.selectorContainer}
+      />
+      <View style={styles.logout}>
+        <Button title="Logout" onPress={handleLogOut} />
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
-    selectorContainer: {
-        backgroundColor: '#fff',
-        borderRadius: 5,
-        marginTop: 20,
-        minWidth: 200,
-    },
-    initValueTextStyle: {
-        color: 'black',
-    },
-    logout: {
-        marginTop: 20,
-    }
+  selectorContainer: {
+    backgroundColor: '#fff',
+    borderRadius: 5,
+    marginTop: 20,
+    minWidth: 200,
+  },
+  initValueTextStyle: {
+    color: 'black',
+  },
+  logout: {
+    marginTop: 20,
+  },
 });
 
 export default Settings;
