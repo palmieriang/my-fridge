@@ -112,10 +112,8 @@ export default function App() {
                             },
                           })}
                           tabBarOptions={{
+                            ...tabBarOptions,
                             activeTintColor: primary,
-                            inactiveTintColor: 'black',
-                            showIcon: true,
-                            showLabel: true,
                           }}
                         >
                           <Tab.Screen
@@ -158,3 +156,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+const tabBarOptions = {
+  inactiveTintColor: 'black',
+  showIcon: true,
+  showLabel: true,
+  upperCaseLabel: true,
+  labelStyle: {
+    fontFamily: 'OpenSansRegular',
+    textTransform: 'uppercase',
+  },
+};
