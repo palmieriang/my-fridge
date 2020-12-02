@@ -103,14 +103,15 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   date: {
-    fontWeight: '200',
     fontSize: 15,
     marginBottom: 10,
+    fontFamily: 'OpenSansLight',
   },
   title: {
+    fontFamily: 'OpenSansRegular',
     fontSize: 15,
-    fontWeight: '300',
     marginBottom: 10,
+    marginTop: 5,
   },
   counterContainer: {
     flex: 1,
@@ -118,18 +119,18 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
   },
   counterText: {
+    fontFamily: 'OpenSansBold',
     fontSize: 40,
   },
   counterLabel: {
+    fontFamily: 'OpenSansLight',
     fontSize: 13,
-    fontWeight: '100',
     marginLeft: 10,
   },
   expired: {
-    fontSize: 30,
+    fontFamily: 'NerkoOneRegular',
+    fontSize: 40,
     textTransform: 'uppercase',
-    fontFamily: 'Courier',
-    fontWeight: '500',
   },
 });
 
