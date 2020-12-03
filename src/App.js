@@ -14,7 +14,7 @@ import {
 import FreezerIcon from '../assets/freezer.svg';
 import SettingsIcon from '../assets/settings.svg';
 import { getCountdownParts } from '../api/api';
-import { fontsList } from './typography/typography';
+import { customFonts } from './typography/typography';
 
 import { decode, encode } from 'base-64';
 global.crypto = require('@firebase/firestore');
@@ -61,7 +61,7 @@ const countExpiredItems = (productsList) => {
 };
 
 export default function App() {
-  const [fontsLoaded] = useFonts(fontsList);
+  const [fontsLoaded] = useFonts(customFonts);
 
   if (!fontsLoaded) {
     return null;
