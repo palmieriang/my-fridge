@@ -140,6 +140,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: 'white',
     borderRadius: 5,
+    fontFamily: 'OpenSansRegular',
     height: 48,
     marginTop: 10,
     marginBottom: 10,
@@ -160,8 +161,10 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: 'white',
+    fontFamily: 'OpenSansBold',
     fontSize: 16,
     fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
   animationContainer: {
     backgroundColor: '#fff',
@@ -177,10 +180,12 @@ const styles = StyleSheet.create({
   },
   footerText: {
     color: '#2e2e2d',
+    fontFamily: 'OpenSansRegular',
     fontSize: 16,
   },
   footerLink: {
     color: '#48BBEC',
+    fontFamily: 'OpenSansBold',
     fontSize: 16,
     fontWeight: 'bold',
   },
