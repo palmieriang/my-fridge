@@ -72,7 +72,7 @@ const ProductCard = ({ product }) => {
               </Text>
             ) : (
               <View style={styles.counterContainer}>
-                <Text style={[styles.counterText, { color: theme.text }]}>
+                <Text style={[styles.counterText, { color: theme.primary }]}>
                   {days}
                 </Text>
                 <Text style={[styles.counterLabel, { color: theme.text }]}>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   expired: {
-    fontFamily: 'NerkoOneRegular',
+    fontFamily: 'LilitaOne',
     fontSize: 40,
     textTransform: 'uppercase',
   },
