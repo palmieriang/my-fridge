@@ -1,15 +1,23 @@
 import * as firebase from 'firebase';
 import '@firebase/auth';
 import '@firebase/firestore';
+import {
+  API_KEY,
+  AUTH_DOMAIN,
+  DATABASE_URL,
+  PROJECT_ID,
+  MESSAGE_SENDER_ID,
+  APP_ID,
+} from '@env';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAvloyko-5La5rqaTj8sKoU2MhXKR7BezI',
-  authDomain: 'my-native-fridge.firebaseapp.com',
-  databaseURL: 'https://my-native-fridge.firebaseio.com',
-  projectId: 'my-native-fridge',
+  apiKey: API_KEY,
+  authDomain: AUTH_DOMAIN,
+  databaseURL: DATABASE_URL,
+  projectId: PROJECT_ID,
   storageBucket: 'my-native-fridge.appspot.com',
-  messagingSenderId: '730096168799',
-  appId: '1:730096168799:ios:103e4627d5ba721ebf10ea',
+  messagingSenderId: MESSAGE_SENDER_ID,
+  appId: APP_ID,
 };
 
 if (!firebase.apps.length) {
