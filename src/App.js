@@ -1,6 +1,7 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 import React from 'react';
+import { useFonts } from '@use-expo/font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, LogBox } from 'react-native';
@@ -8,18 +9,27 @@ import {
   FridgeStackScreen,
   FreezerStackScreen,
   SettingsStackScreen,
-  SingInStackScreen
+  SingInStackScreen,
 } from './navigation/navigation';
 import FreezerIcon from '../assets/freezer.svg';
 import SettingsIcon from '../assets/settings.svg';
 import { getCountdownParts } from '../api/api';
+import { customFonts } from './typography/typography';
 
-import { decode, encode } from 'base-64'
-global.crypto = require("@firebase/firestore");
-global.crypto.getRandomValues = byteArray => { for (let i = 0; i < byteArray.length; i++) { byteArray[i] = Math.floor(256 * Math.random()); } }
+import { decode, encode } from 'base-64';
+global.crypto = require('@firebase/firestore');
+global.crypto.getRandomValues = (byteArray) => {
+  for (let i = 0; i < byteArray.length; i++) {
+    byteArray[i] = Math.floor(256 * Math.random());
+  }
+};
 
-if (!global.btoa) { global.btoa = encode; }
-if (!global.atob) { global.atob = decode; }
+if (!global.btoa) {
+  global.btoa = encode;
+}
+if (!global.atob) {
+  global.atob = decode;
+}
 
 import { AuthProvider } from './store/authStore';
 import { LocaleProvider } from './store/localeStore';
@@ -28,7 +38,7 @@ import { ProductsProvider } from './store/productsStore';
 
 LogBox.ignoreLogs([
   'Warning: componentWillMount is deprecated',
-  'Warning: componentWillReceiveProps has been renamed'
+  'Warning: componentWillReceiveProps has been renamed',
 ]);
 
 const Tab = createBottomTabNavigator();
@@ -51,16 +61,21 @@ const countExpiredItems = (productsList) => {
 };
 
 export default function App() {
+  const [fontsLoaded] = useFonts(customFonts);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   return (
     <AuthProvider>
-      {({authState: { userToken }}) => (
+      {({ authState: { userToken } }) => (
         <LocaleProvider>
-          {({localizationContext: { t }}) => (
+          {({ localizationContext: { t } }) => (
             <ThemeProvider>
-              {({ theme: { primary }}) => (
+              {({ theme: { primary } }) => (
                 <ProductsProvider>
-                  {({productsList }) => (
+                  {({ productsList }) => (
                     <NavigationContainer>
                       {userToken ? (
                         <Tab.Navigator
@@ -80,24 +95,42 @@ export default function App() {
 
                               return (
                                 <View style={styles.tabIcon}>
-                                  <IconName width={size} height={size} fill={color} />
+                                  <IconName
+                                    width={size}
+                                    height={size}
+                                    fill={color}
+                                  />
                                   {route.name === t('freezer') && (
-                                    <IconName width={size} height={size} fill={color} />
+                                    <IconName
+                                      width={size}
+                                      height={size}
+                                      fill={color}
+                                    />
                                   )}
                                 </View>
                               );
                             },
                           })}
                           tabBarOptions={{
+                            ...tabBarOptions,
                             activeTintColor: primary,
-                            inactiveTintColor: 'black',
-                            showIcon: true,
-                            showLabel: true,
                           }}
                         >
-                          <Tab.Screen name={t('fridge')} component={FridgeStackScreen} options={{tabBarBadge: countExpiredItems(productsList)}} />
-                          <Tab.Screen name={t('freezer')} component={FreezerStackScreen} />
-                          <Tab.Screen name={t('settings')} component={SettingsStackScreen} />
+                          <Tab.Screen
+                            name={t('fridge')}
+                            component={FridgeStackScreen}
+                            options={{
+                              tabBarBadge: countExpiredItems(productsList),
+                            }}
+                          />
+                          <Tab.Screen
+                            name={t('freezer')}
+                            component={FreezerStackScreen}
+                          />
+                          <Tab.Screen
+                            name={t('settings')}
+                            component={SettingsStackScreen}
+                          />
                         </Tab.Navigator>
                       ) : (
                         <SingInStackScreen />
@@ -121,5 +154,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-  }
+  },
 });
+
+const tabBarOptions = {
+  inactiveTintColor: 'black',
+  showIcon: true,
+  showLabel: true,
+  upperCaseLabel: true,
+  labelStyle: {
+    fontFamily: 'OpenSansRegular',
+    textTransform: 'uppercase',
+  },
+};
