@@ -16,21 +16,30 @@ const screenOptions = {
     shadowRadius: 0,
     shadowOffset: {
       height: 0,
-    }
+    },
   },
   headerTintColor: '#fff',
   headerTitleStyle: {
-    fontWeight: 'bold',
+    fontFamily: 'NunitoRegular',
+    fontSize: 20,
+    textTransform: 'uppercase',
   },
-}
+};
 
 export function FridgeStackScreen() {
-  const { localizationContext: { t } } = useContext(localeStore);
-  const { theme: { primary } } = useContext(themeStore);
+  const {
+    localizationContext: { t },
+  } = useContext(localeStore);
+  const {
+    theme: { primary },
+  } = useContext(themeStore);
 
   return (
     <Stack.Navigator
-      screenOptions={{ ...screenOptions, headerStyle: {...screenOptions.headerStyle, backgroundColor: primary} }}
+      screenOptions={{
+        ...screenOptions,
+        headerStyle: { ...screenOptions.headerStyle, backgroundColor: primary },
+      }}
     >
       <Stack.Screen
         name="list"
@@ -42,7 +51,7 @@ export function FridgeStackScreen() {
         name="form"
         component={ProductForm}
         options={({ route }) => ({
-          title: route.params.title
+          title: route.params.title,
         })}
       />
     </Stack.Navigator>
@@ -50,17 +59,24 @@ export function FridgeStackScreen() {
 }
 
 export function FreezerStackScreen() {
-  const { localizationContext: { t } } = useContext(localeStore);
-  const { theme: { primary } } = useContext(themeStore);
+  const {
+    localizationContext: { t },
+  } = useContext(localeStore);
+  const {
+    theme: { primary },
+  } = useContext(themeStore);
 
   return (
     <Stack.Navigator
-      screenOptions={{ ...screenOptions, headerStyle: {...screenOptions.headerStyle, backgroundColor: primary} }}
+      screenOptions={{
+        ...screenOptions,
+        headerStyle: { ...screenOptions.headerStyle, backgroundColor: primary },
+      }}
     >
       <Stack.Screen
         name="list"
         component={ProductList}
-        options={{ title: 'My freezer' }}
+        options={{ title: 'Freezer' }}
         initialParams={{ place: 'freezer' }}
       />
       <Stack.Screen
@@ -73,12 +89,19 @@ export function FreezerStackScreen() {
 }
 
 export function SettingsStackScreen() {
-  const { localizationContext: { t } } = useContext(localeStore);
-  const { theme: { primary } } = useContext(themeStore);
+  const {
+    localizationContext: { t },
+  } = useContext(localeStore);
+  const {
+    theme: { primary },
+  } = useContext(themeStore);
 
   return (
     <Stack.Navigator
-      screenOptions={{ ...screenOptions, headerStyle: {...screenOptions.headerStyle, backgroundColor: primary} }}
+      screenOptions={{
+        ...screenOptions,
+        headerStyle: { ...screenOptions.headerStyle, backgroundColor: primary },
+      }}
     >
       <Stack.Screen
         name="settings"
@@ -91,7 +114,12 @@ export function SettingsStackScreen() {
 
 export function SingInStackScreen() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        ...screenOptions,
+        headerTintColor: '#48bbec',
+      }}
+    >
       <Stack.Screen
         name="signin"
         component={SignIn}

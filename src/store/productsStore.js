@@ -3,7 +3,7 @@ import React, {
   useContext,
   useState,
   useEffect,
-  useMemo
+  useMemo,
 } from 'react';
 import {
   getAllProducts,
@@ -11,7 +11,7 @@ import {
   getProductById,
   modifyProduct,
   deleteProduct,
-  moveProduct
+  moveProduct,
 } from '../../api/api';
 import { authStore } from './authStore';
 
@@ -20,7 +20,7 @@ const { Provider, Consumer } = productsStore;
 
 const ProductsProvider = ({ children }) => {
   const {
-    authState: { user }
+    authState: { user },
   } = useContext(authStore);
 
   const [productsList, setProductsList] = useState([]);
@@ -32,56 +32,61 @@ const ProductsProvider = ({ children }) => {
     }
   }, [user]);
 
-  const getProducts = userID => {
-    getAllProducts(userID)
-      .then(response => {
-        const newProducts = response.map(product => ({
-          ...product,
-          date: new Date(product.date)
-        }));
+  const getProducts = async (userID) => {
+    let products;
+    let unsubscribe;
+    try {
+      ({ products, unsubscribe } = await getAllProducts(userID));
+    } catch (error) {
+      console.log('unsubscribe error', error);
+    }
 
-        setProductsList(newProducts);
-      })
-      .catch(error => console.log('Error: ', error));
+    const allProducts = products.map((product) => ({
+      ...product,
+      date: new Date(product.date),
+    }));
+    setProductsList(allProducts);
+
+    return unsubscribe();
   };
 
   const productsContext = useMemo(() => ({
-    handleSaveProduct: async data => {
+    handleSaveProduct: async (data) => {
       return saveProduct(data)
         .then(() => {
           getProducts(userID);
         })
-        .catch(error => console.log('Error: ', error));
+        .catch((error) => console.log('Error: ', error));
     },
-    handleGetProduct: async id => {
+    handleGetProduct: async (id) => {
       return getProductById(id)
-        .then(response => {
+        .then((response) => {
           const product = response.data();
           return product;
         })
-        .catch(error => console.log('Error: ', error));
+        .catch((error) => console.log('Error: ', error));
     },
     handleModifyProduct: async (data, id) => {
       return modifyProduct(data, id)
         .then(() => {
           getProducts(userID);
         })
-        .catch(error => console.log('Error: ', error));
+        .catch((error) => console.log('Error: ', error));
     },
-    handleDeleteProduct: id => {
+    handleDeleteProduct: (id) => {
       return deleteProduct(id)
         .then(() => {
           getProducts(userID);
         })
-        .catch(error => console.log('Error: ', error));
+        .catch((error) => console.log('Error: ', error));
     },
     handleFreezeProduct: (id, moveTo) => {
       moveProduct(id, moveTo)
         .then(() => {
           getProducts(userID);
         })
-        .catch(error => console.log('Error: ', error));
-    }
+        .catch((error) => console.log('Error: ', error));
+    },
   }));
 
   return (
