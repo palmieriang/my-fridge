@@ -24,4 +24,9 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export { firebase };
+const db = firebase.firestore();
+const userRef = db.collection('users');
+const productRef = db.collection('products');
+const imagesRef = firebase.storage().ref();
+
+export { firebase, userRef, productRef, imagesRef };

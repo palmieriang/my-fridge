@@ -1,11 +1,11 @@
 import 'react-native-get-random-values';
 import moment from 'moment';
-import { firebase } from '../src/firebase/config';
-
-const db = firebase.firestore();
-const userRef = db.collection('users');
-const productRef = db.collection('products');
-const imagesRef = firebase.storage().ref();
+import {
+  firebase,
+  userRef,
+  productRef,
+  imagesRef,
+} from '../src/firebase/config';
 
 // Auth
 
