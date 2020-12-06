@@ -153,6 +153,8 @@ const styles = StyleSheet.create({
   },
   profileField: {
     color: '#fff',
+    fontFamily: 'OpenSansRegular',
+    fontSize: 15,
     marginTop: 20,
   },
   progressContainer: {
