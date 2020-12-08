@@ -5,7 +5,7 @@ import {
   TextInput,
   View,
   StyleSheet,
-  LogBox
+  LogBox,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
@@ -16,16 +16,16 @@ import { themeStore } from '../store/themeStore';
 import { productsStore } from '../store/productsStore';
 
 LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state'
+  'Non-serializable values were found in the navigation state',
 ]);
 
 const ProductForm = ({ navigation, route }) => {
   const { params } = route;
   const {
-    localizationContext: { t }
+    localizationContext: { t },
   } = useContext(localeStore);
   const {
-    authState: { user }
+    authState: { user },
   } = useContext(authStore);
   const { theme } = useContext(themeStore);
   const { productsContext } = useContext(productsStore);
@@ -48,7 +48,7 @@ const ProductForm = ({ navigation, route }) => {
         name,
         date,
         place,
-        authorID: userID
+        authorID: userID,
       };
       if (existingId) {
         productsContext
@@ -56,19 +56,19 @@ const ProductForm = ({ navigation, route }) => {
           .then(() => {
             navigation.navigate('list');
           })
-          .catch(error => console.log('Error: ', error));
+          .catch((error) => console.log('Error: ', error));
       } else {
         productsContext
           .handleSaveProduct(data)
           .then(() => {
             navigation.navigate('list');
           })
-          .catch(error => console.log('Error: ', error));
+          .catch((error) => console.log('Error: ', error));
       }
     }
   };
 
-  const handleChangeName = value => {
+  const handleChangeName = (value) => {
     setName(value);
   };
 
@@ -76,7 +76,7 @@ const ProductForm = ({ navigation, route }) => {
     setShowDatePicker(true);
   };
 
-  const handleDatePicked = date => {
+  const handleDatePicked = (date) => {
     setDate(formatDate(date));
     handleDatePickerHide();
   };
@@ -90,7 +90,7 @@ const ProductForm = ({ navigation, route }) => {
       productsContext
         .handleDeleteProduct(existingId)
         .then(() => navigation.navigate('list'))
-        .catch(error => console.log('Error: ', error));
+        .catch((error) => console.log('Error: ', error));
     } else {
       navigation.navigate('list');
     }
@@ -124,14 +124,14 @@ const ProductForm = ({ navigation, route }) => {
       <RNPickerSelect
         style={{
           inputIOS: [styles.input],
-          inputAndroid: [styles.text]
+          inputAndroid: [styles.text],
         }}
         value={place}
         placeholder={{ label: t('choosePlace') }}
-        onValueChange={itemValue => setPlace(itemValue)}
+        onValueChange={(itemValue) => setPlace(itemValue)}
         items={[
           { label: t('fridge'), value: 'fridge', key: 'fridge' },
-          { label: t('freezer'), value: 'freezer', key: 'freezer' }
+          { label: t('freezer'), value: 'freezer', key: 'freezer' },
         ]}
       />
       <TouchableOpacity onPress={handleAddPress} style={styles.button}>
@@ -155,13 +155,14 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: 'white',
     borderRadius: 5,
+    fontFamily: 'OpenSansRegular',
     height: 48,
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
     overflow: 'hidden',
-    paddingLeft: 16
+    paddingLeft: 16,
   },
   button: {
     alignItems: 'center',
@@ -171,20 +172,21 @@ const styles = StyleSheet.create({
     height: 48,
     marginLeft: 30,
     marginRight: 30,
-    marginTop: 20
+    marginTop: 20,
   },
   buttonTitle: {
     color: 'white',
+    fontFamily: 'OpenSansBold',
     fontSize: 16,
-    fontWeight: 'bold'
+    textTransform: 'uppercase',
   },
   buttonDelete: {
-    backgroundColor: '#e74c3c'
+    backgroundColor: '#e74c3c',
   },
   borderTop: {
     borderColor: '#edeeef',
-    borderTopWidth: 0.5
-  }
+    borderTopWidth: 0.5,
+  },
 });
 
 export default ProductForm;
