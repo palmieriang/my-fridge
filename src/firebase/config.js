@@ -29,4 +29,6 @@ const userRef = db.collection('users');
 const productRef = db.collection('products');
 const imagesRef = firebase.storage().ref();
 
-export { firebase, userRef, productRef, imagesRef };
+const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+export { firebase, userRef, productRef, imagesRef, googleProvider };
