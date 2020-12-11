@@ -15,6 +15,7 @@ import {
   sendResetPassword,
   getProfileImageFromFirebase,
   deleteProfileImage,
+  signInWithGoogle,
 } from '../../api/api';
 
 const initialState = {
@@ -100,6 +101,10 @@ const AuthProvider = ({ children }) => {
           console.log('Sign in error', error.message);
         }
         setUserData(userData);
+        dispatch({ type: 'SIGN_IN', token: idToken, user });
+      },
+      signInGoogle: async () => {
+        const { idToken, user } = await signInWithGoogle();
         dispatch({ type: 'SIGN_IN', token: idToken, user });
       },
       signOut: () => {
