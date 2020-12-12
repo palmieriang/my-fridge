@@ -71,12 +71,12 @@ function isUserEqual(googleUser, firebaseUser) {
 
 function onSignIn(googleUser) {
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-  var unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+  const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
     if (!isUserEqual(googleUser, firebaseUser)) {
       // Build Firebase credential with the Google ID token.
-      var credential = firebase.auth.GoogleAuthProvider.credential(
+      const credential = firebase.auth.GoogleAuthProvider.credential(
         googleUser.idToken,
         googleUser.accessToken
       );
