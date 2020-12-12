@@ -86,16 +86,18 @@ function onSignIn(googleUser) {
         .auth()
         .signInWithCredential(credential)
         .then((result) => {
-          const uid = result.user.uid;
-          const data = {
-            uid,
-            email: result.user.email,
-            fullName: result.additionalUserInfo.profile.name,
-            locale: result.additionalUserInfo.profile.locale,
-            profileImg: result.additionalUserInfo.profile.picture,
-            theme: 'lightRed',
-          };
-          addUserData(uid, data);
+          if (result.additionalUserInfo.isNewUser) {
+            const uid = result.user.uid;
+            const data = {
+              uid,
+              email: result.user.email,
+              fullName: result.additionalUserInfo.profile.name,
+              locale: result.additionalUserInfo.profile.locale,
+              profileImg: result.additionalUserInfo.profile.picture,
+              theme: 'lightRed',
+            };
+            addUserData(uid, data);
+          }
         })
         .catch((error) => {
           console.log('onSignIn error', error);
