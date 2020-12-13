@@ -65,6 +65,11 @@ const ProductForm = ({ navigation, route }) => {
           })
           .catch((error) => console.log('Error: ', error));
       }
+    } else {
+      alert(
+        'Please make sure to add a product name longer than 3 letters, a place and the expiring date'
+      );
+      return;
     }
   };
 
