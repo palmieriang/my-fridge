@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     color: 'white',
+    fontFamily: 'OpenSansRegular',
     fontSize: 16,
     backgroundColor: 'transparent',
     padding: 10,
