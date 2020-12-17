@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import SocialIcon from './SocialIcon';
 import LottieAnimation from '../animations/LottieAnimation';
 import useToggle from './utils/useToggle';
 import { authStore } from '../store/authStore';
@@ -122,14 +123,16 @@ const SignIn = ({ navigation }) => {
               Create an account
             </Text>
           </Text>
-        </View>
-        <View style={styles.footerView}>
           <Text
             onPress={isToggled ? fadeOut : fadeIn}
-            style={styles.footerLink}
+            style={{ ...styles.footerLink, marginBottom: 10 }}
           >
             {isToggled ? 'Reset password' : 'Login'}
           </Text>
+        </View>
+        <View style={styles.footerView}>
+          <Text style={styles.footerText}>Sign In with: </Text>
+          <SocialIcon />
         </View>
       </KeyboardAwareScrollView>
     </View>
@@ -163,7 +166,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'OpenSansBold',
     fontSize: 16,
-    fontWeight: 'bold',
     textTransform: 'uppercase',
   },
   animationContainer: {
@@ -182,12 +184,12 @@ const styles = StyleSheet.create({
     color: '#2e2e2d',
     fontFamily: 'OpenSansRegular',
     fontSize: 16,
+    marginBottom: 20,
   },
   footerLink: {
     color: '#48BBEC',
     fontFamily: 'OpenSansBold',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
