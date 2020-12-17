@@ -292,7 +292,7 @@ export async function getProfileImageFromFirebase(userUID) {
   try {
     url = await imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
   } catch (error) {
-    console.log(error.message);
+    console.log("Profile image doesn't exist", error.message);
   }
   return url;
 }
