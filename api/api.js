@@ -30,26 +30,15 @@ export function createUser(fullName, email, password) {
 }
 
 export function authSignIn(email, password) {
-  return new Promise(async (resolve) => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        return {
-          user,
-          idToken: user.getIdToken(true),
-        };
-      })
-      .then(({ user, idToken }) => {
-        resolve({
-          user,
-          idToken,
-        });
-      })
-      .catch((error) => {
-        console.log('Restoring token failed', error);
-      });
-  });
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      console.log('authSignIn API');
+    })
+    .catch((error) => {
+      console.log('Restoring token failed', error);
+    });
 }
 
 function isUserEqual(googleUser, firebaseUser) {
