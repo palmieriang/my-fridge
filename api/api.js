@@ -115,23 +115,38 @@ export function authSignOut() {
   return firebase.auth().signOut();
 }
 
-export function persistentLogin() {
-  return new Promise((resolve) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        user
-          .getIdToken(true)
-          .then((idToken) => {
-            resolve({
-              user,
-              idToken,
+export function persistentLogin(callback, callbackData) {
+  return firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      user
+        .getIdToken(true)
+        .then(async (idToken) => {
+          let userData;
+          try {
+            userData = await getUserData(user.uid);
+            callbackData({
+              email: userData.email,
+              fullName: userData.fullName,
+              id: userData.id,
+              locale: userData.locale,
+              theme: userData.theme,
             });
-          })
-          .catch((error) => {
+            callback({
+              type: 'RESTORE_TOKEN',
+              token: idToken,
+              user,
+            });
+            getProfileImageFromFirebase(user.uid);
+          } catch (error) {
             console.log('Restoring token failed', error);
-          });
-      }
-    });
+          }
+        })
+        .catch((error) => {
+          console.log('idToken failed', error);
+        });
+    } else {
+      callback({ type: 'SIGN_OUT' });
+    }
   });
 }
 
