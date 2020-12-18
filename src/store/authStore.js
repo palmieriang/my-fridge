@@ -89,19 +89,8 @@ const AuthProvider = ({ children }) => {
 
   const authContext = useMemo(
     () => ({
-      signIn: async ({ email, password }) => {
-        let idToken;
-        let user;
-        let userData;
-        try {
-          ({ idToken, user } = await authSignIn(email, password));
-          userData = await getUserData(user.uid);
-          authContext.getProfileImage(user.uid);
-        } catch (error) {
-          console.log('Sign in error', error.message);
-        }
-        setUserData(userData);
-        dispatch({ type: 'SIGN_IN', token: idToken, user });
+      signIn: ({ email, password }) => {
+        authSignIn(email, password);
       },
       signInGoogle: async () => {
         const { idToken, user } = await signInWithGoogle();
