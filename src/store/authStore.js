@@ -67,24 +67,10 @@ const AuthProvider = ({ children }) => {
 
   // Persistent login credentials
   useEffect(() => {
-    (async () => {
-      let idToken;
-      let user;
-      let userData;
-      try {
-        ({ idToken, user } = await persistentLogin());
-        userData = await getUserData(user.uid);
-        authContext.getProfileImage(user.uid);
-      } catch (error) {
-        console.log('Restoring token failed', error);
-      }
-      setUserData(userData);
-      dispatch({
-        type: 'RESTORE_TOKEN',
-        token: idToken,
-        user,
-      });
-    })();
+    const unsubscribe = persistentLogin(dispatch, setUserData);
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const authContext = useMemo(
@@ -92,18 +78,11 @@ const AuthProvider = ({ children }) => {
       signIn: ({ email, password }) => {
         authSignIn(email, password);
       },
-      signInGoogle: async () => {
-        const { idToken, user } = await signInWithGoogle();
-        dispatch({ type: 'SIGN_IN', token: idToken, user });
+      signInGoogle: () => {
+        signInWithGoogle();
       },
       signOut: () => {
-        authSignOut()
-          .then(() => {
-            dispatch({ type: 'SIGN_OUT' });
-          })
-          .catch((error) => {
-            console.log('Sign-out error: ', error.message);
-          });
+        authSignOut();
       },
       signUp: async ({ fullName, email, password, confirmPassword }) => {
         if (password !== confirmPassword) {
