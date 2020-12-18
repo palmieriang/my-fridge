@@ -10,8 +10,21 @@ const SocialIcon = () => {
     authContext.signInGoogle();
   };
 
+  const signInFacebook = () => {
+    authContext.signInFacebook();
+  };
+
   return (
     <View style={styles.iconsContainer}>
+      <FontAwesome.Button
+        borderRadius={2}
+        color="#fff"
+        name="facebook"
+        backgroundColor="#3b5998"
+        onPress={signInFacebook}
+        size={26}
+        iconStyle={styles.icons}
+      ></FontAwesome.Button>
       <FontAwesome.Button
         borderRadius={50}
         color="#fff"
@@ -32,6 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
+    width: '34%',
     marginTop: 20,
     marginBottom: 50,
   },
