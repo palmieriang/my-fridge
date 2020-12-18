@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
   persistentLogin,
-  getUserData,
   authSignIn,
   authSignOut,
   createUser,
@@ -112,26 +111,11 @@ const AuthProvider = ({ children }) => {
             console.info('error ', JSON.stringify(error));
           });
       },
-      getProfileImage: (id) => {
-        getProfileImageFromFirebase(id)
-          .then((url) => {
-            dispatch({ type: 'PROFILE_IMG', imgUrl: url });
-          })
-          .catch((error) => {
-            console.log('Profile img error: ', error.message);
-          });
-      },
       updateProfileImage: (url) => {
         dispatch({ type: 'PROFILE_IMG', imgUrl: url });
       },
       deleteImage: (id) => {
-        deleteProfileImage(id)
-          .then(() => {
-            dispatch({ type: 'PROFILE_IMG', imgUrl: null });
-          })
-          .catch((error) => {
-            console.log('Delete profile img error: ', error.message);
-          });
+        deleteProfileImage(id, dispatch);
       },
     }),
     []
