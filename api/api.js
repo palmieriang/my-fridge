@@ -33,9 +33,6 @@ export function authSignIn(email, password) {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      console.log('authSignIn API');
-    })
     .catch((error) => {
       console.log('Restoring token failed', error);
     });
@@ -109,8 +106,6 @@ export async function signInWithGoogle() {
 
   if (result.type === 'success') {
     onSignIn(result);
-    const { idToken, user } = result; // or accessToken??
-    return { idToken, user };
   } else {
     console.log('Cancelled');
   }
@@ -152,7 +147,8 @@ export function getUserData(userID) {
     .doc(userID)
     .get()
     .then((response) => {
-      return response.data();
+      const data = response.data();
+      return data;
     })
     .catch((error) => console.log('Error: ', error));
 }
@@ -281,7 +277,7 @@ export async function getProfileImageFromFirebase(userUID) {
   try {
     url = await imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
   } catch (error) {
-    console.log("Profile image doesn't exist", error.message);
+    console.log('Profile image does not exist', error.message);
   }
   return url;
 }
