@@ -1,5 +1,6 @@
 import 'react-native-get-random-values';
 import moment from 'moment';
+import * as Facebook from 'expo-facebook';
 import * as Google from 'expo-google-app-auth';
 import {
   firebase,
@@ -7,7 +8,7 @@ import {
   productRef,
   imagesRef,
 } from '../src/firebase/config';
-import { IOS_CLIENT_ID } from '@env';
+import { IOS_CLIENT_ID, FACEBOOK_APP_ID } from '@env';
 
 // Auth
 
@@ -50,6 +51,110 @@ export function authSignIn(email, password) {
         console.log('Restoring token failed', error);
       });
   });
+}
+
+function isUserEqualFacebook(facebookAuthResponse, firebaseUser) {
+  if (firebaseUser) {
+    var providerData = firebaseUser.providerData;
+    for (var i = 0; i < providerData.length; i++) {
+      if (
+        providerData[i].providerId ===
+          firebase.auth.FacebookAuthProvider.PROVIDER_ID &&
+        providerData[i].uid === facebookAuthResponse.userID
+      ) {
+        // We don't need to re-auth the Firebase connection.
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function onSignInFacebook(facebookUser) {
+  console.log('facebookUser', facebookUser);
+  // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+  const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+    unsubscribe();
+    // Check if we are already signed-in Firebase with the correct user.
+    if (!isUserEqualFacebook(facebookUser, firebaseUser)) {
+      // Build Firebase credential with the Google ID token.
+      const token = facebookUser.token;
+
+      // oauthAccessToken
+      // const credential = firebase.auth.FacebookAuthProvider.credential({
+      //   accessToken: token,
+      // });
+
+      // oauthIdToken
+      const credential = new firebase.auth.FacebookAuthProvider().credential({
+        accessToken: token,
+      });
+      console.log('credential', credential);
+
+      // Sign in with credential from the Google user.
+      try {
+        firebase
+          .auth()
+          .signInWithCredential(credential)
+          .then((result) => {
+            console.log('result after credential', result);
+            if (result.additionalUserInfo.isNewUser) {
+              const uid = result.user.uid;
+              const data = {
+                uid,
+                email: result.user.email,
+                fullName: result.additionalUserInfo.profile.name,
+                locale: result.additionalUserInfo.profile.locale,
+                profileImg: result.additionalUserInfo.profile.picture,
+                theme: 'lightRed',
+              };
+              addUserData(uid, data);
+            } else {
+              console.log('Old user');
+            }
+          })
+          .catch((error) => {
+            console.log('onSignIn error', error);
+          });
+      } catch (error) {
+        console.log('catch error', error);
+      }
+    } else {
+      console.log('User already signed-in Firebase.');
+    }
+  });
+}
+
+export async function signInWithFacebook() {
+  const appId = FACEBOOK_APP_ID;
+  const permissions = ['public_profile', 'email']; // Permissions required, consult Facebook docs
+  let result;
+
+  try {
+    await Facebook.initializeAsync({
+      appId,
+    });
+    result = await Facebook.logInWithReadPermissionsAsync({
+      permissions,
+    });
+  } catch (error) {
+    console.log('error in new facebook', error);
+  }
+
+  if (result.type === 'success') {
+    onSignInFacebook(result);
+
+    // const { token, user } = result; // or accessToken??
+    // // return { token, user };
+
+    //   const response = await fetch(
+    //     `https://graph.facebook.com/me?access_token=${token}`
+    //   );
+    //   const { id, name } = await response.json();
+    //   // console.log('id and name', id, name);
+  } else {
+    console.log('Cancelled');
+  }
 }
 
 function isUserEqual(googleUser, firebaseUser) {

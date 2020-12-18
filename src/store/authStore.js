@@ -15,6 +15,7 @@ import {
   sendResetPassword,
   getProfileImageFromFirebase,
   deleteProfileImage,
+  signInWithFacebook,
   signInWithGoogle,
 } from '../../api/api';
 
@@ -102,6 +103,11 @@ const AuthProvider = ({ children }) => {
         }
         setUserData(userData);
         dispatch({ type: 'SIGN_IN', token: idToken, user });
+      signInFacebook: async () => {
+        await signInWithFacebook();
+        // const { token, facebookProfileData } = await signInWithFacebook();
+        // console.log('authStore', token, facebookProfileData);
+        // dispatch({ type: 'SIGN_IN', token, user: facebookProfileData });
       },
       signInGoogle: async () => {
         const { idToken, user } = await signInWithGoogle();
