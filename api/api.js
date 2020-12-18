@@ -136,7 +136,7 @@ export function persistentLogin(callback, callbackData) {
               token: idToken,
               user,
             });
-            getProfileImageFromFirebase(user.uid);
+            getProfileImageFromFirebase(user.uid, callback);
           } catch (error) {
             console.log('Restoring token failed', error);
           }
@@ -287,14 +287,17 @@ export function uploadTaskFromApi(id, blob, metadata) {
   return imagesRef.child(`profileImages/${id}`).put(blob, metadata);
 }
 
-export async function getProfileImageFromFirebase(userUID) {
-  let url;
-  try {
-    url = await imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
-  } catch (error) {
-    console.log('Profile image does not exist', error.message);
-  }
-  return url;
+export function getProfileImageFromFirebase(userUID, callback) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .getDownloadURL()
+    .then((url) => {
+      console.log(url);
+      callback({ type: 'PROFILE_IMG', imgUrl: url });
+    })
+    .catch((error) => {
+      console.log('Profile img error: ', error.message);
+    });
 }
 
 export function deleteProfileImage(userUID) {
