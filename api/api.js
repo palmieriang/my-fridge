@@ -89,7 +89,7 @@ function onSignIn(googleUser) {
           if (result.additionalUserInfo.isNewUser) {
             const uid = result.user.uid;
             const data = {
-              uid,
+              id: uid,
               email: result.user.email,
               fullName: result.additionalUserInfo.profile.name,
               locale: result.additionalUserInfo.profile.locale,
