@@ -45,7 +45,7 @@ function isUserEqual(googleUser, firebaseUser) {
       if (
         providerData[i].providerId ===
           firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-        providerData[i].uid === googleUser.getBasicProfile().getId()
+        providerData[i].uid === googleUser.user.id
       ) {
         // We don't need to reauth the Firebase connection.
         return true;
