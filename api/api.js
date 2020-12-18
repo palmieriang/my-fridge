@@ -300,8 +300,16 @@ export function getProfileImageFromFirebase(userUID, callback) {
     });
 }
 
-export function deleteProfileImage(userUID) {
-  return imagesRef.child(`profileImages/${userUID}`).delete();
+export function deleteProfileImage(userUID, callback) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .delete()
+    .then(() => {
+      callback({ type: 'PROFILE_IMG', imgUrl: null });
+    })
+    .catch((error) => {
+      console.log('Delete profile img error: ', error.message);
+    });
 }
 
 export function changeColor(newTheme, id) {
