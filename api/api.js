@@ -30,26 +30,12 @@ export function createUser(fullName, email, password) {
 }
 
 export function authSignIn(email, password) {
-  return new Promise(async (resolve) => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        return {
-          user,
-          idToken: user.getIdToken(true),
-        };
-      })
-      .then(({ user, idToken }) => {
-        resolve({
-          user,
-          idToken,
-        });
-      })
-      .catch((error) => {
-        console.log('Restoring token failed', error);
-      });
-  });
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .catch((error) => {
+      console.log('Restoring token failed', error);
+    });
 }
 
 function isUserEqual(googleUser, firebaseUser) {
@@ -59,7 +45,7 @@ function isUserEqual(googleUser, firebaseUser) {
       if (
         providerData[i].providerId ===
           firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
-        providerData[i].uid === googleUser.getBasicProfile().getId()
+        providerData[i].uid === googleUser.user.id
       ) {
         // We don't need to reauth the Firebase connection.
         return true;
@@ -120,8 +106,6 @@ export async function signInWithGoogle() {
 
   if (result.type === 'success') {
     onSignIn(result);
-    const { idToken, user } = result; // or accessToken??
-    return { idToken, user };
   } else {
     console.log('Cancelled');
   }
@@ -131,23 +115,38 @@ export function authSignOut() {
   return firebase.auth().signOut();
 }
 
-export function persistentLogin() {
-  return new Promise((resolve) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        user
-          .getIdToken(true)
-          .then((idToken) => {
-            resolve({
-              user,
-              idToken,
+export function persistentLogin(callback, callbackData) {
+  return firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      user
+        .getIdToken(true)
+        .then(async (idToken) => {
+          let userData;
+          try {
+            userData = await getUserData(user.uid);
+            callbackData({
+              email: userData.email,
+              fullName: userData.fullName,
+              id: userData.id,
+              locale: userData.locale,
+              theme: userData.theme,
             });
-          })
-          .catch((error) => {
+            callback({
+              type: 'RESTORE_TOKEN',
+              token: idToken,
+              user,
+            });
+            getProfileImageFromFirebase(user.uid, callback);
+          } catch (error) {
             console.log('Restoring token failed', error);
-          });
-      }
-    });
+          }
+        })
+        .catch((error) => {
+          console.log('idToken failed', error);
+        });
+    } else {
+      callback({ type: 'SIGN_OUT' });
+    }
   });
 }
 
@@ -163,7 +162,8 @@ export function getUserData(userID) {
     .doc(userID)
     .get()
     .then((response) => {
-      return response.data();
+      const data = response.data();
+      return data;
     })
     .catch((error) => console.log('Error: ', error));
 }
@@ -287,18 +287,29 @@ export function uploadTaskFromApi(id, blob, metadata) {
   return imagesRef.child(`profileImages/${id}`).put(blob, metadata);
 }
 
-export async function getProfileImageFromFirebase(userUID) {
-  let url;
-  try {
-    url = await imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
-  } catch (error) {
-    console.log("Profile image doesn't exist", error.message);
-  }
-  return url;
+export function getProfileImageFromFirebase(userUID, callback) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .getDownloadURL()
+    .then((url) => {
+      console.log(url);
+      callback({ type: 'PROFILE_IMG', imgUrl: url });
+    })
+    .catch((error) => {
+      console.log('Profile img error: ', error.message);
+    });
 }
 
-export function deleteProfileImage(userUID) {
-  return imagesRef.child(`profileImages/${userUID}`).delete();
+export function deleteProfileImage(userUID, callback) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .delete()
+    .then(() => {
+      callback({ type: 'PROFILE_IMG', imgUrl: null });
+    })
+    .catch((error) => {
+      console.log('Delete profile img error: ', error.message);
+    });
 }
 
 export function changeColor(newTheme, id) {

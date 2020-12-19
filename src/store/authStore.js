@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 import {
   persistentLogin,
-  getUserData,
   authSignIn,
   authSignOut,
   createUser,
@@ -67,54 +66,22 @@ const AuthProvider = ({ children }) => {
 
   // Persistent login credentials
   useEffect(() => {
-    (async () => {
-      let idToken;
-      let user;
-      let userData;
-      try {
-        ({ idToken, user } = await persistentLogin());
-        userData = await getUserData(user.uid);
-        authContext.getProfileImage(user.uid);
-      } catch (error) {
-        console.log('Restoring token failed', error);
-      }
-      setUserData(userData);
-      dispatch({
-        type: 'RESTORE_TOKEN',
-        token: idToken,
-        user,
-      });
-    })();
+    const unsubscribe = persistentLogin(dispatch, setUserData);
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const authContext = useMemo(
     () => ({
-      signIn: async ({ email, password }) => {
-        let idToken;
-        let user;
-        let userData;
-        try {
-          ({ idToken, user } = await authSignIn(email, password));
-          userData = await getUserData(user.uid);
-          authContext.getProfileImage(user.uid);
-        } catch (error) {
-          console.log('Sign in error', error.message);
-        }
-        setUserData(userData);
-        dispatch({ type: 'SIGN_IN', token: idToken, user });
+      signIn: ({ email, password }) => {
+        authSignIn(email, password);
       },
-      signInGoogle: async () => {
-        const { idToken, user } = await signInWithGoogle();
-        dispatch({ type: 'SIGN_IN', token: idToken, user });
+      signInGoogle: () => {
+        signInWithGoogle();
       },
       signOut: () => {
-        authSignOut()
-          .then(() => {
-            dispatch({ type: 'SIGN_OUT' });
-          })
-          .catch((error) => {
-            console.log('Sign-out error: ', error.message);
-          });
+        authSignOut();
       },
       signUp: async ({ fullName, email, password, confirmPassword }) => {
         if (password !== confirmPassword) {
@@ -144,26 +111,11 @@ const AuthProvider = ({ children }) => {
             console.info('error ', JSON.stringify(error));
           });
       },
-      getProfileImage: (id) => {
-        getProfileImageFromFirebase(id)
-          .then((url) => {
-            dispatch({ type: 'PROFILE_IMG', imgUrl: url });
-          })
-          .catch((error) => {
-            console.log('Profile img error: ', error.message);
-          });
-      },
       updateProfileImage: (url) => {
         dispatch({ type: 'PROFILE_IMG', imgUrl: url });
       },
       deleteImage: (id) => {
-        deleteProfileImage(id)
-          .then(() => {
-            dispatch({ type: 'PROFILE_IMG', imgUrl: null });
-          })
-          .catch((error) => {
-            console.log('Delete profile img error: ', error.message);
-          });
+        deleteProfileImage(id, dispatch);
       },
     }),
     []
