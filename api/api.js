@@ -225,7 +225,6 @@ export const getAllProducts = (userID, callback) => {
     .orderBy('createdAt', 'desc')
     .onSnapshot(
       (querySnapshot) => {
-        console.log('querySnapshot Test');
         const products = [];
         querySnapshot.forEach((doc) => {
           const product = doc.data();
@@ -233,7 +232,6 @@ export const getAllProducts = (userID, callback) => {
           product.date = new Date(product.date);
           products.push(product);
         });
-        console.log(products);
         callback(products);
       },
       (error) => {
