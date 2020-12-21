@@ -79,11 +79,7 @@ const ProductsProvider = ({ children }) => {
         .catch((error) => console.log('Error: ', error));
     },
     handleFreezeProduct: (id, moveTo) => {
-      moveProduct(id, moveTo)
-        .then(() => {
-          getProducts(userID);
-        })
-        .catch((error) => console.log('Error: ', error));
+      moveProduct(id, moveTo).catch((error) => console.log('Error: ', error));
     },
   }));
 
