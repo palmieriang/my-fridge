@@ -37,17 +37,17 @@ const ProductsProvider = ({ children }) => {
     let unsubscribe;
     try {
       ({ products, unsubscribe } = await getAllProducts(userID));
+
+      const allProducts = products.map((product) => ({
+        ...product,
+        date: new Date(product.date),
+      }));
+      setProductsList(allProducts);
+
+      return unsubscribe();
     } catch (error) {
-      console.log('unsubscribe error', error);
+      console.log('Unsubscribe error', error);
     }
-
-    const allProducts = products.map((product) => ({
-      ...product,
-      date: new Date(product.date),
-    }));
-    setProductsList(allProducts);
-
-    return unsubscribe();
   };
 
   const productsContext = useMemo(() => ({
