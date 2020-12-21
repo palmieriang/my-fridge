@@ -71,7 +71,7 @@ const ProductsProvider = ({ children }) => {
         console.log('Error: ', error)
       );
     },
-    handleDeleteProduct: (id) => {
+    handleDeleteProduct: async (id) => {
       return deleteProduct(id).catch((error) => console.log('Error: ', error));
     },
     handleFreezeProduct: (id, moveTo) => {
