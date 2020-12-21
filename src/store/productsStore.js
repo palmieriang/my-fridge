@@ -67,11 +67,9 @@ const ProductsProvider = ({ children }) => {
         .catch((error) => console.log('Error: ', error));
     },
     handleModifyProduct: async (data, id) => {
-      return modifyProduct(data, id)
-        .then(() => {
-          getProducts(userID);
-        })
-        .catch((error) => console.log('Error: ', error));
+      return modifyProduct(data, id).catch((error) =>
+        console.log('Error: ', error)
+      );
     },
     handleDeleteProduct: (id) => {
       return deleteProduct(id)
