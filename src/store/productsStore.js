@@ -27,28 +27,13 @@ const ProductsProvider = ({ children }) => {
   const userID = user?.uid;
 
   useEffect(() => {
-    if (user) {
-      getProducts(userID);
+    if (userID) {
+      const unsubscribe = getAllProducts(userID, setProductsList);
+      return () => {
+        unsubscribe();
+      };
     }
-  }, [user]);
-
-  const getProducts = async (userID) => {
-    let products;
-    let unsubscribe;
-    try {
-      ({ products, unsubscribe } = await getAllProducts(userID));
-
-      const allProducts = products.map((product) => ({
-        ...product,
-        date: new Date(product.date),
-      }));
-      setProductsList(allProducts);
-
-      return unsubscribe();
-    } catch (error) {
-      console.log('Unsubscribe error', error);
-    }
-  };
+  }, [userID]);
 
   const productsContext = useMemo(() => ({
     handleSaveProduct: async (data) => {
