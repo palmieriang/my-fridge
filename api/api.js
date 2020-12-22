@@ -219,26 +219,25 @@ export const getProductsFromPlace = (userID, place) => {
   });
 };
 
-export const getAllProducts = (userID) => {
-  return new Promise((resolve) => {
-    const unsubscribe = productRef
-      .where('authorID', '==', userID)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(
-        (querySnapshot) => {
-          const products = [];
-          querySnapshot.forEach((doc) => {
-            const product = doc.data();
-            product.id = doc.id;
-            products.push(product);
-          });
-          resolve({ products, unsubscribe });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  });
+export const getAllProducts = (userID, callback) => {
+  return productRef
+    .where('authorID', '==', userID)
+    .orderBy('createdAt', 'desc')
+    .onSnapshot(
+      (querySnapshot) => {
+        const products = [];
+        querySnapshot.forEach((doc) => {
+          const product = doc.data();
+          product.id = doc.id;
+          product.date = new Date(product.date);
+          products.push(product);
+        });
+        callback(products);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
 };
 
 export function getProductById(id) {
