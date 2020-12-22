@@ -12,6 +12,8 @@ import SocialIcon from './SocialIcon';
 import LottieAnimation from '../animations/LottieAnimation';
 import useToggle from './utils/useToggle';
 import { authStore } from '../store/authStore';
+import UsernameIcon from '../../assets/username.svg';
+import PadlockIcon from '../../assets/padlock.svg';
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -81,31 +83,41 @@ const SignIn = ({ navigation }) => {
             style={styles.animation}
           />
         </View>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#aaaaaa"
-          value={email}
-          onChangeText={setEmail}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        />
+        <View style={styles.inputContainer}>
+          <View style={styles.iconStyle}>
+            <UsernameIcon width={25} height={25} fill="black" />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#aaaaaa"
+            value={email}
+            onChangeText={setEmail}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+          />
+        </View>
         {isToggled && (
           <Animated.View
             style={{
               opacity: fadeAnim,
             }}
           >
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor="#aaaaaa"
-              value={password}
-              onChangeText={setPassword}
-              underlineColorAndroid="transparent"
-              autoCapitalize="none"
-              secureTextEntry
-            />
+            <View style={styles.inputContainer}>
+              <View style={styles.iconStyle}>
+                <PadlockIcon width={25} height={25} fill="black" />
+              </View>
+              <TextInput
+                style={styles.input}
+                placeholder="Password"
+                placeholderTextColor="#aaaaaa"
+                value={password}
+                onChangeText={setPassword}
+                underlineColorAndroid="transparent"
+                autoCapitalize="none"
+                secureTextEntry
+              />
+            </View>
           </Animated.View>
         )}
         <TouchableOpacity
@@ -140,17 +152,31 @@ const SignIn = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  input: {
-    backgroundColor: 'white',
+  inputContainer: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
     borderRadius: 5,
-    fontFamily: 'OpenSansRegular',
-    height: 48,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
-    overflow: 'hidden',
-    paddingLeft: 16,
+  },
+  iconStyle: {
+    alignItems: 'center',
+    borderRightColor: '#ccc',
+    borderRightWidth: 1,
+    padding: 14,
+  },
+  input: {
+    backgroundColor: '#fff',
+    flex: 1,
+    fontFamily: 'OpenSansRegular',
+    justifyContent: 'center',
+    padding: 14,
   },
   button: {
     alignItems: 'center',
@@ -160,10 +186,10 @@ const styles = StyleSheet.create({
     height: 48,
     marginLeft: 30,
     marginRight: 30,
-    marginTop: 20,
+    marginTop: 10,
   },
   buttonTitle: {
-    color: 'white',
+    color: '#fff',
     fontFamily: 'OpenSansBold',
     fontSize: 16,
     textTransform: 'uppercase',
@@ -173,7 +199,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   animation: {
-    height: 450,
+    height: 280,
   },
   footerView: {
     alignItems: 'center',
