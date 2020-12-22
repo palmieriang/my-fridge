@@ -1,11 +1,13 @@
 import 'react-native-get-random-values';
 import moment from 'moment';
+import * as Google from 'expo-google-app-auth';
 import {
   firebase,
   userRef,
   productRef,
   imagesRef,
 } from '../src/firebase/config';
+import { IOS_CLIENT_ID } from '@env';
 
 // Auth
 
@@ -28,49 +30,123 @@ export function createUser(fullName, email, password) {
 }
 
 export function authSignIn(email, password) {
-  return new Promise(async (resolve) => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(({ user }) => {
-        return {
-          user,
-          idToken: user.getIdToken(true),
-        };
-      })
-      .then(({ user, idToken }) => {
-        resolve({
-          user,
-          idToken,
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .catch((error) => {
+      console.log('Restoring token failed', error);
+    });
+}
+
+function isUserEqual(googleUser, firebaseUser) {
+  if (firebaseUser) {
+    var providerData = firebaseUser.providerData;
+    for (var i = 0; i < providerData.length; i++) {
+      if (
+        providerData[i].providerId ===
+          firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+        providerData[i].uid === googleUser.user.id
+      ) {
+        // We don't need to reauth the Firebase connection.
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+function onSignIn(googleUser) {
+  // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+  const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+    unsubscribe();
+    // Check if we are already signed-in Firebase with the correct user.
+    if (!isUserEqual(googleUser, firebaseUser)) {
+      // Build Firebase credential with the Google ID token.
+      const credential = firebase.auth.GoogleAuthProvider.credential(
+        googleUser.idToken,
+        googleUser.accessToken
+      );
+
+      // Sign in with credential from the Google user.
+      firebase
+        .auth()
+        .signInWithCredential(credential)
+        .then((result) => {
+          if (result.additionalUserInfo.isNewUser) {
+            const uid = result.user.uid;
+            const data = {
+              id: uid,
+              email: result.user.email,
+              fullName: result.additionalUserInfo.profile.name,
+              locale: result.additionalUserInfo.profile.locale,
+              profileImg: result.additionalUserInfo.profile.picture,
+              theme: 'lightRed',
+            };
+            addUserData(uid, data);
+          }
+        })
+        .catch((error) => {
+          console.log('onSignIn error', error);
         });
-      })
-      .catch((error) => {
-        console.log('Restoring token failed', error);
-      });
+    } else {
+      console.log('User already signed-in Firebase.');
+    }
   });
+}
+
+export async function signInWithGoogle() {
+  let result;
+  try {
+    result = await Google.logInAsync({
+      iosClientId: IOS_CLIENT_ID,
+    });
+  } catch ({ message }) {
+    console.log('Google.logInAsync(): ' + message);
+  }
+
+  if (result.type === 'success') {
+    onSignIn(result);
+  } else {
+    console.log('Cancelled');
+  }
 }
 
 export function authSignOut() {
   return firebase.auth().signOut();
 }
 
-export function persistentLogin() {
-  return new Promise((resolve) => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        user
-          .getIdToken(true)
-          .then((idToken) => {
-            resolve({
-              user,
-              idToken,
+export function persistentLogin(callback, callbackData) {
+  return firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      user
+        .getIdToken(true)
+        .then(async (idToken) => {
+          let userData;
+          try {
+            userData = await getUserData(user.uid);
+            callbackData({
+              email: userData.email,
+              fullName: userData.fullName,
+              id: userData.id,
+              locale: userData.locale,
+              theme: userData.theme,
             });
-          })
-          .catch((error) => {
+            callback({
+              type: 'RESTORE_TOKEN',
+              token: idToken,
+              user,
+            });
+            getProfileImageFromFirebase(user.uid, callback);
+          } catch (error) {
             console.log('Restoring token failed', error);
-          });
-      }
-    });
+          }
+        })
+        .catch((error) => {
+          console.log('idToken failed', error);
+        });
+    } else {
+      callback({ type: 'SIGN_OUT' });
+    }
   });
 }
 
@@ -78,7 +154,7 @@ export function addUserData(uid, data) {
   return userRef
     .doc(uid)
     .set(data)
-    .catch((error) => console.log('Error: ', error));
+    .catch((error) => console.log('Error adding user data: ', error));
 }
 
 export function getUserData(userID) {
@@ -86,7 +162,8 @@ export function getUserData(userID) {
     .doc(userID)
     .get()
     .then((response) => {
-      return response.data();
+      const data = response.data();
+      return data;
     })
     .catch((error) => console.log('Error: ', error));
 }
@@ -142,26 +219,25 @@ export const getProductsFromPlace = (userID, place) => {
   });
 };
 
-export const getAllProducts = (userID) => {
-  return new Promise((resolve) => {
-    const unsubscribe = productRef
-      .where('authorID', '==', userID)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(
-        (querySnapshot) => {
-          const products = [];
-          querySnapshot.forEach((doc) => {
-            const product = doc.data();
-            product.id = doc.id;
-            products.push(product);
-          });
-          resolve({ products, unsubscribe });
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  });
+export const getAllProducts = (userID, callback) => {
+  return productRef
+    .where('authorID', '==', userID)
+    .orderBy('createdAt', 'desc')
+    .onSnapshot(
+      (querySnapshot) => {
+        const products = [];
+        querySnapshot.forEach((doc) => {
+          const product = doc.data();
+          product.id = doc.id;
+          product.date = new Date(product.date);
+          products.push(product);
+        });
+        callback(products);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
 };
 
 export function getProductById(id) {
@@ -210,18 +286,29 @@ export function uploadTaskFromApi(id, blob, metadata) {
   return imagesRef.child(`profileImages/${id}`).put(blob, metadata);
 }
 
-export async function getProfileImageFromFirebase(userUID) {
-  let url;
-  try {
-    url = await imagesRef.child(`profileImages/${userUID}`).getDownloadURL();
-  } catch (error) {
-    console.log(error.message);
-  }
-  return url;
+export function getProfileImageFromFirebase(userUID, callback) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .getDownloadURL()
+    .then((url) => {
+      console.log(url);
+      callback({ type: 'PROFILE_IMG', imgUrl: url });
+    })
+    .catch((error) => {
+      console.log('Profile img error: ', error.message);
+    });
 }
 
-export function deleteProfileImage(userUID) {
-  return imagesRef.child(`profileImages/${userUID}`).delete();
+export function deleteProfileImage(userUID, callback) {
+  return imagesRef
+    .child(`profileImages/${userUID}`)
+    .delete()
+    .then(() => {
+      callback({ type: 'PROFILE_IMG', imgUrl: null });
+    })
+    .catch((error) => {
+      console.log('Delete profile img error: ', error.message);
+    });
 }
 
 export function changeColor(newTheme, id) {

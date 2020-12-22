@@ -13,7 +13,7 @@ const ProductCard = ({ product }) => {
 
   const [expired, setExpired] = useState(false);
 
-  const navigation = useNavigation();
+  const { navigate } = useNavigation();
   const {
     localizationContext: { t },
   } = useContext(localeStore);
@@ -34,7 +34,7 @@ const ProductCard = ({ product }) => {
     productsContext
       .handleGetProduct(id)
       .then((product) => {
-        navigation.navigate('form', {
+        navigate('form', {
           id,
           product,
           title: t('modifyItem'),
