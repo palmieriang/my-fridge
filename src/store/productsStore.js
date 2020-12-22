@@ -52,11 +52,7 @@ const ProductsProvider = ({ children }) => {
 
   const productsContext = useMemo(() => ({
     handleSaveProduct: async (data) => {
-      return saveProduct(data)
-        .then(() => {
-          getProducts(userID);
-        })
-        .catch((error) => console.log('Error: ', error));
+      return saveProduct(data).catch((error) => console.log('Error: ', error));
     },
     handleGetProduct: async (id) => {
       return getProductById(id)
