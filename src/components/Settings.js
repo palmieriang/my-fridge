@@ -58,7 +58,14 @@ const Settings = () => {
       }}
     >
       <Profile />
-      <Text style={{ marginTop: 15, marginBottom: 15, color: theme.text }}>
+      <Text
+        style={{
+          marginTop: 15,
+          marginBottom: 15,
+          color: theme.text,
+          fontFamily: 'OpenSansRegular',
+        }}
+      >
         Current locale: {locale}.{' '}
         {locale !== 'en' && locale !== 'it' && locale !== 'fr'
           ? 'Translations will fall back to "en" because none available'
@@ -72,6 +79,11 @@ const Settings = () => {
         initValueTextStyle={styles.initValueTextStyle}
         onChange={handleLocale}
         style={styles.selectorContainer}
+        sectionTextStyle={styles.text}
+        selectTextStyle={styles.text}
+        optionTextStyle={styles.text}
+        cancelTextStyle={styles.text}
+        optionContainerStyle={styles.container}
       />
       <ModalSelector
         animationType="fade"
@@ -81,6 +93,11 @@ const Settings = () => {
         initValueTextStyle={styles.initValueTextStyle}
         onChange={handleTheme}
         style={styles.selectorContainer}
+        sectionTextStyle={styles.text}
+        selectTextStyle={styles.text}
+        optionTextStyle={styles.text}
+        cancelTextStyle={styles.text}
+        optionContainerStyle={styles.container}
       />
       <View style={styles.logout}>
         <Button title="Logout" onPress={handleLogOut} />
@@ -98,6 +115,13 @@ const styles = StyleSheet.create({
   },
   initValueTextStyle: {
     color: 'black',
+    fontFamily: 'OpenSansRegular',
+  },
+  text: {
+    fontFamily: 'OpenSansRegular',
+  },
+  container: {
+    backgroundColor: 'lightgrey',
   },
   logout: {
     marginTop: 20,

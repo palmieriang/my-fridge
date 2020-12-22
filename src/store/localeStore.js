@@ -3,7 +3,7 @@ import React, {
   useMemo,
   useState,
   useContext,
-  useEffect
+  useEffect,
 } from 'react';
 import * as Localization from 'expo-localization';
 import i18n from 'i18n-js';
@@ -45,8 +45,8 @@ const LocaleProvider = ({ children }) => {
           .then(() => {
             setLocale(newLocale);
           })
-          .catch(error => console.log('Error: ', error));
-      }
+          .catch((error) => console.log('Error: ', error));
+      },
     }),
     [locale]
   );

@@ -27,36 +27,17 @@ const ProductsProvider = ({ children }) => {
   const userID = user?.uid;
 
   useEffect(() => {
-    if (user) {
-      getProducts(userID);
+    if (userID) {
+      const unsubscribe = getAllProducts(userID, setProductsList);
+      return () => {
+        unsubscribe();
+      };
     }
-  }, [user]);
-
-  const getProducts = async (userID) => {
-    let products;
-    let unsubscribe;
-    try {
-      ({ products, unsubscribe } = await getAllProducts(userID));
-    } catch (error) {
-      console.log('unsubscribe error', error);
-    }
-
-    const allProducts = products.map((product) => ({
-      ...product,
-      date: new Date(product.date),
-    }));
-    setProductsList(allProducts);
-
-    return unsubscribe();
-  };
+  }, [userID]);
 
   const productsContext = useMemo(() => ({
     handleSaveProduct: async (data) => {
-      return saveProduct(data)
-        .then(() => {
-          getProducts(userID);
-        })
-        .catch((error) => console.log('Error: ', error));
+      return saveProduct(data).catch((error) => console.log('Error: ', error));
     },
     handleGetProduct: async (id) => {
       return getProductById(id)
@@ -67,25 +48,15 @@ const ProductsProvider = ({ children }) => {
         .catch((error) => console.log('Error: ', error));
     },
     handleModifyProduct: async (data, id) => {
-      return modifyProduct(data, id)
-        .then(() => {
-          getProducts(userID);
-        })
-        .catch((error) => console.log('Error: ', error));
+      return modifyProduct(data, id).catch((error) =>
+        console.log('Error: ', error)
+      );
     },
-    handleDeleteProduct: (id) => {
-      return deleteProduct(id)
-        .then(() => {
-          getProducts(userID);
-        })
-        .catch((error) => console.log('Error: ', error));
+    handleDeleteProduct: async (id) => {
+      return deleteProduct(id).catch((error) => console.log('Error: ', error));
     },
     handleFreezeProduct: (id, moveTo) => {
-      moveProduct(id, moveTo)
-        .then(() => {
-          getProducts(userID);
-        })
-        .catch((error) => console.log('Error: ', error));
+      moveProduct(id, moveTo).catch((error) => console.log('Error: ', error));
     },
   }));
 
