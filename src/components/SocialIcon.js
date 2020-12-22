@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    marginTop: 20,
+    marginTop: 10,
     marginBottom: 50,
   },
   icons: {
