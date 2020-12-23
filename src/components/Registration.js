@@ -7,8 +7,10 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-
 import { authStore } from '../store/authStore';
+import UsernameIcon from '../../assets/username.svg';
+import PadlockIcon from '../../assets/padlock.svg';
+import EmailIcon from '../../assets/email.svg';
 
 const Registration = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
@@ -34,44 +36,64 @@ const Registration = ({ navigation }) => {
         style={{ flex: 1, width: '100%' }}
         keyboardShouldPersistTaps="always"
       >
-        <TextInput
-          style={styles.input}
-          placeholder="Full Name"
-          placeholderTextColor="#aaaaaa"
-          onChangeText={setFullName}
-          value={fullName}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="E-mail"
-          placeholderTextColor="#aaaaaa"
-          onChangeText={setEmail}
-          value={email}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholderTextColor="#aaaaaa"
-          secureTextEntry
-          placeholder="Password"
-          onChangeText={setPassword}
-          value={password}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        />
-        <TextInput
-          style={styles.input}
-          placeholderTextColor="#aaaaaa"
-          secureTextEntry
-          placeholder="Confirm Password"
-          onChangeText={setConfirmPassword}
-          value={confirmPassword}
-          underlineColorAndroid="transparent"
-          autoCapitalize="none"
-        />
+        <View style={styles.inputContainer}>
+          <View style={styles.iconStyle}>
+            <UsernameIcon width={25} height={25} fill="black" />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="Full Name"
+            placeholderTextColor="#aaaaaa"
+            onChangeText={setFullName}
+            value={fullName}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconStyle}>
+            <EmailIcon width={25} height={25} fill="black" />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholder="E-mail"
+            placeholderTextColor="#aaaaaa"
+            onChangeText={setEmail}
+            value={email}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconStyle}>
+            <PadlockIcon width={25} height={25} fill="black" />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholderTextColor="#aaaaaa"
+            secureTextEntry
+            placeholder="Password"
+            onChangeText={setPassword}
+            value={password}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <View style={styles.iconStyle}>
+            <PadlockIcon width={25} height={25} fill="black" />
+          </View>
+          <TextInput
+            style={styles.input}
+            placeholderTextColor="#aaaaaa"
+            secureTextEntry
+            placeholder="Confirm Password"
+            onChangeText={setConfirmPassword}
+            value={confirmPassword}
+            underlineColorAndroid="transparent"
+            autoCapitalize="none"
+          />
+        </View>
         <TouchableOpacity style={styles.button} onPress={handleRegistration}>
           <Text style={styles.buttonTitle}>Create account</Text>
         </TouchableOpacity>
@@ -93,17 +115,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  input: {
-    backgroundColor: 'white',
+  inputContainer: {
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderColor: '#ccc',
     borderRadius: 5,
-    fontFamily: 'OpenSansRegular',
-    height: 48,
+    borderWidth: 1,
+    flex: 1,
+    flexDirection: 'row',
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
-    overflow: 'hidden',
-    paddingLeft: 16,
+  },
+  iconStyle: {
+    alignItems: 'center',
+    borderRightColor: '#ccc',
+    borderRightWidth: 1,
+    padding: 14,
+  },
+  input: {
+    backgroundColor: 'white',
+    flex: 1,
+    fontFamily: 'OpenSansRegular',
+    justifyContent: 'center',
+    padding: 14,
   },
   button: {
     alignItems: 'center',
@@ -119,7 +155,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'OpenSansBold',
     fontSize: 16,
-    fontWeight: 'bold',
     textTransform: 'uppercase',
   },
   footerView: {
@@ -136,7 +171,6 @@ const styles = StyleSheet.create({
     color: '#48BBEC',
     fontFamily: 'OpenSansBold',
     fontSize: 16,
-    fontWeight: 'bold',
   },
 });
 
