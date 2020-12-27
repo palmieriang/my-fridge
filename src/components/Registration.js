@@ -44,7 +44,7 @@ const Registration = ({ navigation }) => {
           labelValue={email}
           onChangeText={setEmail}
           placeholderText="Email"
-          Icon={UsernameIcon}
+          Icon={EmailIcon}
           keyboardType="email-address"
           autoCapitalize="none"
           autoCorrect={false}
