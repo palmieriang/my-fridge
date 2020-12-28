@@ -3,12 +3,12 @@ import {
   Animated,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SocialIcon from './SocialIcon';
+import FormInput from './FormInput';
 import LottieAnimation from '../animations/LottieAnimation';
 import useToggle from './utils/useToggle';
 import { authStore } from '../store/authStore';
@@ -83,41 +83,32 @@ const SignIn = ({ navigation }) => {
             style={styles.animation}
           />
         </View>
-        <View style={styles.inputContainer}>
-          <View style={styles.iconStyle}>
-            <UsernameIcon width={25} height={25} fill="black" />
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#aaaaaa"
-            value={email}
-            onChangeText={setEmail}
-            underlineColorAndroid="transparent"
-            autoCapitalize="none"
-          />
-        </View>
+        <FormInput
+          labelValue={email}
+          onChangeText={setEmail}
+          placeholderText="Email"
+          Icon={UsernameIcon}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+        />
         {isToggled && (
           <Animated.View
             style={{
               opacity: fadeAnim,
             }}
           >
-            <View style={styles.inputContainer}>
-              <View style={styles.iconStyle}>
-                <PadlockIcon width={25} height={25} fill="black" />
-              </View>
-              <TextInput
-                style={styles.input}
-                placeholder="Password"
-                placeholderTextColor="#aaaaaa"
-                value={password}
-                onChangeText={setPassword}
-                underlineColorAndroid="transparent"
-                autoCapitalize="none"
-                secureTextEntry
-              />
-            </View>
+            <FormInput
+              labelValue={password}
+              onChangeText={setPassword}
+              placeholderText="Password"
+              Icon={PadlockIcon}
+              autoCapitalize="none"
+              autoCorrect={false}
+              underlineColorAndroid="transparent"
+              secureTextEntry
+            />
           </Animated.View>
         )}
         <TouchableOpacity
@@ -152,32 +143,6 @@ const SignIn = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderColor: '#ccc',
-    borderRadius: 5,
-    borderWidth: 1,
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
-  },
-  iconStyle: {
-    alignItems: 'center',
-    borderRightColor: '#ccc',
-    borderRightWidth: 1,
-    padding: 14,
-  },
-  input: {
-    backgroundColor: '#fff',
-    flex: 1,
-    fontFamily: 'OpenSansRegular',
-    justifyContent: 'center',
-    padding: 14,
-  },
   button: {
     alignItems: 'center',
     backgroundColor: '#48BBEC',
