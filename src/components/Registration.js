@@ -1,12 +1,7 @@
 import React, { useState, useContext } from 'react';
-import {
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import FormInput from './FormInput';
 import { authStore } from '../store/authStore';
 import UsernameIcon from '../../assets/username.svg';
 import PadlockIcon from '../../assets/padlock.svg';
@@ -36,64 +31,45 @@ const Registration = ({ navigation }) => {
         style={{ flex: 1, width: '100%' }}
         keyboardShouldPersistTaps="always"
       >
-        <View style={styles.inputContainer}>
-          <View style={styles.iconStyle}>
-            <UsernameIcon width={25} height={25} fill="black" />
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholder="Full Name"
-            placeholderTextColor="#aaaaaa"
-            onChangeText={setFullName}
-            value={fullName}
-            underlineColorAndroid="transparent"
-            autoCapitalize="none"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <View style={styles.iconStyle}>
-            <EmailIcon width={25} height={25} fill="black" />
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholder="E-mail"
-            placeholderTextColor="#aaaaaa"
-            onChangeText={setEmail}
-            value={email}
-            underlineColorAndroid="transparent"
-            autoCapitalize="none"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <View style={styles.iconStyle}>
-            <PadlockIcon width={25} height={25} fill="black" />
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="#aaaaaa"
-            secureTextEntry
-            placeholder="Password"
-            onChangeText={setPassword}
-            value={password}
-            underlineColorAndroid="transparent"
-            autoCapitalize="none"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <View style={styles.iconStyle}>
-            <PadlockIcon width={25} height={25} fill="black" />
-          </View>
-          <TextInput
-            style={styles.input}
-            placeholderTextColor="#aaaaaa"
-            secureTextEntry
-            placeholder="Confirm Password"
-            onChangeText={setConfirmPassword}
-            value={confirmPassword}
-            underlineColorAndroid="transparent"
-            autoCapitalize="none"
-          />
-        </View>
+        <FormInput
+          labelValue={fullName}
+          onChangeText={setFullName}
+          placeholderText="Full Name"
+          Icon={UsernameIcon}
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+        />
+        <FormInput
+          labelValue={email}
+          onChangeText={setEmail}
+          placeholderText="Email"
+          Icon={EmailIcon}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+        />
+        <FormInput
+          labelValue={password}
+          onChangeText={setPassword}
+          placeholderText="Password"
+          Icon={PadlockIcon}
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          secureTextEntry
+        />
+        <FormInput
+          labelValue={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholderText="Password"
+          Icon={PadlockIcon}
+          autoCapitalize="none"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+          secureTextEntry
+        />
         <TouchableOpacity style={styles.button} onPress={handleRegistration}>
           <Text style={styles.buttonTitle}>Create account</Text>
         </TouchableOpacity>
@@ -114,32 +90,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     flex: 1,
-  },
-  inputContainer: {
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    borderColor: '#ccc',
-    borderRadius: 5,
-    borderWidth: 1,
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
-  },
-  iconStyle: {
-    alignItems: 'center',
-    borderRightColor: '#ccc',
-    borderRightWidth: 1,
-    padding: 14,
-  },
-  input: {
-    backgroundColor: 'white',
-    flex: 1,
-    fontFamily: 'OpenSansRegular',
-    justifyContent: 'center',
-    padding: 14,
   },
   button: {
     alignItems: 'center',

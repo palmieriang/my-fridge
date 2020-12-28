@@ -33,6 +33,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
+    maxHeight: 56,
+    overflow: 'hidden',
   },
   iconStyle: {
     alignItems: 'center',

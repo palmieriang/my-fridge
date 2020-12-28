@@ -26,7 +26,7 @@ export function createUser(fullName, email, password) {
       };
       addUserData(uid, data);
     })
-    .catch((error) => console.log('Error: ', error));
+    .catch((error) => alert(error.message));
 }
 
 export function authSignIn(email, password) {
@@ -34,7 +34,7 @@ export function authSignIn(email, password) {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .catch((error) => {
-      console.log('Restoring token failed', error);
+      alert(error.message);
     });
 }
 
