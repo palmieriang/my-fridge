@@ -12,7 +12,6 @@ import {
   createUser,
   sendVerificationEmail,
   sendResetPassword,
-  getProfileImageFromFirebase,
   deleteProfileImage,
   signInWithGoogle,
 } from '../../api/api';
@@ -97,8 +96,7 @@ const AuthProvider = ({ children }) => {
             alert('Please verify your account.');
           })
           .catch((error) => {
-            alert(error.message);
-            console.info('error ', JSON.stringify(error));
+            console.log('Error in create user', error);
           });
       },
       resetPassword: (email) => {
@@ -107,8 +105,7 @@ const AuthProvider = ({ children }) => {
             alert('Please check your account.');
           })
           .catch((error) => {
-            alert(error.message);
-            console.info('error ', JSON.stringify(error));
+            console.log('Error in reset password', error);
           });
       },
       updateProfileImage: (url) => {
