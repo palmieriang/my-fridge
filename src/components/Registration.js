@@ -3,9 +3,9 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FormInput from './FormInput';
 import { authStore } from '../store/authStore';
-import UsernameIcon from '../../assets/username.svg';
-import PadlockIcon from '../../assets/padlock.svg';
-import EmailIcon from '../../assets/email.svg';
+import UsernameIcon from '../../assets/svg/username.svg';
+import PadlockIcon from '../../assets/svg/padlock.svg';
+import EmailIcon from '../../assets/svg/email.svg';
 
 const Registration = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
