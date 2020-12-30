@@ -11,8 +11,8 @@ import {
   SettingsStackScreen,
   SingInStackScreen,
 } from './navigation/navigation';
-import FreezerIcon from '../assets/freezer.svg';
-import SettingsIcon from '../assets/settings.svg';
+import FreezerIcon from '../assets/svg/freezer.svg';
+import SettingsIcon from '../assets/svg/settings.svg';
 import { getCountdownParts } from '../api/api';
 import { customFonts } from './typography/typography';
 
