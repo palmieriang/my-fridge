@@ -7,8 +7,8 @@ import * as Progress from 'react-native-progress';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import { uploadTaskFromApi } from '../../api/api';
-import UserIcon from '../../assets/user.svg';
-import DeleteIcon from '../../assets/close.svg';
+import UserIcon from '../../assets/svg/user.svg';
+import DeleteIcon from '../../assets/svg/close.svg';
 
 const Profile = () => {
   const [upload, setUpload] = useState({

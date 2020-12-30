@@ -12,8 +12,8 @@ import FormInput from './FormInput';
 import LottieAnimation from '../animations/LottieAnimation';
 import useToggle from './utils/useToggle';
 import { authStore } from '../store/authStore';
-import UsernameIcon from '../../assets/username.svg';
-import PadlockIcon from '../../assets/padlock.svg';
+import UsernameIcon from '../../assets/svg/username.svg';
+import PadlockIcon from '../../assets/svg/padlock.svg';
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
