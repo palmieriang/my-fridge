@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { render as rtlRender } from '@testing-library/react-native';
+import { render as rtlRender, screen } from '@testing-library/react-native';
 import { AuthProvider } from '../src/store/authStore';
 import { LocaleProvider } from '../src/store/localeStore';
 import { ThemeProvider } from '../src/store/themeStore';
@@ -70,7 +70,7 @@ function render(
         {(userToken) => (
           <LocaleProvider>
             {(t) => (
-              <ThemeProvider theme={theme}>
+              <ThemeProvider>
                 {(theme) => (
                   <ProductsProvider>
                     {(products) => {
@@ -94,4 +94,4 @@ function render(
 
 export * from '@testing-library/react-native';
 // override the built-in render with our own
-export { render };
+export { render, screen };
