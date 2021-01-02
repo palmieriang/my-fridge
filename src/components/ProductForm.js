@@ -177,7 +177,7 @@ const pickerSelectStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRightColor: '#ccc',
-    borderRightWidth: 1,
+    borderRightWidth: StyleSheet.hairlineWidth,
   },
 });
 
@@ -186,7 +186,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderColor: '#ccc',
     borderRadius: 5,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     flex: 1,
     marginTop: 10,
     marginBottom: 10,
