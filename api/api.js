@@ -295,7 +295,7 @@ export function getProfileImageFromFirebase(userUID, callback) {
       callback({ type: 'PROFILE_IMG', imgUrl: url });
     })
     .catch((error) => {
-      console.log('Profile img error: ', error.message);
+      console.log('Profile img error: ', error.message_);
     });
 }
 
