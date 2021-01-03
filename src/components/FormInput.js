@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { View, TextInput, StyleSheet } from 'react-native';
 
 const FormInput = ({ labelValue, placeholderText, Icon, ...rest }) => {
@@ -50,5 +51,11 @@ const styles = StyleSheet.create({
     padding: 14,
   },
 });
+
+FormInput.propTypes = {
+  labelValue: PropTypes.string.isRequired,
+  placeholderText: PropTypes.string.isRequired,
+  Icon: PropTypes.func.isRequired,
+};
 
 export default FormInput;
