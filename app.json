@@ -1,6 +1,7 @@
 {
   "expo": {
     "name": "myfridge",
+    "description": "How many times do you open the fridge and find something expired? This app is the best way to track your groceries.",
     "slug": "myfridge",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.0",
@@ -11,10 +12,13 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "android": {
+      "package": "com.myfridge.App"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": ["**/*", "assets/*"],
     "ios": {
       "supportsTablet": true
     },
