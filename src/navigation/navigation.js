@@ -18,11 +18,11 @@ const screenOptions = {
       height: 0,
     },
   },
+  headerTitleAlign: 'center',
   headerTintColor: '#fff',
   headerTitleStyle: {
     fontFamily: 'NunitoRegular',
     fontSize: 20,
-    alignSelf: 'center',
     textTransform: 'uppercase',
   },
 };
