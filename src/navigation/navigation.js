@@ -12,6 +12,7 @@ const Stack = createStackNavigator();
 
 const screenOptions = {
   headerStyle: {
+    elevation: 0,
     shadowColor: 'transparent',
     shadowRadius: 0,
     shadowOffset: {
