@@ -22,6 +22,7 @@ const screenOptions = {
   headerTitleStyle: {
     fontFamily: 'NunitoRegular',
     fontSize: 20,
+    alignSelf: 'center',
     textTransform: 'uppercase',
   },
 };
