@@ -3,6 +3,8 @@ import { Text, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import { formatDate, getCountdownParts } from '../../api/api';
+import { windowHeight, windowWidth } from './utils/dimensions';
+import adjust from './utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { themeStore } from '../store/themeStore';
 import { productsStore } from '../store/productsStore';
@@ -103,13 +105,14 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   date: {
-    fontSize: 15,
+    fontSize: windowHeight / 60,
+    fontSize: adjust(12),
     marginBottom: 10,
     fontFamily: 'OpenSansLight',
   },
   title: {
     fontFamily: 'OpenSansRegular',
-    fontSize: 15,
+    fontSize: windowWidth / 28,
     marginBottom: 10,
     marginTop: 5,
   },
@@ -120,16 +123,16 @@ const styles = StyleSheet.create({
   },
   counterText: {
     fontFamily: 'OpenSansBold',
-    fontSize: 40,
+    fontSize: windowWidth / 10,
   },
   counterLabel: {
     fontFamily: 'OpenSansLight',
-    fontSize: 13,
+    fontSize: windowWidth / 30,
     marginLeft: 10,
   },
   expired: {
     fontFamily: 'LilitaOne',
-    fontSize: 40,
+    fontSize: windowWidth / 10,
     textTransform: 'uppercase',
   },
 });
