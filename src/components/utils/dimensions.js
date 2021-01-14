@@ -1,13 +1,10 @@
 import { Dimensions, PixelRatio } from 'react-native';
 
-export const windowWidth = Dimensions.get('window').width;
-export const windowHeight = Dimensions.get('window').height;
-
 const pixelRatio = PixelRatio.get();
 const deviceHeight = Dimensions.get('window').height;
 const deviceWidth = Dimensions.get('window').width;
 
-const adjust = (size) => {
+export const adjust = (size) => {
   if (pixelRatio >= 2 && pixelRatio < 3) {
     // iphone 5s and older Androids
     if (deviceWidth < 360) {
@@ -63,5 +60,3 @@ const adjust = (size) => {
   }
   return size;
 };
-
-export default adjust;
