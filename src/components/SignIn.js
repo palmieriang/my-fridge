@@ -11,6 +11,7 @@ import SocialIcon from './SocialIcon';
 import FormInput from './FormInput';
 import LottieAnimation from '../animations/LottieAnimation';
 import useToggle from './utils/useToggle';
+import { adjust } from './utils/dimensions';
 import { authStore } from '../store/authStore';
 import UsernameIcon from '../../assets/svg/username.svg';
 import PadlockIcon from '../../assets/svg/padlock.svg';
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: '#fff',
     fontFamily: 'OpenSansBold',
-    fontSize: 16,
+    fontSize: adjust(13),
     textTransform: 'uppercase',
   },
   animationContainer: {
@@ -174,13 +175,13 @@ const styles = StyleSheet.create({
   footerText: {
     color: '#2e2e2d',
     fontFamily: 'OpenSansRegular',
-    fontSize: 16,
+    fontSize: adjust(13),
     marginBottom: 20,
   },
   footerLink: {
     color: '#48BBEC',
     fontFamily: 'OpenSansBold',
-    fontSize: 16,
+    fontSize: adjust(13),
   },
 });
 
