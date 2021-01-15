@@ -4,6 +4,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import FormInput from './FormInput';
 import { formatDate } from '../../api/api';
+import { adjust } from './utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
@@ -209,7 +210,7 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: 'white',
     fontFamily: 'OpenSansBold',
-    fontSize: 16,
+    fontSize: adjust(13),
     textTransform: 'uppercase',
   },
   buttonDelete: {
