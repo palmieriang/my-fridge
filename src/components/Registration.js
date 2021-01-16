@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FormInput from './FormInput';
+import { adjust } from './utils/dimensions';
 import { authStore } from '../store/authStore';
 import UsernameIcon from '../../assets/svg/username.svg';
 import PadlockIcon from '../../assets/svg/padlock.svg';
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: 'white',
     fontFamily: 'OpenSansBold',
-    fontSize: 16,
+    fontSize: adjust(13),
     textTransform: 'uppercase',
   },
   footerView: {
@@ -115,12 +116,12 @@ const styles = StyleSheet.create({
   footerText: {
     color: '#2e2e2d',
     fontFamily: 'OpenSansRegular',
-    fontSize: 16,
+    fontSize: adjust(13),
   },
   footerLink: {
     color: '#48BBEC',
     fontFamily: 'OpenSansBold',
-    fontSize: 16,
+    fontSize: adjust(13),
   },
 });
 
