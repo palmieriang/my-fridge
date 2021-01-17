@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { adjust } from '../components/utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { themeStore } from '../store/themeStore';
 import ProductList from '../components/ProductList';
@@ -23,7 +24,7 @@ const screenOptions = {
   headerTintColor: '#fff',
   headerTitleStyle: {
     fontFamily: 'NunitoRegular',
-    fontSize: 20,
+    fontSize: adjust(16),
     textTransform: 'uppercase',
   },
 };
