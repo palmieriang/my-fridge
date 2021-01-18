@@ -1,6 +1,7 @@
 import React, { useContext, useRef } from 'react';
 import { Animated, Text, View, StyleSheet, I18nManager } from 'react-native';
 import PropTypes from 'prop-types';
+import { adjust } from './utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   actionText: {
     color: 'white',
     fontFamily: 'OpenSansRegular',
-    fontSize: 16,
+    fontSize: adjust(13),
     backgroundColor: 'transparent',
     padding: 10,
   },
