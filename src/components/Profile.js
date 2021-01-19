@@ -4,9 +4,10 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import Image from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
+import { uploadTaskFromApi } from '../../api/api';
+import { adjust } from './utils/dimensions';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
-import { uploadTaskFromApi } from '../../api/api';
 import UserIcon from '../../assets/svg/user.svg';
 import DeleteIcon from '../../assets/svg/close.svg';
 
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
   profileField: {
     color: '#fff',
     fontFamily: 'OpenSansRegular',
-    fontSize: 15,
+    fontSize: adjust(12),
     marginTop: 20,
   },
   progressContainer: {
