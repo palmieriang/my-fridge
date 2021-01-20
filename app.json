@@ -4,7 +4,7 @@
     "description": "How many times do you open the fridge and find something expired? This app is the best way to track your groceries.",
     "slug": "myfridge",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -13,14 +13,17 @@
       "backgroundColor": "#ffffff"
     },
     "android": {
-      "package": "com.myfridge.App"
+      "package": "com.myfridge.App",
+      "versionCode": 2,
+      "permissions": []
     },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
     "assetBundlePatterns": ["**/*", "assets/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.myfridge.App"
     },
     "packagerOpts": {
       "config": "metro.config.js",
