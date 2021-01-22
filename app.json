@@ -14,8 +14,8 @@
     },
     "android": {
       "package": "com.myfridge.App",
-      "versionCode": 2,
-      "permissions": []
+      "versionCode": 3,
+      "permissions": ["ACCESS_FINE_LOCATION"]
     },
     "updates": {
       "fallbackToCacheTimeout": 0
