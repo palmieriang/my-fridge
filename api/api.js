@@ -22,7 +22,7 @@ export function createUser(fullName, email, password) {
         email,
         fullName,
         locale: 'en',
-        theme: 'lightRed',
+        theme: 'lightBlue',
       };
       addUserData(uid, data);
     })
