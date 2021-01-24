@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: 'white',
     flex: 1,
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     justifyContent: 'center',
     padding: 14,
   },

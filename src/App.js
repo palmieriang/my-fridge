@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 import React from 'react';
-import { useFonts } from '@use-expo/font';
+import { useFonts } from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, LogBox } from 'react-native';
@@ -147,7 +147,7 @@ const tabBarOptions = {
   showLabel: true,
   upperCaseLabel: true,
   labelStyle: {
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     textTransform: 'uppercase',
   },
 };

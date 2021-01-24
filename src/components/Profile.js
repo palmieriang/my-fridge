@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   profileField: {
     color: '#fff',
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     fontSize: adjust(12),
     marginTop: 20,
   },
