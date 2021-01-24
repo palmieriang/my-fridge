@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: 'white',
-    fontFamily: 'OpenSansBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: adjust(13),
     textTransform: 'uppercase',
   },

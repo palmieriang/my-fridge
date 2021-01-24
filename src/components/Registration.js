@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: 'white',
-    fontFamily: 'OpenSansBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: adjust(13),
     textTransform: 'uppercase',
   },
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
   },
   footerText: {
     color: '#2e2e2d',
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     fontSize: adjust(13),
   },
   footerLink: {
     color: '#48BBEC',
-    fontFamily: 'OpenSansBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: adjust(13),
   },
 });

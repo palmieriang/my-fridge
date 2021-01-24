@@ -106,10 +106,10 @@ const styles = StyleSheet.create({
   date: {
     fontSize: adjust(12),
     marginBottom: 10,
-    fontFamily: 'OpenSansLight',
+    fontFamily: 'OpenSans-Light',
   },
   title: {
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     fontSize: adjust(12),
     marginBottom: 10,
     marginTop: 5,
@@ -120,16 +120,16 @@ const styles = StyleSheet.create({
     alignItems: 'baseline',
   },
   counterText: {
-    fontFamily: 'OpenSansBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: adjust(32),
   },
   counterLabel: {
-    fontFamily: 'OpenSansLight',
+    fontFamily: 'OpenSans-Light',
     fontSize: adjust(10.5),
     marginLeft: 10,
   },
   expired: {
-    fontFamily: 'LilitaOne',
+    fontFamily: 'LilitaOne-Regular',
     fontSize: adjust(32),
     textTransform: 'uppercase',
   },
