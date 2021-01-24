@@ -15,22 +15,6 @@ import FreezerIcon from '../assets/svg/freezer.svg';
 import SettingsIcon from '../assets/svg/settings.svg';
 import { getCountdownParts } from '../api/api';
 import { customFonts } from './typography/typography';
-
-import { decode, encode } from 'base-64';
-global.crypto = require('@firebase/firestore');
-global.crypto.getRandomValues = (byteArray) => {
-  for (let i = 0; i < byteArray.length; i++) {
-    byteArray[i] = Math.floor(256 * Math.random());
-  }
-};
-
-if (!global.btoa) {
-  global.btoa = encode;
-}
-if (!global.atob) {
-  global.atob = decode;
-}
-
 import { AuthProvider } from './store/authStore';
 import { LocaleProvider } from './store/localeStore';
 import { ThemeProvider } from './store/themeStore';
