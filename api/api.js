@@ -1,4 +1,3 @@
-// import 'react-native-get-random-values';
 import moment from 'moment';
 import * as Google from 'expo-google-app-auth';
 import {
