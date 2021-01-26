@@ -8,8 +8,8 @@ import { uploadTaskFromApi } from '../../api/api';
 import { adjust } from './utils/dimensions';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
-import UserIcon from '../../assets/svg/user.svg';
-import DeleteIcon from '../../assets/svg/close.svg';
+import UserIcon from './svg/UserIcon';
+import DeleteIcon from './svg/DeleteIcon';
 
 const Profile = () => {
   const [upload, setUpload] = useState({
