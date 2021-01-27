@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     color: 'white',
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     fontSize: adjust(13),
     backgroundColor: 'transparent',
     padding: 10,

@@ -4,9 +4,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import FormInput from './FormInput';
 import { adjust } from './utils/dimensions';
 import { authStore } from '../store/authStore';
-import UsernameIcon from '../../assets/svg/username.svg';
-import PadlockIcon from '../../assets/svg/padlock.svg';
-import EmailIcon from '../../assets/svg/email.svg';
+import UsernameIcon from './svg/UsernameIcon';
+import PadlockIcon from './svg/PadlockIcon';
+import EmailIcon from './svg/EmailIcon';
 
 const Registration = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: 'white',
-    fontFamily: 'OpenSansBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: adjust(13),
     textTransform: 'uppercase',
   },
@@ -115,12 +115,12 @@ const styles = StyleSheet.create({
   },
   footerText: {
     color: '#2e2e2d',
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     fontSize: adjust(13),
   },
   footerLink: {
     color: '#48BBEC',
-    fontFamily: 'OpenSansBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: adjust(13),
   },
 });

@@ -63,7 +63,7 @@ const Settings = () => {
           marginTop: 15,
           marginBottom: 15,
           color: theme.text,
-          fontFamily: 'OpenSansRegular',
+          fontFamily: 'OpenSans-Regular',
         }}
       >
         Current locale: {locale}.{' '}
@@ -115,10 +115,10 @@ const styles = StyleSheet.create({
   },
   initValueTextStyle: {
     color: 'black',
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
   },
   text: {
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
   },
   container: {
     backgroundColor: 'lightgrey',

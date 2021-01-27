@@ -8,8 +8,8 @@ import { uploadTaskFromApi } from '../../api/api';
 import { adjust } from './utils/dimensions';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
-import UserIcon from '../../assets/svg/user.svg';
-import DeleteIcon from '../../assets/svg/close.svg';
+import UserIcon from './svg/UserIcon';
+import DeleteIcon from './svg/DeleteIcon';
 
 const Profile = () => {
   const [upload, setUpload] = useState({
@@ -29,7 +29,7 @@ const Profile = () => {
       if (Constants.platform.ios) {
         const {
           status,
-        } = await ImagePicker.requestCameraRollPermissionsAsync();
+        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
         }
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   },
   profileField: {
     color: '#fff',
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     fontSize: adjust(12),
     marginTop: 20,
   },

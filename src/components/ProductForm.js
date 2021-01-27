@@ -9,9 +9,9 @@ import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import { productsStore } from '../store/productsStore';
-import CalendarIcon from '../../assets/svg/calendar.svg';
-import ColdIcon from '../../assets/svg/cold.svg';
-import ShoppingBasketIcon from '../../assets/svg/shopping-basket.svg';
+import CalendarIcon from './svg/CalendarIcon';
+import ColdIcon from './svg/ColdIcon';
+import ShoppingBasketIcon from './svg/ShoppingBasketIcon';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: 'white',
-    fontFamily: 'OpenSansBold',
+    fontFamily: 'OpenSans-Bold',
     fontSize: adjust(13),
     textTransform: 'uppercase',
   },
