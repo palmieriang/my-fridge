@@ -1,12 +1,13 @@
-import * as React from "react";
-import Svg, { Path } from "react-native-svg";
+import * as React from 'react';
+import Svg, { Path } from 'react-native-svg';
 
-const DeleteIcon = ({ height, width, fill }) => {
+const DeleteIcon = ({ height, width, fill, ...props }) => {
   return (
     <Svg
       height={height}
       width={width}
       fill={fill}
+      {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 511.995 511.995"
     >
