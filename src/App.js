@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import { registerRootComponent } from 'expo';
 import React from 'react';
-import { useFonts } from '@use-expo/font';
+import { useFonts } from 'expo-font';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { StyleSheet, View, LogBox } from 'react-native';
@@ -11,26 +11,10 @@ import {
   SettingsStackScreen,
   SingInStackScreen,
 } from './navigation/navigation';
-import FreezerIcon from '../assets/svg/freezer.svg';
-import SettingsIcon from '../assets/svg/settings.svg';
+import FreezerIcon from './components/svg/FreezerIcon';
+import SettingsIcon from './components/svg/SettingsIcon';
 import { getCountdownParts } from '../api/api';
 import { customFonts } from './typography/typography';
-
-import { decode, encode } from 'base-64';
-global.crypto = require('@firebase/firestore');
-global.crypto.getRandomValues = (byteArray) => {
-  for (let i = 0; i < byteArray.length; i++) {
-    byteArray[i] = Math.floor(256 * Math.random());
-  }
-};
-
-if (!global.btoa) {
-  global.btoa = encode;
-}
-if (!global.atob) {
-  global.atob = decode;
-}
-
 import { AuthProvider } from './store/authStore';
 import { LocaleProvider } from './store/localeStore';
 import { ThemeProvider } from './store/themeStore';
@@ -163,7 +147,7 @@ const tabBarOptions = {
   showLabel: true,
   upperCaseLabel: true,
   labelStyle: {
-    fontFamily: 'OpenSansRegular',
+    fontFamily: 'OpenSans-Regular',
     textTransform: 'uppercase',
   },
 };
