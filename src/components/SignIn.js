@@ -13,13 +13,14 @@ import LottieAnimation from '../animations/LottieAnimation';
 import useToggle from './utils/useToggle';
 import { adjust } from './utils/dimensions';
 import { authStore } from '../store/authStore';
-import UsernameIcon from '../../assets/svg/username.svg';
-import PadlockIcon from '../../assets/svg/padlock.svg';
+import UsernameIcon from './svg/UsernameIcon';
+import PadlockIcon from './svg/PadlockIcon';
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [playAnimation, setPlayAnimation] = useState(false);
+  const [resetAnimation, setResetAnimation] = useState(false);
   const [isToggled, toggle] = useToggle(true);
 
   const { authContext } = useContext(authStore);
@@ -53,6 +54,8 @@ const SignIn = ({ navigation }) => {
 
   const signInAfterAnimation = () => {
     authContext.signIn({ email, password });
+    setPlayAnimation(false);
+    setResetAnimation(true);
   };
 
   const handleResetPassword = async () => {
@@ -81,6 +84,7 @@ const SignIn = ({ navigation }) => {
             loop={false}
             name="door"
             play={playAnimation}
+            reset={resetAnimation}
             style={styles.animation}
           />
         </View>

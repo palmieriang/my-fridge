@@ -7,7 +7,7 @@ const ANIMATIONS = {
   door: DoorAnimation,
 };
 
-const LottieAnimation = ({ loop, name, play, animationEnd, style }) => {
+const LottieAnimation = ({ loop, name, play, animationEnd, reset, style }) => {
   const lottieRef = useRef();
 
   useEffect(() => {
@@ -15,6 +15,12 @@ const LottieAnimation = ({ loop, name, play, animationEnd, style }) => {
       lottieRef.current.play();
     }
   }, [play]);
+
+  useEffect(() => {
+    if (reset) {
+      lottieRef.current.reset();
+    }
+  }, [reset]);
 
   if (name in ANIMATIONS) {
     return (
