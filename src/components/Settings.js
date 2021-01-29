@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
@@ -9,7 +9,6 @@ import Profile from './Profile';
 const Settings = () => {
   const {
     localizationContext: { t, changeLocale },
-    locale,
   } = useContext(localeStore);
   const {
     authContext,
@@ -58,19 +57,6 @@ const Settings = () => {
       }}
     >
       <Profile />
-      <Text
-        style={{
-          marginTop: 15,
-          marginBottom: 15,
-          color: theme.text,
-          fontFamily: 'OpenSans-Regular',
-        }}
-      >
-        Current locale: {locale}.{' '}
-        {locale !== 'en' && locale !== 'it' && locale !== 'fr'
-          ? 'Translations will fall back to "en" because none available'
-          : null}
-      </Text>
       <ModalSelector
         animationType="fade"
         cancelText={t('cancel')}
