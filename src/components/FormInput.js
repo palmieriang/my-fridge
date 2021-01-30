@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, TextInput, StyleSheet } from 'react-native';
+import { adjust } from './utils/dimensions';
 
 const FormInput = ({ labelValue, placeholderText, Icon, ...rest }) => {
   return (
@@ -47,6 +48,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flex: 1,
     fontFamily: 'OpenSans-Regular',
+    fontSize: adjust(14),
     justifyContent: 'center',
     padding: 14,
   },
