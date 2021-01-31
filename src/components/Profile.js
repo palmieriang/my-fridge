@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
   profileField: {
     color: '#fff',
     fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(12),
+    fontSize: adjust(13),
     marginTop: 20,
   },
   progressContainer: {
