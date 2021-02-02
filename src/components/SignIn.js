@@ -150,7 +150,7 @@ const SignIn = ({ navigation }) => {
 const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
-    backgroundColor: '#48BBEC',
+    backgroundColor: '#48bbec',
     borderRadius: 5,
     justifyContent: 'center',
     height: 48,
@@ -161,7 +161,10 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: '#fff',
     fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(13),
+    fontSize: adjust(15),
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 0,
     textTransform: 'uppercase',
   },
   animationContainer: {
@@ -183,7 +186,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   footerLink: {
-    color: '#48BBEC',
+    color: '#48bbec',
     fontFamily: 'OpenSans-Bold',
     fontSize: adjust(13),
   },
