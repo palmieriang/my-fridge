@@ -103,9 +103,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonTitle: {
-    color: 'white',
+    color: '#fff',
     fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(13),
+    fontSize: adjust(15),
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 0,
     textTransform: 'uppercase',
   },
   footerView: {
