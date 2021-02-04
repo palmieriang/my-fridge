@@ -5,7 +5,11 @@ import { adjust } from './utils/dimensions';
 
 const FormInput = ({ labelValue, placeholderText, Icon, ...rest }) => {
   return (
-    <View style={styles.inputContainer}>
+    <View
+      style={styles.inputContainer}
+      accessible={true}
+      accessibilityLabel={placeholderText}
+    >
       <View style={styles.iconStyle}>
         <Icon width={25} height={25} fill="black" />
       </View>
@@ -13,7 +17,7 @@ const FormInput = ({ labelValue, placeholderText, Icon, ...rest }) => {
         autoCapitalize="none"
         numberOfLines={1}
         placeholder={placeholderText}
-        placeholderTextColor="#aaaaaa"
+        placeholderTextColor="#757575"
         style={styles.input}
         value={labelValue}
         {...rest}
