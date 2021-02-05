@@ -110,14 +110,15 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(12),
+    fontSize: adjust(14),
     marginBottom: 10,
     marginTop: 5,
   },
   counterContainer: {
+    alignItems: 'baseline',
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'baseline',
+    justifyContent: 'flex-end',
   },
   counterText: {
     fontFamily: 'OpenSans-Bold',
