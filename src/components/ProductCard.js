@@ -63,10 +63,13 @@ const ProductCard = ({ product }) => {
       <View>
         <TouchableWithoutFeedback onPress={handleChange}>
           <View style={[styles.card, { backgroundColor: theme.foreground }]}>
-            <Text style={[styles.date, { color: theme.text }]}>
-              {formatDate(date)}
-            </Text>
-            <Text style={[styles.title, { color: theme.text }]}>{name}</Text>
+            <View>
+              <Text style={[styles.date, { color: theme.text }]}>
+                {formatDate(date)}
+              </Text>
+              <Text style={[styles.title, { color: theme.text }]}>{name}</Text>
+            </View>
+
             {expired ? (
               <Text style={[styles.expired, { color: theme.primary }]}>
                 {t('expired')}
@@ -97,8 +100,12 @@ ProductCard.propTypes = {
 
 const styles = StyleSheet.create({
   card: {
+    alignItems: 'flex-end',
     flex: 1,
+    flexWrap: 'wrap',
     padding: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     margin: 10,
     marginTop: 5,
     marginBottom: 5,
