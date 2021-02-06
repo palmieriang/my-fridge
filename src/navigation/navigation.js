@@ -23,8 +23,8 @@ const screenOptions = {
   headerTitleAlign: 'center',
   headerTintColor: '#fff',
   headerTitleStyle: {
-    fontFamily: 'Nunito-Regular',
-    fontSize: adjust(16),
+    fontFamily: 'Nunito-Bold',
+    fontSize: adjust(18),
     textTransform: 'uppercase',
   },
 };
