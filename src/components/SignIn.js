@@ -137,8 +137,6 @@ const SignIn = ({ navigation }) => {
           >
             {isToggled ? 'Reset password' : 'Login'}
           </Text>
-        </View>
-        <View style={styles.footerView}>
           <Text style={styles.footerText}>Sign In with: </Text>
           <SocialIcon />
         </View>
@@ -161,10 +159,10 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: '#fff',
     fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(15),
+    fontSize: adjust(16),
     textShadowColor: '#000',
     textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 0,
+    textShadowRadius: 1,
     textTransform: 'uppercase',
   },
   animationContainer: {
@@ -183,12 +181,13 @@ const styles = StyleSheet.create({
     color: '#2e2e2d',
     fontFamily: 'OpenSans-Regular',
     fontSize: adjust(13),
-    marginBottom: 20,
+    padding: 10,
   },
   footerLink: {
     color: '#48bbec',
     fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(13),
+    fontSize: adjust(14),
+    padding: 10,
   },
 });
 
