@@ -185,7 +185,7 @@ const pickerSelectStyles = StyleSheet.create({
     width: 54,
   },
   placeholder: {
-    color: '#aaaaaa',
+    color: '#757575',
   },
 });
 
@@ -214,9 +214,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   buttonTitle: {
-    color: 'white',
+    color: '#fff',
     fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(13),
+    fontSize: adjust(16),
+    textShadowColor: '#000',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 1,
     textTransform: 'uppercase',
   },
   buttonDelete: {
