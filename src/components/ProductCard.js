@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(14),
+    fontSize: adjust(16),
     marginBottom: 10,
     marginTop: 5,
   },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   },
   counterLabel: {
     fontFamily: 'OpenSans-Light',
-    fontSize: adjust(10.5),
+    fontSize: adjust(12),
     marginLeft: 10,
   },
   expired: {
