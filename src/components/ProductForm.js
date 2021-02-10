@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, LogBox } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FormInput from './FormInput';
 import { formatDate } from '../../api/api';
 import { adjust } from './utils/dimensions';
@@ -102,60 +103,65 @@ const ProductForm = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
-      <FormInput
-        labelValue={name}
-        onChangeText={handleChangeName}
-        placeholderText={t('product')}
-        Icon={ShoppingBasketIcon}
-        autoCapitalize="sentences"
-        autoCorrect={false}
-        underlineColorAndroid="transparent"
-      />
-      <FormInput
-        labelValue={formatDate(date.toString())}
-        onChangeText={handleChangeName}
-        placeholderText={t('date')}
-        Icon={CalendarIcon}
-        autoCorrect={false}
-        editable={!showDatePicker}
-        onFocus={handleDatePress}
-      />
-      <DateTimePickerModal
-        date={initPickerDate}
-        isVisible={showDatePicker}
-        mode="date"
-        onConfirm={handleDatePicked}
-        onCancel={handleDatePickerHide}
-      />
-      <View style={styles.inputContainer}>
-        <RNPickerSelect
-          style={pickerSelectStyles}
-          value={place}
-          placeholder={{ label: t('choosePlace') }}
-          onValueChange={(itemValue) => setPlace(itemValue)}
-          items={[
-            { label: t('fridge'), value: 'fridge', key: 'fridge' },
-            { label: t('freezer'), value: 'freezer', key: 'freezer' },
-          ]}
-          Icon={() => {
-            return <ColdIcon width={25} height={25} fill="black" />;
-          }}
-        />
-      </View>
-
-      <TouchableOpacity onPress={handleAddPress} style={styles.button}>
-        {existingId ? (
-          <Text style={styles.buttonTitle}>{t('modify')}</Text>
-        ) : (
-          <Text style={styles.buttonTitle}>{t('add')}</Text>
-        )}
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={handleDeletePress}
-        style={[styles.button, styles.buttonDelete]}
+      <KeyboardAwareScrollView
+        style={styles.container}
+        keyboardShouldPersistTaps="always"
       >
-        <Text style={styles.buttonTitle}>{t('delete')}</Text>
-      </TouchableOpacity>
+        <FormInput
+          labelValue={name}
+          onChangeText={handleChangeName}
+          placeholderText={t('product')}
+          Icon={ShoppingBasketIcon}
+          autoCapitalize="sentences"
+          autoCorrect={false}
+          underlineColorAndroid="transparent"
+        />
+        <FormInput
+          labelValue={formatDate(date.toString())}
+          onChangeText={handleChangeName}
+          placeholderText={t('date')}
+          Icon={CalendarIcon}
+          autoCorrect={false}
+          editable={!showDatePicker}
+          onFocus={handleDatePress}
+        />
+        <DateTimePickerModal
+          date={initPickerDate}
+          isVisible={showDatePicker}
+          mode="date"
+          onConfirm={handleDatePicked}
+          onCancel={handleDatePickerHide}
+        />
+        <View style={styles.inputContainer}>
+          <RNPickerSelect
+            style={pickerSelectStyles}
+            value={place}
+            placeholder={{ label: t('choosePlace') }}
+            onValueChange={(itemValue) => setPlace(itemValue)}
+            items={[
+              { label: t('fridge'), value: 'fridge', key: 'fridge' },
+              { label: t('freezer'), value: 'freezer', key: 'freezer' },
+            ]}
+            Icon={() => {
+              return <ColdIcon width={25} height={25} fill="black" />;
+            }}
+          />
+        </View>
+
+        <TouchableOpacity onPress={handleAddPress} style={styles.button}>
+          {existingId ? (
+            <Text style={styles.buttonTitle}>{t('modify')}</Text>
+          ) : (
+            <Text style={styles.buttonTitle}>{t('add')}</Text>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={handleDeletePress}
+          style={[styles.button, styles.buttonDelete]}
+        >
+          <Text style={styles.buttonTitle}>{t('delete')}</Text>
+        </TouchableOpacity>
+      </KeyboardAwareScrollView>
     </View>
   );
 };
@@ -190,6 +196,10 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+  },
   inputContainer: {
     backgroundColor: '#fff',
     borderColor: '#ccc',
