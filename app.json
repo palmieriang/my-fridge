@@ -4,7 +4,7 @@
     "description": "How many times do you open the fridge and find something expired? This app is the best way to track your groceries.",
     "slug": "myfridge",
     "platforms": ["ios", "android", "web"],
-    "version": "3.0.0",
+    "version": "4.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -14,7 +14,7 @@
     },
     "android": {
       "package": "com.myfridge.App",
-      "versionCode": 9,
+      "versionCode": 10,
       "permissions": []
     },
     "updates": {
