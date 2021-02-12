@@ -113,7 +113,6 @@ const ProductForm = ({ navigation, route }) => {
           placeholderText={t('product')}
           Icon={ShoppingBasketIcon}
           autoCapitalize="sentences"
-          autoCorrect={false}
           underlineColorAndroid="transparent"
         />
         <FormInput
@@ -121,7 +120,6 @@ const ProductForm = ({ navigation, route }) => {
           onChangeText={handleChangeName}
           placeholderText={t('date')}
           Icon={CalendarIcon}
-          autoCorrect={false}
           editable={!showDatePicker}
           onFocus={handleDatePress}
         />

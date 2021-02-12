@@ -95,7 +95,6 @@ const SignIn = ({ navigation }) => {
           Icon={UsernameIcon}
           keyboardType="email-address"
           autoCapitalize="none"
-          autoCorrect={false}
           underlineColorAndroid="transparent"
         />
         {isToggled && (
@@ -110,7 +109,6 @@ const SignIn = ({ navigation }) => {
               placeholderText="Password"
               Icon={PadlockIcon}
               autoCapitalize="none"
-              autoCorrect={false}
               underlineColorAndroid="transparent"
               secureTextEntry
             />
