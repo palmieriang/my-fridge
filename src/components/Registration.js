@@ -38,7 +38,6 @@ const Registration = ({ navigation }) => {
           placeholderText="Full Name"
           Icon={UsernameIcon}
           autoCapitalize="none"
-          autoCorrect={false}
           underlineColorAndroid="transparent"
         />
         <FormInput
@@ -48,7 +47,6 @@ const Registration = ({ navigation }) => {
           Icon={EmailIcon}
           keyboardType="email-address"
           autoCapitalize="none"
-          autoCorrect={false}
           underlineColorAndroid="transparent"
         />
         <FormInput
@@ -57,7 +55,6 @@ const Registration = ({ navigation }) => {
           placeholderText="Password"
           Icon={PadlockIcon}
           autoCapitalize="none"
-          autoCorrect={false}
           underlineColorAndroid="transparent"
           secureTextEntry
         />
@@ -67,7 +64,6 @@ const Registration = ({ navigation }) => {
           placeholderText="Password"
           Icon={PadlockIcon}
           autoCapitalize="none"
-          autoCorrect={false}
           underlineColorAndroid="transparent"
           secureTextEntry
         />
