@@ -147,17 +147,17 @@ const ProductForm = ({ navigation, route }) => {
         </View>
 
         <TouchableOpacity onPress={handleAddPress} style={styles.button}>
-          {existingId ? (
-            <Text style={styles.buttonTitle}>{t('modify')}</Text>
-          ) : (
-            <Text style={styles.buttonTitle}>{t('add')}</Text>
-          )}
+          <Text style={styles.buttonTitle}>
+            {existingId ? t('modify') : t('add')}
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={handleDeletePress}
           style={[styles.button, styles.buttonDelete]}
         >
-          <Text style={styles.buttonTitle}>{t('delete')}</Text>
+          <Text style={styles.buttonTitle}>
+            {existingId ? t('delete') : t('cancel')}
+          </Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
     </View>
