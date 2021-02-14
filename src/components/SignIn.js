@@ -72,78 +72,79 @@ const SignIn = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <KeyboardAwareScrollView
-        style={{ flex: 1, width: '100%' }}
-        keyboardShouldPersistTaps="always"
-      >
-        <View style={styles.animationContainer}>
-          <LottieAnimation
-            animationEnd={signInAfterAnimation}
-            autoplay={false}
-            loop={false}
-            name="door"
-            play={playAnimation}
-            reset={resetAnimation}
-            style={styles.animation}
-          />
-        </View>
-        <FormInput
-          labelValue={email}
-          onChangeText={setEmail}
-          placeholderText="Email"
-          Icon={UsernameIcon}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          underlineColorAndroid="transparent"
+    <KeyboardAwareScrollView
+      style={styles.container}
+      keyboardShouldPersistTaps="always"
+    >
+      <View style={styles.animationContainer}>
+        <LottieAnimation
+          animationEnd={signInAfterAnimation}
+          autoplay={false}
+          loop={false}
+          name="door"
+          play={playAnimation}
+          reset={resetAnimation}
         />
-        {isToggled && (
-          <Animated.View
-            style={{
-              opacity: fadeAnim,
-            }}
-          >
-            <FormInput
-              labelValue={password}
-              onChangeText={setPassword}
-              placeholderText="Password"
-              Icon={PadlockIcon}
-              autoCapitalize="none"
-              underlineColorAndroid="transparent"
-              secureTextEntry
-            />
-          </Animated.View>
-        )}
-        <TouchableOpacity
-          onPress={isToggled ? handleSignIn : handleResetPassword}
-          style={styles.button}
+      </View>
+      <FormInput
+        labelValue={email}
+        onChangeText={setEmail}
+        placeholderText="Email"
+        Icon={UsernameIcon}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+      />
+      {isToggled && (
+        <Animated.View
+          style={{
+            opacity: fadeAnim,
+          }}
         >
-          <Text style={styles.buttonTitle}>
-            {isToggled ? 'Sign in' : 'Reset password'}
+          <FormInput
+            labelValue={password}
+            onChangeText={setPassword}
+            placeholderText="Password"
+            Icon={PadlockIcon}
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            secureTextEntry
+          />
+        </Animated.View>
+      )}
+      <TouchableOpacity
+        onPress={isToggled ? handleSignIn : handleResetPassword}
+        style={styles.button}
+      >
+        <Text style={styles.buttonTitle}>
+          {isToggled ? 'Sign in' : 'Reset password'}
+        </Text>
+      </TouchableOpacity>
+      <View style={styles.footerView}>
+        <Text style={styles.footerText}>
+          New user?{' '}
+          <Text onPress={handleCreateAccount} style={styles.footerLink}>
+            Create an account
           </Text>
-        </TouchableOpacity>
-        <View style={styles.footerView}>
-          <Text style={styles.footerText}>
-            New user?{' '}
-            <Text onPress={handleCreateAccount} style={styles.footerLink}>
-              Create an account
-            </Text>
-          </Text>
-          <Text
-            onPress={isToggled ? fadeOut : fadeIn}
-            style={{ ...styles.footerLink, marginBottom: 10 }}
-          >
-            {isToggled ? 'Reset password' : 'Login'}
-          </Text>
-          <Text style={styles.footerText}>Sign In with: </Text>
-          <SocialIcon />
-        </View>
-      </KeyboardAwareScrollView>
-    </View>
+        </Text>
+        <Text
+          onPress={isToggled ? fadeOut : fadeIn}
+          style={{ ...styles.footerLink, marginBottom: 10 }}
+        >
+          {isToggled ? 'Reset password' : 'Login'}
+        </Text>
+        <Text style={styles.footerText}>Sign In with: </Text>
+        <SocialIcon />
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: '100%',
+  },
   button: {
     alignItems: 'center',
     backgroundColor: '#48bbec',
@@ -166,8 +167,6 @@ const styles = StyleSheet.create({
   animationContainer: {
     backgroundColor: '#fff',
     alignItems: 'center',
-  },
-  animation: {
     height: 280,
   },
   footerView: {
