@@ -1,13 +1,21 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import LottieView from 'lottie-react-native';
+import { StyleSheet } from 'react-native';
 import DoorAnimation from './15131-elevator-doors.json';
 
 const ANIMATIONS = {
   door: DoorAnimation,
 };
 
-const LottieAnimation = ({ loop, name, play, animationEnd, reset, style }) => {
+const LottieAnimation = ({
+  loop,
+  name,
+  play,
+  animationEnd,
+  reset,
+  ...props
+}) => {
   const lottieRef = useRef();
 
   useEffect(() => {
@@ -29,18 +37,24 @@ const LottieAnimation = ({ loop, name, play, animationEnd, reset, style }) => {
         source={ANIMATIONS[name]}
         loop={loop}
         onAnimationFinish={animationEnd}
-        style={style}
+        style={styles.animation}
+        {...props}
       />
     );
   }
 };
+
+const styles = StyleSheet.create({
+  animation: {
+    height: '100%',
+  },
+});
 
 LottieAnimation.propTypes = {
   loop: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   play: PropTypes.bool.isRequired,
   animationEnd: PropTypes.func.isRequired,
-  style: PropTypes.object.isRequired,
 };
 
 export default LottieAnimation;
