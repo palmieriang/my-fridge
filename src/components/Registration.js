@@ -27,66 +27,64 @@ const Registration = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <KeyboardAwareScrollView
-        style={{ flex: 1, width: '100%' }}
-        keyboardShouldPersistTaps="always"
-      >
-        <FormInput
-          labelValue={fullName}
-          onChangeText={setFullName}
-          placeholderText="Full Name"
-          Icon={UsernameIcon}
-          autoCapitalize="none"
-          underlineColorAndroid="transparent"
-        />
-        <FormInput
-          labelValue={email}
-          onChangeText={setEmail}
-          placeholderText="Email"
-          Icon={EmailIcon}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          underlineColorAndroid="transparent"
-        />
-        <FormInput
-          labelValue={password}
-          onChangeText={setPassword}
-          placeholderText="Password"
-          Icon={PadlockIcon}
-          autoCapitalize="none"
-          underlineColorAndroid="transparent"
-          secureTextEntry
-        />
-        <FormInput
-          labelValue={confirmPassword}
-          onChangeText={setConfirmPassword}
-          placeholderText="Password"
-          Icon={PadlockIcon}
-          autoCapitalize="none"
-          underlineColorAndroid="transparent"
-          secureTextEntry
-        />
-        <TouchableOpacity style={styles.button} onPress={handleRegistration}>
-          <Text style={styles.buttonTitle}>Create account</Text>
-        </TouchableOpacity>
-        <View style={styles.footerView}>
-          <Text style={styles.footerText}>
-            Already got an account?{' '}
-            <Text onPress={handleGoToLogin} style={styles.footerLink}>
-              Log in
-            </Text>
+    <KeyboardAwareScrollView
+      style={styles.container}
+      keyboardShouldPersistTaps="always"
+    >
+      <FormInput
+        labelValue={fullName}
+        onChangeText={setFullName}
+        placeholderText="Full Name"
+        Icon={UsernameIcon}
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+      />
+      <FormInput
+        labelValue={email}
+        onChangeText={setEmail}
+        placeholderText="Email"
+        Icon={EmailIcon}
+        keyboardType="email-address"
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+      />
+      <FormInput
+        labelValue={password}
+        onChangeText={setPassword}
+        placeholderText="Password"
+        Icon={PadlockIcon}
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        secureTextEntry
+      />
+      <FormInput
+        labelValue={confirmPassword}
+        onChangeText={setConfirmPassword}
+        placeholderText="Password"
+        Icon={PadlockIcon}
+        autoCapitalize="none"
+        underlineColorAndroid="transparent"
+        secureTextEntry
+      />
+      <TouchableOpacity style={styles.button} onPress={handleRegistration}>
+        <Text style={styles.buttonTitle}>Create account</Text>
+      </TouchableOpacity>
+      <View style={styles.footerView}>
+        <Text style={styles.footerText}>
+          Already got an account?{' '}
+          <Text onPress={handleGoToLogin} style={styles.footerLink}>
+            Log in
           </Text>
-        </View>
-      </KeyboardAwareScrollView>
-    </View>
+        </Text>
+      </View>
+    </KeyboardAwareScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    alignItems: 'center',
     flex: 1,
+    width: '100%',
   },
   button: {
     alignItems: 'center',
