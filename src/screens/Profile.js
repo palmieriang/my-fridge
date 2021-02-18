@@ -5,11 +5,11 @@ import Constants from 'expo-constants';
 import Image from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
 import { uploadTaskFromApi } from '../../api/api';
-import { adjust } from './utils/dimensions';
+import { adjust } from '../components/utils/dimensions';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
-import UserIcon from './svg/UserIcon';
-import DeleteIcon from './svg/DeleteIcon';
+import UserIcon from '../components/svg/UserIcon';
+import DeleteIcon from '../components/svg/DeleteIcon';
 
 const Profile = () => {
   const [upload, setUpload] = useState({

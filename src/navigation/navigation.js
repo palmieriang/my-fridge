@@ -3,11 +3,11 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { adjust } from '../components/utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { themeStore } from '../store/themeStore';
-import ProductList from '../components/ProductList';
-import ProductForm from '../components/ProductForm';
-import Settings from '../components/Settings';
-import SignIn from '../components/SignIn';
-import Registration from '../components/Registration';
+import ProductList from '../screens/ProductList';
+import ProductForm from '../screens/ProductForm';
+import Settings from '../screens/Settings';
+import SignIn from '../screens/SignIn';
+import Registration from '../screens/Registration';
 
 const Stack = createStackNavigator();
 

@@ -7,14 +7,14 @@ import {
   View,
 } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import SocialIcon from './SocialIcon';
-import FormInput from './FormInput';
+import SocialIcon from '../components/SocialIcon';
+import FormInput from '../components/FormInput';
 import LottieAnimation from '../animations/LottieAnimation';
-import useToggle from './utils/useToggle';
-import { adjust } from './utils/dimensions';
+import useToggle from '../components/utils/useToggle';
+import { adjust } from '../components/utils/dimensions';
 import { authStore } from '../store/authStore';
-import UsernameIcon from './svg/UsernameIcon';
-import PadlockIcon from './svg/PadlockIcon';
+import UsernameIcon from '../components/svg/UsernameIcon';
+import PadlockIcon from '../components/svg/PadlockIcon';
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
