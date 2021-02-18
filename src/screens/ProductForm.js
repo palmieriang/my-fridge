@@ -3,16 +3,16 @@ import { Text, TouchableOpacity, View, StyleSheet, LogBox } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import FormInput from './FormInput';
+import FormInput from '../components/FormInput';
 import { formatDate } from '../../api/api';
-import { adjust } from './utils/dimensions';
+import { adjust } from '../components/utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { authStore } from '../store/authStore';
 import { themeStore } from '../store/themeStore';
 import { productsStore } from '../store/productsStore';
-import CalendarIcon from './svg/CalendarIcon';
-import ColdIcon from './svg/ColdIcon';
-import ShoppingBasketIcon from './svg/ShoppingBasketIcon';
+import CalendarIcon from '../components/svg/CalendarIcon';
+import ColdIcon from '../components/svg/ColdIcon';
+import ShoppingBasketIcon from '../components/svg/ShoppingBasketIcon';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
