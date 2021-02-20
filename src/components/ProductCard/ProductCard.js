@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
-import { formatDate, getCountdownParts } from '../../api/api';
-import { adjust } from './utils/dimensions';
-import { localeStore } from '../store/localeStore';
-import { themeStore } from '../store/themeStore';
-import { productsStore } from '../store/productsStore';
-import SwipeableRow from './SwipeableRow';
+import { formatDate, getCountdownParts } from '../../../api/api';
+import { localeStore } from '../../store/localeStore';
+import { themeStore } from '../../store/themeStore';
+import { productsStore } from '../../store/productsStore';
+import SwipeableRow from '../SwipeableRow/SwipeableRow';
+import styles from './styles';
 
 const ProductCard = ({ product }) => {
   const { date, id, name, place } = product;
@@ -97,50 +97,5 @@ ProductCard.propTypes = {
     date: PropTypes.instanceOf(Date),
   }),
 };
-
-const styles = StyleSheet.create({
-  card: {
-    alignItems: 'flex-end',
-    flex: 1,
-    flexWrap: 'wrap',
-    padding: 15,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    margin: 10,
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  date: {
-    fontSize: adjust(12),
-    marginBottom: 10,
-    fontFamily: 'OpenSans-Light',
-  },
-  title: {
-    fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(16),
-    marginBottom: 10,
-    marginTop: 5,
-  },
-  counterContainer: {
-    alignItems: 'baseline',
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-  },
-  counterText: {
-    fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(32),
-  },
-  counterLabel: {
-    fontFamily: 'OpenSans-Light',
-    fontSize: adjust(12),
-    marginLeft: 10,
-  },
-  expired: {
-    fontFamily: 'LilitaOne-Regular',
-    fontSize: adjust(32),
-    textTransform: 'uppercase',
-  },
-});
 
 export default ProductCard;
