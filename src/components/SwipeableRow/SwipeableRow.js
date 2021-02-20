@@ -1,9 +1,9 @@
 import React, { useContext, useRef } from 'react';
-import { Animated, Text, View, StyleSheet, I18nManager } from 'react-native';
 import PropTypes from 'prop-types';
-import { adjust } from './utils/dimensions';
-import { localeStore } from '../store/localeStore';
+import { Animated, Text, View, I18nManager } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { localeStore } from '../../store/localeStore';
+import styles from './styles';
 
 const SwipeableRow = ({
   children,
@@ -93,29 +93,5 @@ SwipeableRow.propTypes = {
   modifyFunction: PropTypes.func.isRequired,
   deleteFunction: PropTypes.func.isRequired,
 };
-
-const styles = StyleSheet.create({
-  leftAction: {
-    flex: 1,
-    backgroundColor: '#497AFC',
-    justifyContent: 'center',
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  actionText: {
-    color: 'white',
-    fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(13),
-    backgroundColor: 'transparent',
-    padding: 10,
-  },
-  rightAction: {
-    alignItems: 'center',
-    flex: 1,
-    justifyContent: 'center',
-    marginTop: 5,
-    marginBottom: 5,
-  },
-});
 
 export default SwipeableRow;
