@@ -4,7 +4,7 @@ import { adjust } from '../components/utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { themeStore } from '../store/themeStore';
 import ProductList from '../screens/ProductList';
-import ProductForm from '../screens/ProductForm';
+import ProductForm from '../screens/ProductForm/ProductForm';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignIn';
 import Registration from '../screens/Registration';
