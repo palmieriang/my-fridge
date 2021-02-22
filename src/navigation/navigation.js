@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { adjust } from '../components/utils/dimensions';
 import { localeStore } from '../store/localeStore';
 import { themeStore } from '../store/themeStore';
-import ProductList from '../screens/ProductList';
+import ProductList from '../screens/ProductList/ProductList';
 import ProductForm from '../screens/ProductForm/ProductForm';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignIn';
