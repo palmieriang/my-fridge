@@ -1,12 +1,12 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { FlatList, Text, StyleSheet, View } from 'react-native';
+import { FlatList, Text, View } from 'react-native';
 import ActionButton from 'react-native-action-button';
-import { localeStore } from '../store/localeStore';
-import { themeStore } from '../store/themeStore';
-import { productsStore } from '../store/productsStore';
-
-import ProductCard from '../components/ProductCard';
+import { localeStore } from '../../store/localeStore';
+import { themeStore } from '../../store/themeStore';
+import { productsStore } from '../../store/productsStore';
+import ProductCard from '../../components/ProductCard/ProductCard';
+import styles from './styles';
 
 const ProductList = ({ navigation, route }) => {
   const {
@@ -75,20 +75,6 @@ const ProductList = ({ navigation, route }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-    paddingTop: 10,
-  },
-  text: {
-    height: 50,
-    margin: 0,
-    marginRight: 7,
-    paddingLeft: 20,
-    marginTop: 20,
-  },
-});
 
 ProductList.propTypes = {
   navigation: PropTypes.shape({
