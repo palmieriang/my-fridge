@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import FormInput from '../components/FormInput';
-import { adjust } from '../components/utils/dimensions';
-import { authStore } from '../store/authStore';
-import UsernameIcon from '../components/svg/UsernameIcon';
-import PadlockIcon from '../components/svg/PadlockIcon';
-import EmailIcon from '../components/svg/EmailIcon';
+import FormInput from '../../components/FormInput/FormInput';
+import { authStore } from '../../store/authStore';
+import UsernameIcon from '../../components/svg/UsernameIcon';
+import PadlockIcon from '../../components/svg/PadlockIcon';
+import EmailIcon from '../../components/svg/EmailIcon';
+import styles from './styles';
 
 const Registration = ({ navigation }) => {
   const [fullName, setFullName] = useState('');
@@ -80,48 +80,5 @@ const Registration = ({ navigation }) => {
     </KeyboardAwareScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#48BBEC',
-    borderRadius: 5,
-    justifyContent: 'center',
-    height: 48,
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-  },
-  buttonTitle: {
-    color: '#fff',
-    fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(16),
-    textShadowColor: '#000',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 1,
-    textTransform: 'uppercase',
-  },
-  footerView: {
-    alignItems: 'center',
-    flex: 1,
-    marginTop: 20,
-  },
-  footerText: {
-    color: '#2e2e2d',
-    fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(13),
-    padding: 10,
-  },
-  footerLink: {
-    color: '#48BBEC',
-    fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(14),
-    padding: 10,
-  },
-});
 
 export default Registration;
