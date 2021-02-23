@@ -7,7 +7,7 @@ import ProductList from '../screens/ProductList/ProductList';
 import ProductForm from '../screens/ProductForm/ProductForm';
 import Settings from '../screens/Settings';
 import SignIn from '../screens/SignIn';
-import Registration from '../screens/Registration';
+import Registration from '../screens/Registration/Registration';
 
 const Stack = createStackNavigator();
 
