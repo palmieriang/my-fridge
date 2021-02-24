@@ -1,20 +1,14 @@
 import React, { useState, useContext, useRef } from 'react';
-import {
-  Animated,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Animated, Text, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import SocialIcon from '../components/SocialIcon';
-import FormInput from '../components/FormInput';
-import LottieAnimation from '../animations/LottieAnimation';
-import useToggle from '../components/utils/useToggle';
-import { adjust } from '../components/utils/dimensions';
-import { authStore } from '../store/authStore';
-import UsernameIcon from '../components/svg/UsernameIcon';
-import PadlockIcon from '../components/svg/PadlockIcon';
+import SocialIcon from '../../components/SocialIcon/SocialIcon';
+import FormInput from '../../components/FormInput/FormInput';
+import LottieAnimation from '../../animations/LottieAnimation';
+import useToggle from '../../components/utils/useToggle';
+import { authStore } from '../../store/authStore';
+import UsernameIcon from '../../components/svg/UsernameIcon';
+import PadlockIcon from '../../components/svg/PadlockIcon';
+import styles from './styles';
 
 const SignIn = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -139,53 +133,5 @@ const SignIn = ({ navigation }) => {
     </KeyboardAwareScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    width: '100%',
-  },
-  button: {
-    alignItems: 'center',
-    backgroundColor: '#48bbec',
-    borderRadius: 5,
-    justifyContent: 'center',
-    height: 48,
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 10,
-  },
-  buttonTitle: {
-    color: '#fff',
-    fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(16),
-    textShadowColor: '#000',
-    textShadowOffset: { width: 0, height: 0 },
-    textShadowRadius: 1,
-    textTransform: 'uppercase',
-  },
-  animationContainer: {
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    height: 280,
-  },
-  footerView: {
-    alignItems: 'center',
-    flex: 1,
-    marginTop: 20,
-  },
-  footerText: {
-    color: '#2e2e2d',
-    fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(13),
-    padding: 10,
-  },
-  footerLink: {
-    color: '#48bbec',
-    fontFamily: 'OpenSans-Bold',
-    fontSize: adjust(14),
-    padding: 10,
-  },
-});
 
 export default SignIn;
