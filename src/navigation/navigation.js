@@ -6,7 +6,7 @@ import { themeStore } from '../store/themeStore';
 import ProductList from '../screens/ProductList/ProductList';
 import ProductForm from '../screens/ProductForm/ProductForm';
 import Settings from '../screens/Settings';
-import SignIn from '../screens/SignIn';
+import SignIn from '../screens/SignIn/SignIn';
 import Registration from '../screens/Registration/Registration';
 
 const Stack = createStackNavigator();
