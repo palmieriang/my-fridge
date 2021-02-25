@@ -1,15 +1,15 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import Image from 'react-native-image-progress';
 import * as Progress from 'react-native-progress';
-import { uploadTaskFromApi } from '../../api/api';
-import { adjust } from '../components/utils/dimensions';
-import { authStore } from '../store/authStore';
-import { themeStore } from '../store/themeStore';
-import UserIcon from '../components/svg/UserIcon';
-import DeleteIcon from '../components/svg/DeleteIcon';
+import { uploadTaskFromApi } from '../../../api/api';
+import { authStore } from '../../store/authStore';
+import { themeStore } from '../../store/themeStore';
+import UserIcon from '../../components/svg/UserIcon';
+import DeleteIcon from '../../components/svg/DeleteIcon';
+import styles from './styles';
 
 const Profile = () => {
   const [upload, setUpload] = useState({
@@ -136,38 +136,5 @@ const Profile = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  profile: {
-    alignItems: 'center',
-    paddingBottom: 30,
-    width: '100%',
-  },
-  pictureContainer: {
-    marginTop: 30,
-  },
-  picture: {
-    height: 150,
-    width: 150,
-    borderRadius: 100,
-    position: 'relative',
-  },
-  profileField: {
-    color: '#fff',
-    fontFamily: 'OpenSans-Regular',
-    fontSize: adjust(13),
-    marginTop: 20,
-  },
-  progressContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    maxHeight: 150,
-  },
-  deleteIcon: {
-    bottom: 0,
-    position: 'absolute',
-    right: 0,
-  },
-});
 
 export default Profile;
