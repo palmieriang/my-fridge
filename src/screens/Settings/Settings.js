@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
-import { Button, StyleSheet, View } from 'react-native';
+import { Button, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import { localeStore } from '../store/localeStore';
-import { authStore } from '../store/authStore';
-import { themeStore } from '../store/themeStore';
-import Profile from './Profile';
+import { localeStore } from '../../store/localeStore';
+import { authStore } from '../../store/authStore';
+import { themeStore } from '../../store/themeStore';
+import Profile from '../Profile/Profile';
+import styles from './styles';
 
 const Settings = () => {
   const {
@@ -91,27 +92,5 @@ const Settings = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  selectorContainer: {
-    backgroundColor: '#fff',
-    borderRadius: 5,
-    marginTop: 20,
-    minWidth: 200,
-  },
-  initValueTextStyle: {
-    color: 'black',
-    fontFamily: 'OpenSans-Regular',
-  },
-  text: {
-    fontFamily: 'OpenSans-Regular',
-  },
-  container: {
-    backgroundColor: 'lightgrey',
-  },
-  logout: {
-    marginTop: 20,
-  },
-});
 
 export default Settings;
