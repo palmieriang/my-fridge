@@ -1,8 +1,9 @@
 import React, { useState, useContext, useRef } from 'react';
-import { Animated, Text, TouchableOpacity, View } from 'react-native';
+import { Animated, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import SocialIcon from '../../components/SocialIcon/SocialIcon';
 import FormInput from '../../components/FormInput/FormInput';
+import Button from '../../components/Button/Button';
 import LottieAnimation from '../../animations/LottieAnimation';
 import useToggle from '../../components/utils/useToggle';
 import { authStore } from '../../store/authStore';
@@ -106,14 +107,10 @@ const SignIn = ({ navigation }) => {
           />
         </Animated.View>
       )}
-      <TouchableOpacity
+      <Button
+        text={isToggled ? 'Sign in' : 'Reset password'}
         onPress={isToggled ? handleSignIn : handleResetPassword}
-        style={styles.button}
-      >
-        <Text style={styles.buttonTitle}>
-          {isToggled ? 'Sign in' : 'Reset password'}
-        </Text>
-      </TouchableOpacity>
+      />
       <View style={styles.footerView}>
         <Text style={styles.footerText}>
           New user?{' '}
