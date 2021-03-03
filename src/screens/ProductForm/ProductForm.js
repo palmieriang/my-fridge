@@ -1,9 +1,10 @@
 import React, { useContext, useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, LogBox } from 'react-native';
+import { View, StyleSheet, LogBox } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import FormInput from '../../components/FormInput/FormInput';
+import Button from '../../components/Button/Button';
 import { formatDate } from '../../../api/api';
 import { adjust } from '../../components/utils/dimensions';
 import { localeStore } from '../../store/localeStore';
@@ -146,20 +147,15 @@ const ProductForm = ({ navigation, route }) => {
             }}
           />
         </View>
-
-        <TouchableOpacity onPress={handleAddPress} style={styles.button}>
-          <Text style={styles.buttonTitle}>
-            {existingId ? t('modify') : t('add')}
-          </Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+        <Button
+          text={existingId ? t('modify') : t('add')}
+          onPress={handleAddPress}
+        />
+        <Button
+          text={existingId ? t('delete') : t('cancel')}
           onPress={handleDeletePress}
-          style={[styles.button, styles.buttonDelete]}
-        >
-          <Text style={styles.buttonTitle}>
-            {existingId ? t('delete') : t('cancel')}
-          </Text>
-        </TouchableOpacity>
+          buttonDelete
+        />
       </KeyboardAwareScrollView>
     </View>
   );
