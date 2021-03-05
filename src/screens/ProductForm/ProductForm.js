@@ -3,17 +3,17 @@ import { View, StyleSheet, LogBox } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import RNPickerSelect from 'react-native-picker-select';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import FormInput from '../../components/FormInput/FormInput';
-import Button from '../../components/Button/Button';
 import { formatDate } from '../../../api/api';
-import { adjust } from '../../components/utils/dimensions';
 import { localeStore } from '../../store/localeStore';
 import { authStore } from '../../store/authStore';
 import { themeStore } from '../../store/themeStore';
 import { productsStore } from '../../store/productsStore';
-import CalendarIcon from '../../components/svg/CalendarIcon';
-import ColdIcon from '../../components/svg/ColdIcon';
-import ShoppingBasketIcon from '../../components/svg/ShoppingBasketIcon';
+import FormInput from '@components/FormInput/FormInput';
+import Button from '@components/Button/Button';
+import { adjust } from '@components/utils/dimensions';
+import CalendarIcon from '@components/svg/CalendarIcon';
+import ColdIcon from '@components/svg/ColdIcon';
+import ShoppingBasketIcon from '@components/svg/ShoppingBasketIcon';
 import styles from './styles';
 
 LogBox.ignoreLogs([
