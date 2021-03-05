@@ -5,7 +5,7 @@ import ActionButton from 'react-native-action-button';
 import { localeStore } from '../../store/localeStore';
 import { themeStore } from '../../store/themeStore';
 import { productsStore } from '../../store/productsStore';
-import ProductCard from '../../components/ProductCard/ProductCard';
+import ProductCard from '@components/ProductCard/ProductCard';
 import styles from './styles';
 
 const ProductList = ({ navigation, route }) => {
