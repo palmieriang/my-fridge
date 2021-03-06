@@ -1,12 +1,12 @@
 import React, { useState, useContext } from 'react';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import FormInput from '../../components/FormInput/FormInput';
-import Button from '../../components/Button/Button';
 import { authStore } from '../../store/authStore';
-import UsernameIcon from '../../components/svg/UsernameIcon';
-import PadlockIcon from '../../components/svg/PadlockIcon';
-import EmailIcon from '../../components/svg/EmailIcon';
+import FormInput from '@components/FormInput/FormInput';
+import Button from '@components/Button/Button';
+import UsernameIcon from '@components/svg/UsernameIcon';
+import PadlockIcon from '@components/svg/PadlockIcon';
+import EmailIcon from '@components/svg/EmailIcon';
 import styles from './styles';
 
 const Registration = ({ navigation }) => {
