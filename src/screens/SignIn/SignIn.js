@@ -1,14 +1,14 @@
 import React, { useState, useContext, useRef } from 'react';
 import { Animated, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import SocialIcon from '../../components/SocialIcon/SocialIcon';
-import FormInput from '../../components/FormInput/FormInput';
-import Button from '../../components/Button/Button';
-import LottieAnimation from '../../animations/LottieAnimation';
-import useToggle from '../../components/utils/useToggle';
 import { authStore } from '../../store/authStore';
-import UsernameIcon from '../../components/svg/UsernameIcon';
-import PadlockIcon from '../../components/svg/PadlockIcon';
+import SocialIcon from '@components/SocialIcon/SocialIcon';
+import FormInput from '@components/FormInput/FormInput';
+import Button from '@components/Button/Button';
+import useToggle from '@components/utils/useToggle';
+import UsernameIcon from '@components/svg/UsernameIcon';
+import PadlockIcon from '@components/svg/PadlockIcon';
+import LottieAnimation from '../../animations/LottieAnimation';
 import styles from './styles';
 
 const SignIn = ({ navigation }) => {
