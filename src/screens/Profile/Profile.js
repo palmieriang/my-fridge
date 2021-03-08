@@ -7,8 +7,8 @@ import * as Progress from 'react-native-progress';
 import { uploadTaskFromApi } from '../../../api/api';
 import { authStore } from '../../store/authStore';
 import { themeStore } from '../../store/themeStore';
-import UserIcon from '../../components/svg/UserIcon';
-import DeleteIcon from '../../components/svg/DeleteIcon';
+import UserIcon from '@components/svg/UserIcon';
+import DeleteIcon from '@components/svg/DeleteIcon';
 import styles from './styles';
 
 const Profile = () => {
