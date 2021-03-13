@@ -1,9 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Text, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
-const FormInput = ({ text, onPress, buttonDelete }) => {
+type ButtonProps = {
+  text: string;
+  onPress: () => void;
+  buttonDelete?: boolean;
+};
+
+const Button = ({ text, onPress, buttonDelete = false }: ButtonProps) => {
   return (
     <TouchableOpacity
       onPress={onPress}
@@ -14,14 +19,4 @@ const FormInput = ({ text, onPress, buttonDelete }) => {
   );
 };
 
-FormInput.propTypes = {
-  text: PropTypes.string.isRequired,
-  onPress: PropTypes.func.isRequired,
-  buttonDelete: PropTypes.bool,
-};
-
-FormInput.defaultProps = {
-  buttonDelete: false,
-};
-
-export default FormInput;
+export default Button;
