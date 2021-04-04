@@ -11,8 +11,8 @@ import {
   SettingsStackScreen,
   SingInStackScreen,
 } from './navigation/navigation';
-import FreezerIcon from './components/svg/FreezerIcon';
-import SettingsIcon from './components/svg/SettingsIcon';
+import FreezerIcon from '@components/svg/FreezerIcon';
+import SettingsIcon from '@components/svg/SettingsIcon';
 import { getCountdownParts } from '../api/api';
 import { customFonts } from './typography/typography';
 import { AuthProvider } from './store/authStore';
@@ -23,6 +23,7 @@ import { ProductsProvider } from './store/productsStore';
 LogBox.ignoreLogs([
   'Warning: componentWillMount is deprecated',
   'Warning: componentWillReceiveProps has been renamed',
+  'Warning: Setting a timer',
 ]);
 
 const Tab = createBottomTabNavigator();
