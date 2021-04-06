@@ -1,8 +1,7 @@
 import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { adjust } from '@components/utils/dimensions';
-import { localeStore } from '../store/localeStore';
-import { themeStore } from '../store/themeStore';
+import { localeStore, themeStore } from '../store';
 import ProductList from '@screens/ProductList/ProductList';
 import ProductForm from '@screens/ProductForm/ProductForm';
 import Settings from '@screens/Settings/Settings';
