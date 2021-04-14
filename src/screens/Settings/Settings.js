@@ -1,9 +1,7 @@
 import React, { useContext } from 'react';
 import { Button, View } from 'react-native';
 import ModalSelector from 'react-native-modal-selector';
-import { localeStore } from '../../store/localeStore';
-import { authStore } from '../../store/authStore';
-import { themeStore } from '../../store/themeStore';
+import { authStore, localeStore, themeStore } from '../../store';
 import Profile from '../Profile/Profile';
 import styles from './styles';
 
