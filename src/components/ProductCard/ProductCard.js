@@ -3,9 +3,7 @@ import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import { formatDate, getCountdownParts } from '../../../api/api';
-import { localeStore } from '../../store/localeStore';
-import { themeStore } from '../../store/themeStore';
-import { productsStore } from '../../store/productsStore';
+import { localeStore, productsStore, themeStore } from '../../store';
 import SwipeableRow from '../SwipeableRow/SwipeableRow';
 import styles from './styles';
 
