@@ -15,10 +15,12 @@ import FreezerIcon from '@components/svg/FreezerIcon';
 import SettingsIcon from '@components/svg/SettingsIcon';
 import { getCountdownParts } from '../api/api';
 import { customFonts } from './typography/typography';
-import { AuthProvider } from './store/authStore';
-import { LocaleProvider } from './store/localeStore';
-import { ThemeProvider } from './store/themeStore';
-import { ProductsProvider } from './store/productsStore';
+import {
+  AuthProvider,
+  LocaleProvider,
+  ProductsProvider,
+  ThemeProvider,
+} from './store';
 
 LogBox.ignoreLogs([
   'Warning: componentWillMount is deprecated',
