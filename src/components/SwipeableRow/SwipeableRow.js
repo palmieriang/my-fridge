@@ -2,7 +2,7 @@ import React, { useContext, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Animated, Text, View, I18nManager } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
-import { localeStore } from '../../store/localeStore';
+import { localeStore } from '../../store';
 import styles from './styles';
 
 const SwipeableRow = ({
