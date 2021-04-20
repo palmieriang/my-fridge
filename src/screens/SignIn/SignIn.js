@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from 'react';
 import { Animated, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { authStore } from '../../store/authStore';
+import { authStore } from '../../store';
 import SocialIcon from '@components/SocialIcon/SocialIcon';
 import FormInput from '@components/FormInput/FormInput';
 import Button from '@components/Button/Button';
