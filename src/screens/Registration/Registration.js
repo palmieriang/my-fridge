@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { authStore } from '../../store/authStore';
+import { authStore } from '../../store';
 import FormInput from '@components/FormInput/FormInput';
 import Button from '@components/Button/Button';
 import UsernameIcon from '@components/svg/UsernameIcon';
