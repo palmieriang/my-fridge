@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
 import { View } from 'react-native';
-import { authStore } from '../../store/authStore';
+import { authStore } from '../../store';
 import styles from './styles';
 
 const SocialIcon = () => {
