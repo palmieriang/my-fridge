@@ -1,13 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
-import PropTypes from 'prop-types';
 import { useNavigation } from '@react-navigation/native';
 import { formatDate, getCountdownParts } from '../../../api/api';
 import { localeStore, productsStore, themeStore } from '../../store';
 import SwipeableRow from '../SwipeableRow/SwipeableRow';
 import styles from './styles';
 
-const ProductCard = ({ product }) => {
+type ProductCardProps = {
+  product: {
+    date: Date;
+    id: string;
+    name: string;
+    place: string;
+  }
+};
+
+const ProductCard = ({ product }: ProductCardProps) => {
   const { date, id, name, place } = product;
 
   const [expired, setExpired] = useState(false);
@@ -87,13 +95,6 @@ const ProductCard = ({ product }) => {
       </View>
     </SwipeableRow>
   );
-};
-
-ProductCard.propTypes = {
-  product: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    date: PropTypes.instanceOf(Date),
-  }),
 };
 
 export default ProductCard;
