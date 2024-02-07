@@ -22,7 +22,7 @@
     "firebase": "7.9.0",
     "i18n-js": "^3.5.1",
     "lottie-react-native": "~2.6.1",
-    "moment": "^2.25.3",
+    "moment": "^2.29.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
