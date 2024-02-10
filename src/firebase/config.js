@@ -1,6 +1,8 @@
-import * as firebase from 'firebase';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection } from "firebase/firestore";
+import { getStorage, ref } from 'firebase/storage';
+import { getAuth } from "firebase/auth";
 import '@firebase/auth';
-import '@firebase/firestore';
 import {
   API_KEY,
   AUTH_DOMAIN,
@@ -20,13 +22,19 @@ const firebaseConfig = {
   appId: APP_ID,
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
+const app = initializeApp(firebaseConfig);
 
-const db = firebase.firestore();
-const userRef = db.collection('users');
-const productRef = db.collection('products');
-const imagesRef = firebase.storage().ref();
+const db = getFirestore(app);
+const auth = getAuth(app);
+const usersRef = collection(db, 'users');
+const productsRef = collection(db, 'products');
+const storage = getStorage(app);
+const storageRef = ref(storage);
+const imagesRef = ref(storageRef, 'images');
+const imagesRefTest = ref(storageRef, 'profileImages/');
+// console.log("usersRef ", usersRef);
+// console.log("imagesRefTest ", imagesRefTest);
 
-export { firebase, userRef, productRef, imagesRef };
+export {
+  app, db, auth, usersRef, productsRef, imagesRef
+};
