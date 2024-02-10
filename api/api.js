@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { orderBy, query, where, getDoc, setDoc, doc, onSnapshot, serverTimestamp, deleteDoc } from "firebase/firestore";
+import { orderBy, query, where, getDoc, setDoc, doc, onSnapshot, serverTimestamp, deleteDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, deleteObject, uploadBytesResumable } from 'firebase/storage';
 import {
   app,
@@ -192,7 +192,7 @@ export function saveProduct({ name, date, place, authorID }) {
 
 export const getProductsFromPlace = (userID, place, callback) => {
   const productsQuery = query(productsRef, where('authorID', '==', userID), where('place', '==', place), orderBy('createdAt', 'desc'));
-  
+
   const unsubscribe = onSnapshot(productsQuery,
     (querySnapshot) => {
       const newProducts = [];
@@ -257,20 +257,16 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     authorID,
     createdAt: timestamp,
   };
-  return productsRef
-    .doc(existingId)
-    .set(data)
+  return setDoc(doc(productsRef, existingId), data)
     .catch((error) => {
       alert(error);
     });
 }
 
 export function moveProduct(id, place) {
-  return productsRef
-    .doc(id)
-    .update({
-      place,
-    })
+  return updateDoc(doc(productsRef, id), {
+    place,
+  })
     .catch((error) => console.log('Error: ', error));
 }
 
@@ -308,9 +304,7 @@ export function changeColor(newTheme, id) {
   const data = {
     theme: newTheme,
   };
-  return usersRef
-    .doc(id)
-    .set(data, { merge: true })
+  return setDoc(doc(usersRef, id), data, { merge: true })
     .catch((error) => console.log('Error: ', error));
 }
 
@@ -318,10 +312,8 @@ export function changeLanguage(newLocale, id) {
   const data = {
     locale: newLocale,
   };
-  return usersRef
-    .doc(id)
-    .set(data, { merge: true })
-    .catch((error) => console.log('Error: ', error));
+  return setDoc(doc(usersRef, id), data, { merge: true })
+  .catch((error) => console.log('Error: ', error));
 }
 
 // Utils
