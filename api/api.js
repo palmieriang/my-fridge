@@ -1,7 +1,8 @@
 import moment from 'moment';
 import * as Google from 'expo-google-app-auth';
-import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
-import { collection, orderBy, query, where, getDocs, getDoc, doc, onSnapshot } from "firebase/firestore";
+import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
+import { orderBy, query, where, getDoc, doc, onSnapshot } from "firebase/firestore";
+import { getDownloadURL, ref } from 'firebase/storage';
 import {
   app,
   auth,
@@ -15,8 +16,7 @@ import { IOS_CLIENT_ID } from '@env';
 // Auth
 
 export function createUser(fullName, email, password) {
-  return app
-    .auth()
+  return auth
     .createUserWithEmailAndPassword(email, password)
     .then((response) => {
       const uid = response.user.uid;
@@ -58,19 +58,18 @@ function isUserEqual(googleUser, firebaseUser) {
 
 function onSignIn(googleUser) {
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-  const unsubscribe = app.auth().onAuthStateChanged((firebaseUser) => {
+  const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
     if (!isUserEqual(googleUser, firebaseUser)) {
       // Build Firebase credential with the Google ID token.
-      const credential = app.auth.GoogleAuthProvider.credential(
+      const credential = GoogleAuthProvider.credential(
         googleUser.idToken,
         googleUser.accessToken
       );
 
       // Sign in with credential from the Google user.
-      app
-        .auth()
+      auth
         .signInWithCredential(credential)
         .then((result) => {
           if (result.additionalUserInfo.isNewUser) {
@@ -113,12 +112,11 @@ export async function signInWithGoogle() {
 }
 
 export function authSignOut() {
-  return app.auth().signOut();
+  return auth.signOut();
 }
 
 export function persistentLogin(callback, callbackData) {
   console.log('PERSISTEN LOGIN ');
-  // const auth = getAuth();
   return onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log('user persistent ', user);
@@ -147,7 +145,7 @@ export function persistentLogin(callback, callbackData) {
               console.log('GET USER DATA ERROR: ', error);
             });
         
-            // getProfileImageFromFirebase(user.uid, callback);
+            getProfileImageFromFirebase(user.uid, callback);
           } catch (error) {
             console.log('Restoring token failed', error);
           }
@@ -179,12 +177,12 @@ export async function getUserData(userID) {
 }
 
 export function sendVerificationEmail() {
-  const user = app.auth().currentUser;
+  const user = auth.currentUser;
   return user.sendEmailVerification();
 }
 
 export function sendResetPassword(email) {
-  return app.auth().sendPasswordResetEmail(email);
+  return auth.sendPasswordResetEmail(email);
 }
 
 // Products
@@ -302,17 +300,24 @@ export function uploadTaskFromApi(id, blob, metadata) {
   return imagesRef.child(`profileImages/${id}`).put(blob, metadata);
 }
 
-export function getProfileImageFromFirebase(userUID, callback) {
-  return imagesRef
-    .child(`profileImages/${userUID}`)
-    .getDownloadURL()
-    .then((url) => {
-      console.log(url);
-      callback({ type: 'PROFILE_IMG', imgUrl: url });
-    })
-    .catch((error) => {
-      console.log('Profile img error: ', error.message_);
-    });
+export async function getProfileImageFromFirebase(userUID, callback) {
+  // return imagesRef
+  //   .child(`profileImages/${userUID}`)
+  //   .getDownloadURL()
+  //   .then((url) => {
+  //     console.log(url);
+  //     callback({ type: 'PROFILE_IMG', imgUrl: url });
+  //   })
+  //   .catch((error) => {
+  //     console.log('Profile img error: ', error.message_);
+  //   });
+  try {
+    const url = await getDownloadURL(ref(imagesRef, `${userUID}`));
+    console.log(url);
+    callback({ type: 'PROFILE_IMG', imgUrl: url });
+  } catch (error) {
+    console.log('Profile img error:', error.message);
+  }
 }
 
 export function deleteProfileImage(userUID, callback) {
