@@ -112,11 +112,8 @@ export function persistentLogin(callback, callbackData) {
       user
         .getIdToken(true)
         .then(async (idToken) => {
-          console.log('idToken ', idToken);
           try {
             getUserData(user.uid).then((userData) => {
-              console.log('userData HERE ', userData);
-
               callbackData({
                 email: userData.email,
                 fullName: userData.fullName,
@@ -228,7 +225,7 @@ export const getAllProducts = (userID, callback) => {
       callback(products);
     },
     (error) => {
-      console.log(error);
+      console.log("Error in getAllProducts", error);
     }
   );
 
@@ -264,7 +261,7 @@ export function moveProduct(id, place) {
   return updateDoc(doc(productsRef, id), {
     place,
   })
-    .catch((error) => console.log('Error: ', error));
+    .catch((error) => console.log('Error in moveProduct: ', error));
 }
 
 export function deleteProduct(existingId) {
@@ -282,7 +279,6 @@ export function uploadTaskFromApi(id, blob, metadata) {
 export async function getProfileImageFromFirebase(userUID, callback) {
   try {
     const url = await getDownloadURL(ref(profileImagesRef, `${userUID}`));
-    console.log(url);
     callback({ type: 'PROFILE_IMG', imgUrl: url });
   } catch (error) {
     console.log('Profile img error:', error.message);

@@ -6,8 +6,8 @@ Used React Native to develop an app which allows to track products inside the fr
 
 ----------
 
-npm i
+`yarn install`
 
-npm start
+`npx expo start`
 
 ----------
