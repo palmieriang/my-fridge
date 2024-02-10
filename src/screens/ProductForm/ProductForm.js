@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, LogBox } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from '@react-native-picker/picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { formatDate } from '../../../api/api';
 import { authStore, localeStore, productsStore, themeStore } from '../../store';
@@ -130,19 +130,15 @@ const ProductForm = ({ navigation, route }) => {
           onCancel={handleDatePickerHide}
         />
         <View style={styles.inputContainer}>
-          <RNPickerSelect
+          <Picker
             style={pickerSelectStyles}
-            value={place}
-            placeholder={{ label: t('choosePlace') }}
+            selectedValue={place}
             onValueChange={(itemValue) => setPlace(itemValue)}
-            items={[
-              { label: t('fridge'), value: 'fridge', key: 'fridge' },
-              { label: t('freezer'), value: 'freezer', key: 'freezer' },
-            ]}
-            Icon={() => {
-              return <ColdIcon width={25} height={25} fill="black" />;
-            }}
-          />
+          >
+            <Picker.Item label={t('choosePlace')} value="" />
+            <Picker.Item label={t('fridge')} value="fridge" />
+            <Picker.Item label={t('freezer')} value="freezer" />
+          </Picker>
         </View>
         <Button
           text={existingId ? t('modify') : t('add')}
