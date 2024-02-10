@@ -6056,10 +6056,10 @@ react-is@^17.0.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-17.0.2.tgz#e691d4a8e9c789365655539ab372762b0efb54f0"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
-react-native-action-button@^2.8.5:
-  version "2.8.5"
-  resolved "https://registry.yarnpkg.com/react-native-action-button/-/react-native-action-button-2.8.5.tgz#4152a50323a8a6b3468e6f161f9a9071f2f0739a"
-  integrity sha512-BvGZpzuGeuFR2Y6j93+vKiSqDhsF87VHvNXFs/qEYKfzT4b1ASAT/GQbgS6gNt4jRJCUnJWYrIwlBzRjesZQmQ==
+react-native-action-button-warnings-fixed@^2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/react-native-action-button-warnings-fixed/-/react-native-action-button-warnings-fixed-2.9.2.tgz#91c452af68303fe5a3b9cf3628bcfe28082e3b07"
+  integrity sha512-162w373DCOIuJA7wk3CiDonOoqBrEzCIhEN7aviC+Xo8cJUYDYhm1wtUWaIwGtBHTlsHy1JrFiPyGu6qUwfkeA==
   dependencies:
     prop-types "^15.5.10"
 
