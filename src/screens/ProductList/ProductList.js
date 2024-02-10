@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { FlatList, Text, View } from 'react-native';
-import ActionButton from 'react-native-action-button';
+import ActionButton from 'react-native-action-button-warnings-fixed';
 import { localeStore, themeStore } from '../../store';
 import { productsStore } from '../../store/productsStore';
 import ProductCard from '@components/ProductCard/ProductCard';

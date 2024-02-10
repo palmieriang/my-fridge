@@ -26,7 +26,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.73.4",
-    "react-native-action-button": "^2.8.5",
+    "react-native-action-button-warnings-fixed": "^2.9.2",
     "react-native-dotenv": "^2.4.3",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-image-progress": "^1.1.1",
