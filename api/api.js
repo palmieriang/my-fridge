@@ -2,14 +2,13 @@ import moment from 'moment';
 import * as Google from 'expo-google-app-auth';
 import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
 import { orderBy, query, where, getDoc, setDoc, doc, onSnapshot, serverTimestamp, deleteDoc } from "firebase/firestore";
-import { getDownloadURL, ref } from 'firebase/storage';
+import { getDownloadURL, ref, deleteObject, uploadBytesResumable } from 'firebase/storage';
 import {
   app,
   auth,
-  db,
   usersRef,
   productsRef,
-  imagesRef,
+  profileImagesRef,
 } from '../src/firebase/config';
 import { IOS_CLIENT_ID } from '@env';
 
@@ -295,39 +294,25 @@ export function deleteProduct(existingId) {
 // Settings
 
 export function uploadTaskFromApi(id, blob, metadata) {
-  return imagesRef.child(`profileImages/${id}`).put(blob, metadata);
+  return uploadBytesResumable(ref(profileImagesRef, `${id}`), blob, metadata);
 }
 
 export async function getProfileImageFromFirebase(userUID, callback) {
-  // return imagesRef
-  //   .child(`profileImages/${userUID}`)
-  //   .getDownloadURL()
-  //   .then((url) => {
-  //     console.log(url);
-  //     callback({ type: 'PROFILE_IMG', imgUrl: url });
-  //   })
-  //   .catch((error) => {
-  //     console.log('Profile img error: ', error.message_);
-  //   });
   try {
-    const url = await getDownloadURL(ref(imagesRef, `${userUID}`));
+    const url = await getDownloadURL(ref(profileImagesRef, `${userUID}`));
     console.log(url);
     callback({ type: 'PROFILE_IMG', imgUrl: url });
   } catch (error) {
     console.log('Profile img error:', error.message);
   }
 }
-
-export function deleteProfileImage(userUID, callback) {
-  return imagesRef
-    .child(`profileImages/${userUID}`)
-    .delete()
-    .then(() => {
-      callback({ type: 'PROFILE_IMG', imgUrl: null });
-    })
-    .catch((error) => {
-      console.log('Delete profile img error: ', error.message);
-    });
+export async function deleteProfileImage(userUID, callback) {
+  try {
+    await deleteObject(ref(profileImagesRef, `${userUID}`));
+    callback({ type: 'PROFILE_IMG', imgUrl: null });
+  } catch (error) {
+    console.log('Delete profile img error: ', error.message);
+  }
 }
 
 export function changeColor(newTheme, id) {
