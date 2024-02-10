@@ -13,7 +13,7 @@ import {
 } from './navigation/navigation';
 import FreezerIcon from '@components/svg/FreezerIcon';
 import SettingsIcon from '@components/svg/SettingsIcon';
-import { getCountdownParts } from '../api/api';
+import { getCountdownParts } from '../src/utils';
 import { customFonts } from './typography/typography';
 import {
   AuthProvider,

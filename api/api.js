@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { orderBy, query, where, getDoc, setDoc, doc, onSnapshot, serverTimestamp, deleteDoc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, deleteObject, uploadBytesResumable } from 'firebase/storage';
@@ -314,39 +313,4 @@ export function changeLanguage(newLocale, id) {
   };
   return setDoc(doc(usersRef, id), data, { merge: true })
   .catch((error) => console.log('Error: ', error));
-}
-
-// Utils
-
-export function formatDate(dateString) {
-  const parsed = moment(new Date(dateString));
-
-  if (!parsed.isValid()) {
-    return dateString;
-  }
-
-  return parsed.format('D MMM YYYY');
-}
-
-export function formatDateTime(dateString) {
-  const parsed = moment(new Date(dateString));
-
-  if (!parsed.isValid()) {
-    return dateString;
-  }
-
-  return parsed.format('H A on D MMM YYYY');
-}
-
-export function getCountdownParts(eventDate) {
-  const duration = moment.duration(
-    moment(new Date(eventDate)).diff(new Date())
-  );
-
-  return {
-    days: parseInt(duration.as('days')),
-    hours: duration.get('hours'),
-    minutes: duration.get('minutes'),
-    seconds: duration.get('seconds'),
-  };
 }
