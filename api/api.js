@@ -149,9 +149,7 @@ export function persistentLogin(callback, callbackData) {
 }
 
 export function addUserData(uid, data) {
-  return usersRef
-    .doc(uid)
-    .set(data)
+  return setDoc(doc(usersRef, uid), data)
     .catch((error) => console.log('Error adding user data: ', error));
 }
 
