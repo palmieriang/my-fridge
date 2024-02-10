@@ -30,11 +30,8 @@ const usersRef = collection(db, 'users');
 const productsRef = collection(db, 'products');
 const storage = getStorage(app);
 const storageRef = ref(storage);
-const imagesRef = ref(storageRef, 'images');
-const imagesRefTest = ref(storageRef, 'profileImages/');
-// console.log("usersRef ", usersRef);
-// console.log("imagesRefTest ", imagesRefTest);
+const profileImagesRef = ref(storageRef, 'profileImages/');
 
 export {
-  app, db, auth, usersRef, productsRef, imagesRef
+  app, auth, usersRef, productsRef, profileImagesRef
 };
