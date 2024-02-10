@@ -1,6 +1,5 @@
 import moment from 'moment';
-import * as Google from 'expo-google-app-auth';
-import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { orderBy, query, where, getDoc, setDoc, doc, onSnapshot, serverTimestamp, deleteDoc } from "firebase/firestore";
 import { getDownloadURL, ref, deleteObject, uploadBytesResumable } from 'firebase/storage';
 import {
@@ -10,7 +9,6 @@ import {
   productsRef,
   profileImagesRef,
 } from '../src/firebase/config';
-import { IOS_CLIENT_ID } from '@env';
 
 // Auth
 
@@ -94,19 +92,12 @@ function onSignIn(googleUser) {
 }
 
 export async function signInWithGoogle() {
-  let result;
+  const provider = new GoogleAuthProvider();
   try {
-    result = await Google.logInAsync({
-      iosClientId: IOS_CLIENT_ID,
-    });
-  } catch ({ message }) {
-    console.log('Google.logInAsync(): ' + message);
-  }
-
-  if (result.type === 'success') {
+    const result = await signInWithPopup(auth, provider);
     onSignIn(result);
-  } else {
-    console.log('Cancelled');
+  } catch (error) {
+    console.log('signInWithGoogle error: ', error.message);
   }
 }
 
@@ -199,27 +190,25 @@ export function saveProduct({ name, date, place, authorID }) {
   });
 }
 
-export const getProductsFromPlace = (userID, place) => {
-  return new Promise((resolve) => {
-    productsRef
-      .where('authorID', '==', userID)
-      .where('place', '==', place)
-      .orderBy('createdAt', 'desc')
-      .onSnapshot(
-        (querySnapshot) => {
-          const newProducts = [];
-          querySnapshot.forEach((doc) => {
-            const product = doc.data();
-            product.id = doc.id;
-            newProducts.push(product);
-          });
-          resolve(newProducts);
-        },
-        (error) => {
-          console.log("getProductsFromPlace ", error);
-        }
-      );
-  });
+export const getProductsFromPlace = (userID, place, callback) => {
+  const productsQuery = query(productsRef, where('authorID', '==', userID), where('place', '==', place), orderBy('createdAt', 'desc'));
+  
+  const unsubscribe = onSnapshot(productsQuery,
+    (querySnapshot) => {
+      const newProducts = [];
+      querySnapshot.forEach((doc) => {
+        const product = doc.data();
+        product.id = doc.id;
+        newProducts.push(product);
+      });
+      callback(newProducts);
+    },
+    (error) => {
+      console.log("getProductsFromPlace ", error);
+    }
+  );
+
+  return unsubscribe;
 };
 
 export const getAllProducts = (userID, callback) => {
