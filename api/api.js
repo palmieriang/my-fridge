@@ -1,7 +1,7 @@
 import moment from 'moment';
 import * as Google from 'expo-google-app-auth';
 import { signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider } from "firebase/auth";
-import { orderBy, query, where, getDoc, doc, onSnapshot } from "firebase/firestore";
+import { orderBy, query, where, getDoc, setDoc, doc, onSnapshot, serverTimestamp, deleteDoc } from "firebase/firestore";
 import { getDownloadURL, ref } from 'firebase/storage';
 import {
   app,
@@ -45,7 +45,7 @@ function isUserEqual(googleUser, firebaseUser) {
     for (var i = 0; i < providerData.length; i++) {
       if (
         providerData[i].providerId ===
-          app.auth.GoogleAuthProvider.PROVIDER_ID &&
+        app.auth.GoogleAuthProvider.PROVIDER_ID &&
         providerData[i].uid === googleUser.user.id
       ) {
         // We don't need to reauth the Firebase connection.
@@ -141,10 +141,10 @@ export function persistentLogin(callback, callbackData) {
                 user,
               });
             })
-            .catch((error) => {
-              console.log('GET USER DATA ERROR: ', error);
-            });
-        
+              .catch((error) => {
+                console.log('GET USER DATA ERROR: ', error);
+              });
+
             getProfileImageFromFirebase(user.uid, callback);
           } catch (error) {
             console.log('Restoring token failed', error);
@@ -169,8 +169,7 @@ export function addUserData(uid, data) {
 export async function getUserData(userID) {
   try {
     const response = await getDoc(doc(usersRef, userID));
-    const data = response.data();
-    return data;
+    return response.data();
   } catch (error) {
     throw new Error('Error fetching user data: ' + error.message);
   }
@@ -188,7 +187,7 @@ export function sendResetPassword(email) {
 // Products
 
 export function saveProduct({ name, date, place, authorID }) {
-  const timestamp = db.FieldValue.serverTimestamp();
+  const timestamp = serverTimestamp();
   const data = {
     name,
     date,
@@ -196,12 +195,9 @@ export function saveProduct({ name, date, place, authorID }) {
     authorID,
     createdAt: timestamp,
   };
-  return productsRef
-    .doc()
-    .set(data)
-    .catch((error) => {
-      alert(error);
-    });
+  return setDoc(doc(productsRef), data).catch((error) => {
+    alert(error);
+  });
 }
 
 export const getProductsFromPlace = (userID, place) => {
@@ -221,7 +217,7 @@ export const getProductsFromPlace = (userID, place) => {
           resolve(newProducts);
         },
         (error) => {
-          console.log(error);
+          console.log("getProductsFromPlace ", error);
         }
       );
   });
@@ -254,15 +250,18 @@ export const getAllProducts = (userID, callback) => {
   return unsubscribe;
 };
 
-export function getProductById(id) {
-  return productsRef
-    .doc(id)
-    .get()
-    .catch((error) => console.log('Error: ', error));
+export async function getProductById(id) {
+  const productDocRef = doc(productsRef, id);
+  try {
+    const productDocSnap = await getDoc(productDocRef);
+    return productDocSnap.data();
+  } catch (error) {
+    console.log('getProductById error: ', error);
+  }
 }
 
 export function modifyProduct({ name, date, place, authorID }, existingId) {
-  const timestamp = db.FieldValue.serverTimestamp();
+  const timestamp = serverTimestamp();
   const data = {
     name,
     date,
@@ -288,10 +287,9 @@ export function moveProduct(id, place) {
 }
 
 export function deleteProduct(existingId) {
-  return productsRef
-    .doc(existingId)
-    .delete()
-    .catch((error) => console.log('Error: ', error));
+  return deleteDoc(doc(productsRef, existingId)).catch((error) => {
+    console.log('Error in deleteProduct: ', error);
+  });
 }
 
 // Settings
