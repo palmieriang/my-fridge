@@ -1,9 +1,13 @@
 import moment from 'moment';
 import * as Google from 'expo-google-app-auth';
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
+import { collection, orderBy, query, where, getDocs, getDoc, doc, onSnapshot } from "firebase/firestore";
 import {
-  firebase,
-  userRef,
-  productRef,
+  app,
+  auth,
+  db,
+  usersRef,
+  productsRef,
   imagesRef,
 } from '../src/firebase/config';
 import { IOS_CLIENT_ID } from '@env';
@@ -11,7 +15,7 @@ import { IOS_CLIENT_ID } from '@env';
 // Auth
 
 export function createUser(fullName, email, password) {
-  return firebase
+  return app
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then((response) => {
@@ -29,11 +33,9 @@ export function createUser(fullName, email, password) {
 }
 
 export function authSignIn(email, password) {
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
+  signInWithEmailAndPassword(auth, email, password)
     .catch((error) => {
-      alert(error.message);
+      console.log("ERROR in authSignInc ", error.message);
     });
 }
 
@@ -43,7 +45,7 @@ function isUserEqual(googleUser, firebaseUser) {
     for (var i = 0; i < providerData.length; i++) {
       if (
         providerData[i].providerId ===
-          firebase.auth.GoogleAuthProvider.PROVIDER_ID &&
+          app.auth.GoogleAuthProvider.PROVIDER_ID &&
         providerData[i].uid === googleUser.user.id
       ) {
         // We don't need to reauth the Firebase connection.
@@ -56,18 +58,18 @@ function isUserEqual(googleUser, firebaseUser) {
 
 function onSignIn(googleUser) {
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-  const unsubscribe = firebase.auth().onAuthStateChanged((firebaseUser) => {
+  const unsubscribe = app.auth().onAuthStateChanged((firebaseUser) => {
     unsubscribe();
     // Check if we are already signed-in Firebase with the correct user.
     if (!isUserEqual(googleUser, firebaseUser)) {
       // Build Firebase credential with the Google ID token.
-      const credential = firebase.auth.GoogleAuthProvider.credential(
+      const credential = app.auth.GoogleAuthProvider.credential(
         googleUser.idToken,
         googleUser.accessToken
       );
 
       // Sign in with credential from the Google user.
-      firebase
+      app
         .auth()
         .signInWithCredential(credential)
         .then((result) => {
@@ -111,31 +113,41 @@ export async function signInWithGoogle() {
 }
 
 export function authSignOut() {
-  return firebase.auth().signOut();
+  return app.auth().signOut();
 }
 
 export function persistentLogin(callback, callbackData) {
-  return firebase.auth().onAuthStateChanged((user) => {
+  console.log('PERSISTEN LOGIN ');
+  // const auth = getAuth();
+  return onAuthStateChanged(auth, (user) => {
     if (user) {
+      console.log('user persistent ', user);
       user
         .getIdToken(true)
         .then(async (idToken) => {
-          let userData;
+          console.log('idToken ', idToken);
           try {
-            userData = await getUserData(user.uid);
-            callbackData({
-              email: userData.email,
-              fullName: userData.fullName,
-              id: userData.id,
-              locale: userData.locale,
-              theme: userData.theme,
+            getUserData(user.uid).then((userData) => {
+              console.log('userData HERE ', userData);
+
+              callbackData({
+                email: userData.email,
+                fullName: userData.fullName,
+                id: userData.id,
+                locale: userData.locale,
+                theme: userData.theme,
+              });
+              callback({
+                type: 'RESTORE_TOKEN',
+                token: idToken,
+                user,
+              });
+            })
+            .catch((error) => {
+              console.log('GET USER DATA ERROR: ', error);
             });
-            callback({
-              type: 'RESTORE_TOKEN',
-              token: idToken,
-              user,
-            });
-            getProfileImageFromFirebase(user.uid, callback);
+        
+            // getProfileImageFromFirebase(user.uid, callback);
           } catch (error) {
             console.log('Restoring token failed', error);
           }
@@ -150,36 +162,35 @@ export function persistentLogin(callback, callbackData) {
 }
 
 export function addUserData(uid, data) {
-  return userRef
+  return usersRef
     .doc(uid)
     .set(data)
     .catch((error) => console.log('Error adding user data: ', error));
 }
 
-export function getUserData(userID) {
-  return userRef
-    .doc(userID)
-    .get()
-    .then((response) => {
-      const data = response.data();
-      return data;
-    })
-    .catch((error) => console.log('Error: ', error));
+export async function getUserData(userID) {
+  try {
+    const response = await getDoc(doc(usersRef, userID));
+    const data = response.data();
+    return data;
+  } catch (error) {
+    throw new Error('Error fetching user data: ' + error.message);
+  }
 }
 
 export function sendVerificationEmail() {
-  const user = firebase.auth().currentUser;
+  const user = app.auth().currentUser;
   return user.sendEmailVerification();
 }
 
 export function sendResetPassword(email) {
-  return firebase.auth().sendPasswordResetEmail(email);
+  return app.auth().sendPasswordResetEmail(email);
 }
 
 // Products
 
 export function saveProduct({ name, date, place, authorID }) {
-  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  const timestamp = db.FieldValue.serverTimestamp();
   const data = {
     name,
     date,
@@ -187,7 +198,7 @@ export function saveProduct({ name, date, place, authorID }) {
     authorID,
     createdAt: timestamp,
   };
-  return productRef
+  return productsRef
     .doc()
     .set(data)
     .catch((error) => {
@@ -197,7 +208,7 @@ export function saveProduct({ name, date, place, authorID }) {
 
 export const getProductsFromPlace = (userID, place) => {
   return new Promise((resolve) => {
-    productRef
+    productsRef
       .where('authorID', '==', userID)
       .where('place', '==', place)
       .orderBy('createdAt', 'desc')
@@ -219,35 +230,41 @@ export const getProductsFromPlace = (userID, place) => {
 };
 
 export const getAllProducts = (userID, callback) => {
-  return productRef
-    .where('authorID', '==', userID)
-    .orderBy('createdAt', 'desc')
-    .onSnapshot(
-      (querySnapshot) => {
-        const products = [];
-        querySnapshot.forEach((doc) => {
-          const product = doc.data();
-          product.id = doc.id;
-          product.date = new Date(product.date);
-          products.push(product);
-        });
-        callback(products);
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+  const productsQuery = query(
+    productsRef,
+    where('authorID', '==', userID),
+    orderBy('createdAt', 'desc')
+  );
+
+  const unsubscribe = onSnapshot(
+    productsQuery,
+    (querySnapshot) => {
+      const products = [];
+      querySnapshot.forEach((doc) => {
+        const product = doc.data();
+        product.id = doc.id;
+        product.date = new Date(product.date);
+        products.push(product);
+      });
+      callback(products);
+    },
+    (error) => {
+      console.log(error);
+    }
+  );
+
+  return unsubscribe;
 };
 
 export function getProductById(id) {
-  return productRef
+  return productsRef
     .doc(id)
     .get()
     .catch((error) => console.log('Error: ', error));
 }
 
 export function modifyProduct({ name, date, place, authorID }, existingId) {
-  const timestamp = firebase.firestore.FieldValue.serverTimestamp();
+  const timestamp = db.FieldValue.serverTimestamp();
   const data = {
     name,
     date,
@@ -255,7 +272,7 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     authorID,
     createdAt: timestamp,
   };
-  return productRef
+  return productsRef
     .doc(existingId)
     .set(data)
     .catch((error) => {
@@ -264,7 +281,7 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
 }
 
 export function moveProduct(id, place) {
-  return productRef
+  return productsRef
     .doc(id)
     .update({
       place,
@@ -273,7 +290,7 @@ export function moveProduct(id, place) {
 }
 
 export function deleteProduct(existingId) {
-  return productRef
+  return productsRef
     .doc(existingId)
     .delete()
     .catch((error) => console.log('Error: ', error));
@@ -314,7 +331,7 @@ export function changeColor(newTheme, id) {
   const data = {
     theme: newTheme,
   };
-  return userRef
+  return usersRef
     .doc(id)
     .set(data, { merge: true })
     .catch((error) => console.log('Error: ', error));
@@ -324,7 +341,7 @@ export function changeLanguage(newLocale, id) {
   const data = {
     locale: newLocale,
   };
-  return userRef
+  return usersRef
     .doc(id)
     .set(data, { merge: true })
     .catch((error) => console.log('Error: ', error));

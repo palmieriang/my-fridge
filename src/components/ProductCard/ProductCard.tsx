@@ -71,7 +71,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <View style={[styles.card, { backgroundColor: theme.foreground }]}>
             <View>
               <Text style={[styles.date, { color: theme.text }]}>
-                {formatDate(date)}
+                {formatDate(date.toString())}
               </Text>
               <Text style={[styles.title, { color: theme.text }]}>{name}</Text>
             </View>
