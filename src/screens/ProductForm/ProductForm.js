@@ -3,7 +3,7 @@ import { View, StyleSheet, LogBox } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { Picker } from '@react-native-picker/picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { formatDate } from '../../../api/api';
+import { formatDate } from '../../utils';
 import { authStore, localeStore, productsStore, themeStore } from '../../store';
 import FormInput from '@components/FormInput/FormInput';
 import Button from '@components/Button/Button';

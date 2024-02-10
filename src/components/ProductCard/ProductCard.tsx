@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { formatDate, getCountdownParts } from '../../../api/api';
+import { formatDate, getCountdownParts } from '../../utils';
 import { localeStore, productsStore, themeStore } from '../../store';
 import SwipeableRow from '../SwipeableRow/SwipeableRow';
 import styles from './styles';
