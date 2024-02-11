@@ -1,0 +1,6 @@
+export const ActionTypes = {
+  RESTORE_TOKEN: 'RESTORE_TOKEN',
+  SIGN_IN: 'SIGN_IN',
+  SIGN_OUT: 'SIGN_OUT',
+  PROFILE_IMG: 'PROFILE_IMG',
+};

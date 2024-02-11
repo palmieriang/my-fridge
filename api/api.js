@@ -8,6 +8,7 @@ import {
   productsRef,
   profileImagesRef,
 } from '../src/firebase/config';
+import { ActionTypes } from "../src/constants";
 
 // Auth
 
@@ -120,7 +121,7 @@ export function persistentLogin(callback, callbackData) {
                 theme: userData.theme,
               });
               callback({
-                type: 'RESTORE_TOKEN',
+                type: ActionTypes.RESTORE_TOKEN,
                 token: idToken,
                 user,
               });
@@ -138,7 +139,7 @@ export function persistentLogin(callback, callbackData) {
           console.log('idToken failed', error);
         });
     } else {
-      callback({ type: 'SIGN_OUT' });
+      callback({ type: ActionTypes.SIGN_OUT });
     }
   });
 }
@@ -276,7 +277,7 @@ export function uploadTaskFromApi(id, blob, metadata) {
 export async function getProfileImageFromFirebase(userUID, callback) {
   try {
     const url = await getDownloadURL(ref(profileImagesRef, `${userUID}`));
-    callback({ type: 'PROFILE_IMG', imgUrl: url });
+    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log('Profile img error:', error.message);
   }
@@ -284,7 +285,7 @@ export async function getProfileImageFromFirebase(userUID, callback) {
 export async function deleteProfileImage(userUID, callback) {
   try {
     await deleteObject(ref(profileImagesRef, `${userUID}`));
-    callback({ type: 'PROFILE_IMG', imgUrl: null });
+    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error) {
     console.log('Delete profile img error: ', error.message);
   }
