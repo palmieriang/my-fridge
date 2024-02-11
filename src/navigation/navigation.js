@@ -7,6 +7,7 @@ import ProductForm from '@screens/ProductForm/ProductForm';
 import Settings from '@screens/Settings/Settings';
 import SignIn from '@screens/SignIn/SignIn';
 import Registration from '@screens/Registration/Registration';
+import { FRIDGE, FREEZER, SETTINGS } from '../constants';
 
 const Stack = createStackNavigator();
 
@@ -47,7 +48,7 @@ export function FridgeStackScreen() {
         name="list"
         component={ProductList}
         options={{ title: t('title') }}
-        initialParams={{ place: 'fridge' }}
+        initialParams={{ place: FRIDGE }}
       />
       <Stack.Screen
         name="form"
@@ -79,7 +80,7 @@ export function FreezerStackScreen() {
         name="list"
         component={ProductList}
         options={{ title: 'Freezer' }}
-        initialParams={{ place: 'freezer' }}
+        initialParams={{ place: FREEZER }}
       />
       <Stack.Screen
         name="form"
@@ -108,7 +109,7 @@ export function SettingsStackScreen() {
       <Stack.Screen
         name="settings"
         component={Settings}
-        options={{ title: t('settings') }}
+        options={{ title: t(SETTINGS) }}
       />
     </Stack.Navigator>
   );

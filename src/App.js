@@ -21,6 +21,7 @@ import {
   ProductsProvider,
   ThemeProvider,
 } from './store';
+import { FRIDGE, FREEZER, SETTINGS } from './constants';
 
 LogBox.ignoreLogs([
   'Warning: componentWillMount is deprecated',
@@ -37,7 +38,7 @@ const countExpiredItems = (productsList) => {
 
   let counter = null;
   for (let i = 0; i < productsList.length; i++) {
-    if (productsList[i].place === 'fridge') {
+    if (productsList[i].place === FRIDGE) {
       const days = daysUntilDate(productsList[i].date);
       if (days < 0) {
         counter++;
@@ -72,11 +73,11 @@ export default function App() {
                               size = focused ? size : '22';
 
                               if (
-                                route.name === t('fridge') ||
-                                route.name === t('freezer')
+                                route.name === t(FRIDGE) ||
+                                route.name === t(FREEZER)
                               ) {
                                 IconName = FreezerIcon;
-                              } else if (route.name === t('settings')) {
+                              } else if (route.name === t(SETTINGS)) {
                                 IconName = SettingsIcon;
                               }
 
@@ -87,7 +88,7 @@ export default function App() {
                                     height={size}
                                     fill={color}
                                   />
-                                  {route.name === t('freezer') && (
+                                  {route.name === t(FREEZER) && (
                                     <IconName
                                       width={size}
                                       height={size}
@@ -104,18 +105,18 @@ export default function App() {
                           }}
                         >
                           <Tab.Screen
-                            name={t('fridge')}
+                            name={t(FRIDGE)}
                             component={FridgeStackScreen}
                             options={{
                               tabBarBadge: countExpiredItems(productsList),
                             }}
                           />
                           <Tab.Screen
-                            name={t('freezer')}
+                            name={t(FREEZER)}
                             component={FreezerStackScreen}
                           />
                           <Tab.Screen
-                            name={t('settings')}
+                            name={t(SETTINGS)}
                             component={SettingsStackScreen}
                           />
                         </Tab.Navigator>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Animated, Text, View, I18nManager } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { localeStore } from '../../store';
+import { FRIDGE } from '../../constants';
 import styles from './styles';
 
 const SwipeableRow = ({
@@ -33,7 +34,7 @@ const SwipeableRow = ({
             },
           ]}
         >
-          {place === 'fridge' ? t('freeze') : t('fridge')}
+          {place === FRIDGE ? t('freeze') : t(FRIDGE)}
         </Animated.Text>
       </RectButton>
     );
