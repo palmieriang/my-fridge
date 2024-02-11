@@ -1,14 +1,16 @@
 import moment from 'moment';
 
-export function formatDate(dateString) {
-  console.log("dateString ", dateString);
-  const parsed = moment(new Date(dateString));
+export function convertToISODateString(dateString) {
+  const date = moment(dateString, 'D MMM YYYY');
 
-  if (!parsed.isValid()) {
-    return dateString;
-  }
+  return date.toISOString();
+}
 
-  return parsed.format('D MMM YYYY');
+export function convertToCustomFormat(isoString) {
+  const date = new Date(isoString);
+  const options = { day: 'numeric', month: 'short', year: 'numeric' };
+
+  return date.toLocaleDateString('en-GB', options);
 }
 
 export function daysUntilDate(dateString) {
