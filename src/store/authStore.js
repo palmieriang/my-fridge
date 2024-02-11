@@ -28,15 +28,10 @@ const initialState = {
 const reducer = (prevState, action) => {
   switch (action.type) {
     case ActionTypes.RESTORE_TOKEN:
-      return {
-        ...prevState,
-        isLoading: false,
-        userToken: action.token,
-        user: action.user,
-      };
     case ActionTypes.SIGN_IN:
       return {
         ...prevState,
+        isLoading: false,
         isSignout: false,
         userToken: action.token,
         user: action.user,
@@ -64,7 +59,6 @@ const AuthProvider = ({ children }) => {
   const [authState, dispatch] = useReducer(reducer, initialState);
   const [userData, setUserData] = useState({});
 
-  // Persistent login credentials
   useEffect(() => {
     const unsubscribe = persistentLogin(dispatch, setUserData);
     return () => {
@@ -89,25 +83,21 @@ const AuthProvider = ({ children }) => {
           return;
         }
 
-        createUser(fullName, email, password)
-          .then(() => {
-            sendVerificationEmail();
-          })
-          .then(() => {
-            alert('Please verify your account.');
-          })
-          .catch((error) => {
-            console.log('Error in create user', error);
-          });
+        try {
+          await createUser(fullName, email, password);
+          await sendVerificationEmail();
+          alert('Please verify your account.');
+        } catch (error) {
+          console.error('Error in create user', error);
+        }
       },
-      resetPassword: (email) => {
-        sendResetPassword(email)
-          .then(() => {
-            alert('Please check your account.');
-          })
-          .catch((error) => {
-            console.log('Error in reset password', error);
-          });
+      resetPassword: async (email) => {
+        try {
+          await sendResetPassword(email);
+          alert('Please check your account.');
+        } catch (error) {
+          console.error('Error in reset password', error);
+        }
       },
       updateProfileImage: (url) => {
         dispatch({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
