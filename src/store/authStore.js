@@ -15,6 +15,7 @@ import {
   deleteProfileImage,
   signInWithGoogle,
 } from '../../api/api';
+import { ActionTypes } from "../constants";
 
 const initialState = {
   isLoading: true,
@@ -26,21 +27,21 @@ const initialState = {
 
 const reducer = (prevState, action) => {
   switch (action.type) {
-    case 'RESTORE_TOKEN':
+    case ActionTypes.RESTORE_TOKEN:
       return {
         ...prevState,
         isLoading: false,
         userToken: action.token,
         user: action.user,
       };
-    case 'SIGN_IN':
+    case ActionTypes.SIGN_IN:
       return {
         ...prevState,
         isSignout: false,
         userToken: action.token,
         user: action.user,
       };
-    case 'SIGN_OUT':
+    case ActionTypes.SIGN_OUT:
       return {
         ...prevState,
         isSignout: true,
@@ -48,7 +49,7 @@ const reducer = (prevState, action) => {
         user: null,
         profileImg: null,
       };
-    case 'PROFILE_IMG':
+    case ActionTypes.PROFILE_IMG:
       return {
         ...prevState,
         profileImg: action.imgUrl,
@@ -109,7 +110,7 @@ const AuthProvider = ({ children }) => {
           });
       },
       updateProfileImage: (url) => {
-        dispatch({ type: 'PROFILE_IMG', imgUrl: url });
+        dispatch({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
       },
       deleteImage: (id) => {
         deleteProfileImage(id, dispatch);
