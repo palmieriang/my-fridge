@@ -219,7 +219,6 @@ export const getAllProducts = (userID, callback) => {
       querySnapshot.forEach((doc) => {
         const product = doc.data();
         product.id = doc.id;
-        product.date = new Date(product.date);
         products.push(product);
       });
       callback(products);

@@ -1,14 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Text, TouchableWithoutFeedback, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { formatDate, getCountdownParts } from '../../utils';
+import { daysUntilDate } from '../../utils';
 import { localeStore, productsStore, themeStore } from '../../store';
 import SwipeableRow from '../SwipeableRow/SwipeableRow';
 import styles from './styles';
 
 type ProductCardProps = {
   product: {
-    date: Date;
+    date: string;
     id: string;
     name: string;
     place: string;
@@ -27,7 +27,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   const { theme } = useContext(themeStore);
   const { productsContext } = useContext(productsStore);
 
-  const { days } = getCountdownParts(date);
+  const  days = daysUntilDate(date);
 
   useEffect(() => {
     if (days < 0) {
@@ -71,7 +71,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           <View style={[styles.card, { backgroundColor: theme.foreground }]}>
             <View>
               <Text style={[styles.date, { color: theme.text }]}>
-                {formatDate(date.toString())}
+                {date}
               </Text>
               <Text style={[styles.title, { color: theme.text }]}>{name}</Text>
             </View>

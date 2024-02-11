@@ -13,7 +13,7 @@ import {
 } from './navigation/navigation';
 import FreezerIcon from '@components/svg/FreezerIcon';
 import SettingsIcon from '@components/svg/SettingsIcon';
-import { getCountdownParts } from '../src/utils';
+import { daysUntilDate } from '../src/utils';
 import { customFonts } from './typography/typography';
 import {
   AuthProvider,
@@ -38,7 +38,7 @@ const countExpiredItems = (productsList) => {
   let counter = null;
   for (let i = 0; i < productsList.length; i++) {
     if (productsList[i].place === 'fridge') {
-      const { days } = getCountdownParts(productsList[i].date);
+      const days = daysUntilDate(productsList[i].date);
       if (days < 0) {
         counter++;
       }
