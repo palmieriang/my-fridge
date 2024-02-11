@@ -42,7 +42,6 @@ const ProductsProvider = ({ children }) => {
     handleGetProduct: async (id) => {
       return getProductById(id)
         .then((response) => {
-          console.log("response HERE ", response)
           return response;
         })
         .catch((error) => console.log('Error: ', error));

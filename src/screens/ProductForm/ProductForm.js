@@ -9,7 +9,6 @@ import FormInput from '@components/FormInput/FormInput';
 import Button from '@components/Button/Button';
 import { adjust } from '@components/utils/dimensions';
 import CalendarIcon from '@components/svg/CalendarIcon';
-import ColdIcon from '@components/svg/ColdIcon';
 import ShoppingBasketIcon from '@components/svg/ShoppingBasketIcon';
 import { FRIDGE, FREEZER } from '../../constants';
 import styles from './styles';
