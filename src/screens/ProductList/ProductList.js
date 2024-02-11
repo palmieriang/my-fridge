@@ -5,6 +5,7 @@ import ActionButton from 'react-native-action-button-warnings-fixed';
 import { localeStore, themeStore } from '../../store';
 import { productsStore } from '../../store/productsStore';
 import ProductCard from '@components/ProductCard/ProductCard';
+import { FRIDGE, FREEZER } from '../../constants';
 import styles from './styles';
 
 const ProductList = ({ navigation, route }) => {
@@ -40,7 +41,7 @@ const ProductList = ({ navigation, route }) => {
   };
 
   const handleFreezeProduct = (id) => {
-    const moveTo = place === 'fridge' ? 'freezer' : 'fridge';
+    const moveTo = place === FRIDGE ? FREEZER : FRIDGE;
     productsContext.handleFreezeProduct(id, moveTo);
   };
 

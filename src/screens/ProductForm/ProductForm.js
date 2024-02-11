@@ -11,6 +11,7 @@ import { adjust } from '@components/utils/dimensions';
 import CalendarIcon from '@components/svg/CalendarIcon';
 import ColdIcon from '@components/svg/ColdIcon';
 import ShoppingBasketIcon from '@components/svg/ShoppingBasketIcon';
+import { FRIDGE, FREEZER } from '../../constants';
 import styles from './styles';
 
 LogBox.ignoreLogs([
@@ -136,8 +137,8 @@ const ProductForm = ({ navigation, route }) => {
             onValueChange={(itemValue) => setPlace(itemValue)}
           >
             <Picker.Item label={t('choosePlace')} value="" />
-            <Picker.Item label={t('fridge')} value="fridge" />
-            <Picker.Item label={t('freezer')} value="freezer" />
+            <Picker.Item label={t(FRIDGE)} value="fridge" />
+            <Picker.Item label={t(FREEZER)} value="freezer" />
           </Picker>
         </View>
         <Button

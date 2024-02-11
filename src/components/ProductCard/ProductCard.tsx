@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { daysUntilDate } from '../../utils';
 import { localeStore, productsStore, themeStore } from '../../store';
 import SwipeableRow from '../SwipeableRow/SwipeableRow';
+import { FRIDGE, FREEZER } from '../../constants';
 import styles from './styles';
 
 type ProductCardProps = {
@@ -51,7 +52,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
   };
 
   const handleFreeze = () => {
-    const moveTo = place === 'fridge' ? 'freezer' : 'fridge';
+    const moveTo = place === FRIDGE ? FREEZER : FRIDGE;
     productsContext.handleFreezeProduct(id, moveTo);
   };
 
