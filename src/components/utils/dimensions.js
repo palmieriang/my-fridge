@@ -1,8 +1,8 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import { Dimensions, PixelRatio } from "react-native";
 
 const pixelRatio = PixelRatio.get();
-const deviceHeight = Dimensions.get('window').height;
-const deviceWidth = Dimensions.get('window').width;
+const deviceHeight = Dimensions.get("window").height;
+const deviceWidth = Dimensions.get("window").width;
 
 export const adjust = (size) => {
   if (pixelRatio >= 2 && pixelRatio < 3) {

@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import PropTypes from 'prop-types';
-import LottieView from 'lottie-react-native';
-import { StyleSheet } from 'react-native';
-import DoorAnimation from './15131-elevator-doors.json';
+import LottieView from "lottie-react-native";
+import PropTypes from "prop-types";
+import React, { useEffect, useRef } from "react";
+import { StyleSheet } from "react-native";
+
+import DoorAnimation from "./15131-elevator-doors.json";
 
 const ANIMATIONS = {
   door: DoorAnimation,
@@ -46,7 +47,7 @@ const LottieAnimation = ({
 
 const styles = StyleSheet.create({
   animation: {
-    height: '100%',
+    height: "100%",
   },
 });
 

@@ -1,10 +1,11 @@
-import React, { useContext, useRef } from 'react';
-import PropTypes from 'prop-types';
-import { Animated, Text, View, I18nManager } from 'react-native';
-import { RectButton, Swipeable } from 'react-native-gesture-handler';
-import { localeStore } from '../../store';
-import { FRIDGE } from '../../constants';
-import styles from './styles';
+import PropTypes from "prop-types";
+import React, { useContext, useRef } from "react";
+import { Animated, Text, View, I18nManager } from "react-native";
+import { RectButton, Swipeable } from "react-native-gesture-handler";
+
+import styles from "./styles";
+import { FRIDGE } from "../../constants";
+import { localeStore } from "../../store";
 
 const SwipeableRow = ({
   children,
@@ -34,7 +35,7 @@ const SwipeableRow = ({
             },
           ]}
         >
-          {place === FRIDGE ? t('freeze') : t(FRIDGE)}
+          {place === FRIDGE ? t("freeze") : t(FRIDGE)}
         </Animated.Text>
       </RectButton>
     );
@@ -62,11 +63,11 @@ const SwipeableRow = ({
     <View
       style={{
         width: 192,
-        flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
+        flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
       }}
     >
-      {renderRightAction(t('modify'), '#ffab00', 192, progress, modifyFunction)}
-      {renderRightAction(t('delete'), '#dd2c00', 64, progress, deleteFunction)}
+      {renderRightAction(t("modify"), "#ffab00", 192, progress, modifyFunction)}
+      {renderRightAction(t("delete"), "#dd2c00", 64, progress, deleteFunction)}
     </View>
   );
 
@@ -79,8 +80,8 @@ const SwipeableRow = ({
       ref={swipeableRef}
       renderLeftActions={renderLeftActions}
       renderRightActions={renderRightActions}
-      onSwipeableLeftOpen={() => console.log('closing')}
-      onSwipeableRightOpen={() => console.log('closing')}
+      onSwipeableLeftOpen={() => console.log("closing")}
+      onSwipeableRightOpen={() => console.log("closing")}
       leftThreshold={30}
       rightThreshold={40}
     >

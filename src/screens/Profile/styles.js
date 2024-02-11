@@ -1,11 +1,11 @@
-import { StyleSheet } from 'react-native';
-import { adjust } from '@components/utils/dimensions';
+import { adjust } from "@components/utils/dimensions";
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   profile: {
-    alignItems: 'center',
+    alignItems: "center",
     paddingBottom: 30,
-    width: '100%',
+    width: "100%",
   },
   pictureContainer: {
     marginTop: 30,
@@ -14,22 +14,22 @@ export default StyleSheet.create({
     height: 150,
     width: 150,
     borderRadius: 100,
-    position: 'relative',
+    position: "relative",
   },
   profileField: {
-    color: '#fff',
-    fontFamily: 'OpenSans-Regular',
+    color: "#fff",
+    fontFamily: "OpenSans-Regular",
     fontSize: adjust(13),
     marginTop: 20,
   },
   progressContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     maxHeight: 150,
   },
   deleteIcon: {
     bottom: 0,
-    position: 'absolute',
+    position: "absolute",
     right: 0,
   },
 });

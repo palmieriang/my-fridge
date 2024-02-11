@@ -4,7 +4,9 @@ import React, {
   useState,
   useEffect,
   useMemo,
-} from 'react';
+} from "react";
+
+import { authStore } from "./authStore";
 import {
   getAllProducts,
   saveProduct,
@@ -12,8 +14,7 @@ import {
   modifyProduct,
   deleteProduct,
   moveProduct,
-} from '../../api/api';
-import { authStore } from './authStore';
+} from "../../api/api";
 
 const productsStore = createContext();
 const { Provider, Consumer } = productsStore;
@@ -37,25 +38,25 @@ const ProductsProvider = ({ children }) => {
 
   const productsContext = useMemo(() => ({
     handleSaveProduct: async (data) => {
-      return saveProduct(data).catch((error) => console.log('Error: ', error));
+      return saveProduct(data).catch((error) => console.log("Error: ", error));
     },
     handleGetProduct: async (id) => {
       return getProductById(id)
         .then((response) => {
           return response;
         })
-        .catch((error) => console.log('Error: ', error));
+        .catch((error) => console.log("Error: ", error));
     },
     handleModifyProduct: async (data, id) => {
       return modifyProduct(data, id).catch((error) =>
-        console.log('Error: ', error)
+        console.log("Error: ", error),
       );
     },
     handleDeleteProduct: async (id) => {
-      return deleteProduct(id).catch((error) => console.log('Error: ', error));
+      return deleteProduct(id).catch((error) => console.log("Error: ", error));
     },
     handleFreezeProduct: (id, moveTo) => {
-      moveProduct(id, moveTo).catch((error) => console.log('Error: ', error));
+      moveProduct(id, moveTo).catch((error) => console.log("Error: ", error));
     },
   }));
 

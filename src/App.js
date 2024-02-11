@@ -1,32 +1,33 @@
-import 'react-native-gesture-handler';
-import { registerRootComponent } from 'expo';
-import React from 'react';
-import { useFonts } from 'expo-font';
-import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { StyleSheet, View, LogBox } from 'react-native';
+import "react-native-gesture-handler";
+import FreezerIcon from "@components/svg/FreezerIcon";
+import SettingsIcon from "@components/svg/SettingsIcon";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer } from "@react-navigation/native";
+import { registerRootComponent } from "expo";
+import { useFonts } from "expo-font";
+import React from "react";
+import { StyleSheet, View, LogBox } from "react-native";
+
+import { FRIDGE, FREEZER, SETTINGS } from "./constants";
 import {
   FridgeStackScreen,
   FreezerStackScreen,
   SettingsStackScreen,
   SingInStackScreen,
-} from './navigation/navigation';
-import FreezerIcon from '@components/svg/FreezerIcon';
-import SettingsIcon from '@components/svg/SettingsIcon';
-import { countExpiredItems } from '../src/utils';
-import { customFonts } from './typography/typography';
+} from "./navigation/navigation";
 import {
   AuthProvider,
   LocaleProvider,
   ProductsProvider,
   ThemeProvider,
-} from './store';
-import { FRIDGE, FREEZER, SETTINGS } from './constants';
+} from "./store";
+import { customFonts } from "./typography/typography";
+import { countExpiredItems } from "../src/utils";
 
 LogBox.ignoreLogs([
-  'Warning: componentWillMount is deprecated',
-  'Warning: componentWillReceiveProps has been renamed',
-  'Warning: Setting a timer',
+  "Warning: componentWillMount is deprecated",
+  "Warning: componentWillReceiveProps has been renamed",
+  "Warning: Setting a timer",
 ]);
 
 const Tab = createBottomTabNavigator();
@@ -53,7 +54,7 @@ export default function App() {
                           screenOptions={({ route }) => ({
                             tabBarIcon: ({ focused, color, size }) => {
                               let IconName;
-                              size = focused ? size : '22';
+                              size = focused ? size : "22";
 
                               if (
                                 route.name === t(FRIDGE) ||
@@ -123,18 +124,18 @@ registerRootComponent(App);
 const styles = StyleSheet.create({
   tabIcon: {
     flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
 const tabBarOptions = {
-  inactiveTintColor: 'black',
+  inactiveTintColor: "black",
   showIcon: true,
   showLabel: true,
   upperCaseLabel: true,
   labelStyle: {
-    fontFamily: 'OpenSans-Regular',
-    textTransform: 'uppercase',
+    fontFamily: "OpenSans-Regular",
+    textTransform: "uppercase",
   },
 };

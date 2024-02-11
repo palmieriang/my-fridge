@@ -1,8 +1,9 @@
-import React, { useContext } from 'react';
-import { FontAwesome } from '@expo/vector-icons';
-import { View } from 'react-native';
-import { authStore } from '../../store';
-import styles from './styles';
+import { FontAwesome } from "@expo/vector-icons";
+import React, { useContext } from "react";
+import { View } from "react-native";
+
+import styles from "./styles";
+import { authStore } from "../../store";
 
 const SocialIcon = () => {
   const { authContext } = useContext(authStore);
@@ -21,7 +22,7 @@ const SocialIcon = () => {
         onPress={signInGoogle}
         size={26}
         iconStyle={styles.icons}
-      ></FontAwesome.Button>
+      />
     </View>
   );
 };

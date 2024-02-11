@@ -1,20 +1,21 @@
-import React, { useContext, useState } from 'react';
-import { View, StyleSheet, LogBox } from 'react-native';
-import DateTimePickerModal from 'react-native-modal-datetime-picker';
-import { Picker } from '@react-native-picker/picker';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { convertToISODateString, convertToCustomFormat } from '../../utils';
-import { authStore, localeStore, productsStore, themeStore } from '../../store';
-import FormInput from '@components/FormInput/FormInput';
-import Button from '@components/Button/Button';
-import { adjust } from '@components/utils/dimensions';
-import CalendarIcon from '@components/svg/CalendarIcon';
-import ShoppingBasketIcon from '@components/svg/ShoppingBasketIcon';
-import { FRIDGE, FREEZER } from '../../constants';
-import styles from './styles';
+import Button from "@components/Button/Button";
+import FormInput from "@components/FormInput/FormInput";
+import CalendarIcon from "@components/svg/CalendarIcon";
+import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
+import { adjust } from "@components/utils/dimensions";
+import { Picker } from "@react-native-picker/picker";
+import React, { useContext, useState } from "react";
+import { View, StyleSheet, LogBox } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+
+import styles from "./styles";
+import { FRIDGE, FREEZER } from "../../constants";
+import { authStore, localeStore, productsStore, themeStore } from "../../store";
+import { convertToISODateString, convertToCustomFormat } from "../../utils";
 
 LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
+  "Non-serializable values were found in the navigation state",
 ]);
 
 const ProductForm = ({ navigation, route }) => {
@@ -28,14 +29,14 @@ const ProductForm = ({ navigation, route }) => {
   const { theme } = useContext(themeStore);
   const { productsContext } = useContext(productsStore);
 
-  const existingId = params?.id || '';
+  const existingId = params?.id || "";
   const initPickerDate = params.product?.date
     ? convertToISODateString(params.product?.date)
     : new Date();
 
-  const [name, setName] = useState(params.product?.name || '');
-  const [date, setDate] = useState(params.product?.date || '');
-  const [place, setPlace] = useState(params.product?.place || '');
+  const [name, setName] = useState(params.product?.name || "");
+  const [date, setDate] = useState(params.product?.date || "");
+  const [place, setPlace] = useState(params.product?.place || "");
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const userID = user.uid;
@@ -52,22 +53,21 @@ const ProductForm = ({ navigation, route }) => {
         productsContext
           .handleModifyProduct(data, existingId)
           .then(() => {
-            navigation.navigate('list');
+            navigation.navigate("list");
           })
-          .catch((error) => console.log('Error: ', error));
+          .catch((error) => console.log("Error: ", error));
       } else {
         productsContext
           .handleSaveProduct(data)
           .then(() => {
-            navigation.navigate('list');
+            navigation.navigate("list");
           })
-          .catch((error) => console.log('Error: ', error));
+          .catch((error) => console.log("Error: ", error));
       }
     } else {
       alert(
-        'Please make sure to add a product name longer than 3 letters, a place and the expiring date'
+        "Please make sure to add a product name longer than 3 letters, a place and the expiring date",
       );
-      return;
     }
   };
 
@@ -92,12 +92,12 @@ const ProductForm = ({ navigation, route }) => {
     if (existingId) {
       productsContext
         .handleDeleteProduct(existingId)
-        .then(() => navigation.navigate('list'))
-        .catch((error) => console.log('Error: ', error));
+        .then(() => navigation.navigate("list"))
+        .catch((error) => console.log("Error: ", error));
     } else {
-      navigation.navigate('list');
+      navigation.navigate("list");
     }
-    console.log('Item deleted');
+    console.log("Item deleted");
   };
 
   return (
@@ -109,7 +109,7 @@ const ProductForm = ({ navigation, route }) => {
         <FormInput
           labelValue={name}
           onChangeText={handleChangeName}
-          placeholderText={t('product')}
+          placeholderText={t("product")}
           Icon={ShoppingBasketIcon}
           autoCapitalize="sentences"
           underlineColorAndroid="transparent"
@@ -117,7 +117,7 @@ const ProductForm = ({ navigation, route }) => {
         <FormInput
           labelValue={date}
           onChangeText={handleChangeName}
-          placeholderText={t('date')}
+          placeholderText={t("date")}
           Icon={CalendarIcon}
           editable={!showDatePicker}
           onFocus={handleDatePress}
@@ -135,17 +135,17 @@ const ProductForm = ({ navigation, route }) => {
             selectedValue={place}
             onValueChange={(itemValue) => setPlace(itemValue)}
           >
-            <Picker.Item label={t('choosePlace')} value="" />
+            <Picker.Item label={t("choosePlace")} value="" />
             <Picker.Item label={t(FRIDGE)} value="fridge" />
             <Picker.Item label={t(FREEZER)} value="freezer" />
           </Picker>
         </View>
         <Button
-          text={existingId ? t('modify') : t('add')}
+          text={existingId ? t("modify") : t("add")}
           onPress={handleAddPress}
         />
         <Button
-          text={existingId ? t('delete') : t('cancel')}
+          text={existingId ? t("delete") : t("cancel")}
           onPress={handleDeletePress}
           buttonDelete
         />
@@ -156,30 +156,30 @@ const ProductForm = ({ navigation, route }) => {
 
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     fontSize: adjust(14),
-    height: '100%',
+    height: "100%",
     paddingLeft: 66,
   },
   inputAndroid: {
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     fontSize: adjust(14),
-    height: '100%',
+    height: "100%",
     marginLeft: 60,
     paddingLeft: 66,
   },
   iconContainer: {
-    alignItems: 'center',
-    borderRightColor: '#ccc',
+    alignItems: "center",
+    borderRightColor: "#ccc",
     borderRightWidth: StyleSheet.hairlineWidth,
     fontSize: adjust(14),
-    justifyContent: 'center',
-    height: '100%',
+    justifyContent: "center",
+    height: "100%",
     left: 0,
     width: 54,
   },
   placeholder: {
-    color: '#757575',
+    color: "#757575",
   },
 });
 

@@ -1,21 +1,21 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   selectorContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 5,
     marginTop: 20,
     minWidth: 200,
   },
   initValueTextStyle: {
-    color: 'black',
-    fontFamily: 'OpenSans-Regular',
+    color: "black",
+    fontFamily: "OpenSans-Regular",
   },
   text: {
-    fontFamily: 'OpenSans-Regular',
+    fontFamily: "OpenSans-Regular",
   },
   container: {
-    backgroundColor: 'lightgrey',
+    backgroundColor: "lightgrey",
   },
   logout: {
     marginTop: 20,
