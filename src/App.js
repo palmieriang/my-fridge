@@ -13,7 +13,7 @@ import {
 } from './navigation/navigation';
 import FreezerIcon from '@components/svg/FreezerIcon';
 import SettingsIcon from '@components/svg/SettingsIcon';
-import { daysUntilDate } from '../src/utils';
+import { countExpiredItems } from '../src/utils';
 import { customFonts } from './typography/typography';
 import {
   AuthProvider,
@@ -30,23 +30,6 @@ LogBox.ignoreLogs([
 ]);
 
 const Tab = createBottomTabNavigator();
-
-const countExpiredItems = (productsList) => {
-  if (!productsList.length) {
-    return null;
-  }
-
-  let counter = null;
-  for (let i = 0; i < productsList.length; i++) {
-    if (productsList[i].place === FRIDGE) {
-      const days = daysUntilDate(productsList[i].date);
-      if (days < 0) {
-        counter++;
-      }
-    }
-  }
-  return counter;
-};
 
 export default function App() {
   const [fontsLoaded] = useFonts(customFonts);

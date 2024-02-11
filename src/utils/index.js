@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { FRIDGE } from '../constants';
 
 export function convertToISODateString(dateString) {
   const date = moment(dateString, 'D MMM YYYY');
@@ -20,3 +21,20 @@ export function daysUntilDate(dateString) {
 
   return difference;
 }
+
+export const countExpiredItems = (productsList) => {
+  if (!productsList.length) {
+    return null;
+  }
+
+  let counter = null;
+  for (let i = 0; i < productsList.length; i++) {
+    if (productsList[i].place === FRIDGE) {
+      const days = daysUntilDate(productsList[i].date);
+      if (days < 0) {
+        counter++;
+      }
+    }
+  }
+  return counter;
+};
