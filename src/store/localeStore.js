@@ -5,7 +5,7 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import * as Localization from 'expo-localization';
+import { getLocales } from 'expo-localization';
 import i18n from 'i18n-js';
 import { authStore } from './authStore';
 import { changeLanguage } from '../../api/api';
@@ -16,7 +16,7 @@ const fr = require('../localization/fr.json');
 
 i18n.fallbacks = true;
 i18n.translations = { fr, it, en };
-i18n.locale = Localization.locale;
+i18n.locale = getLocales();
 
 const loadLocale = i18n;
 

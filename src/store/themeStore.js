@@ -34,8 +34,6 @@ const { Provider, Consumer } = themeStore;
 
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(themes.lightRed);
-
-  // destructure theme from userData and rename it as themeFromFirebase
   const { userData: {theme: themeFromFirebase}} = useContext(authStore);
 
   useEffect(() => {
@@ -51,7 +49,7 @@ const ThemeProvider = ({ children }) => {
           .then(() => {
             setTheme(themes[newTheme]);
           })
-          .catch(error => console.log('Error: ', error));
+          .catch(error => console.log('Error changing theme: ', error));
       },
     }), []
   );
