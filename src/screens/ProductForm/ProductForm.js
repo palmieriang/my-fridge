@@ -3,7 +3,7 @@ import { View, StyleSheet, LogBox } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { Picker } from '@react-native-picker/picker';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { formatDate } from '../../utils';
+import { convertToISODateString, convertToCustomFormat } from '../../utils';
 import { authStore, localeStore, productsStore, themeStore } from '../../store';
 import FormInput from '@components/FormInput/FormInput';
 import Button from '@components/Button/Button';
@@ -30,7 +30,7 @@ const ProductForm = ({ navigation, route }) => {
 
   const existingId = params?.id || '';
   const initPickerDate = params.product?.date
-    ? new Date(params.product?.date)
+    ? convertToISODateString(params.product?.date)
     : new Date();
 
   const [name, setName] = useState(params.product?.name || '');
@@ -80,7 +80,7 @@ const ProductForm = ({ navigation, route }) => {
   };
 
   const handleDatePicked = (date) => {
-    setDate(formatDate(date));
+    setDate(convertToCustomFormat(date));
     handleDatePickerHide();
   };
 
@@ -115,7 +115,7 @@ const ProductForm = ({ navigation, route }) => {
           underlineColorAndroid="transparent"
         />
         <FormInput
-          labelValue={formatDate(date.toString())}
+          labelValue={date}
           onChangeText={handleChangeName}
           placeholderText={t('date')}
           Icon={CalendarIcon}
@@ -123,7 +123,7 @@ const ProductForm = ({ navigation, route }) => {
           onFocus={handleDatePress}
         />
         <DateTimePickerModal
-          date={initPickerDate}
+          date={new Date(initPickerDate)}
           isVisible={showDatePicker}
           mode="date"
           onConfirm={handleDatePicked}

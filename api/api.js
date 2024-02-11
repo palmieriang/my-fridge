@@ -105,10 +105,8 @@ export function authSignOut() {
 }
 
 export function persistentLogin(callback, callbackData) {
-  console.log('PERSISTEN LOGIN ');
   return onAuthStateChanged(auth, (user) => {
     if (user) {
-      console.log('user persistent ', user);
       user
         .getIdToken(true)
         .then(async (idToken) => {
