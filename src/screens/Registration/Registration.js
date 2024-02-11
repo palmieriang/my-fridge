@@ -1,30 +1,31 @@
-import React, { useState, useContext } from 'react';
-import { Text, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { authStore } from '../../store';
-import FormInput from '@components/FormInput/FormInput';
-import Button from '@components/Button/Button';
-import UsernameIcon from '@components/svg/UsernameIcon';
-import PadlockIcon from '@components/svg/PadlockIcon';
-import EmailIcon from '@components/svg/EmailIcon';
-import styles from './styles';
+import Button from "@components/Button/Button";
+import FormInput from "@components/FormInput/FormInput";
+import EmailIcon from "@components/svg/EmailIcon";
+import PadlockIcon from "@components/svg/PadlockIcon";
+import UsernameIcon from "@components/svg/UsernameIcon";
+import React, { useState, useContext } from "react";
+import { Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+import styles from "./styles";
+import { authStore } from "../../store";
 
 const Registration = ({ navigation }) => {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const { authContext } = useContext(authStore);
 
   const handleRegistration = () => {
     authContext
       .signUp({ fullName, email, password, confirmPassword })
-      .then(() => navigation.navigate('signin'));
+      .then(() => navigation.navigate("signin"));
   };
 
   const handleGoToLogin = () => {
-    navigation.navigate('signin');
+    navigation.navigate("signin");
   };
 
   return (
@@ -67,10 +68,10 @@ const Registration = ({ navigation }) => {
         underlineColorAndroid="transparent"
         secureTextEntry
       />
-      <Button text={'Create account'} onPress={handleRegistration} />
+      <Button text="Create account" onPress={handleRegistration} />
       <View style={styles.footerView}>
         <Text style={styles.footerText}>
-          Already got an account?{' '}
+          Already got an account?{" "}
           <Text onPress={handleGoToLogin} style={styles.footerLink}>
             Log in
           </Text>

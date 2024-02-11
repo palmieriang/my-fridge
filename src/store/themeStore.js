@@ -1,31 +1,38 @@
-import React, { createContext, useState, useContext, useEffect, useMemo } from 'react';
-import { changeColor } from '../../api/api';
-import { authStore } from './authStore';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+} from "react";
+
+import { authStore } from "./authStore";
+import { changeColor } from "../../api/api";
 
 const themes = {
   lightRed: {
-    foreground: '#ffffff',
-    background: '#F3F3F3',
-    text: 'black',
-    primary: '#e74c3c',
+    foreground: "#ffffff",
+    background: "#F3F3F3",
+    text: "black",
+    primary: "#e74c3c",
   },
   lightBlue: {
-    foreground: '#ffffff',
-    background: '#F3F3F3',
-    text: 'black',
-    primary: '#48bbec',
+    foreground: "#ffffff",
+    background: "#F3F3F3",
+    text: "black",
+    primary: "#48bbec",
   },
   darkRed: {
-    foreground: '#242424',
-    background: '#131313',
-    text: 'white',
-    primary: '#e74c3c',
+    foreground: "#242424",
+    background: "#131313",
+    text: "white",
+    primary: "#e74c3c",
   },
   darkBlue: {
-    foreground: '#242424',
-    background: '#131313',
-    text: 'white',
-    primary: '#48bbec',
+    foreground: "#242424",
+    background: "#131313",
+    text: "white",
+    primary: "#48bbec",
   },
 };
 
@@ -34,7 +41,9 @@ const { Provider, Consumer } = themeStore;
 
 const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(themes.lightRed);
-  const { userData: {theme: themeFromFirebase}} = useContext(authStore);
+  const {
+    userData: { theme: themeFromFirebase },
+  } = useContext(authStore);
 
   useEffect(() => {
     if (themeFromFirebase) {
@@ -49,16 +58,15 @@ const ThemeProvider = ({ children }) => {
           .then(() => {
             setTheme(themes[newTheme]);
           })
-          .catch(error => console.log('Error changing theme: ', error));
+          .catch((error) => console.log("Error changing theme: ", error));
       },
-    }), []
+    }),
+    [],
   );
 
   return (
     <Provider value={{ theme, setTheme, themeContext }}>
-      <Consumer>
-        {children}
-      </Consumer>
+      <Consumer>{children}</Consumer>
     </Provider>
   );
 };

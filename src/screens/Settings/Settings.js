@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
-import { Button, View } from 'react-native';
-import ModalSelector from 'react-native-modal-selector';
-import { authStore, localeStore, themeStore } from '../../store';
-import Profile from '../Profile/Profile';
-import styles from './styles';
+import React, { useContext } from "react";
+import { Button, View } from "react-native";
+import ModalSelector from "react-native-modal-selector";
+
+import styles from "./styles";
+import { authStore, localeStore, themeStore } from "../../store";
+import Profile from "../Profile/Profile";
 
 const Settings = () => {
   const {
@@ -19,18 +20,18 @@ const Settings = () => {
   } = useContext(themeStore);
 
   const languageData = [
-    { section: true, label: t('chooseLanguage'), key: 'title' },
-    { label: t('english'), value: 'en', key: 'english' },
-    { label: t('italian'), value: 'it', key: 'italian' },
-    { label: t('french'), value: 'fr', key: 'french' },
+    { section: true, label: t("chooseLanguage"), key: "title" },
+    { label: t("english"), value: "en", key: "english" },
+    { label: t("italian"), value: "it", key: "italian" },
+    { label: t("french"), value: "fr", key: "french" },
   ];
 
   const themeData = [
-    { section: true, label: t('changeTheme'), key: 'title' },
-    { label: 'Light Red', value: 'lightRed', key: 'lightRed' },
-    { label: 'Light Blue', value: 'lightBlue', key: 'lightBlue' },
-    { label: 'Dark Red', value: 'darkRed', key: 'darkRed' },
-    { label: 'Dark Blue', value: 'darkBlue', key: 'darkBlue' },
+    { section: true, label: t("changeTheme"), key: "title" },
+    { label: "Light Red", value: "lightRed", key: "lightRed" },
+    { label: "Light Blue", value: "lightBlue", key: "lightBlue" },
+    { label: "Dark Red", value: "darkRed", key: "darkRed" },
+    { label: "Dark Blue", value: "darkBlue", key: "darkBlue" },
   ];
 
   const handleLogOut = () => {
@@ -51,16 +52,16 @@ const Settings = () => {
     <View
       style={{
         flex: 1,
-        alignItems: 'center',
+        alignItems: "center",
         backgroundColor: theme.background,
       }}
     >
       <Profile />
       <ModalSelector
         animationType="fade"
-        cancelText={t('cancel')}
+        cancelText={t("cancel")}
         data={languageData}
-        initValue={t('changeLanguage')}
+        initValue={t("changeLanguage")}
         initValueTextStyle={styles.initValueTextStyle}
         onChange={handleLocale}
         style={styles.selectorContainer}
@@ -72,9 +73,9 @@ const Settings = () => {
       />
       <ModalSelector
         animationType="fade"
-        cancelText={t('cancel')}
+        cancelText={t("cancel")}
         data={themeData}
-        initValue={t('changeTheme')}
+        initValue={t("changeTheme")}
         initValueTextStyle={styles.initValueTextStyle}
         onChange={handleTheme}
         style={styles.selectorContainer}

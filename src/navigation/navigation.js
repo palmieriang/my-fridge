@@ -1,31 +1,32 @@
-import React, { useContext } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { adjust } from '@components/utils/dimensions';
-import { localeStore, themeStore } from '../store';
-import ProductList from '@screens/ProductList/ProductList';
-import ProductForm from '@screens/ProductForm/ProductForm';
-import Settings from '@screens/Settings/Settings';
-import SignIn from '@screens/SignIn/SignIn';
-import Registration from '@screens/Registration/Registration';
-import { FRIDGE, FREEZER, SETTINGS } from '../constants';
+import { adjust } from "@components/utils/dimensions";
+import { createStackNavigator } from "@react-navigation/stack";
+import ProductForm from "@screens/ProductForm/ProductForm";
+import ProductList from "@screens/ProductList/ProductList";
+import Registration from "@screens/Registration/Registration";
+import Settings from "@screens/Settings/Settings";
+import SignIn from "@screens/SignIn/SignIn";
+import React, { useContext } from "react";
+
+import { FRIDGE, FREEZER, SETTINGS } from "../constants";
+import { localeStore, themeStore } from "../store";
 
 const Stack = createStackNavigator();
 
 const screenOptions = {
   headerStyle: {
     elevation: 0,
-    shadowColor: 'transparent',
+    shadowColor: "transparent",
     shadowRadius: 0,
     shadowOffset: {
       height: 0,
     },
   },
-  headerTitleAlign: 'center',
-  headerTintColor: '#fff',
+  headerTitleAlign: "center",
+  headerTintColor: "#fff",
   headerTitleStyle: {
-    fontFamily: 'Nunito-Bold',
+    fontFamily: "Nunito-Bold",
     fontSize: adjust(18),
-    textTransform: 'uppercase',
+    textTransform: "uppercase",
   },
 };
 
@@ -47,7 +48,7 @@ export function FridgeStackScreen() {
       <Stack.Screen
         name="list"
         component={ProductList}
-        options={{ title: t('title') }}
+        options={{ title: t("title") }}
         initialParams={{ place: FRIDGE }}
       />
       <Stack.Screen
@@ -79,13 +80,13 @@ export function FreezerStackScreen() {
       <Stack.Screen
         name="list"
         component={ProductList}
-        options={{ title: 'Freezer' }}
+        options={{ title: "Freezer" }}
         initialParams={{ place: FREEZER }}
       />
       <Stack.Screen
         name="form"
         component={ProductForm}
-        options={{ title: t('add') }}
+        options={{ title: t("add") }}
       />
     </Stack.Navigator>
   );
@@ -120,18 +121,18 @@ export function SingInStackScreen() {
     <Stack.Navigator
       screenOptions={{
         ...screenOptions,
-        headerTintColor: '#48bbec',
+        headerTintColor: "#48bbec",
       }}
     >
       <Stack.Screen
         name="signin"
         component={SignIn}
-        options={{ title: 'Login' }}
+        options={{ title: "Login" }}
       />
       <Stack.Screen
         name="registration"
         component={Registration}
-        options={{ title: 'Create account' }}
+        options={{ title: "Create account" }}
       />
     </Stack.Navigator>
   );

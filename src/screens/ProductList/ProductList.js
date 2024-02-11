@@ -1,12 +1,13 @@
-import React, { useContext } from 'react';
-import PropTypes from 'prop-types';
-import { FlatList, Text, View } from 'react-native';
-import ActionButton from 'react-native-action-button-warnings-fixed';
-import { localeStore, themeStore } from '../../store';
-import { productsStore } from '../../store/productsStore';
-import ProductCard from '@components/ProductCard/ProductCard';
-import { FRIDGE, FREEZER } from '../../constants';
-import styles from './styles';
+import ProductCard from "@components/ProductCard/ProductCard";
+import PropTypes from "prop-types";
+import React, { useContext } from "react";
+import { FlatList, Text, View } from "react-native";
+import ActionButton from "react-native-action-button-warnings-fixed";
+
+import styles from "./styles";
+import { FRIDGE, FREEZER } from "../../constants";
+import { localeStore, themeStore } from "../../store";
+import { productsStore } from "../../store/productsStore";
 
 const ProductList = ({ navigation, route }) => {
   const {
@@ -17,13 +18,13 @@ const ProductList = ({ navigation, route }) => {
 
   const { place } = route.params;
 
-  let filteredList = productsList.filter((item) => {
+  const filteredList = productsList.filter((item) => {
     return item.place === place;
   });
 
   const handleAddProduct = () => {
-    navigation.navigate('form', {
-      title: t('addItem'),
+    navigation.navigate("form", {
+      title: t("addItem"),
     });
   };
 
@@ -31,13 +32,13 @@ const ProductList = ({ navigation, route }) => {
     productsContext
       .handleGetProduct(id)
       .then((product) => {
-        navigation.navigate('form', {
+        navigation.navigate("form", {
           id,
           product,
-          title: t('modifyItem'),
+          title: t("modifyItem"),
         });
       })
-      .catch((error) => console.log('Error: ', error));
+      .catch((error) => console.log("Error: ", error));
   };
 
   const handleFreezeProduct = (id) => {
@@ -63,7 +64,7 @@ const ProductList = ({ navigation, route }) => {
           keyExtractor={(item) => item.id}
         />
       ) : (
-        <Text style={styles.text}>{t('error')}</Text>
+        <Text style={styles.text}>{t("error")}</Text>
       )}
 
       <ActionButton

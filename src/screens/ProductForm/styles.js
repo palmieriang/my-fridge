@@ -1,13 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%',
+    width: "100%",
   },
   inputContainer: {
-    backgroundColor: '#fff',
-    borderColor: '#ccc',
+    backgroundColor: "#fff",
+    borderColor: "#ccc",
     borderRadius: 5,
     borderWidth: StyleSheet.hairlineWidth,
     flex: 1,
@@ -16,6 +16,6 @@ export default StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     maxHeight: 54,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
 });

@@ -4,7 +4,8 @@ import React, {
   useMemo,
   useReducer,
   useState,
-} from 'react';
+} from "react";
+
 import {
   persistentLogin,
   authSignIn,
@@ -14,7 +15,7 @@ import {
   sendResetPassword,
   deleteProfileImage,
   signInWithGoogle,
-} from '../../api/api';
+} from "../../api/api";
 import { ActionTypes } from "../constants";
 
 const initialState = {
@@ -86,17 +87,17 @@ const AuthProvider = ({ children }) => {
         try {
           await createUser(fullName, email, password);
           await sendVerificationEmail();
-          alert('Please verify your account.');
+          alert("Please verify your account.");
         } catch (error) {
-          console.error('Error in create user', error);
+          console.error("Error in create user", error);
         }
       },
       resetPassword: async (email) => {
         try {
           await sendResetPassword(email);
-          alert('Please check your account.');
+          alert("Please check your account.");
         } catch (error) {
-          console.error('Error in reset password', error);
+          console.error("Error in reset password", error);
         }
       },
       updateProfileImage: (url) => {
@@ -106,7 +107,7 @@ const AuthProvider = ({ children }) => {
         deleteProfileImage(id, dispatch);
       },
     }),
-    []
+    [],
   );
 
   return (

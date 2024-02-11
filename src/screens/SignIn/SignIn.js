@@ -1,19 +1,20 @@
-import React, { useState, useContext, useRef } from 'react';
-import { Animated, Text, View } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { authStore } from '../../store';
-import SocialIcon from '@components/SocialIcon/SocialIcon';
-import FormInput from '@components/FormInput/FormInput';
-import Button from '@components/Button/Button';
-import useToggle from '@components/utils/useToggle';
-import UsernameIcon from '@components/svg/UsernameIcon';
-import PadlockIcon from '@components/svg/PadlockIcon';
-import LottieAnimation from '../../animations/LottieAnimation';
-import styles from './styles';
+import Button from "@components/Button/Button";
+import FormInput from "@components/FormInput/FormInput";
+import SocialIcon from "@components/SocialIcon/SocialIcon";
+import PadlockIcon from "@components/svg/PadlockIcon";
+import UsernameIcon from "@components/svg/UsernameIcon";
+import useToggle from "@components/utils/useToggle";
+import React, { useState, useContext, useRef } from "react";
+import { Animated, Text, View } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
+import styles from "./styles";
+import LottieAnimation from "../../animations/LottieAnimation";
+import { authStore } from "../../store";
 
 const SignIn = ({ navigation }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [playAnimation, setPlayAnimation] = useState(false);
   const [resetAnimation, setResetAnimation] = useState(false);
   const [isToggled, toggle] = useToggle(true);
@@ -63,7 +64,7 @@ const SignIn = ({ navigation }) => {
   };
 
   const handleCreateAccount = () => {
-    navigation.navigate('registration');
+    navigation.navigate("registration");
   };
 
   return (
@@ -108,12 +109,12 @@ const SignIn = ({ navigation }) => {
         </Animated.View>
       )}
       <Button
-        text={isToggled ? 'Sign in' : 'Reset password'}
+        text={isToggled ? "Sign in" : "Reset password"}
         onPress={isToggled ? handleSignIn : handleResetPassword}
       />
       <View style={styles.footerView}>
         <Text style={styles.footerText}>
-          New user?{' '}
+          New user?{" "}
           <Text onPress={handleCreateAccount} style={styles.footerLink}>
             Create an account
           </Text>
@@ -122,7 +123,7 @@ const SignIn = ({ navigation }) => {
           onPress={isToggled ? fadeOut : fadeIn}
           style={{ ...styles.footerLink, marginBottom: 10 }}
         >
-          {isToggled ? 'Reset password' : 'Login'}
+          {isToggled ? "Reset password" : "Login"}
         </Text>
         <Text style={styles.footerText}>Sign In with: </Text>
         <SocialIcon />

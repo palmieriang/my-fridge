@@ -1,18 +1,19 @@
+import { getLocales } from "expo-localization";
+import i18n from "i18n-js";
 import React, {
   createContext,
   useMemo,
   useState,
   useContext,
   useEffect,
-} from 'react';
-import { getLocales } from 'expo-localization';
-import i18n from 'i18n-js';
-import { authStore } from './authStore';
-import { changeLanguage } from '../../api/api';
+} from "react";
 
-const en = require('../localization/en.json');
-const it = require('../localization/it.json');
-const fr = require('../localization/fr.json');
+import { authStore } from "./authStore";
+import { changeLanguage } from "../../api/api";
+
+const en = require("../localization/en.json");
+const fr = require("../localization/fr.json");
+const it = require("../localization/it.json");
 
 i18n.fallbacks = true;
 i18n.translations = { fr, it, en };
@@ -45,10 +46,10 @@ const LocaleProvider = ({ children }) => {
           .then(() => {
             setLocale(newLocale);
           })
-          .catch((error) => console.log('Error: ', error));
+          .catch((error) => console.log("Error: ", error));
       },
     }),
-    [locale]
+    [locale],
   );
 
   return (

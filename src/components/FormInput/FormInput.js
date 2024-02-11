@@ -1,13 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { View, TextInput } from 'react-native';
-import styles from './styles';
+import PropTypes from "prop-types";
+import React from "react";
+import { View, TextInput } from "react-native";
+
+import styles from "./styles";
 
 const FormInput = ({ labelValue, placeholderText, Icon, ...rest }) => {
   return (
     <View
       style={styles.inputContainer}
-      accessible={true}
+      accessible
       accessibilityLabel={placeholderText}
     >
       <View style={styles.iconStyle}>

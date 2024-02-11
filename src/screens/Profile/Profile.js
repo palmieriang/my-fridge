@@ -1,14 +1,15 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import Image from 'react-native-image-progress';
-import * as Progress from 'react-native-progress';
-import { uploadTaskFromApi } from '../../../api/api';
-import { authStore, themeStore } from '../../store';
-import UserIcon from '@components/svg/UserIcon';
-import DeleteIcon from '@components/svg/DeleteIcon';
-import styles from './styles';
+import DeleteIcon from "@components/svg/DeleteIcon";
+import UserIcon from "@components/svg/UserIcon";
+import Constants from "expo-constants";
+import * as ImagePicker from "expo-image-picker";
+import React, { useContext, useState, useEffect } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import Image from "react-native-image-progress";
+import * as Progress from "react-native-progress";
+
+import styles from "./styles";
+import { uploadTaskFromApi } from "../../../api/api";
+import { authStore, themeStore } from "../../store";
 
 const Profile = () => {
   const [upload, setUpload] = useState({
@@ -26,11 +27,10 @@ const Profile = () => {
   useEffect(() => {
     (async () => {
       if (Constants.platform.ios) {
-        const {
-          status,
-        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
         }
       }
     })();
@@ -40,37 +40,37 @@ const Profile = () => {
 
   const monitorFileUpload = (uploadTask) => {
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot) => {
         const progress = snapshot.bytesTransferred / snapshot.totalBytes;
-        console.log('Upload is ' + uploadProgress(progress) + '% done');
+        console.log("Upload is " + uploadProgress(progress) + "% done");
 
         setUpload({ loading: true, progress });
 
         switch (snapshot.state) {
-          case 'paused': // or firebase.storage.TaskState.PAUSED
-            console.log('Upload is paused');
+          case "paused": // or firebase.storage.TaskState.PAUSED
+            console.log("Upload is paused");
             break;
-          case 'running': // or firebase.storage.TaskState.RUNNING
-            console.log('Upload is running');
+          case "running": // or firebase.storage.TaskState.RUNNING
+            console.log("Upload is running");
             break;
         }
       },
       (error) => {
-        console.log('Error: ', error);
+        console.log("Error: ", error);
       },
       () => {
         uploadTask.snapshot.ref.getDownloadURL().then((url) => {
-          console.log('File available at', url);
+          console.log("File available at", url);
           authContext.updateProfileImage(url);
           setUpload({ loading: false });
         });
-      }
+      },
     );
   };
 
   const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+    const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
       allowsEditing: true,
       aspect: [4, 3],
@@ -83,12 +83,12 @@ const Profile = () => {
         xhr.onload = () => {
           resolve(xhr.response);
         };
-        xhr.responseType = 'blob';
-        xhr.open('GET', result.uri, true);
+        xhr.responseType = "blob";
+        xhr.open("GET", result.uri, true);
         xhr.send(null);
       });
       const metadata = {
-        contentType: 'image/jpeg',
+        contentType: "image/jpeg",
       };
 
       const uploadTask = uploadTaskFromApi(userData.id, blob, metadata);
