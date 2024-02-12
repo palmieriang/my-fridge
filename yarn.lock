@@ -2680,22 +2680,6 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.11.tgz#2596fb352ee96a1379c657734d4b913a613ad563"
   integrity sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==
 
-"@types/react-native@~0.63.2":
-  version "0.63.75"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.63.75.tgz#fbc6a3c45bcce963f7cc9803a65d8f841197f7d0"
-  integrity sha512-SPlOPHMoSP7eeMaEb3ef1T/Hjsjub4xl1ipj4tqaXZtuF+1Pfgn+S3U2/tHWN++S41c+4BJp+krUJ1LXy7pY7w==
-  dependencies:
-    "@types/react" "^16"
-
-"@types/react@^16":
-  version "16.14.56"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.14.56.tgz#4cf37850a87edcb9f3526648338eff35d283c9ab"
-  integrity sha512-MxuHB7dvVm5yOxRr7hJoonLG0JY8YvqZtaQ9Quirp3Oe4FLFjAgxkxsKE6IspdHPpRVZKo2ZoDEravWO81EeYA==
-  dependencies:
-    "@types/prop-types" "*"
-    "@types/scheduler" "*"
-    csstype "^3.0.2"
-
 "@types/react@~18.2.45":
   version "18.2.55"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.55.tgz#38141821b7084404b5013742bc4ae08e44da7a67"
