@@ -3,7 +3,11 @@
     "name": "myfridge",
     "description": "How many times do you open the fridge and find something expired? This app is the best way to track your groceries.",
     "slug": "myfridge",
-    "platforms": ["ios", "android", "web"],
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
     "version": "4.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,20 +24,30 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": ["**/*", "assets/*"],
+    "assetBundlePatterns": [
+      "**/*",
+      "assets/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.myfridge.App"
     },
     "plugins": [
-      "expo-build-properties",
-      {
-        "android": {
-          "compileSdkVersion": 31,
-          "targetSdkVersion": 31,
-          "buildToolsVersion": "31.0.0"
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 31,
+            "targetSdkVersion": 31,
+            "buildToolsVersion": "31.0.0"
+          }
         }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "${EAS_PROJECT_ID}"
       }
-    ]
+    }
   }
 }
