@@ -3,6 +3,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
+  deleteUser,
 } from "firebase/auth";
 import {
   orderBy,
@@ -49,6 +50,13 @@ export function createUser(fullName, email, password) {
       addUserData(uid, data);
     })
     .catch((error) => alert(error.message));
+}
+
+export function deleteAccount() {
+  const user = auth.currentUser;
+  deleteUser(user).catch((error) => {
+    console.log("ERROR in deleteAccount ", error.message);
+  });
 }
 
 export function authSignIn(email, password) {
