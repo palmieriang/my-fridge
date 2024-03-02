@@ -48,7 +48,7 @@ const LottieAnimation = ({
 const styles = StyleSheet.create({
   animation: {
     height: "100%",
-    width: "100%"
+    width: "100%",
   },
 });
 
