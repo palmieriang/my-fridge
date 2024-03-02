@@ -11,3 +11,27 @@ Used React Native to develop an app which allows to track products inside the fr
 `npx expo start`
 
 ----------
+
+# Install EAS CLI:
+First, you'll need to install the EAS CLI if you haven't already. You can install it globally using npm or yarn:
+
+`npm install -g eas-cli`
+
+or
+
+`yarn global add eas-cli`
+
+If you're encountering a "command not found" error after installing eas-cli, it's possible that the binary directory where eas is installed is not included in your system's PATH environment variable.
+
+`yarn global bin`
+
+`export PATH="$PATH:<global_bin_directory>"`
+
+# Build for Android with EAS:
+Once you have the EAS CLI installed, you can use the following command to start the build process for your Android app:
+
+`eas build -p android`
+
+# Notes
+
+Show inspector in Android Emulator shortcut `CMD + M`
