@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Button, View } from "react-native";
+import { Alert, Button, Text, View } from "react-native";
 import ModalSelector from "react-native-modal-selector";
 
 import styles from "./styles";
@@ -34,8 +34,9 @@ const Settings = () => {
     { label: "Dark Blue", value: "darkBlue", key: "darkBlue" },
   ];
 
-  const handleLogOut = () => {
-    authContext.signOut();
+  const handleLocale = (locale) => {
+    const newLocale = locale.value;
+    changeLocale({ newLocale, id });
   };
 
   const handleTheme = (theme) => {
@@ -43,9 +44,23 @@ const Settings = () => {
     changeTheme({ newTheme, id });
   };
 
-  const handleLocale = (locale) => {
-    const newLocale = locale.value;
-    changeLocale({ newLocale, id });
+  const handleLogOut = () => {
+    authContext.signOut();
+  };
+
+  const handleDeleteUser = () => {
+    Alert.alert("Attention", "Are you sure you want to delete your account?", [
+      {
+        text: "Go back",
+        onPress: () => null,
+        style: "cancel",
+      },
+      {
+        text: "Yes delete",
+        onPress: () => authContext.deleteUser(),
+        style: "destructive",
+      },
+    ]);
   };
 
   return (
@@ -69,7 +84,7 @@ const Settings = () => {
         selectTextStyle={styles.text}
         optionTextStyle={styles.text}
         cancelTextStyle={styles.text}
-        optionContainerStyle={styles.container}
+        optionContainerStyle={styles.optionContainer}
       />
       <ModalSelector
         animationType="fade"
@@ -83,10 +98,13 @@ const Settings = () => {
         selectTextStyle={styles.text}
         optionTextStyle={styles.text}
         cancelTextStyle={styles.text}
-        optionContainerStyle={styles.container}
+        optionContainerStyle={styles.optionContainer}
       />
-      <View style={styles.logout}>
+      <View style={styles.auth}>
         <Button title="Logout" onPress={handleLogOut} />
+        <Text onPress={handleDeleteUser} style={styles.authLink}>
+          Delete account
+        </Text>
       </View>
     </View>
   );

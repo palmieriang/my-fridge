@@ -15,6 +15,7 @@ import {
   sendResetPassword,
   deleteProfileImage,
   signInWithGoogle,
+  deleteAccount,
 } from "../../api/api";
 import { ActionTypes } from "../constants";
 
@@ -105,6 +106,9 @@ const AuthProvider = ({ children }) => {
       },
       deleteImage: (id) => {
         deleteProfileImage(id, dispatch);
+      },
+      deleteUser: () => {
+        deleteAccount();
       },
     }),
     [],
