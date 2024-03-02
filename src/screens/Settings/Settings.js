@@ -49,14 +49,14 @@ const Settings = () => {
   };
 
   const handleDeleteUser = () => {
-    Alert.alert("Attention", "Are you sure you want to delete your account?", [
+    Alert.alert(t("attention"), t("deleteAccountMessage"), [
       {
-        text: "Go back",
+        text: t("goBack"),
         onPress: () => null,
         style: "cancel",
       },
       {
-        text: "Yes delete",
+        text: t("deleteConfirmation"),
         onPress: () => authContext.deleteUser(),
         style: "destructive",
       },
