@@ -1,9 +1,11 @@
 import {
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  GoogleAuthProvider,
-  signInWithPopup,
+  createUserWithEmailAndPassword,
   deleteUser,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 import {
   orderBy,
@@ -36,8 +38,7 @@ import {
 // Auth
 
 export function createUser(fullName, email, password) {
-  return auth
-    .createUserWithEmailAndPassword(email, password)
+  return createUserWithEmailAndPassword(auth, email, password)
     .then((response) => {
       const uid = response.user.uid;
       const data = {
@@ -191,7 +192,7 @@ export async function getUserData(userID) {
 
 export function sendVerificationEmail() {
   const user = auth.currentUser;
-  return user.sendEmailVerification();
+  return sendEmailVerification(user);
 }
 
 export function sendResetPassword(email) {
