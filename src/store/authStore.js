@@ -5,6 +5,7 @@ import React, {
   useReducer,
   useState,
 } from "react";
+import { Alert } from "react-native";
 
 import {
   persistentLogin,
@@ -81,14 +82,27 @@ const AuthProvider = ({ children }) => {
       },
       signUp: async ({ fullName, email, password, confirmPassword }) => {
         if (password !== confirmPassword) {
-          alert("Passwords don't match.");
+          Alert.alert("Passwords don't match", "Please try again.", [
+            {
+              text: "Ok",
+              onPress: () => null,
+              style: "default",
+            },
+          ]);
+
           return;
         }
 
         try {
           await createUser(fullName, email, password);
           await sendVerificationEmail();
-          alert("Please verify your account.");
+          Alert.alert("Account created", "Please check your email and verify your account.", [
+            {
+              text: "Ok",
+              onPress: () => null,
+              style: "default",
+            },
+          ]);
         } catch (error) {
           console.error("Error in create user", error);
         }
@@ -96,7 +110,13 @@ const AuthProvider = ({ children }) => {
       resetPassword: async (email) => {
         try {
           await sendResetPassword(email);
-          alert("Please check your account.");
+          Alert.alert("Reset password", "Please check your email and follow the instructions.", [
+            {
+              text: "Ok",
+              onPress: () => null,
+              style: "default",
+            },
+          ]);
         } catch (error) {
           console.error("Error in reset password", error);
         }
