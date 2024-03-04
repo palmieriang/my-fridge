@@ -55,7 +55,11 @@ export function createUser(fullName, email, password) {
 
 export function deleteAccount() {
   const user = auth.currentUser;
-  deleteUser(user).catch((error) => {
+  deleteUser(user)
+  .then(() => {
+    deleteUserData(user.uid);
+  })
+  .catch((error) => {
     console.log("ERROR in deleteAccount ", error.message);
   });
 }
@@ -178,6 +182,12 @@ export function persistentLogin(callback, callbackData) {
 export function addUserData(uid, data) {
   return setDoc(doc(usersRef, uid), data).catch((error) =>
     console.log("Error adding user data: ", error),
+  );
+}
+
+export function deleteUserData(uid) {
+  return deleteDoc(doc(usersRef, uid)).catch((error) =>
+    console.log("Error in deleteUserData: ", error),
   );
 }
 
