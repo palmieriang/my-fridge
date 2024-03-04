@@ -96,13 +96,17 @@ const AuthProvider = ({ children }) => {
         try {
           await createUser(fullName, email, password);
           await sendVerificationEmail();
-          Alert.alert("Account created", "Please check your email and verify your account.", [
-            {
-              text: "Ok",
-              onPress: () => null,
-              style: "default",
-            },
-          ]);
+          Alert.alert(
+            "Account created",
+            "Please check your email and verify your account.",
+            [
+              {
+                text: "Ok",
+                onPress: () => null,
+                style: "default",
+              },
+            ],
+          );
         } catch (error) {
           console.error("Error in create user", error);
         }
@@ -110,13 +114,17 @@ const AuthProvider = ({ children }) => {
       resetPassword: async (email) => {
         try {
           await sendResetPassword(email);
-          Alert.alert("Reset password", "Please check your email and follow the instructions.", [
-            {
-              text: "Ok",
-              onPress: () => null,
-              style: "default",
-            },
-          ]);
+          Alert.alert(
+            "Reset password",
+            "Please check your email and follow the instructions.",
+            [
+              {
+                text: "Ok",
+                onPress: () => null,
+                style: "default",
+              },
+            ],
+          );
         } catch (error) {
           console.error("Error in reset password", error);
         }
