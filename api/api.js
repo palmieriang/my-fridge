@@ -56,12 +56,12 @@ export function createUser(fullName, email, password) {
 export function deleteAccount() {
   const user = auth.currentUser;
   deleteUser(user)
-  .then(() => {
-    deleteUserData(user.uid);
-  })
-  .catch((error) => {
-    console.log("ERROR in deleteAccount ", error.message);
-  });
+    .then(() => {
+      deleteUserData(user.uid);
+    })
+    .catch((error) => {
+      console.log("ERROR in deleteAccount ", error.message);
+    });
 }
 
 export function authSignIn(email, password) {
