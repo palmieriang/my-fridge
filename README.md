@@ -35,3 +35,8 @@ Once you have the EAS CLI installed, you can use the following command to start 
 # Notes
 
 Show inspector in Android Emulator shortcut `CMD + M`
+
+# Install and configure local emulator
+Install [firebase-cli](https://firebase.google.com/docs/cli#install-cli-mac-linux)
+
+Follow [https://firebase.google.com/docs/emulator-suite/install_and_configure](https://firebase.google.com/docs/emulator-suite/install_and_configure)
