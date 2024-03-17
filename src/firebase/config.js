@@ -54,4 +54,4 @@ if (__DEV__) {
   connectStorageEmulator(storage, debuggerHost, 9199);
 }
 
-export { app, auth, usersRef, productsRef, profileImagesRef };
+export { app, auth, db, productsRef, profileImagesRef, usersRef };
