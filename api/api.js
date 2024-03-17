@@ -8,21 +8,23 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import {
+  deleteDoc,
+  doc,
+  getDoc,
+  getDocs,
+  onSnapshot,
   orderBy,
   query,
-  where,
-  getDoc,
   setDoc,
-  doc,
-  onSnapshot,
   serverTimestamp,
-  deleteDoc,
   updateDoc,
+  where,
+  writeBatch,
 } from "firebase/firestore";
 import {
+  deleteObject,
   getDownloadURL,
   ref,
-  deleteObject,
   uploadBytesResumable,
 } from "firebase/storage";
 
@@ -30,6 +32,7 @@ import { ActionTypes } from "../src/constants";
 import {
   app,
   auth,
+  db,
   usersRef,
   productsRef,
   profileImagesRef,
@@ -56,8 +59,9 @@ export function createUser(fullName, email, password) {
 export async function deleteAccount() {
   const user = auth.currentUser;
   try {
-    deleteUser(user);
-    deleteUserData(user.uid);
+    await deleteAllProductsFromUser(user.uid);
+    await deleteUserData(user.uid);
+    await deleteUser(user);
   } catch (error) {
     console.log("ERROR in deleteAccount ", error.message);
   }
@@ -311,6 +315,21 @@ export function deleteProduct(existingId) {
   return deleteDoc(doc(productsRef, existingId)).catch((error) => {
     console.log("Error in deleteProduct: ", error);
   });
+}
+
+export async function deleteAllProductsFromUser(uid) {
+  try {
+    const querySnapshot = await getDocs(
+      query(productsRef, where("authorID", "==", uid)),
+    );
+    const batch = writeBatch(db);
+    querySnapshot.forEach((doc) => {
+      batch.delete(doc.ref);
+    });
+    await batch.commit();
+  } catch (error) {
+    console.log("Error deleting products:", error);
+  }
 }
 
 // Settings
