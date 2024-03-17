@@ -8,7 +8,7 @@ Used React Native to develop an app which allows to track products inside the fr
 
 `yarn install`
 
-`npx expo start`
+`yarn start`
 
 ----------
 
@@ -40,3 +40,13 @@ Show inspector in Android Emulator shortcut `CMD + M`
 Install [firebase-cli](https://firebase.google.com/docs/cli#install-cli-mac-linux)
 
 Follow [https://firebase.google.com/docs/emulator-suite/install_and_configure](https://firebase.google.com/docs/emulator-suite/install_and_configure)
+
+Run emulators importing local data
+
+`firebase emulators:start --import=./firebase-emulators-data`
+
+Export data from emulators
+
+Run the emulator and run this command in a different window
+
+`firebase emulators:export ./firebase-emulators-data`
