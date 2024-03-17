@@ -53,15 +53,14 @@ export function createUser(fullName, email, password) {
     .catch((error) => alert(error.message));
 }
 
-export function deleteAccount() {
+export async function deleteAccount() {
   const user = auth.currentUser;
-  deleteUser(user)
-    .then(() => {
-      deleteUserData(user.uid);
-    })
-    .catch((error) => {
-      console.log("ERROR in deleteAccount ", error.message);
-    });
+  try {
+    deleteUser(user);
+    deleteUserData(user.uid);
+  } catch (error) {
+    console.log("ERROR in deleteAccount ", error.message);
+  }
 }
 
 export function authSignIn(email, password) {
