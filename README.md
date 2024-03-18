@@ -10,6 +10,10 @@ Used React Native to develop an app which allows to track products inside the fr
 
 `yarn start`
 
+and in a different terminal window run
+
+`firebase emulators:start --import=./firebase-emulators-data`
+
 ----------
 
 # Install EAS CLI:
