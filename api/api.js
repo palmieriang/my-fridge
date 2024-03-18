@@ -126,7 +126,6 @@ function onSignIn(googleUser) {
         }
       } catch (error) {
         console.log("onSignIn error", error);
-        throw error; // Re-throw for better error handling
       }
     } else {
       console.log("User already signed-in Firebase.");
@@ -153,22 +152,14 @@ export function persistentLogin(callback, callbackData) {
     if (user) {
       try {
         const idToken = await user.getIdToken(true);
-        getUserData(user.uid)
-          .then((userData) => {
-            callbackData({
-              email: userData.email,
-              fullName: userData.fullName,
-              id: userData.id,
-              locale: userData.locale,
-              theme: userData.theme,
-            });
-            callback({ type: ActionTypes.RESTORE_TOKEN, token: idToken, user });
-          })
-          .catch((error) => {
-            console.log("GET USER DATA ERROR: ", error);
-          });
+        const userData = await getUserData(user.uid);
 
-        getProfileImageFromFirebase(user.uid, callback);
+        callbackData({
+          ...userData,
+        });
+        callback({ type: ActionTypes.RESTORE_TOKEN, token: idToken, user });
+
+        await getProfileImageFromFirebase(user.uid, callback);
       } catch (error) {
         console.log("Restoring token failed", error);
       }
