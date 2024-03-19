@@ -54,3 +54,13 @@ Export data from emulators
 Run the emulator and run this command in a different window
 
 `firebase emulators:export ./firebase-emulators-data`
+
+# Create a build and release it
+
+[https://docs.expo.dev/build/setup/](https://docs.expo.dev/build/setup/)
+
+`eas login`
+
+`eas build --platform android`
+
+`eas submit --platform android`
