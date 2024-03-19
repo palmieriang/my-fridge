@@ -6,7 +6,7 @@ import {
   MESSAGE_SENDER_ID,
   APP_ID,
 } from "@env";
-import { getAsyncStorage } from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { initializeApp } from "firebase/app";
 import {
   initializeAuth,
@@ -33,7 +33,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(getAsyncStorage),
+  persistence: getReactNativePersistence(AsyncStorage),
 });
 
 const db = getFirestore(app);
