@@ -5,7 +5,7 @@ import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { adjust } from "@components/utils/dimensions";
 import { Picker } from "@react-native-picker/picker";
 import React, { useContext, useState } from "react";
-import { View, StyleSheet, LogBox } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
@@ -13,10 +13,6 @@ import styles from "./styles";
 import { FRIDGE, FREEZER } from "../../constants";
 import { authStore, localeStore, productsStore, themeStore } from "../../store";
 import { convertToISODateString, convertToCustomFormat } from "../../utils";
-
-LogBox.ignoreLogs([
-  "Non-serializable values were found in the navigation state",
-]);
 
 const ProductForm = ({ navigation, route }) => {
   const { params } = route;
