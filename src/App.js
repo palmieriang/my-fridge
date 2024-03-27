@@ -1,12 +1,11 @@
 import "react-native-gesture-handler";
-import FreezerIcon from "@components/svg/FreezerIcon";
-import SettingsIcon from "@components/svg/SettingsIcon";
+import Icon from "@components/Icon/Icon";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
 import { registerRootComponent } from "expo";
 import { useFonts } from "expo-font";
 import React from "react";
-import { StyleSheet, View, LogBox } from "react-native";
+import { LogBox } from "react-native";
 
 import { FRIDGE, FREEZER, SETTINGS } from "./constants";
 import {
@@ -52,36 +51,14 @@ export default function App() {
                       {userToken ? (
                         <Tab.Navigator
                           screenOptions={({ route }) => ({
-                            tabBarIcon: ({ focused, color, size }) => {
-                              let IconName;
-                              size = focused ? size : "22";
-
-                              if (
-                                route.name === t(FRIDGE) ||
-                                route.name === t(FREEZER)
-                              ) {
-                                IconName = FreezerIcon;
-                              } else if (route.name === t(SETTINGS)) {
-                                IconName = SettingsIcon;
-                              }
-
-                              return (
-                                <View style={styles.tabIcon}>
-                                  <IconName
-                                    width={size}
-                                    height={size}
-                                    fill={color}
-                                  />
-                                  {route.name === t(FREEZER) && (
-                                    <IconName
-                                      width={size}
-                                      height={size}
-                                      fill={color}
-                                    />
-                                  )}
-                                </View>
-                              );
-                            },
+                            tabBarIcon: ({ focused, color, size }) => (
+                              <Icon
+                                type={route.name.toLowerCase()}
+                                size={size}
+                                fill={color}
+                                focused={focused}
+                              />
+                            ),
                           })}
                           tabBarOptions={{
                             ...tabBarOptions,
@@ -120,14 +97,6 @@ export default function App() {
 }
 
 registerRootComponent(App);
-
-const styles = StyleSheet.create({
-  tabIcon: {
-    flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
-  },
-});
 
 const tabBarOptions = {
   inactiveTintColor: "black",
