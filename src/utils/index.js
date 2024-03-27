@@ -28,14 +28,7 @@ export const countExpiredItems = (productsList) => {
     return null;
   }
 
-  let counter = null;
-  for (let i = 0; i < productsList.length; i++) {
-    if (productsList[i].place === FRIDGE) {
-      const days = daysUntilDate(productsList[i].date);
-      if (days < 0) {
-        counter++;
-      }
-    }
-  }
-  return counter;
+  return productsList.filter(
+    ({ place, date }) => place === FRIDGE && daysUntilDate(date) < 0,
+  ).length;
 };
