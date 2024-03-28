@@ -22,7 +22,7 @@ i18n.locale = getLocales();
 const loadLocale = i18n;
 
 const localeStore = createContext();
-const { Provider, Consumer } = localeStore;
+const { Provider } = localeStore;
 
 const LocaleProvider = ({ children }) => {
   const [locale, setLocale] = useState(loadLocale.locale);
@@ -54,7 +54,7 @@ const LocaleProvider = ({ children }) => {
 
   return (
     <Provider value={{ locale, setLocale, localizationContext }}>
-      <Consumer>{children}</Consumer>
+      {children}
     </Provider>
   );
 };
