@@ -116,7 +116,7 @@ export function SettingsStackScreen() {
   );
 }
 
-export function SingInStackScreen() {
+export function SignInStackScreen() {
   return (
     <Stack.Navigator
       screenOptions={{
