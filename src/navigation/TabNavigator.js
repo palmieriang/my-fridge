@@ -23,9 +23,9 @@ const TabNavigator = () => {
   const { productsList } = useContext(productsStore);
 
   const routeTypeMapping = {
-    [t(FRIDGE)]: "fridge",
-    [t(FREEZER)]: "freezer",
-    [t(SETTINGS)]: "settings",
+    [t(FRIDGE)]: FRIDGE,
+    [t(FREEZER)]: FREEZER,
+    [t(SETTINGS)]: SETTINGS,
   };
 
   return (
