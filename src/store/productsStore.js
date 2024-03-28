@@ -17,7 +17,7 @@ import {
 } from "../../api/api";
 
 const productsStore = createContext();
-const { Provider, Consumer } = productsStore;
+const { Provider } = productsStore;
 
 const ProductsProvider = ({ children }) => {
   const {
@@ -61,9 +61,7 @@ const ProductsProvider = ({ children }) => {
   }));
 
   return (
-    <Provider value={{ productsList, productsContext }}>
-      <Consumer>{children}</Consumer>
-    </Provider>
+    <Provider value={{ productsList, productsContext }}>{children}</Provider>
   );
 };
 

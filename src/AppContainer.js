@@ -11,32 +11,22 @@ import {
   ThemeProvider,
 } from "./store";
 
-function AppContainer() {
+const AppContainer = () => {
   return (
     <AuthProvider>
       {({ authState: { userToken } }) => (
         <LocaleProvider>
-          {({ localizationContext: { t } }) => (
-            <ThemeProvider>
-              {({ theme: { primary } }) => (
-                <ProductsProvider>
-                  {({ productsList }) => (
-                    <NavigationContainer>
-                      {userToken ? (
-                        TabNavigator(productsList, t, primary)
-                      ) : (
-                        <SingInStackScreen />
-                      )}
-                    </NavigationContainer>
-                  )}
-                </ProductsProvider>
-              )}
-            </ThemeProvider>
-          )}
+          <ThemeProvider>
+            <ProductsProvider>
+              <NavigationContainer>
+                {userToken ? <TabNavigator /> : <SingInStackScreen />}
+              </NavigationContainer>
+            </ProductsProvider>
+          </ThemeProvider>
         </LocaleProvider>
       )}
     </AuthProvider>
   );
-}
+};
 
 export default memo(AppContainer);
