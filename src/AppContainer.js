@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import React, { memo } from "react";
 
 import TabNavigator from "./TabNavigator";
-import { SingInStackScreen } from "./navigation/navigation";
+import { SignInStackScreen } from "./navigation/navigation";
 import {
   AuthProvider,
   LocaleProvider,
@@ -19,7 +19,7 @@ const AppContainer = () => {
           <ThemeProvider>
             <ProductsProvider>
               <NavigationContainer>
-                {userToken ? <TabNavigator /> : <SingInStackScreen />}
+                {userToken ? <TabNavigator /> : <SignInStackScreen />}
               </NavigationContainer>
             </ProductsProvider>
           </ThemeProvider>
