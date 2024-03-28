@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import React, { memo } from "react";
 
-import TabNavigator from "./TabNavigator";
+import TabNavigator from "./navigation/TabNavigator";
 import { SignInStackScreen } from "./navigation/navigation";
 import {
   AuthProvider,

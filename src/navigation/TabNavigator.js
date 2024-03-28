@@ -2,14 +2,14 @@ import Icon from "@components/Icon/Icon";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext } from "react";
 
-import { FRIDGE, FREEZER, SETTINGS } from "./constants";
 import {
   FridgeStackScreen,
   FreezerStackScreen,
   SettingsStackScreen,
-} from "./navigation/navigation";
-import { localeStore, productsStore, themeStore } from "./store";
-import { countExpiredItems } from "../src/utils";
+} from "./navigation";
+import { FRIDGE, FREEZER, SETTINGS } from "../constants";
+import { localeStore, productsStore, themeStore } from "../store";
+import { countExpiredItems } from "../utils";
 
 const Tab = createBottomTabNavigator();
 
