@@ -22,18 +22,18 @@ const TabNavigator = () => {
   } = useContext(themeStore);
   const { productsList } = useContext(productsStore);
 
+  const routeTypeMapping = {
+    [t(FRIDGE)]: "fridge",
+    [t(FREEZER)]: "freezer",
+    [t(SETTINGS)]: "settings",
+  };
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
-            type={
-              route.name === t(FRIDGE)
-                ? "fridge"
-                : route.name === t(FREEZER)
-                  ? "freezer"
-                  : "settings"
-            }
+            type={routeTypeMapping[route.name]}
             size={size}
             fill={color}
             focused={focused}
