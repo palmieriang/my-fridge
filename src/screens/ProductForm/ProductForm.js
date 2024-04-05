@@ -52,7 +52,7 @@ const ProductForm = ({ navigation, route }) => {
         } else {
           await productsContext.handleSaveProduct(data);
         }
-        navigation.navigate("list");
+        navigateToList();
       } catch (error) {
         console.log("Error: ", error);
       }
@@ -76,15 +76,19 @@ const ProductForm = ({ navigation, route }) => {
     setShowDatePicker(false);
   };
 
-  const handleDeletePress = () => {
-    if (existingId) {
-      productsContext
-        .handleDeleteProduct(existingId)
-        .then(() => navigation.navigate("list"))
-        .catch((error) => console.log("Error: ", error));
-    } else {
-      navigation.navigate("list");
+  const handleDeletePress = async () => {
+    try {
+      if (existingId) {
+        await productsContext.handleDeleteProduct(existingId);
+      }
+      navigateToList();
+    } catch (error) {
+      console.log("Error: ", error);
     }
+  };
+
+  const navigateToList = () => {
+    navigation.navigate("list");
   };
 
   return (
