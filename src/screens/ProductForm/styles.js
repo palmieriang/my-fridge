@@ -1,6 +1,7 @@
+import { adjust } from "@components/utils/dimensions";
 import { StyleSheet } from "react-native";
 
-export default StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
@@ -17,5 +18,34 @@ export default StyleSheet.create({
     marginRight: 30,
     maxHeight: 54,
     overflow: "hidden",
+  },
+});
+
+export const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    borderColor: "#ccc",
+    fontSize: adjust(14),
+    height: "100%",
+    paddingLeft: 66,
+  },
+  inputAndroid: {
+    borderColor: "#ccc",
+    fontSize: adjust(14),
+    height: "100%",
+    marginLeft: 60,
+    paddingLeft: 66,
+  },
+  iconContainer: {
+    alignItems: "center",
+    borderRightColor: "#ccc",
+    borderRightWidth: StyleSheet.hairlineWidth,
+    fontSize: adjust(14),
+    justifyContent: "center",
+    height: "100%",
+    left: 0,
+    width: 54,
+  },
+  placeholder: {
+    color: "#757575",
   },
 });

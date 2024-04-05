@@ -2,14 +2,13 @@ import Button from "@components/Button/Button";
 import FormInput from "@components/FormInput/FormInput";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
-import { adjust } from "@components/utils/dimensions";
 import { Picker } from "@react-native-picker/picker";
 import React, { useContext, useState } from "react";
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import styles from "./styles";
+import { styles, pickerSelectStyles } from "./styles";
 import { validateProduct } from "./validateProduct";
 import { FRIDGE, FREEZER } from "../../constants";
 import { authStore, localeStore, productsStore, themeStore } from "../../store";
@@ -145,34 +144,5 @@ const ProductForm = ({ navigation, route }) => {
     </View>
   );
 };
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    borderColor: "#ccc",
-    fontSize: adjust(14),
-    height: "100%",
-    paddingLeft: 66,
-  },
-  inputAndroid: {
-    borderColor: "#ccc",
-    fontSize: adjust(14),
-    height: "100%",
-    marginLeft: 60,
-    paddingLeft: 66,
-  },
-  iconContainer: {
-    alignItems: "center",
-    borderRightColor: "#ccc",
-    borderRightWidth: StyleSheet.hairlineWidth,
-    fontSize: adjust(14),
-    justifyContent: "center",
-    height: "100%",
-    left: 0,
-    width: 54,
-  },
-  placeholder: {
-    color: "#757575",
-  },
-});
 
 export default ProductForm;
