@@ -16,7 +16,6 @@
   "english": "Anglais",
   "error": "Commencez à ajouter des produits au réfrigérateur.",
   "expired": "Expiré",
-  "foo": "Foo",
   "freeze": "Geler",
   "freezer": "Congélateur",
   "french": "Français",
@@ -27,8 +26,12 @@
   "minutes": "Minutes",
   "modify": "Modifier",
   "modifyItem": "Modifier l'élément",
+  "nameLength": "Le nom du produit doit comporter au moins 3 caractères.",
   "product": "Nom du produit",
   "seconds": "Secondes",
+  "selectDate": "Veuillez sélectionner une date.",
+  "selectPlace": "Veuillez sélectionner un lieu.",
   "settings": "Réglages",
-  "title": "Frigo"
+  "title": "Frigo",
+  "validationError": "Erreur de validation"
 }

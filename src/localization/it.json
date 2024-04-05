@@ -16,7 +16,6 @@
   "english": "Inglese",
   "error": "Inizia ad aggiungere prodotti al frigorifero.",
   "expired": "Scaduto",
-  "foo": "Fou",
   "freeze": "Congela",
   "freezer": "Freezer",
   "french": "Francese",
@@ -27,8 +26,12 @@
   "minutes": "Minuti",
   "modify": "Modifica",
   "modifyItem": "Modifica prodotto",
+  "nameLength": "Il nome del prodotto deve contenere almeno 3 caratteri.",
   "product": "Nome del prodotto",
   "seconds": "Secondi",
+  "selectDate": "Seleziona una data.",
+  "selectPlace": "Seleziona un luogo.",
   "settings": "Impostazioni",
-  "title": "Frigo"
+  "title": "Frigo",
+  "validationError": "Prodotto non valido"
 }
