@@ -23,27 +23,27 @@ const ProductList = ({ navigation, route }) => {
   });
 
   const handleAddProduct = () => {
-    navigation.navigate("form", {
+    navigateToProductForm({
       title: t("addItem"),
     });
   };
 
-  const handleChangeProduct = (id) => {
-    productsContext
-      .handleGetProduct(id)
-      .then((product) => {
-        navigation.navigate("form", {
-          id,
-          product,
-          title: t("modifyItem"),
-        });
-      })
-      .catch((error) => console.log("Error: ", error));
+  const handleChangeProduct = async (id) => {
+    try {
+      const product = await productsContext.handleGetProduct(id);
+      navigateToProductForm({ id, product, title: t("modifyItem") });
+    } catch (error) {
+      console.log("Error fetching product: ", error);
+    }
   };
 
   const handleFreezeProduct = (id) => {
     const moveTo = place === FRIDGE ? FREEZER : FRIDGE;
     productsContext.handleFreezeProduct(id, moveTo);
+  };
+
+  const navigateToProductForm = (params) => {
+    navigation.navigate("form", params);
   };
 
   return (
@@ -68,7 +68,6 @@ const ProductList = ({ navigation, route }) => {
       )}
 
       <ActionButton
-        key="fab"
         onPress={handleAddProduct}
         buttonColor={theme.primary}
         hideShadow
