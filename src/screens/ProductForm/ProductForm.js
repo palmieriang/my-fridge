@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import styles from "./styles";
+import { validateProduct } from "./validateProduct";
 import { FRIDGE, FREEZER } from "../../constants";
 import { authStore, localeStore, productsStore, themeStore } from "../../store";
 import { convertToISODateString, convertToCustomFormat } from "../../utils";
@@ -38,7 +39,7 @@ const ProductForm = ({ navigation, route }) => {
   const userID = user.uid;
 
   const handleAddPress = () => {
-    if (name.length >= 3 && date && place) {
+    if (validateProduct(name, date, place, t)) {
       const data = {
         name,
         date,
@@ -60,10 +61,6 @@ const ProductForm = ({ navigation, route }) => {
           })
           .catch((error) => console.log("Error: ", error));
       }
-    } else {
-      alert(
-        "Please make sure to add a product name longer than 3 letters, a place and the expiring date",
-      );
     }
   };
 
@@ -93,7 +90,6 @@ const ProductForm = ({ navigation, route }) => {
     } else {
       navigation.navigate("list");
     }
-    console.log("Item deleted");
   };
 
   return (
