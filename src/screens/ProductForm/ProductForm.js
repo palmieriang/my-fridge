@@ -37,7 +37,7 @@ const ProductForm = ({ navigation, route }) => {
 
   const userID = user.uid;
 
-  const handleAddPress = () => {
+  const handleAddPress = async () => {
     if (validateProduct(name, date, place, t)) {
       const data = {
         name,
@@ -45,20 +45,16 @@ const ProductForm = ({ navigation, route }) => {
         place,
         authorID: userID,
       };
-      if (existingId) {
-        productsContext
-          .handleModifyProduct(data, existingId)
-          .then(() => {
-            navigation.navigate("list");
-          })
-          .catch((error) => console.log("Error: ", error));
-      } else {
-        productsContext
-          .handleSaveProduct(data)
-          .then(() => {
-            navigation.navigate("list");
-          })
-          .catch((error) => console.log("Error: ", error));
+
+      try {
+        if (existingId) {
+          await productsContext.handleModifyProduct(data, existingId);
+        } else {
+          await productsContext.handleSaveProduct(data);
+        }
+        navigation.navigate("list");
+      } catch (error) {
+        console.log("Error: ", error);
       }
     }
   };
