@@ -321,7 +321,7 @@ export async function deleteAllProductsFromUser(uid) {
 
 // Settings
 
-export function uploadTaskFromApi(id, blob, metadata) {
+export function uploadImage(id, blob, metadata) {
   return uploadBytesResumable(ref(profileImagesRef, `${id}`), blob, metadata);
 }
 
