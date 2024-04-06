@@ -68,6 +68,7 @@ export async function deleteAccount() {
   try {
     await deleteAllProductsFromUser(user.uid);
     await deleteUserData(user.uid);
+    await deleteProfileImage(user.uid);
     await deleteUser(user);
   } catch (error) {
     console.log("ERROR in deleteAccount ", error.message);
