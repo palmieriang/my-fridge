@@ -39,7 +39,8 @@ const Profile = () => {
   }, []);
 
   const handleUploadProgress = (snapshot) => {
-    const progress = snapshot.bytesTransferred / snapshot.totalBytes;
+    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+    console.log("Upload is " + progress + "% done");
     setUpload({ loading: true, progress });
   };
 

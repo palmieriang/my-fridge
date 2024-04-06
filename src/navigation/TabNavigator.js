@@ -39,11 +39,9 @@ const TabNavigator = () => {
             focused={focused}
           />
         ),
-      })}
-      tabBarOptions={{
         ...tabBarOptions,
-        activeTintColor: primary,
-      }}
+        tabBarActiveTintColor: primary,
+      })}
     >
       <Tab.Screen
         name={t(FRIDGE)}
@@ -59,11 +57,10 @@ const TabNavigator = () => {
 };
 
 const tabBarOptions = {
-  inactiveTintColor: "black",
-  showIcon: true,
-  showLabel: true,
-  upperCaseLabel: true,
-  labelStyle: {
+  headerShown: false,
+  tabBarInactiveTintColor: "black",
+  tabBarShowLabel: true,
+  tabBarLabelStyle: {
     fontFamily: "OpenSans-Regular",
     textTransform: "uppercase",
   },
