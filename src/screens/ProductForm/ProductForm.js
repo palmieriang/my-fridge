@@ -125,6 +125,7 @@ const ProductForm = ({ navigation, route }) => {
             style={pickerSelectStyles}
             selectedValue={place}
             onValueChange={(itemValue) => setPlace(itemValue)}
+            itemStyle={styles.iosHeight}
           >
             <Picker.Item label={t("choosePlace")} value="" />
             <Picker.Item label={t(FRIDGE)} value="fridge" />
