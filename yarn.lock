@@ -2416,10 +2416,10 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
-"@react-native-community/datetimepicker@7.6.1":
-  version "7.6.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-7.6.1.tgz#98bdee01e3df490526ee1125e438c2030becac1f"
-  integrity sha512-g66Q2Kd9Uw3eRL7kkrTsGhi+eXxNoPDRFYH6z78sZQuYjPkUQgJDDMUYgBmaBsQx/fKMtemPrCj1ulGmyi0OSw==
+"@react-native-community/datetimepicker@^7.6.4":
+  version "7.6.4"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-7.6.4.tgz#b11ae425a51234bab36ba88755cd2a430c53e862"
+  integrity sha512-mbnZ5xYl4d2dkWPumQD2mTbLrvMunxUQdbmu0CriOLn48Hy1dQLilQcFg3SfVynND0ydJXo5CRPyXWvUaVkrLQ==
   dependencies:
     invariant "^2.2.4"
 
@@ -7305,10 +7305,10 @@ react-native-keyboard-aware-scroll-view@^0.9.1:
     prop-types "^15.6.2"
     react-native-iphone-x-helper "^1.0.3"
 
-react-native-modal-datetime-picker@^8.6.0:
-  version "8.9.3"
-  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-8.9.3.tgz#4ab01386c525bf8df9e8e71a93cdd61aa0916212"
-  integrity sha512-bLqwvSRYZb3LD5AUWhGd2iJxeUoOMkTg81Z8TbNQP4SFsHpoqEi6LoUJ+DJvaxwTvpN8/LgqJ5bNRGJl4VwATQ==
+react-native-modal-datetime-picker@^17.1.0:
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-17.1.0.tgz#74291bf92b830be285752f437841f52885c90e0b"
+  integrity sha512-jfTwfaCLtBffYbQ+pOGFLM+J5HmUh3vb9rT0JrrQPjxzecdc8pNYreB1c96+mVuq8bDCvaCdIeuEsslTqLJL0Q==
   dependencies:
     prop-types "^15.7.2"
 
