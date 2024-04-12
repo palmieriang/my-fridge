@@ -1,5 +1,5 @@
 import { getLocales } from "expo-localization";
-import i18n from "i18n-js";
+import { I18n } from "i18n-js";
 import React, {
   createContext,
   useMemo,
@@ -15,20 +15,21 @@ const en = require("../localization/en.json");
 const fr = require("../localization/fr.json");
 const it = require("../localization/it.json");
 
-i18n.fallbacks = true;
-i18n.translations = { fr, it, en };
-i18n.locale = getLocales();
+const deviceLocales = getLocales();
+const deviceLocale = deviceLocales[0].languageCode || "en";
 
-const loadLocale = i18n;
+const i18n = new I18n();
+i18n.translations = { en, fr, it };
+i18n.fallbacks = true;
 
 const localeStore = createContext();
 const { Provider } = localeStore;
 
 const LocaleProvider = ({ children }) => {
-  const [locale, setLocale] = useState(loadLocale.locale);
-
   const { userData } = useContext(authStore);
   const localeFromFirebase = userData.locale;
+
+  const [locale, setLocale] = useState(deviceLocale);
 
   useEffect(() => {
     if (localeFromFirebase) {
@@ -38,7 +39,7 @@ const LocaleProvider = ({ children }) => {
 
   const localizationContext = useMemo(
     () => ({
-      t: (scope, options) => loadLocale.t(scope, { locale, ...options }),
+      t: (scope, options) => i18n.t(scope, { ...options, locale }),
       locale,
       setLocale,
       changeLocale: async ({ newLocale, id }) => {
