@@ -4,7 +4,7 @@ import SocialIcon from "@components/SocialIcon/SocialIcon";
 import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
 import useToggle from "@components/utils/useToggle";
-import React, { useState, useContext, useRef } from "react";
+import { useState, useContext, useRef } from "react";
 import { Animated, Text, View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
