@@ -27,11 +27,13 @@
   "modify": "Modifier",
   "modifyItem": "Modifier l'élément",
   "nameLength": "Le nom du produit doit comporter au moins 3 caractères.",
+  "portuguese": "Portugais",
   "product": "Nom du produit",
   "seconds": "Secondes",
   "selectDate": "Veuillez sélectionner une date.",
   "selectPlace": "Veuillez sélectionner un lieu.",
   "settings": "Réglages",
+  "spanish": "Espagnol",
   "title": "Frigo",
   "validationError": "Erreur de validation"
 }

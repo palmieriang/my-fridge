@@ -12,14 +12,16 @@ import { authStore } from "./authStore";
 import { changeLanguage } from "../../api/api";
 
 const en = require("../localization/en.json");
+const es = require("../localization/es.json");
 const fr = require("../localization/fr.json");
 const it = require("../localization/it.json");
+const pt = require("../localization/pt.json");
 
 const deviceLocales = getLocales();
 const deviceLocale = deviceLocales[0].languageCode || "en";
 
 const i18n = new I18n();
-i18n.translations = { en, fr, it };
+i18n.translations = { en, es, fr, it, pt };
 i18n.fallbacks = true;
 
 const localeStore = createContext();
