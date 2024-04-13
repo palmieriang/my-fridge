@@ -27,11 +27,13 @@
   "modify": "Modify",
   "modifyItem": "Modify item",
   "nameLength": "Product name must be at least 3 characters long.",
+  "portuguese": "Portuguese",
   "product": "Product name",
   "seconds": "Seconds",
   "selectDate": "Please select a date.",
   "selectPlace": "Please select a place.",
   "settings": "Settings",
+  "spanish": "Spanish",
   "title": "Fridge",
   "validationError": "Validation Error"
 }
