@@ -5,7 +5,14 @@ import React from "react";
 
 import { FRIDGE, FREEZER, SETTINGS } from "../../constants";
 
-const Icon = ({ type, size, fill, focused }) => {
+type IconProps = {
+  type: typeof FRIDGE | typeof FREEZER | typeof SETTINGS;
+  size: string;
+  fill: string;
+  focused: boolean;
+};
+
+const Icon = ({ type, size, fill, focused }: IconProps) => {
   size = focused ? size : "22";
   const icons = {
     [FRIDGE]: <FridgeIcon height={size} width={size} fill={fill} />,
