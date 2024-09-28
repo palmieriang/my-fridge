@@ -1,10 +1,20 @@
-import PropTypes from "prop-types";
 import React from "react";
 import { View, TextInput } from "react-native";
 
 import styles from "./styles";
 
-const FormInput = ({ labelValue, placeholderText, Icon, ...rest }) => {
+type FormInputProps = {
+  labelValue: string;
+  placeholderText: string;
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+};
+
+const FormInput = ({
+  labelValue,
+  placeholderText,
+  Icon,
+  ...rest
+}: FormInputProps) => {
   return (
     <View
       style={styles.inputContainer}
@@ -25,12 +35,6 @@ const FormInput = ({ labelValue, placeholderText, Icon, ...rest }) => {
       />
     </View>
   );
-};
-
-FormInput.propTypes = {
-  labelValue: PropTypes.string.isRequired,
-  placeholderText: PropTypes.string.isRequired,
-  Icon: PropTypes.func.isRequired,
 };
 
 export default FormInput;
