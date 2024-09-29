@@ -1,14 +1,19 @@
 import * as React from "react";
-import Svg, { Path } from "react-native-svg";
+import Svg, { Path, SvgProps } from "react-native-svg";
 
-const DeleteIcon = ({ height, width, fill, ...props }) => {
+type DeleteIconProps = SvgProps & {
+  height: number;
+  width: number;
+  fill: string;
+};
+
+const DeleteIcon = ({ height, width, fill, ...props }: DeleteIconProps) => {
   return (
     <Svg
       height={height}
       width={width}
       fill={fill}
       {...props}
-      xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 511.995 511.995"
     >
       <Path d="M437.126 74.939c-99.826-99.826-262.307-99.826-362.133 0C26.637 123.314 0 187.617 0 256.005s26.637 132.691 74.993 181.047c49.923 49.923 115.495 74.874 181.066 74.874s131.144-24.951 181.066-74.874c99.826-99.826 99.826-262.268.001-362.113zM409.08 409.006c-84.375 84.375-221.667 84.375-306.042 0-40.858-40.858-63.37-95.204-63.37-153.001s22.512-112.143 63.37-153.021c84.375-84.375 221.667-84.355 306.042 0 84.355 84.375 84.355 221.667 0 306.022z" />
