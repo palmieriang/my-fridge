@@ -22,6 +22,11 @@ type SwipeActionProps = {
   text: string;
 };
 
+type actionStyleProps = {
+  flexDirection: "row-reverse" | "row";
+  width: number;
+};
+
 const SwipeableRow = ({
   children,
   modifyFunction,
@@ -34,9 +39,7 @@ const SwipeableRow = ({
   } = useContext(localeStore);
   const swipeableRef = useRef<Swipeable>(null);
 
-  const getActionStyle = (
-    width: number
-  ): { width: number; flexDirection: "row-reverse" | "row" } => ({
+  const getActionStyle = (width: number): actionStyleProps => ({
     width,
     flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
   });
