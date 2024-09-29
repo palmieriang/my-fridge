@@ -1,9 +1,14 @@
 import { FontAwesome } from "@expo/vector-icons";
 import React, { useContext } from "react";
-import { View } from "react-native";
+import { View, StyleProp, ViewStyle } from "react-native";
 
 import styles from "./styles";
 import { authStore } from "../../store";
+
+type StylesType = {
+  iconsContainer: StyleProp<ViewStyle>;
+  icons: StyleProp<ViewStyle>;
+};
 
 const SocialIcon = () => {
   const { authContext } = useContext(authStore);
@@ -13,7 +18,7 @@ const SocialIcon = () => {
   };
 
   return (
-    <View style={styles.iconsContainer}>
+    <View style={(styles as StylesType).iconsContainer}>
       <FontAwesome.Button
         borderRadius={50}
         color="#fff"
