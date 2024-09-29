@@ -14,6 +14,14 @@ type SwipeableRowProps = {
   place: "fridge" | "freezer";
 };
 
+type SwipeActionProps = {
+  callback: () => void;
+  color: string;
+  progress: Animated.Value;
+  startValue: number;
+  text: string;
+};
+
 const SwipeableRow = ({
   children,
   modifyFunction,
@@ -25,6 +33,21 @@ const SwipeableRow = ({
     localizationContext: { t },
   } = useContext(localeStore);
   const swipeableRef = useRef<Swipeable>(null);
+
+  const getActionStyle = (
+    width: number
+  ): { width: number; flexDirection: "row-reverse" | "row" } => ({
+    width,
+    flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
+  });
+
+  const renderActions = (actions: SwipeActionProps[], width: number) => (
+    <View style={getActionStyle(width)}>
+      {actions.map((action, index) => (
+        <SwipeAction key={index} {...action} />
+      ))}
+    </View>
+  );
 
   const renderLeftActions = useCallback(
     (progress: Animated.Value) => {
@@ -38,20 +61,7 @@ const SwipeableRow = ({
         },
       ];
 
-      const leftActionsStyle = {
-        width: 96,
-        flexDirection: I18nManager.isRTL
-          ? ("row-reverse" as const)
-          : ("row" as const),
-      };
-
-      return (
-        <View style={leftActionsStyle}>
-          {leftActions.map((action, index) => (
-            <SwipeAction key={index} {...action} />
-          ))}
-        </View>
-      );
+      return renderActions(leftActions, 96);
     },
     [freezeFunction, place, t]
   );
@@ -75,20 +85,7 @@ const SwipeableRow = ({
         },
       ];
 
-      const rightActionsStyle = {
-        width: 192,
-        flexDirection: I18nManager.isRTL
-          ? ("row-reverse" as const)
-          : ("row" as const),
-      };
-
-      return (
-        <View style={rightActionsStyle}>
-          {rightActions.map((action, index) => (
-            <SwipeAction key={index} {...action} />
-          ))}
-        </View>
-      );
+      return renderActions(rightActions, 192);
     },
     [modifyFunction, deleteFunction, t]
   );
