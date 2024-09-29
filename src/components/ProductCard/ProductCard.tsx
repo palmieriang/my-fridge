@@ -13,7 +13,7 @@ type ProductCardProps = {
     date: string;
     id: string;
     name: string;
-    place: string;
+    place: "fridge" | "freezer";
   };
 };
 
