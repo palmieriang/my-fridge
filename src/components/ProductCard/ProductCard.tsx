@@ -4,6 +4,7 @@ import { Text, TouchableWithoutFeedback, View } from "react-native";
 
 import styles from "./styles";
 import { FRIDGE, FREEZER } from "../../constants";
+import { FormScreenNavigationProp } from "../../navigation/navigation.d";
 import { localeStore, productsStore, themeStore } from "../../store";
 import { daysUntilDate } from "../../utils";
 import SwipeableRow from "../SwipeableRow/SwipeableRow";
@@ -22,7 +23,8 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const [expired, setExpired] = useState(false);
 
-  const { navigate } = useNavigation();
+  const { navigate } = useNavigation<FormScreenNavigationProp>();
+
   const {
     localizationContext: { t },
   } = useContext(localeStore);
