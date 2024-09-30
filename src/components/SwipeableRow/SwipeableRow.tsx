@@ -1,4 +1,10 @@
-import React, { useContext, useRef, useCallback } from "react";
+import React, {
+  useContext,
+  useRef,
+  useCallback,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { Animated, View, I18nManager } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 
@@ -27,87 +33,94 @@ type actionStyleProps = {
   width: number;
 };
 
-const SwipeableRow = ({
-  children,
-  modifyFunction,
-  deleteFunction,
-  freezeFunction,
-  place,
-}: SwipeableRowProps) => {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const swipeableRef = useRef<Swipeable>(null);
+const SwipeableRow = forwardRef(
+  (
+    {
+      children,
+      modifyFunction,
+      deleteFunction,
+      freezeFunction,
+      place,
+    }: SwipeableRowProps,
+    ref
+  ) => {
+    const {
+      localizationContext: { t },
+    } = useContext(localeStore);
+    const swipeableRef = useRef<Swipeable>(null);
 
-  const getActionStyle = (width: number): actionStyleProps => ({
-    width,
-    flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
-  });
+    useImperativeHandle(ref, () => ({
+      close: () => {
+        swipeableRef.current?.close();
+      },
+    }));
 
-  const renderActions = (actions: SwipeActionProps[], width: number) => (
-    <View style={getActionStyle(width)}>
-      {actions.map((action, index) => (
-        <SwipeAction key={index} {...action} />
-      ))}
-    </View>
-  );
+    const getActionStyle = (width: number): actionStyleProps => ({
+      width,
+      flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
+    });
 
-  const renderLeftActions = useCallback(
-    (progress: Animated.Value) => {
-      const leftActions = [
-        {
-          callback: freezeFunction,
-          color: "#497AFC",
-          progress,
-          startValue: -100,
-          text: place === FRIDGE ? t("freeze") : t(FRIDGE),
-        },
-      ];
+    const renderActions = (actions: SwipeActionProps[], width: number) => (
+      <View style={getActionStyle(width)}>
+        {actions.map((action, index) => (
+          <SwipeAction key={index} {...action} />
+        ))}
+      </View>
+    );
 
-      return renderActions(leftActions, 96);
-    },
-    [freezeFunction, place, t]
-  );
+    const renderLeftActions = useCallback(
+      (progress: Animated.Value) => {
+        const leftActions = [
+          {
+            callback: freezeFunction,
+            color: "#497AFC",
+            progress,
+            startValue: -100,
+            text: place === FRIDGE ? t("freeze") : t(FRIDGE),
+          },
+        ];
 
-  const renderRightActions = useCallback(
-    (progress: Animated.Value) => {
-      const rightActions = [
-        {
-          callback: modifyFunction,
-          color: "#ffab00",
-          progress,
-          startValue: 100,
-          text: t("modify"),
-        },
-        {
-          callback: deleteFunction,
-          color: "#dd2c00",
-          progress,
-          startValue: 100,
-          text: t("delete"),
-        },
-      ];
+        return renderActions(leftActions, 96);
+      },
+      [freezeFunction, place, t]
+    );
 
-      return renderActions(rightActions, 192);
-    },
-    [modifyFunction, deleteFunction, t]
-  );
+    const renderRightActions = useCallback(
+      (progress: Animated.Value) => {
+        const rightActions = [
+          {
+            callback: modifyFunction,
+            color: "#ffab00",
+            progress,
+            startValue: 100,
+            text: t("modify"),
+          },
+          {
+            callback: deleteFunction,
+            color: "#dd2c00",
+            progress,
+            startValue: 100,
+            text: t("delete"),
+          },
+        ];
 
-  const close = () => {
-    swipeableRef.current?.close();
-  };
+        return renderActions(rightActions, 192);
+      },
+      [modifyFunction, deleteFunction, t]
+    );
 
-  return (
-    <Swipeable
-      ref={swipeableRef}
-      renderLeftActions={renderLeftActions}
-      renderRightActions={renderRightActions}
-      leftThreshold={30}
-      rightThreshold={40}
-    >
-      {children}
-    </Swipeable>
-  );
-};
+    return (
+      <Swipeable
+        ref={swipeableRef}
+        renderLeftActions={renderLeftActions}
+        renderRightActions={renderRightActions}
+        leftThreshold={30}
+        rightThreshold={40}
+      >
+        {children}
+      </Swipeable>
+    );
+  }
+);
 
 export default SwipeableRow;

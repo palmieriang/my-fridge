@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, forwardRef } from "react";
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 
 import styles from "./styles";
@@ -18,7 +18,7 @@ type ProductCardProps = {
   };
 };
 
-const ProductCard = ({ product }: ProductCardProps) => {
+const ProductCard = forwardRef(({ product }: ProductCardProps, ref) => {
   const { date, id, name, place } = product;
 
   const [expired, setExpired] = useState(false);
@@ -65,6 +65,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   return (
     <SwipeableRow
+      ref={ref}
       modifyFunction={handleChange}
       deleteFunction={handleDelete}
       freezeFunction={handleFreeze}
@@ -97,6 +98,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
       </View>
     </SwipeableRow>
   );
-};
+});
 
 export default ProductCard;
