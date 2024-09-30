@@ -7,13 +7,13 @@ import { FRIDGE, FREEZER, SETTINGS } from "../../constants";
 
 type IconProps = {
   type: typeof FRIDGE | typeof FREEZER | typeof SETTINGS;
-  size: string;
+  size: number;
   fill: string;
   focused: boolean;
 };
 
 const Icon = ({ type, size, fill, focused }: IconProps) => {
-  size = focused ? size : "22";
+  size = focused ? size : 22;
   const icons = {
     [FRIDGE]: <FridgeIcon height={size} width={size} fill={fill} />,
     [FREEZER]: <FreezerIcon height={size} width={size} fill={fill} />,
