@@ -1,5 +1,8 @@
 import Icon from "@components/Icon/Icon";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import {
+  createBottomTabNavigator,
+  BottomTabNavigationOptions,
+} from "@react-navigation/bottom-tabs";
 import React, { useContext } from "react";
 
 import {
@@ -30,7 +33,7 @@ const TabNavigator = () => {
 
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({ route }): BottomTabNavigationOptions => ({
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
             type={routeTypeMapping[route.name]}
@@ -56,7 +59,7 @@ const TabNavigator = () => {
   );
 };
 
-const tabBarOptions = {
+const tabBarOptions: BottomTabNavigationOptions = {
   headerShown: false,
   tabBarInactiveTintColor: "black",
   tabBarShowLabel: true,

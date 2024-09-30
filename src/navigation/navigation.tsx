@@ -1,5 +1,8 @@
 import { adjust } from "@components/utils/dimensions";
-import { createStackNavigator } from "@react-navigation/stack";
+import {
+  createStackNavigator,
+  StackNavigationOptions,
+} from "@react-navigation/stack";
 import ProductForm from "@screens/ProductForm/ProductForm";
 import ProductList from "@screens/ProductList/ProductList";
 import Registration from "@screens/Registration/Registration";
@@ -7,17 +10,19 @@ import Settings from "@screens/Settings/Settings";
 import SignIn from "@screens/SignIn/SignIn";
 import React, { useContext } from "react";
 
+import { RootStackParamList } from "./navigation.d";
 import { FRIDGE, FREEZER, SETTINGS } from "../constants";
 import { localeStore, themeStore } from "../store";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
-const screenOptions = {
+const screenOptions: StackNavigationOptions = {
   headerStyle: {
     elevation: 0,
     shadowColor: "transparent",
     shadowRadius: 0,
     shadowOffset: {
+      width: 0,
       height: 0,
     },
   },
@@ -42,7 +47,10 @@ export function FridgeStackScreen() {
     <Stack.Navigator
       screenOptions={{
         ...screenOptions,
-        headerStyle: { ...screenOptions.headerStyle, backgroundColor: primary },
+        headerStyle: {
+          ...(screenOptions.headerStyle as object),
+          backgroundColor: primary,
+        },
       }}
     >
       <Stack.Screen
@@ -74,7 +82,10 @@ export function FreezerStackScreen() {
     <Stack.Navigator
       screenOptions={{
         ...screenOptions,
-        headerStyle: { ...screenOptions.headerStyle, backgroundColor: primary },
+        headerStyle: {
+          ...(screenOptions.headerStyle as object),
+          backgroundColor: primary,
+        },
       }}
     >
       <Stack.Screen
@@ -104,7 +115,10 @@ export function SettingsStackScreen() {
     <Stack.Navigator
       screenOptions={{
         ...screenOptions,
-        headerStyle: { ...screenOptions.headerStyle, backgroundColor: primary },
+        headerStyle: {
+          ...(screenOptions.headerStyle as object),
+          backgroundColor: primary,
+        },
       }}
     >
       <Stack.Screen
