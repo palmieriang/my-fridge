@@ -1,6 +1,6 @@
 import ProductCard from "@components/ProductCard/ProductCard";
 import PropTypes from "prop-types";
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { FlatList, Text, View } from "react-native";
 import ActionButton from "react-native-action-button-warnings-fixed";
 
@@ -21,6 +21,8 @@ const ProductList = ({ navigation, route }) => {
   const filteredList = productsList.filter((item) => {
     return item.place === place;
   });
+
+  const swipeableRefs = useRef([]);
 
   const handleAddProduct = () => {
     navigateToProductForm({
@@ -46,6 +48,14 @@ const ProductList = ({ navigation, route }) => {
     navigation.navigate("form", params);
   };
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("blur", () => {
+      swipeableRefs.current.forEach((ref) => ref?.close());
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <View style={{ flex: 1 }}>
       {filteredList.length > 0 ? (
@@ -53,12 +63,13 @@ const ProductList = ({ navigation, route }) => {
           key="list"
           style={[styles.list, { backgroundColor: theme.background }]}
           data={filteredList}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <ProductCard
               product={item}
               key={item.id}
               changeProduct={handleChangeProduct}
               freezeProduct={handleFreezeProduct}
+              ref={(el) => (swipeableRefs.current[index] = el)}
             />
           )}
           keyExtractor={(item) => item.id}
