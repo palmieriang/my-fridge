@@ -47,7 +47,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   const userID = user.uid;
 
   const handleAddPress = async () => {
-    if (validateProduct(name, date, place, t)) {
+    if (validateProduct({ name, date, place, t })) {
       const data = {
         name,
         date,

@@ -1,6 +1,18 @@
 import { Alert } from "react-native";
 
-export const validateProduct = (name, date, place, t) => {
+type ValidateProductProps = {
+  name: string;
+  date: string | null;
+  place: string;
+  t: (key: string) => string;
+};
+
+export const validateProduct = ({
+  name,
+  date,
+  place,
+  t,
+}: ValidateProductProps): boolean => {
   if (name.length < 3) {
     Alert.alert(t("validationError"), t("nameLength"));
     return false;
