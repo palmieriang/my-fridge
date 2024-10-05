@@ -8,13 +8,22 @@ import { View } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
-import { styles, pickerSelectStyles } from "./styles";
+import { styles } from "./styles";
 import { validateProduct } from "./validateProduct";
 import { FRIDGE, FREEZER } from "../../constants";
+import {
+  FormScreenNavigationProp,
+  FormScreenRouteProp,
+} from "../../navigation/navigation.d";
 import { authStore, localeStore, productsStore, themeStore } from "../../store";
 import { convertToISODateString, convertToCustomFormat } from "../../utils";
 
-const ProductForm = ({ navigation, route }) => {
+type ProductFormProps = {
+  navigation: FormScreenNavigationProp;
+  route: FormScreenRouteProp;
+};
+
+const ProductForm = ({ navigation, route }: ProductFormProps) => {
   const { params } = route;
   const {
     localizationContext: { t },
@@ -59,7 +68,7 @@ const ProductForm = ({ navigation, route }) => {
     }
   };
 
-  const handleChangeName = (value) => {
+  const handleChangeName = (value: string) => {
     setName(value);
   };
 
@@ -67,8 +76,8 @@ const ProductForm = ({ navigation, route }) => {
     setShowDatePicker(true);
   };
 
-  const handleDatePicked = (date) => {
-    setDate(convertToCustomFormat(date));
+  const handleDatePicked = (pickedDate: Date) => {
+    setDate(convertToCustomFormat(pickedDate));
     handleDatePickerHide();
   };
 
@@ -107,7 +116,7 @@ const ProductForm = ({ navigation, route }) => {
         />
         <FormInput
           labelValue={date}
-          onChangeText={handleChangeName}
+          onChangeText={handleDatePress}
           placeholderText={t("date")}
           Icon={CalendarIcon}
           editable={!showDatePicker}
@@ -122,7 +131,6 @@ const ProductForm = ({ navigation, route }) => {
         />
         <View style={styles.inputContainer}>
           <Picker
-            style={pickerSelectStyles}
             selectedValue={place}
             onValueChange={(itemValue) => setPlace(itemValue)}
             itemStyle={styles.iosHeight}
