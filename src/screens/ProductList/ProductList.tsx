@@ -1,26 +1,31 @@
 import ProductCard from "@components/ProductCard/ProductCard";
-import PropTypes from "prop-types";
 import React, { useContext, useEffect, useRef } from "react";
 import { FlatList, Text, View } from "react-native";
 import ActionButton from "react-native-action-button-warnings-fixed";
 
 import styles from "./styles";
-import { FRIDGE, FREEZER } from "../../constants";
+import {
+  ProductListNavigationProp,
+  ProductListRouteProp,
+} from "../../navigation/navigation.d";
 import { localeStore, themeStore } from "../../store";
 import { productsStore } from "../../store/productsStore";
 
-const ProductList = ({ navigation, route }) => {
+type ProductListProps = {
+  navigation: ProductListNavigationProp;
+  route: ProductListRouteProp;
+};
+
+const ProductList = ({ navigation, route }: ProductListProps) => {
   const {
     localizationContext: { t },
   } = useContext(localeStore);
   const { theme } = useContext(themeStore);
-  const { productsContext, productsList } = useContext(productsStore);
+  const { productsList } = useContext(productsStore);
 
   const { place } = route.params;
 
-  const filteredList = productsList.filter((item) => {
-    return item.place === place;
-  });
+  const filteredList = productsList.filter((item) => item.place === place);
 
   const swipeableRefs = useRef([]);
 
@@ -30,21 +35,7 @@ const ProductList = ({ navigation, route }) => {
     });
   };
 
-  const handleChangeProduct = async (id) => {
-    try {
-      const product = await productsContext.handleGetProduct(id);
-      navigateToProductForm({ id, product, title: t("modifyItem") });
-    } catch (error) {
-      console.log("Error fetching product: ", error);
-    }
-  };
-
-  const handleFreezeProduct = (id) => {
-    const moveTo = place === FRIDGE ? FREEZER : FRIDGE;
-    productsContext.handleFreezeProduct(id, moveTo);
-  };
-
-  const navigateToProductForm = (params) => {
+  const navigateToProductForm = (params: { title: string }) => {
     navigation.navigate("form", params);
   };
 
@@ -67,8 +58,6 @@ const ProductList = ({ navigation, route }) => {
             <ProductCard
               product={item}
               key={item.id}
-              changeProduct={handleChangeProduct}
-              freezeProduct={handleFreezeProduct}
               ref={(el) => (swipeableRefs.current[index] = el)}
             />
           )}
@@ -85,13 +74,6 @@ const ProductList = ({ navigation, route }) => {
       />
     </View>
   );
-};
-
-ProductList.propTypes = {
-  navigation: PropTypes.shape({
-    navigate: PropTypes.func.isRequired,
-  }).isRequired,
-  route: PropTypes.object.isRequired,
 };
 
 export default ProductList;
