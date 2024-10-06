@@ -12,7 +12,13 @@ import styles from "./styles";
 import LottieAnimation from "../../animations/LottieAnimation";
 import { authStore } from "../../store";
 
-const SignIn = ({ navigation }) => {
+interface SignInProps {
+  navigation: {
+    navigate: (screen: string) => void;
+  };
+}
+
+const SignIn = ({ navigation }: SignInProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [playAnimation, setPlayAnimation] = useState(false);
@@ -56,7 +62,7 @@ const SignIn = ({ navigation }) => {
 
   const handleResetPassword = async () => {
     try {
-      authContext.resetPassword(email);
+      await authContext.resetPassword(email);
     } catch (error) {
       console.log(error);
     }
