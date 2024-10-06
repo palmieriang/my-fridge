@@ -10,7 +10,13 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import styles from "./styles";
 import { authStore } from "../../store";
 
-const Registration = ({ navigation }) => {
+interface RegistrationProps {
+  navigation: {
+    navigate: (screen: string) => void;
+  };
+}
+
+const Registration = ({ navigation }: RegistrationProps) => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -62,7 +68,7 @@ const Registration = ({ navigation }) => {
       <FormInput
         labelValue={confirmPassword}
         onChangeText={setConfirmPassword}
-        placeholderText="Password"
+        placeholderText="Confirm password"
         Icon={PadlockIcon}
         autoCapitalize="none"
         underlineColorAndroid="transparent"
