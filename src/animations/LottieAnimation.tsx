@@ -5,6 +5,7 @@ import { StyleSheet, ViewProps } from "react-native";
 import DoorAnimation from "./15131-elevator-doors.json";
 
 interface LottieAnimationProps extends ViewProps {
+  autoplay: boolean;
   loop: boolean;
   name: keyof typeof ANIMATIONS;
   play: boolean;
