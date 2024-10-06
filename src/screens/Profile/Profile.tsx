@@ -2,7 +2,11 @@ import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
 import Constants from "expo-constants";
 import * as ImagePicker from "expo-image-picker";
-import { getDownloadURL } from "firebase/storage";
+import {
+  getDownloadURL,
+  UploadTask,
+  UploadTaskSnapshot,
+} from "firebase/storage";
 import React, { useContext, useState, useEffect } from "react";
 import { Alert, View, Text, TouchableOpacity } from "react-native";
 import Image from "react-native-image-progress";
@@ -12,6 +16,11 @@ import styles from "./styles";
 import { uploadImage } from "../../../api/api";
 import { authStore, themeStore } from "../../store";
 
+type UploadState = {
+  loading: boolean;
+  progress: number;
+};
+
 const Profile = () => {
   const {
     userData,
@@ -19,7 +28,7 @@ const Profile = () => {
     authState: { profileImg },
   } = useContext(authStore);
   const { theme } = useContext(themeStore);
-  const [upload, setUpload] = useState({
+  const [upload, setUpload] = useState<UploadState>({
     loading: false,
     progress: 0,
   });
@@ -38,26 +47,26 @@ const Profile = () => {
     })();
   }, []);
 
-  const handleUploadProgress = (snapshot) => {
+  const handleUploadProgress = (snapshot: UploadTaskSnapshot) => {
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log("Upload is " + progress + "% done");
     setUpload({ loading: true, progress });
   };
 
-  const handleUploadError = (error) => {
+  const handleUploadError = (error: Error) => {
     console.log("Error uploading image:", error);
     Alert.alert("Upload failed", "Failed to upload image. Please try again.");
     setUpload({ loading: false, progress: 0 });
   };
 
-  const handleUploadComplete = (uploadTask) => {
+  const handleUploadComplete = (uploadTask: UploadTask) => {
     getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
       authContext.updateProfileImage(downloadURL);
       setUpload({ loading: false, progress: 0 });
     });
   };
 
-  const monitorFileUpload = (uploadTask) => {
+  const monitorFileUpload = (uploadTask: UploadTask) => {
     uploadTask.on(
       "state_changed",
       handleUploadProgress,
@@ -88,7 +97,7 @@ const Profile = () => {
     }
   };
 
-  const getImageBlobAndMetadata = async (uri) => {
+  const getImageBlobAndMetadata = async (uri: string) => {
     const response = await fetch(uri);
     if (!response.ok) {
       throw new Error(`Failed to fetch resource: ${response.statusText}`);

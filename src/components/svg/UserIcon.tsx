@@ -4,7 +4,7 @@ import Svg, { Path } from "react-native-svg";
 type UserIconProps = {
   height: number;
   width: number;
-  fill: string;
+  fill?: string;
 };
 
 const UserIcon = ({ height, width, fill = "#ffffff" }: UserIconProps) => {
