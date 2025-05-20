@@ -1263,10 +1263,10 @@
     mv "~2"
     safe-json-stringify "~1"
 
-"@expo/cli@0.17.10":
-  version "0.17.10"
-  resolved "https://registry.npmjs.org/@expo/cli/-/cli-0.17.10.tgz"
-  integrity sha512-Jw2wY+lsavP9GRqwwLqF/SvB7w2GZ4sWBMcBKTZ8F0lWjwmLGAUt4WYquf20agdmnY/oZUHvWNkrz/t3SflhnA==
+"@expo/cli@0.17.13":
+  version "0.17.13"
+  resolved "https://registry.npmjs.org/@expo/cli/-/cli-0.17.13.tgz#ab6acbd1b15a25a0fcc86a6c4f4ed7e60cfda457"
+  integrity sha512-n13yxOmI3I0JidzMdFCH68tYKGDtK4XlDFk1vysZX7AIRKeDVRsSbHhma5jCla2bDt25RKmJBHA9KtzielwzAA==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/code-signing-certificates" "0.0.5"
@@ -1276,7 +1276,7 @@
     "@expo/env" "~0.2.2"
     "@expo/image-utils" "^0.4.0"
     "@expo/json-file" "^8.2.37"
-    "@expo/metro-config" "~0.17.0"
+    "@expo/metro-config" "0.17.8"
     "@expo/osascript" "^2.0.31"
     "@expo/package-manager" "^1.1.1"
     "@expo/plist" "^0.1.0"
@@ -1353,10 +1353,10 @@
     node-forge "^1.2.1"
     nullthrows "^1.1.1"
 
-"@expo/config-plugins@7.9.1", "@expo/config-plugins@~7.9.0":
-  version "7.9.1"
-  resolved "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-7.9.1.tgz"
-  integrity sha512-ICt6Jed1J0tPYMQrJ8K5Qusgih2I6pZ2PU4VSvxsN3T4n97L13XpYV1vyq1Uc/HMl3UhOwldipmgpEbCfeDqsQ==
+"@expo/config-plugins@7.9.2":
+  version "7.9.2"
+  resolved "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-7.9.2.tgz#fc18e84761067ce670742d735b888613c06fbea8"
+  integrity sha512-sRU/OAp7kJxrCUiCTUZqvPMKPdiN1oTmNfnbkG4oPdfWQTpid3jyCH7ZxJEN5SI6jrY/ZsK5B/JPgjDUhuWLBQ==
   dependencies:
     "@expo/config-types" "^50.0.0-alpha.1"
     "@expo/fingerprint" "^0.6.0"
@@ -1380,6 +1380,29 @@
   version "7.8.4"
   resolved "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-7.8.4.tgz"
   integrity sha512-hv03HYxb/5kX8Gxv/BTI8TLc9L06WzqAfHRRXdbar4zkLcP2oTzvsLEF4/L/TIpD3rsnYa0KU42d0gWRxzPCJg==
+  dependencies:
+    "@expo/config-types" "^50.0.0-alpha.1"
+    "@expo/fingerprint" "^0.6.0"
+    "@expo/json-file" "~8.3.0"
+    "@expo/plist" "^0.1.0"
+    "@expo/sdk-runtime-versions" "^1.0.0"
+    "@react-native/normalize-color" "^2.0.0"
+    chalk "^4.1.2"
+    debug "^4.3.1"
+    find-up "~5.0.0"
+    getenv "^1.0.0"
+    glob "7.1.6"
+    resolve-from "^5.0.0"
+    semver "^7.5.3"
+    slash "^3.0.0"
+    slugify "^1.6.6"
+    xcode "^3.0.1"
+    xml2js "0.6.0"
+
+"@expo/config-plugins@~7.9.0":
+  version "7.9.1"
+  resolved "https://registry.npmjs.org/@expo/config-plugins/-/config-plugins-7.9.1.tgz"
+  integrity sha512-ICt6Jed1J0tPYMQrJ8K5Qusgih2I6pZ2PU4VSvxsN3T4n97L13XpYV1vyq1Uc/HMl3UhOwldipmgpEbCfeDqsQ==
   dependencies:
     "@expo/config-types" "^50.0.0-alpha.1"
     "@expo/fingerprint" "^0.6.0"
@@ -1457,17 +1480,6 @@
     tmp "^0.0.33"
     tslib "^2.4.0"
 
-"@expo/env@~0.2.0":
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/@expo/env/-/env-0.2.1.tgz"
-  integrity sha512-deZmRS7Dvp18VM8s559dq/ZjPlV1D9vtLoLXwHmCK/JYOvtNptdKsfxcWjI7ewmo6ln2PqgNI9HRI74q6Wk2eA==
-  dependencies:
-    chalk "^4.0.0"
-    debug "^4.3.4"
-    dotenv "~16.0.3"
-    dotenv-expand "~10.0.0"
-    getenv "^1.0.0"
-
 "@expo/env@~0.2.2":
   version "0.2.2"
   resolved "https://registry.npmjs.org/@expo/env/-/env-0.2.2.tgz"
@@ -1517,10 +1529,10 @@
     json5 "^2.2.2"
     write-file-atomic "^2.3.0"
 
-"@expo/metro-config@0.17.7":
-  version "0.17.7"
-  resolved "https://registry.npmjs.org/@expo/metro-config/-/metro-config-0.17.7.tgz"
-  integrity sha512-3vAdinAjMeRwdhGWWLX6PziZdAPvnyJ6KVYqnJErHHqH0cA6dgAENT3Vq6PEM1H2HgczKr2d5yG9AMgwy848ow==
+"@expo/metro-config@0.17.8":
+  version "0.17.8"
+  resolved "https://registry.npmjs.org/@expo/metro-config/-/metro-config-0.17.8.tgz#8a5b46af0bef3397eac17607fc249670fdbbab9a"
+  integrity sha512-XNjI5Q5bW3k2ieNtQBSX9BnIysRxG4UyNsaWcysv3AzY+rahay6fAp5xzJey8xBOlzs9u7H4AdMoeJsUje3lcQ==
   dependencies:
     "@babel/core" "^7.20.0"
     "@babel/generator" "^7.20.5"
@@ -1528,32 +1540,6 @@
     "@babel/types" "^7.20.0"
     "@expo/config" "~8.5.0"
     "@expo/env" "~0.2.2"
-    "@expo/json-file" "~8.3.0"
-    "@expo/spawn-async" "^1.7.2"
-    babel-preset-fbjs "^3.4.0"
-    chalk "^4.1.0"
-    debug "^4.3.2"
-    find-yarn-workspace-root "~2.0.0"
-    fs-extra "^9.1.0"
-    getenv "^1.0.0"
-    glob "^7.2.3"
-    jsc-safe-url "^0.2.4"
-    lightningcss "~1.19.0"
-    postcss "~8.4.32"
-    resolve-from "^5.0.0"
-    sucrase "3.34.0"
-
-"@expo/metro-config@~0.17.0":
-  version "0.17.4"
-  resolved "https://registry.npmjs.org/@expo/metro-config/-/metro-config-0.17.4.tgz"
-  integrity sha512-PxqDMuVjXQeboa6Aj8kNj4iTxIpwpfoYlF803qOjf1LE1ePlREnWNwqy65ESCBnCmekYIO5hhm1Nksa+xCvuyg==
-  dependencies:
-    "@babel/core" "^7.20.0"
-    "@babel/generator" "^7.20.5"
-    "@babel/parser" "^7.20.0"
-    "@babel/types" "^7.20.0"
-    "@expo/config" "~8.5.0"
-    "@expo/env" "~0.2.0"
     "@expo/json-file" "~8.3.0"
     "@expo/spawn-async" "^1.7.2"
     babel-preset-fbjs "^3.4.0"
@@ -2461,10 +2447,10 @@
     prompts "^2.4.2"
     semver "^7.5.2"
 
-"@react-native-community/datetimepicker@7.6.1":
-  version "7.6.1"
-  resolved "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-7.6.1.tgz"
-  integrity sha512-g66Q2Kd9Uw3eRL7kkrTsGhi+eXxNoPDRFYH6z78sZQuYjPkUQgJDDMUYgBmaBsQx/fKMtemPrCj1ulGmyi0OSw==
+"@react-native-community/datetimepicker@7.7.0":
+  version "7.7.0"
+  resolved "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-7.7.0.tgz#0d0162b0434c7b35883f8c5af846f35e23d045ec"
+  integrity sha512-nYzZy4DQLRFUzKJShWzRleCaebmCJfZ1lIcFmZgMXJoiVuGJNw3OIGHSWmHhPETh3OhP1RO3to882d7WmDIyrA==
   dependencies:
     invariant "^2.2.4"
 
@@ -4682,16 +4668,16 @@ expo-modules-core@1.11.13:
   dependencies:
     invariant "^2.2.4"
 
-expo@~50.0.17:
-  version "50.0.17"
-  resolved "https://registry.npmjs.org/expo/-/expo-50.0.17.tgz"
-  integrity sha512-eD8Nh10BgVwecU7EVyogx7X314ajxVpJdFwkXhi341AD61S2WPX31NMHW82XGXas6dbDjdbgtaOMo5H/vylB7Q==
+expo@50.0.20:
+  version "50.0.20"
+  resolved "https://registry.npmjs.org/expo/-/expo-50.0.20.tgz#b2ec213e0657859647109ac1917d3916ba0346d8"
+  integrity sha512-7ySpJL6rvbVUDdPAShc9ByU+v2CmUX3z4k3H7HkIRB9d/kTZpHWQmyr9ynWf5i3oCBnE82HcO74k2nW4GykNog==
   dependencies:
     "@babel/runtime" "^7.20.0"
-    "@expo/cli" "0.17.10"
+    "@expo/cli" "0.17.13"
     "@expo/config" "8.5.6"
-    "@expo/config-plugins" "7.9.1"
-    "@expo/metro-config" "0.17.7"
+    "@expo/config-plugins" "7.9.2"
+    "@expo/metro-config" "0.17.8"
     "@expo/vector-icons" "^14.0.0"
     babel-preset-expo "~10.0.2"
     expo-asset "~9.0.2"
