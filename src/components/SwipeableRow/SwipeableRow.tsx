@@ -42,7 +42,7 @@ const SwipeableRow = forwardRef(
       freezeFunction,
       place,
     }: SwipeableRowProps,
-    ref
+    ref,
   ) => {
     const {
       localizationContext: { t },
@@ -82,7 +82,7 @@ const SwipeableRow = forwardRef(
 
         return renderActions(leftActions, 96);
       },
-      [freezeFunction, place, t]
+      [freezeFunction, place, t],
     );
 
     const renderRightActions = useCallback(
@@ -106,7 +106,7 @@ const SwipeableRow = forwardRef(
 
         return renderActions(rightActions, 192);
       },
-      [modifyFunction, deleteFunction, t]
+      [modifyFunction, deleteFunction, t],
     );
 
     return (
@@ -120,7 +120,7 @@ const SwipeableRow = forwardRef(
         {children}
       </Swipeable>
     );
-  }
+  },
 );
 
 export default SwipeableRow;
