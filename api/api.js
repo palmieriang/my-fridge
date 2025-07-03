@@ -3,6 +3,7 @@ import {
   deleteUser,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   sendEmailVerification,
   signInWithCredential,
   signInWithEmailAndPassword,
@@ -32,11 +33,11 @@ import {
 import { ActionTypes } from "../src/constants";
 import {
   app,
-  auth,
-  db,
-  usersRef,
-  productsRef,
-  profileImagesRef,
+  getAuthService,
+  getDbService,
+  getUsersRef,
+  getProductsRef,
+  getProfileImagesRef,
 } from "../src/firebase/config";
 
 // Auth
@@ -44,7 +45,7 @@ import {
 export async function createUser(fullName, email, password) {
   try {
     const response = await createUserWithEmailAndPassword(
-      auth,
+      getAuthService(),
       email,
       password,
     );
@@ -64,7 +65,12 @@ export async function createUser(fullName, email, password) {
 }
 
 export async function deleteAccount() {
-  const user = auth.currentUser;
+  const user = getAuthService().currentUser;
+  if (!user) {
+    console.log("No user is currently signed in to delete account.");
+    return;
+  }
+
   try {
     await deleteAllProductsFromUser(user.uid);
     await deleteUserData(user.uid);
@@ -76,9 +82,11 @@ export async function deleteAccount() {
 }
 
 export function authSignIn(email, password) {
-  return signInWithEmailAndPassword(auth, email, password).catch((error) => {
-    console.log("ERROR in authSignInc ", error.message);
-  });
+  return signInWithEmailAndPassword(getAuthService(), email, password).catch(
+    (error) => {
+      console.log("ERROR in authSignIn ", error.message);
+    },
+  );
 }
 
 function isUserEqual(googleUser, firebaseUser) {
@@ -86,9 +94,8 @@ function isUserEqual(googleUser, firebaseUser) {
     const providerData = firebaseUser.providerData;
     for (let i = 0; i < providerData.length; i++) {
       if (
-        providerData[i].providerId ===
-          app.auth.GoogleAuthProvider.PROVIDER_ID &&
-        providerData[i].uid === googleUser.user.id
+        providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
+        providerData[i].uid === googleUser.user.id // or googleUser.getBasicProfile().getId() or googleUser.getId()
       ) {
         // We don't need to reauth the Firebase connection.
         return true;
@@ -100,44 +107,47 @@ function isUserEqual(googleUser, firebaseUser) {
 
 function onSignIn(googleUser) {
   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-  const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-    unsubscribe();
-    // Check if we are already signed-in Firebase with the correct user.
-    if (!isUserEqual(googleUser, firebaseUser)) {
-      // Build Firebase credential with the Google ID token.
-      const credential = GoogleAuthProvider.credential(
-        googleUser.idToken,
-        googleUser.accessToken,
-      );
+  const unsubscribe = onAuthStateChanged(
+    getAuthService(),
+    async (firebaseUser) => {
+      unsubscribe();
+      // Check if we are already signed-in Firebase with the correct user.
+      if (!isUserEqual(googleUser, firebaseUser)) {
+        // Build Firebase credential with the Google ID token.
+        const credential = GoogleAuthProvider.credential(
+          googleUser.idToken,
+          googleUser.accessToken,
+        );
 
-      // Sign in with credential from the Google user.
-      try {
-        const result = await signInWithCredential(auth, credential);
-        if (result.additionalUserInfo.isNewUser) {
-          const uid = result.user.uid;
-          const data = {
-            id: uid,
-            email: result.user.email,
-            fullName: result.additionalUserInfo.profile.name,
-            locale: result.additionalUserInfo.profile.locale,
-            profileImg: result.additionalUserInfo.profile.picture,
-            theme: "lightRed",
-          };
-          await addUserData(uid, data);
+        // Sign in with credential from the Google user.
+        try {
+          const result = await signInWithCredential(getAuthService(), credential);
+          if (result.additionalUserInfo.isNewUser) {
+            const uid = result.user.uid;
+            const data = {
+              id: uid,
+              email: result.user.email,
+              fullName: result.additionalUserInfo.profile.name,
+              locale: result.additionalUserInfo.profile.locale,
+              profileImg: result.additionalUserInfo.profile.picture,
+              theme: "lightRed",
+            };
+            await addUserData(uid, data);
+          }
+        } catch (error) {
+          console.log("onSignIn error", error);
         }
-      } catch (error) {
-        console.log("onSignIn error", error);
+      } else {
+        console.log("User already signed-in Firebase.");
       }
-    } else {
-      console.log("User already signed-in Firebase.");
-    }
-  });
+    },
+  );
 }
 
 export async function signInWithGoogle() {
   const provider = new GoogleAuthProvider();
   try {
-    const result = await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(getAuthService(), provider); // this is only available in web
     onSignIn(result);
   } catch (error) {
     console.log("signInWithGoogle error: ", error.message);
@@ -145,11 +155,11 @@ export async function signInWithGoogle() {
 }
 
 export function authSignOut() {
-  return auth.signOut();
+  return getAuthService().signOut();
 }
 
 export function persistentLogin(callback, callbackData) {
-  return onAuthStateChanged(auth, async (user) => {
+  return onAuthStateChanged(getAuthService(), async (user) => {
     if (user) {
       try {
         const idToken = await user.getIdToken(true);
@@ -171,20 +181,20 @@ export function persistentLogin(callback, callbackData) {
 }
 
 export function addUserData(uid, data) {
-  return setDoc(doc(usersRef, uid), data).catch((error) =>
+  return setDoc(doc(getUsersRef(), uid), data).catch((error) =>
     console.log("Error adding user data: ", error),
   );
 }
 
 export function deleteUserData(uid) {
-  return deleteDoc(doc(usersRef, uid)).catch((error) =>
+  return deleteDoc(doc(getUsersRef(), uid)).catch((error) =>
     console.log("Error in deleteUserData: ", error),
   );
 }
 
 export async function getUserData(userID) {
   try {
-    const response = await getDoc(doc(usersRef, userID));
+    const response = await getDoc(doc(getUsersRef(), userID));
     return response.data();
   } catch (error) {
     throw new Error("Error fetching user data: " + error.message);
@@ -192,12 +202,17 @@ export async function getUserData(userID) {
 }
 
 export function sendVerificationEmail() {
-  const user = auth.currentUser;
+  const user = getAuthService().currentUser;
+  if (!user) {
+    console.log("No user is currently signed in to delete account.");
+    return Promise.reject(new Error("No user signed in."));
+  }
+
   return sendEmailVerification(user);
 }
 
 export function sendResetPassword(email) {
-  return auth.sendPasswordResetEmail(email);
+  return sendPasswordResetEmail(getAuthService(), email);
 }
 
 // Products
@@ -211,14 +226,18 @@ export function saveProduct({ name, date, place, authorID }) {
     authorID,
     createdAt: timestamp,
   };
-  return setDoc(doc(productsRef), data).catch((error) => {
+  return setDoc(doc(getProductsRef()), data).catch((error) => {
     alert(error);
   });
+  // if setDoc doesn't work, try addDoc
+  // return addDoc(getProductsRef(), data).catch((error) => {
+  //   alert(error);
+  // });
 }
 
 export const getProductsFromPlace = (userID, place, callback) => {
   const productsQuery = query(
-    productsRef,
+    getProductsRef(),
     where("authorID", "==", userID),
     where("place", "==", place),
     orderBy("createdAt", "desc"),
@@ -245,7 +264,7 @@ export const getProductsFromPlace = (userID, place, callback) => {
 
 export const getAllProducts = (userID, callback) => {
   const productsQuery = query(
-    productsRef,
+    getProductsRef(),
     where("authorID", "==", userID),
     orderBy("createdAt", "desc"),
   );
@@ -270,7 +289,7 @@ export const getAllProducts = (userID, callback) => {
 };
 
 export async function getProductById(id) {
-  const productDocRef = doc(productsRef, id);
+  const productDocRef = doc(getProductsRef(), id);
   try {
     const productDocSnap = await getDoc(productDocRef);
     return productDocSnap.data();
@@ -288,19 +307,19 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     authorID,
     createdAt: timestamp,
   };
-  return setDoc(doc(productsRef, existingId), data).catch((error) => {
+  return setDoc(doc(getProductsRef(), existingId), data).catch((error) => {
     alert(error);
   });
 }
 
 export function moveProduct(id, place) {
-  return updateDoc(doc(productsRef, id), {
+  return updateDoc(doc(getProductsRef(), id), {
     place,
   }).catch((error) => console.log("Error in moveProduct: ", error));
 }
 
 export function deleteProduct(existingId) {
-  return deleteDoc(doc(productsRef, existingId)).catch((error) => {
+  return deleteDoc(doc(getProductsRef(), existingId)).catch((error) => {
     console.log("Error in deleteProduct: ", error);
   });
 }
@@ -308,9 +327,9 @@ export function deleteProduct(existingId) {
 export async function deleteAllProductsFromUser(uid) {
   try {
     const querySnapshot = await getDocs(
-      query(productsRef, where("authorID", "==", uid)),
+      query(getProductsRef(), where("authorID", "==", uid)),
     );
-    const batch = writeBatch(db);
+    const batch = writeBatch(getDbService());
     querySnapshot.forEach((doc) => {
       batch.delete(doc.ref);
     });
@@ -323,12 +342,12 @@ export async function deleteAllProductsFromUser(uid) {
 // Settings
 
 export function uploadImage(id, blob, metadata) {
-  return uploadBytesResumable(ref(profileImagesRef, `${id}`), blob, metadata);
+  return uploadBytesResumable(ref(getProfileImagesRef(), `${id}`), blob, metadata);
 }
 
 export async function getProfileImageFromFirebase(userUID, callback) {
   try {
-    const url = await getDownloadURL(ref(profileImagesRef, `${userUID}`));
+    const url = await getDownloadURL(ref(getProfileImagesRef(), `${userUID}`));
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log("Profile img error:", error.message);
@@ -336,7 +355,7 @@ export async function getProfileImageFromFirebase(userUID, callback) {
 }
 export async function deleteProfileImage(userUID, callback) {
   try {
-    await deleteObject(ref(profileImagesRef, `${userUID}`));
+    await deleteObject(ref(getProfileImagesRef(), `${userUID}`));
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error) {
     console.log("Delete profile img error: ", error.message);
@@ -347,7 +366,7 @@ export function changeColor(newTheme, id) {
   const data = {
     theme: newTheme,
   };
-  return setDoc(doc(usersRef, id), data, { merge: true }).catch((error) =>
+  return setDoc(doc(getUsersRef(), id), data, { merge: true }).catch((error) =>
     console.log("Error: ", error),
   );
 }
@@ -356,7 +375,7 @@ export function changeLanguage(newLocale, id) {
   const data = {
     locale: newLocale,
   };
-  return setDoc(doc(usersRef, id), data, { merge: true }).catch((error) =>
+  return setDoc(doc(getUsersRef(), id), data, { merge: true }).catch((error) =>
     console.log("Error: ", error),
   );
 }
