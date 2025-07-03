@@ -2,6 +2,9 @@ import { adjust } from "@components/utils/dimensions";
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
+  androidPicker: {
+    width: "100%",
+  },
   container: {
     flex: 1,
     width: "100%",
