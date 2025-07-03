@@ -1,22 +1,14 @@
-import React, { useContext } from "react";
-import { Alert, Button, Text, View } from "react-native";
-import ModalSelector, { IOption } from "react-native-modal-selector";
+import { Picker } from "@react-native-picker/picker";
+import React, { useContext, useEffect, useState } from "react";
+import { Alert, Button, Platform, Text, View } from "react-native";
 
 import styles from "./styles";
 import { authStore, localeStore, themeStore } from "../../store";
 import Profile from "../Profile/Profile";
 
-interface LanguageOption extends IOption {
-  section?: boolean;
-}
-
-interface ThemeOption extends IOption {
-  section?: boolean;
-}
-
 const Settings = () => {
   const {
-    localizationContext: { t, changeLocale },
+    localizationContext: { t, changeLocale, locale },
   } = useContext(localeStore);
   const {
     authContext,
@@ -24,10 +16,21 @@ const Settings = () => {
   } = useContext(authStore);
   const {
     theme,
-    themeContext: { changeTheme },
+    themeContext: { changeTheme, themeName },
   } = useContext(themeStore);
 
-  const languageData: LanguageOption[] = [
+  const [selectedLocale, setSelectedLocale] = useState<string>(locale);
+  const [selectedTheme, setSelectedTheme] = useState<string>(themeName);
+
+  useEffect(() => {
+    setSelectedLocale(locale);
+  }, [locale]);
+
+  useEffect(() => {
+    setSelectedTheme(themeName);
+  }, [themeName]);
+
+  const languageData = [
     { section: true, label: t("chooseLanguage"), key: "title" },
     { label: t("english"), value: "en", key: "english" },
     { label: t("spanish"), value: "es", key: "spanish" },
@@ -36,7 +39,7 @@ const Settings = () => {
     { label: t("portuguese"), value: "pt", key: "portuguese" },
   ];
 
-  const themeData: ThemeOption[] = [
+  const themeData = [
     { section: true, label: t("changeTheme"), key: "title" },
     { label: "Light Red", value: "lightRed", key: "lightRed" },
     { label: "Light Blue", value: "lightBlue", key: "lightBlue" },
@@ -44,13 +47,13 @@ const Settings = () => {
     { label: "Dark Blue", value: "darkBlue", key: "darkBlue" },
   ];
 
-  const handleLocale = (locale: LanguageOption) => {
-    const newLocale = locale.value;
+  const handleLocaleChange = (newLocale: string) => {
+    setSelectedLocale(newLocale);
     changeLocale({ newLocale, id });
   };
 
-  const handleTheme = (theme: ThemeOption) => {
-    const newTheme = theme.value;
+  const handleThemeChange = (newTheme: string) => {
+    setSelectedTheme(newTheme);
     changeTheme({ newTheme, id });
   };
 
@@ -82,34 +85,42 @@ const Settings = () => {
       }}
     >
       <Profile />
-      <ModalSelector
-        animationType="fade"
-        cancelText={t("cancel")}
-        data={languageData}
-        initValue={t("changeLanguage")}
-        initValueTextStyle={styles.initValueTextStyle}
-        onChange={handleLocale}
-        style={styles.selectorContainer}
-        sectionTextStyle={styles.text}
-        selectTextStyle={styles.text}
-        optionTextStyle={styles.text}
-        cancelTextStyle={styles.text}
-        optionContainerStyle={styles.optionContainer}
-      />
-      <ModalSelector
-        animationType="fade"
-        cancelText={t("cancel")}
-        data={themeData}
-        initValue={t("changeTheme")}
-        initValueTextStyle={styles.initValueTextStyle}
-        onChange={handleTheme}
-        style={styles.selectorContainer}
-        sectionTextStyle={styles.text}
-        selectTextStyle={styles.text}
-        optionTextStyle={styles.text}
-        cancelTextStyle={styles.text}
-        optionContainerStyle={styles.optionContainer}
-      />
+      <View style={styles.selectorContainer}>
+        <Text style={styles.initValueTextStyle}>{t("changeLanguage")}</Text>
+        <Picker
+          selectedValue={selectedLocale}
+          onValueChange={handleLocaleChange}
+          style={Platform.OS === "android" ? styles.androidPicker : undefined}
+          dropdownIconColor={theme.text}
+        >
+          <Picker.Item label={t("chooseLanguage")} value="" />
+          {languageData.map((lang) => (
+            <Picker.Item
+              key={lang.value}
+              label={lang.label}
+              value={lang.value}
+            />
+          ))}
+        </Picker>
+      </View>
+      <View style={styles.selectorContainer}>
+        <Text style={styles.initValueTextStyle}>{t("changeTheme")}</Text>
+        <Picker
+          selectedValue={selectedTheme}
+          onValueChange={handleThemeChange}
+          style={Platform.OS === "android" ? styles.androidPicker : undefined}
+          dropdownIconColor={theme.text}
+        >
+          <Picker.Item label={t("chooseTheme") ?? "Choose theme"} value="" />
+          {themeData.map((themeOption) => (
+            <Picker.Item
+              key={themeOption.value}
+              label={themeOption.label}
+              value={themeOption.value}
+            />
+          ))}
+        </Picker>
+      </View>
       <View style={styles.auth}>
         <Button title="Logout" onPress={handleLogOut} />
         <Text onPress={handleDeleteUser} style={styles.authLink}>
