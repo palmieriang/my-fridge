@@ -12,6 +12,7 @@ import {
   initializeAuth,
   getReactNativePersistence,
   connectAuthEmulator,
+  getAuth,
 } from "firebase/auth";
 import {
   getFirestore,
@@ -32,26 +33,59 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(AsyncStorage),
-});
 
-const db = getFirestore(app);
-const usersRef = collection(db, "users");
-const productsRef = collection(db, "products");
+let auth;
+let db;
+let storage;
+let usersRef;
+let productsRef;
+let profileImagesRef;
 
-const storage = getStorage(app);
-const storageRef = ref(storage);
-const profileImagesRef = ref(storageRef, "profileImages/");
+export const initializeFirebaseServices = async () => {
+  if (!auth) {
+    try {
+      auth = initializeAuth(app, {
+        persistence: getReactNativePersistence(AsyncStorage),
+      });
 
-if (__DEV__) {
-  console.log("Running in development mode");
+      if (__DEV__) {
+        const debuggerHost =
+          Platform.OS === "android" ? "10.0.2.2" : "localhost";
+        connectAuthEmulator(auth, `http://${debuggerHost}:9099`);
+      }
+    } catch (e) {
+      console.error("Failed to initialize Firebase Auth:", e);
+    }
+  }
 
-  const debuggerHost = Platform.OS === "android" ? "10.0.2.2" : "localhost";
+  if (!db) {
+    db = getFirestore(app);
+    usersRef = collection(db, "users");
+    productsRef = collection(db, "products");
 
-  connectAuthEmulator(auth, `http://${debuggerHost}:9099/`);
-  connectFirestoreEmulator(db, debuggerHost, 8080);
-  connectStorageEmulator(storage, debuggerHost, 9199);
-}
+    if (__DEV__) {
+      const debuggerHost = Platform.OS === "android" ? "10.0.2.2" : "localhost";
+      connectFirestoreEmulator(db, debuggerHost, 8080);
+    }
+  }
 
-export { app, auth, db, productsRef, profileImagesRef, usersRef };
+  if (!storage) {
+    storage = getStorage(app);
+    const storageRootRef = ref(storage);
+    profileImagesRef = ref(storageRootRef, "profileImages/");
+
+    if (__DEV__) {
+      const debuggerHost = Platform.OS === "android" ? "10.0.2.2" : "localhost";
+      connectStorageEmulator(storage, debuggerHost, 9199);
+    }
+  }
+};
+
+export const getAuthService = () => auth || getAuth(app);
+export const getDbService = () => db;
+export const getStorageService = () => storage;
+export const getUsersRef = () => usersRef;
+export const getProductsRef = () => productsRef;
+export const getProfileImagesRef = () => profileImagesRef;
+
+export { app };
