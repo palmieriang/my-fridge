@@ -4,8 +4,7 @@ import CalendarIcon from "@components/svg/CalendarIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { Picker } from "@react-native-picker/picker";
 import React, { useContext, useState } from "react";
-import { View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
@@ -101,11 +100,12 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background }}>
-      <KeyboardAwareScrollView
-        style={styles.container}
-        keyboardShouldPersistTaps="always"
-      >
+    <KeyboardAvoidingView
+      style={{ flex: 1, backgroundColor: theme.background }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
+    >
+      <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
         <FormInput
           labelValue={name}
           onChangeText={handleChangeName}
@@ -149,8 +149,8 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           onPress={handleDeletePress}
           buttonDelete
         />
-      </KeyboardAwareScrollView>
-    </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

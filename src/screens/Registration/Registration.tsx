@@ -4,8 +4,13 @@ import EmailIcon from "@components/svg/EmailIcon";
 import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
 import React, { useState, useContext } from "react";
-import { Text, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 import styles from "./styles";
 import { authStore } from "../../store";
@@ -35,55 +40,62 @@ const Registration = ({ navigation }: RegistrationProps) => {
   };
 
   return (
-    <KeyboardAwareScrollView
-      style={styles.container}
-      keyboardShouldPersistTaps="always"
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
     >
-      <FormInput
-        labelValue={fullName}
-        onChangeText={setFullName}
-        placeholderText="Full Name"
-        Icon={UsernameIcon}
-        autoCapitalize="none"
-        underlineColorAndroid="transparent"
-      />
-      <FormInput
-        labelValue={email}
-        onChangeText={setEmail}
-        placeholderText="Email"
-        Icon={EmailIcon}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        underlineColorAndroid="transparent"
-      />
-      <FormInput
-        labelValue={password}
-        onChangeText={setPassword}
-        placeholderText="Password"
-        Icon={PadlockIcon}
-        autoCapitalize="none"
-        underlineColorAndroid="transparent"
-        secureTextEntry
-      />
-      <FormInput
-        labelValue={confirmPassword}
-        onChangeText={setConfirmPassword}
-        placeholderText="Confirm password"
-        Icon={PadlockIcon}
-        autoCapitalize="none"
-        underlineColorAndroid="transparent"
-        secureTextEntry
-      />
-      <Button text="Create account" onPress={handleRegistration} />
-      <View style={styles.footerView}>
-        <Text style={styles.footerText}>
-          Already got an account?{" "}
-          <Text onPress={handleGoToLogin} style={styles.footerLink}>
-            Log in
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 24 }} // move to style?
+        keyboardShouldPersistTaps="handled"
+      >
+        <FormInput
+          labelValue={fullName}
+          onChangeText={setFullName}
+          placeholderText="Full Name"
+          Icon={UsernameIcon}
+          autoCapitalize="none"
+          underlineColorAndroid="transparent"
+        />
+        <FormInput
+          labelValue={email}
+          onChangeText={setEmail}
+          placeholderText="Email"
+          Icon={EmailIcon}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          underlineColorAndroid="transparent"
+        />
+        <FormInput
+          labelValue={password}
+          onChangeText={setPassword}
+          placeholderText="Password"
+          Icon={PadlockIcon}
+          autoCapitalize="none"
+          underlineColorAndroid="transparent"
+          secureTextEntry
+        />
+        <FormInput
+          labelValue={confirmPassword}
+          onChangeText={setConfirmPassword}
+          placeholderText="Confirm password"
+          Icon={PadlockIcon}
+          autoCapitalize="none"
+          underlineColorAndroid="transparent"
+          secureTextEntry
+        />
+        <Button text="Create account" onPress={handleRegistration} />
+        <View style={styles.footerView}>
+          <Text style={styles.footerText}>
+            Already got an account?{" "}
+            <Text onPress={handleGoToLogin} style={styles.footerLink}>
+              Log in
+            </Text>
           </Text>
-        </Text>
-      </View>
-    </KeyboardAwareScrollView>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
