@@ -5,8 +5,14 @@ import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
 import useToggle from "@components/utils/useToggle";
 import { useState, useContext, useRef } from "react";
-import { Animated, Text, View } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {
+  Animated,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
 
 import styles from "./styles";
 import LottieAnimation from "../../animations/LottieAnimation";
@@ -74,67 +80,74 @@ const SignIn = ({ navigation }: SignInProps) => {
   };
 
   return (
-    <KeyboardAwareScrollView
-      style={styles.container}
-      keyboardShouldPersistTaps="always"
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      keyboardVerticalOffset={0}
     >
-      <View style={styles.animationContainer}>
-        <LottieAnimation
-          animationEnd={signInAfterAnimation}
-          autoplay={false}
-          loop={false}
-          name="door"
-          play={playAnimation}
-          reset={resetAnimation}
-        />
-      </View>
-      <FormInput
-        labelValue={email}
-        onChangeText={setEmail}
-        placeholderText="Email"
-        Icon={UsernameIcon}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        underlineColorAndroid="transparent"
-      />
-      {isToggled && (
-        <Animated.View
-          style={{
-            opacity: fadeAnim,
-          }}
-        >
-          <FormInput
-            labelValue={password}
-            onChangeText={setPassword}
-            placeholderText="Password"
-            Icon={PadlockIcon}
-            autoCapitalize="none"
-            underlineColorAndroid="transparent"
-            secureTextEntry
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ paddingBottom: 24 }} // move to style?
+        keyboardShouldPersistTaps="handled"
+      >
+        <View style={styles.animationContainer}>
+          <LottieAnimation
+            animationEnd={signInAfterAnimation}
+            autoplay={false}
+            loop={false}
+            name="door"
+            play={playAnimation}
+            reset={resetAnimation}
           />
-        </Animated.View>
-      )}
-      <Button
-        text={isToggled ? "Sign in" : "Reset password"}
-        onPress={isToggled ? handleSignIn : handleResetPassword}
-      />
-      <View style={styles.footerView}>
-        <Text style={styles.footerText}>
-          New user?{" "}
-          <Text onPress={handleCreateAccount} style={styles.footerLink}>
-            Create an account
+        </View>
+        <FormInput
+          labelValue={email}
+          onChangeText={setEmail}
+          placeholderText="Email"
+          Icon={UsernameIcon}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          underlineColorAndroid="transparent"
+        />
+        {isToggled && (
+          <Animated.View
+            style={{
+              opacity: fadeAnim,
+            }}
+          >
+            <FormInput
+              labelValue={password}
+              onChangeText={setPassword}
+              placeholderText="Password"
+              Icon={PadlockIcon}
+              autoCapitalize="none"
+              underlineColorAndroid="transparent"
+              secureTextEntry
+            />
+          </Animated.View>
+        )}
+        <Button
+          text={isToggled ? "Sign in" : "Reset password"}
+          onPress={isToggled ? handleSignIn : handleResetPassword}
+        />
+        <View style={styles.footerView}>
+          <Text style={styles.footerText}>
+            New user?{" "}
+            <Text onPress={handleCreateAccount} style={styles.footerLink}>
+              Create an account
+            </Text>
           </Text>
-        </Text>
-        <Text
-          onPress={isToggled ? fadeOut : fadeIn}
-          style={{ ...styles.footerLink, marginBottom: 10 }}
-        >
-          {isToggled ? "Reset password" : "Login"}
-        </Text>
-        <Text style={styles.footerText}>Sign In with: </Text>
-        <SocialIcon />
-      </View>
-    </KeyboardAwareScrollView>
+          <Text
+            onPress={isToggled ? fadeOut : fadeIn}
+            style={{ ...styles.footerLink, marginBottom: 10 }}
+          >
+            {isToggled ? "Reset password" : "Login"}
+          </Text>
+          <Text style={styles.footerText}>Sign In with: </Text>
+          <SocialIcon />
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
