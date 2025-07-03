@@ -1,6 +1,5 @@
 import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
-import Constants from "expo-constants";
 import * as ImagePicker from "expo-image-picker";
 import {
   getDownloadURL,
@@ -8,17 +7,23 @@ import {
   UploadTaskSnapshot,
 } from "firebase/storage";
 import React, { useContext, useState, useEffect } from "react";
-import { Alert, View, Text, TouchableOpacity } from "react-native";
-import Image from "react-native-image-progress";
-import * as Progress from "react-native-progress";
+import {
+  ActivityIndicator,
+  Alert,
+  Image,
+  Platform,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 import styles from "./styles";
 import { uploadImage } from "../../../api/api";
 import { authStore, themeStore } from "../../store";
 
 type UploadState = {
-  loading: boolean;
-  progress: number;
+  isUploading: boolean;
+  uploadProgress: number;
 };
 
 const Profile = () => {
@@ -29,17 +34,19 @@ const Profile = () => {
   } = useContext(authStore);
   const { theme } = useContext(themeStore);
   const [upload, setUpload] = useState<UploadState>({
-    loading: false,
-    progress: 0,
+    isUploading: false,
+    uploadProgress: 0,
   });
+  const [isProfileImageLoading, setIsProfileImageLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      if (Constants.platform.ios) {
+      if (Platform.OS === "ios") {
         const { status } =
           await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== "granted") {
           Alert.alert(
+            "Permission Required",
             "Sorry, we need camera roll permissions to make this work!",
           );
         }
@@ -47,23 +54,42 @@ const Profile = () => {
     })();
   }, []);
 
+  useEffect(() => {
+    if (profileImg && !upload.isUploading) {
+      setIsProfileImageLoading(true);
+    } else if (!profileImg) {
+      setIsProfileImageLoading(false);
+    }
+  }, [profileImg, upload.isUploading]);
+
   const handleUploadProgress = (snapshot: UploadTaskSnapshot) => {
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log("Upload is " + progress + "% done");
-    setUpload({ loading: true, progress });
+    setUpload({ isUploading: true, uploadProgress: progress });
   };
 
   const handleUploadError = (error: Error) => {
     console.log("Error uploading image:", error);
     Alert.alert("Upload failed", "Failed to upload image. Please try again.");
-    setUpload({ loading: false, progress: 0 });
+    setUpload({ isUploading: false, uploadProgress: 0 });
+    setIsProfileImageLoading(false);
   };
 
   const handleUploadComplete = (uploadTask: UploadTask) => {
-    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-      authContext.updateProfileImage(downloadURL);
-      setUpload({ loading: false, progress: 0 });
-    });
+    getDownloadURL(uploadTask.snapshot.ref)
+      .then((downloadURL) => {
+        authContext.updateProfileImage(downloadURL);
+        setUpload({ isUploading: false, uploadProgress: 0 });
+      })
+      .catch((error) => {
+        console.error("Error getting download URL:", error);
+        Alert.alert(
+          "Upload failed",
+          "Failed to get image URL. Please try again.",
+        );
+        setUpload({ isUploading: false, uploadProgress: 0 });
+        setIsProfileImageLoading(false);
+      });
   };
 
   const monitorFileUpload = (uploadTask: UploadTask) => {
@@ -85,6 +111,8 @@ const Profile = () => {
       });
 
       if (!result.canceled) {
+        setUpload({ isUploading: true, uploadProgress: 0 });
+
         const { blob, metadata } = await getImageBlobAndMetadata(
           result.assets[0].uri,
         );
@@ -94,6 +122,12 @@ const Profile = () => {
       }
     } catch (error) {
       console.error("Error in useImagePicker:", error);
+      Alert.alert(
+        "Image Selection Failed",
+        "Could not select image. Please try again.",
+      );
+      setUpload({ isUploading: false, uploadProgress: 0 });
+      setIsProfileImageLoading(false);
     }
   };
 
@@ -109,41 +143,71 @@ const Profile = () => {
   };
 
   const deleteProfileImg = () => {
-    authContext.deleteImage(userData.id);
+    Alert.alert(
+      "Confirm Delete",
+      "Are you sure you want to delete your profile picture?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          onPress: () => authContext.deleteImage(userData.id),
+          style: "destructive",
+        },
+      ],
+    );
   };
 
   return (
     <View style={[styles.profile, { backgroundColor: theme.primary }]}>
       <TouchableOpacity onPress={useImagePicker}>
         <View style={styles.pictureContainer}>
-          {!upload.loading && profileImg && (
-            <View>
+          {upload.isUploading ? (
+            <View style={styles.progressContainer}>
+              <ActivityIndicator size="large" color="#fff" />
+              <Text style={styles.profileField}>
+                Uploading: {upload.uploadProgress.toFixed(0)}%
+              </Text>
+            </View>
+          ) : profileImg ? (
+            <>
+              {isProfileImageLoading && (
+                <View style={styles.activityIndicatorOverlay}>
+                  <ActivityIndicator size="large" color={theme.text} />
+                </View>
+              )}
               <Image
                 source={{ uri: profileImg }}
-                imageStyle={styles.picture}
-                indicator={Progress.Bar}
+                style={styles.picture}
+                onLoadEnd={() => setIsProfileImageLoading(false)}
+                onError={(e) => {
+                  console.error(
+                    "Failed to load profile image:",
+                    e.nativeEvent.error,
+                  );
+                  setIsProfileImageLoading(false);
+                }}
               />
-              <DeleteIcon
-                style={styles.deleteIcon}
-                width={24}
-                height={24}
-                fill="#fff"
-                onPress={deleteProfileImg}
-              />
-            </View>
-          )}
-          {!upload.loading && !profileImg && (
-            <UserIcon width={150} height={150} />
-          )}
-          {upload.loading && (
-            <View style={styles.progressContainer}>
-              <Progress.Bar progress={upload.progress} width={150} />
-            </View>
+              {!upload.isUploading && !isProfileImageLoading && (
+                <DeleteIcon
+                  style={styles.deleteIcon}
+                  width={24}
+                  height={24}
+                  fill="#fff"
+                  onPress={deleteProfileImg}
+                />
+              )}
+            </>
+          ) : (
+            <UserIcon width={150} height={150} fill={theme.text} />
           )}
         </View>
       </TouchableOpacity>
-      <Text style={styles.profileField}>{userData.fullName}</Text>
-      <Text style={styles.profileField}>{userData.email}</Text>
+      <Text style={[styles.profileField, { color: theme.text }]}>
+        {userData.fullName}
+      </Text>
+      <Text style={[styles.profileField, { color: theme.text }]}>
+        {userData.email}
+      </Text>
     </View>
   );
 };
