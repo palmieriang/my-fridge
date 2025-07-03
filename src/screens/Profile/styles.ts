@@ -16,6 +16,18 @@ export default StyleSheet.create({
     borderRadius: 100,
     position: "relative",
   },
+  activityIndicatorOverlay: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)", // Dim background during any loading
+    borderRadius: 75, // Match container radius
+    zIndex: 2, // Ensure it's on top
+  },
   profileField: {
     color: "#fff",
     fontFamily: "OpenSans-Regular",
