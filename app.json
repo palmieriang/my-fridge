@@ -42,7 +42,9 @@
             "targetSdkVersion": 35
           }
         }
-      ]
+      ],
+      "expo-font",
+      "expo-localization"
     ],
     "extra": {
       "eas": {
