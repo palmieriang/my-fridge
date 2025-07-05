@@ -29,6 +29,7 @@ import {
   ref,
   uploadBytesResumable,
 } from "@react-native-firebase/storage";
+import { Alert } from "react-native";
 
 import { ActionTypes } from "../src/constants";
 import {
@@ -37,6 +38,7 @@ import {
   getUsersRef,
   getProductsRef,
   getProfileImagesRef,
+  getStorageService,
 } from "../src/firebase/config";
 
 // Auth
@@ -59,7 +61,7 @@ export async function createUser(fullName, email, password) {
     await addUserData(uid, data);
     return { uid }; // Returning the uid for potential use
   } catch (error) {
-    alert(error.message);
+    Alert.alert("Error creating user", error.message);
   }
 }
 
@@ -77,6 +79,7 @@ export async function deleteAccount() {
     await deleteUser(user);
   } catch (error) {
     console.log("ERROR in deleteAccount ", error.message);
+    Alert.alert("Account Deletion Failed", error.message);
   }
 }
 
@@ -85,6 +88,7 @@ export function authSignIn(email, password) {
   return signInWithEmailAndPassword(getAuthService(), email, password).catch(
     (error) => {
       console.log("ERROR in authSignIn ", error.message);
+      Alert.alert("Sign In Failed", error.message);
     },
   );
 }
@@ -173,6 +177,7 @@ export function persistentLogin(callback, callbackData) {
         await getProfileImageFromFirebase(user.uid, callback);
       } catch (error) {
         console.log("Restoring token failed", error);
+        Alert.alert("Authentication Failed", error.message);
       }
     } else {
       callback({ type: ActionTypes.SIGN_OUT });
@@ -227,11 +232,11 @@ export function saveProduct({ name, date, place, authorID }) {
     createdAt: timestamp,
   };
   return setDoc(doc(getProductsRef()), data).catch((error) => {
-    alert(error);
+    Alert.alert("Error saving product", error.message);
   });
   // if setDoc doesn't work, try addDoc
   // return addDoc(getProductsRef(), data).catch((error) => {
-  //   alert(error);
+  //   Alert.alert("Error saving product", error.message);
   // });
 }
 
@@ -256,6 +261,7 @@ export const getProductsFromPlace = (userID, place, callback) => {
     },
     (error) => {
       console.log("getProductsFromPlace ", error);
+      Alert.alert("Error fetching products", error.message);
     },
   );
 
@@ -282,6 +288,7 @@ export const getAllProducts = (userID, callback) => {
     },
     (error) => {
       console.log("Error in getAllProducts", error);
+      Alert.alert("Error fetching all products", error.message);
     },
   );
 
@@ -295,6 +302,7 @@ export async function getProductById(id) {
     return productDocSnap.data();
   } catch (error) {
     console.log("getProductById error: ", error);
+    Alert.alert("Error fetching product", error.message);
   }
 }
 
@@ -308,19 +316,23 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     createdAt: timestamp,
   };
   return setDoc(doc(getProductsRef(), existingId), data).catch((error) => {
-    alert(error);
+    Alert.alert("Error modifying product", error.message);
   });
 }
 
 export function moveProduct(id, place) {
   return updateDoc(doc(getProductsRef(), id), {
     place,
-  }).catch((error) => console.log("Error in moveProduct: ", error));
+  }).catch((error) => {
+    console.log("Error in moveProduct: ", error);
+    Alert.alert("Error moving product", error.message);
+  });
 }
 
 export function deleteProduct(existingId) {
   return deleteDoc(doc(getProductsRef(), existingId)).catch((error) => {
     console.log("Error in deleteProduct: ", error);
+    Alert.alert("Error deleting product", error.message);
   });
 }
 
@@ -336,6 +348,7 @@ export async function deleteAllProductsFromUser(uid) {
     await batch.commit();
   } catch (error) {
     console.log("Error deleting products:", error);
+    Alert.alert("Error deleting all products", error.message);
   }
 }
 
@@ -355,6 +368,8 @@ export async function getProfileImageFromFirebase(userUID, callback) {
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log("Profile img error:", error.message);
+    Alert.alert("Error fetching profile image", error.message);
+    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
 export async function deleteProfileImage(userUID, callback) {
@@ -363,6 +378,8 @@ export async function deleteProfileImage(userUID, callback) {
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error) {
     console.log("Delete profile img error: ", error.message);
+    Alert.alert("Error deleting profile image", error.message);
+    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
 

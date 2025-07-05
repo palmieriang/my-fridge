@@ -109,6 +109,17 @@ const AuthProvider = ({ children }) => {
           );
         } catch (error) {
           console.error("Error in create user", error);
+          Alert.alert(
+            "Error creating account",
+            error.message || "Please try again.",
+            [
+              {
+                text: "Ok",
+                onPress: () => null,
+                style: "default",
+              },
+            ],
+          );
         }
       },
       resetPassword: async (email) => {
@@ -127,6 +138,17 @@ const AuthProvider = ({ children }) => {
           );
         } catch (error) {
           console.error("Error in reset password", error);
+          Alert.alert(
+            "Error sending reset email",
+            error.message || "Please try again.",
+            [
+              {
+                text: "Ok",
+                onPress: () => null,
+                style: "default",
+              },
+            ],
+          );
         }
       },
       updateProfileImage: (url) => {
