@@ -1,11 +1,8 @@
 import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
+import { getDownloadURL } from "@react-native-firebase/storage";
+import type { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
-import {
-  getDownloadURL,
-  UploadTask,
-  UploadTaskSnapshot,
-} from "firebase/storage";
 import React, { useContext, useState, useEffect } from "react";
 import {
   ActivityIndicator,
@@ -62,7 +59,9 @@ const Profile = () => {
     }
   }, [profileImg, upload.isUploading]);
 
-  const handleUploadProgress = (snapshot: UploadTaskSnapshot) => {
+  const handleUploadProgress = (
+    snapshot: FirebaseStorageTypes.TaskSnapshot,
+  ) => {
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log("Upload is " + progress + "% done");
     setUpload({ isUploading: true, uploadProgress: progress });
@@ -75,7 +74,7 @@ const Profile = () => {
     setIsProfileImageLoading(false);
   };
 
-  const handleUploadComplete = (uploadTask: UploadTask) => {
+  const handleUploadComplete = (uploadTask: FirebaseStorageTypes.Task) => {
     getDownloadURL(uploadTask.snapshot.ref)
       .then((downloadURL) => {
         authContext.updateProfileImage(downloadURL);
@@ -92,7 +91,7 @@ const Profile = () => {
       });
   };
 
-  const monitorFileUpload = (uploadTask: UploadTask) => {
+  const monitorFileUpload = (uploadTask: FirebaseStorageTypes.Task) => {
     uploadTask.on(
       "state_changed",
       handleUploadProgress,
