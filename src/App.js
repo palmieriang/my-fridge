@@ -2,7 +2,6 @@ import "react-native-gesture-handler";
 import { registerRootComponent } from "expo";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
-// import { View, ActivityIndicator, StyleSheet, Text } from "react-native";
 
 import AppContainer from "./AppContainer";
 import { initializeFirebaseServices } from "./firebase/config";
@@ -14,6 +13,7 @@ export default function App() {
 
   useEffect(() => {
     const initFirebase = async () => {
+      console.log("[App] Firebase init started");
       try {
         await initializeFirebaseServices();
         setFirebaseReady(true);
@@ -33,13 +33,5 @@ export default function App() {
 
   return <AppContainer />;
 }
-
-// const styles = StyleSheet.create({
-//   loadingContainer: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignItems: "center",
-//   },
-// });
 
 registerRootComponent(App);

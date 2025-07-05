@@ -1,14 +1,14 @@
 import {
   createUserWithEmailAndPassword,
   deleteUser,
-  GoogleAuthProvider,
+  // GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
   sendEmailVerification,
-  signInWithCredential,
+  // signInWithCredential,
   signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
+  // signInWithPopup, // This is only available in web
+} from "@react-native-firebase/auth";
 import {
   deleteDoc,
   doc,
@@ -22,17 +22,16 @@ import {
   updateDoc,
   where,
   writeBatch,
-} from "firebase/firestore";
+} from "@react-native-firebase/firestore";
 import {
   deleteObject,
   getDownloadURL,
   ref,
   uploadBytesResumable,
-} from "firebase/storage";
+} from "@react-native-firebase/storage";
 
 import { ActionTypes } from "../src/constants";
 import {
-  app,
   getAuthService,
   getDbService,
   getUsersRef,
@@ -82,6 +81,7 @@ export async function deleteAccount() {
 }
 
 export function authSignIn(email, password) {
+  console.log("authSignIn :", email);
   return signInWithEmailAndPassword(getAuthService(), email, password).catch(
     (error) => {
       console.log("ERROR in authSignIn ", error.message);
@@ -89,70 +89,70 @@ export function authSignIn(email, password) {
   );
 }
 
-function isUserEqual(googleUser, firebaseUser) {
-  if (firebaseUser) {
-    const providerData = firebaseUser.providerData;
-    for (let i = 0; i < providerData.length; i++) {
-      if (
-        providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
-        providerData[i].uid === googleUser.user.id // or googleUser.getBasicProfile().getId() or googleUser.getId()
-      ) {
-        // We don't need to reauth the Firebase connection.
-        return true;
-      }
-    }
-  }
-  return false;
-}
+// function isUserEqual(googleUser, firebaseUser) {
+//   if (firebaseUser) {
+//     const providerData = firebaseUser.providerData;
+//     for (let i = 0; i < providerData.length; i++) {
+//       if (
+//         providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
+//         providerData[i].uid === googleUser.user.id // or googleUser.getBasicProfile().getId() or googleUser.getId()
+//       ) {
+//         // We don't need to reauth the Firebase connection.
+//         return true;
+//       }
+//     }
+//   }
+//   return false;
+// }
 
-function onSignIn(googleUser) {
-  // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-  const unsubscribe = onAuthStateChanged(
-    getAuthService(),
-    async (firebaseUser) => {
-      unsubscribe();
-      // Check if we are already signed-in Firebase with the correct user.
-      if (!isUserEqual(googleUser, firebaseUser)) {
-        // Build Firebase credential with the Google ID token.
-        const credential = GoogleAuthProvider.credential(
-          googleUser.idToken,
-          googleUser.accessToken,
-        );
+// function onSignIn(googleUser) {
+//   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+//   const unsubscribe = onAuthStateChanged(
+//     getAuthService(),
+//     async (firebaseUser) => {
+//       unsubscribe();
+//       // Check if we are already signed-in Firebase with the correct user.
+//       if (!isUserEqual(googleUser, firebaseUser)) {
+//         // Build Firebase credential with the Google ID token.
+//         const credential = GoogleAuthProvider.credential(
+//           googleUser.idToken,
+//           googleUser.accessToken,
+//         );
 
-        // Sign in with credential from the Google user.
-        try {
-          const result = await signInWithCredential(getAuthService(), credential);
-          if (result.additionalUserInfo.isNewUser) {
-            const uid = result.user.uid;
-            const data = {
-              id: uid,
-              email: result.user.email,
-              fullName: result.additionalUserInfo.profile.name,
-              locale: result.additionalUserInfo.profile.locale,
-              profileImg: result.additionalUserInfo.profile.picture,
-              theme: "lightRed",
-            };
-            await addUserData(uid, data);
-          }
-        } catch (error) {
-          console.log("onSignIn error", error);
-        }
-      } else {
-        console.log("User already signed-in Firebase.");
-      }
-    },
-  );
-}
+//         // Sign in with credential from the Google user.
+//         try {
+//           const result = await signInWithCredential(getAuthService(), credential);
+//           if (result.additionalUserInfo.isNewUser) {
+//             const uid = result.user.uid;
+//             const data = {
+//               id: uid,
+//               email: result.user.email,
+//               fullName: result.additionalUserInfo.profile.name,
+//               locale: result.additionalUserInfo.profile.locale,
+//               profileImg: result.additionalUserInfo.profile.picture,
+//               theme: "lightRed",
+//             };
+//             await addUserData(uid, data);
+//           }
+//         } catch (error) {
+//           console.log("onSignIn error", error);
+//         }
+//       } else {
+//         console.log("User already signed-in Firebase.");
+//       }
+//     },
+//   );
+// }
 
-export async function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
-  try {
-    const result = await signInWithPopup(getAuthService(), provider); // this is only available in web
-    onSignIn(result);
-  } catch (error) {
-    console.log("signInWithGoogle error: ", error.message);
-  }
-}
+// export async function signInWithGoogle() {
+//   const provider = new GoogleAuthProvider();
+//   try {
+//     const result = await signInWithPopup(getAuthService(), provider); // this is only available in web
+//     onSignIn(result);
+//   } catch (error) {
+//     console.log("signInWithGoogle error: ", error.message);
+//   }
+// }
 
 export function authSignOut() {
   return getAuthService().signOut();
@@ -204,7 +204,7 @@ export async function getUserData(userID) {
 export function sendVerificationEmail() {
   const user = getAuthService().currentUser;
   if (!user) {
-    console.log("No user is currently signed in to delete account.");
+    console.log("No user is signed in to send verification email.");
     return Promise.reject(new Error("No user signed in."));
   }
 
@@ -342,7 +342,11 @@ export async function deleteAllProductsFromUser(uid) {
 // Settings
 
 export function uploadImage(id, blob, metadata) {
-  return uploadBytesResumable(ref(getProfileImagesRef(), `${id}`), blob, metadata);
+  return uploadBytesResumable(
+    ref(getProfileImagesRef(), `${id}`),
+    blob,
+    metadata,
+  );
 }
 
 export async function getProfileImageFromFirebase(userUID, callback) {
