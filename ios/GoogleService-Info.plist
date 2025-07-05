@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>730096168799-reud7qc0fd59t8onecgupqihpcoccs5o.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.730096168799-reud7qc0fd59t8onecgupqihpcoccs5o</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>730096168799-no7n36c2b3a6ar42gnmj6beft6jlr5lu.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAieWb3XBEq4jgM4nU_tTrTzzrlWlK9TCM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>730096168799</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.mynativefridge</string>
+	<key>PROJECT_ID</key>
+	<string>my-native-fridge</string>
+	<key>STORAGE_BUCKET</key>
+	<string>my-native-fridge.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:730096168799:ios:103e4627d5ba721ebf10ea</string>
+	<key>DATABASE_URL</key>
+	<string>https://my-native-fridge.firebaseio.com</string>
+</dict>
+</plist>

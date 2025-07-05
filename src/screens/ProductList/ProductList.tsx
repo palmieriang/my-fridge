@@ -1,7 +1,7 @@
+import FloatingButton from "@components/FloatingButton/FloatingButton";
 import ProductCard from "@components/ProductCard/ProductCard";
 import React, { useContext, useEffect, useRef } from "react";
 import { FlatList, Text, View } from "react-native";
-import ActionButton from "react-native-action-button-warnings-fixed";
 
 import styles from "./styles";
 import {
@@ -67,11 +67,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
         <Text style={styles.text}>{t("error")}</Text>
       )}
 
-      <ActionButton
-        onPress={handleAddProduct}
-        buttonColor={theme.primary}
-        hideShadow
-      />
+      <FloatingButton onPress={handleAddProduct} color={theme.primary} />
     </View>
   );
 };
