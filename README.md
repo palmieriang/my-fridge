@@ -1,71 +1,162 @@
-# my-fridge
+# 🧊 My Fridge
+
+A React Native (Expo Bare Workflow) app to manage food inventory in your fridge or freezer, helping you track expiration dates and reduce waste.
 
 ---
 
-Used React Native to develop an app which allows to track products inside the fridge/freezer monitoring the expiring date. Implemented create user/login functionality; localization (English, Italian and French), used Google Firebase for storing authentication details, products list and user's profile image.
+## ✨ Features
+
+- 🔐 Firebase Authentication (email/password)
+- 🧃 Track fridge/freezer contents
+- 🗓️ Monitor expiry dates
+- 🗂️ Upload profile images to Firebase Storage
+- 🌍 Multi-language support: 🇬🇧 English, 🇮🇹 Italian, 🇫🇷 French
+- 🔁 Local development powered by Firebase Emulator Suite
 
 ---
 
-# Install and run project locally.
+## 🚀 Getting Started
 
-NOTE: [by default](./src/firebase/config.js#L47) the project uses the firebase emaulator
+### 1. Install dependencies
 
-`yarn install`
+```
+yarn install
+```
 
-`yarn start`
+### 2. Start Expo
 
-and in a different terminal window run
+```
+yarn start
+```
 
-`firebase emulators:start --import=./firebase-emulators-data`
+### 3. Start Firebase Emulators (optional, but recommended for dev)
 
-# Install and configure local emulator
+```
+firebase emulators:start --import=./firebase-emulators-data
+```
 
-Install [firebase-cli](https://firebase.google.com/docs/cli#install-cli-mac-linux)
+ℹ️ Emulator usage is enabled by default in `src/firebase/config.js`.
+Modify it if you want to connect to live Firebase services instead.
 
-Follow [https://firebase.google.com/docs/emulator-suite/install_and_configure](https://firebase.google.com/docs/emulator-suite/install_and_configure)
+## 🧪 Firebase Emulator Management
 
-Run emulators importing local data
+### Export current emulator state
 
-`firebase emulators:start --import=./firebase-emulators-data`
+```
+firebase emulators:export ./firebase-emulators-data
+```
 
-Export data from emulators
+Run this after modifying Firestore/Auth data locally to preserve it.
 
-Run the emulator and run this command in a different window
+### Import saved emulator data
 
-`firebase emulators:export ./firebase-emulators-data`
+```
+firebase emulators:start --import=./firebase-emulators-data
+```
 
-# Install EAS CLI:
+## 🔧 Firebase Setup (Emulator + Bare Workflow)
 
-First, you'll need to install the EAS CLI if you haven't already. You can install it globally using npm or yarn:
+### Install Firebase CLI
 
-`npm install -g eas-cli`
+https://firebase.google.com/docs/cli#install-cli-mac-linux
 
-or
+### Initialize Emulator Suite
 
-`yarn global add eas-cli`
+```
+firebase init emulators
+```
 
-If you're encountering a "command not found" error after installing eas-cli, it's possible that the binary directory where eas is installed is not included in your system's PATH environment variable.
+### Prebuild the project (required once for Bare Workflow)
 
-`yarn global bin`
+```
+npx expo prebuild
+```
 
-`export PATH="$PATH:<global_bin_directory>"`
+### Add native Firebase config files:
 
-# Build for Android with EAS:
+Place `google-services.json` in: `android/app/`
 
-Once you have the EAS CLI installed, you can use the following command to start the build process for your Android app:
+Place `GoogleService-Info.plist` in: `ios/`
 
-`eas build -p android`
+### Reference them in `app.json` or `app.config.js`:
 
-# Notes
+```
+{
+  "android": {
+    "googleServicesFile": "./android/app/google-services.json"
+  },
+  "ios": {
+    "googleServicesFile": "./ios/GoogleService-Info.plist"
+  }
+}
+```
 
-Show inspector in Android Emulator shortcut `CMD + M`
+## 📱 Native Build with EAS
 
-# Create a build and release it
+### 1. Install EAS CLI
 
-[https://docs.expo.dev/build/setup/](https://docs.expo.dev/build/setup/)
+```
+yarn global add eas-cli
+# or
+npm install -g eas-cli
+```
 
-`eas login`
+If eas is not found:
 
-`eas build --platform android`
+```
+yarn global bin
+# Then:
+export PATH="$PATH:<output_path>"
+```
 
-`eas submit --platform android`
+### 2. Authenticate with EAS
+
+```
+eas login
+```
+
+### 3. Build for Android
+
+```
+eas build -p android
+```
+
+### 4. Submit to Google Play
+
+```
+eas submit -p android
+```
+
+For full instructions: https://docs.expo.dev/build/setup/
+
+## 🧰 Developer Tips
+
+* Show React Native dev menu in Android Emulator: Cmd + M (macOS) / Ctrl + M (Windows/Linux)
+
+* Translations are in the localization/ folder
+
+* Profile images are saved in Firebase Storage under profileImages/
+
+* Firebase Emulator ports (by default):
+
+  * Auth: 9099
+  * Firestore: 8080
+  * Storage: 9199
+
+## 📦 Dependencies Overview
+
+expo — managed workflow base
+
+@react-native-firebase/app, auth, firestore, storage — Firebase SDK for native modules
+
+firebase — not used anymore; remove if still present
+
+@react-native-async-storage/async-storage — needed only if you re-enable Firebase JS SDK
+
+## ✅ Status
+
+* ✅ Firebase emulator support
+
+* ✅ EAS builds (Android tested)
+
+* 🔜 Tests
