@@ -1,3 +1,4 @@
+import { getApp } from "@react-native-firebase/app";
 import {
   createUserWithEmailAndPassword,
   deleteUser,
@@ -26,6 +27,7 @@ import {
 import {
   deleteObject,
   getDownloadURL,
+  getStorage,
   ref,
   uploadBytesResumable,
 } from "@react-native-firebase/storage";
@@ -37,8 +39,6 @@ import {
   getDbService,
   getUsersRef,
   getProductsRef,
-  getProfileImagesRef,
-  getStorageService,
 } from "../src/firebase/config";
 
 // Auth
@@ -355,16 +355,16 @@ export async function deleteAllProductsFromUser(uid) {
 // Settings
 
 export function uploadImage(id, blob, metadata) {
-  return uploadBytesResumable(
-    ref(getProfileImagesRef(), `${id}`),
-    blob,
-    metadata,
-  );
+  const storageInstance = getStorage(getApp());
+  const storageRef = ref(storageInstance, `profileImages/${id}`);
+  return uploadBytesResumable(storageRef, blob, metadata);
 }
 
 export async function getProfileImageFromFirebase(userUID, callback) {
   try {
-    const url = await getDownloadURL(ref(getProfileImagesRef(), `${userUID}`));
+    const storageInstance = getStorage(getApp());
+    const storageRef = ref(storageInstance, `profileImages/${userUID}`);
+    const url = await getDownloadURL(storageRef);
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log("Profile img error:", error.message);
@@ -374,7 +374,9 @@ export async function getProfileImageFromFirebase(userUID, callback) {
 }
 export async function deleteProfileImage(userUID, callback) {
   try {
-    await deleteObject(ref(getProfileImagesRef(), `${userUID}`));
+    const storageInstance = getStorage(getApp());
+    const storageRef = ref(storageInstance, `profileImages/${userUID}`);
+    await deleteObject(storageRef);
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error) {
     console.log("Delete profile img error: ", error.message);

@@ -1,6 +1,5 @@
 import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
-import { getDownloadURL } from "@react-native-firebase/storage";
 import type { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 import React, { useContext, useState, useEffect } from "react";
@@ -74,21 +73,22 @@ const Profile = () => {
     setIsProfileImageLoading(false);
   };
 
-  const handleUploadComplete = (uploadTask: FirebaseStorageTypes.Task) => {
-    getDownloadURL(uploadTask.snapshot.ref)
-      .then((downloadURL) => {
-        authContext.updateProfileImage(downloadURL);
-        setUpload({ isUploading: false, uploadProgress: 0 });
-      })
-      .catch((error) => {
-        console.error("Error getting download URL:", error);
-        Alert.alert(
-          "Upload failed",
-          "Failed to get image URL. Please try again.",
-        );
-        setUpload({ isUploading: false, uploadProgress: 0 });
-        setIsProfileImageLoading(false);
-      });
+  const handleUploadComplete = async (
+    uploadTask: FirebaseStorageTypes.Task,
+  ) => {
+    try {
+      const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+      authContext.updateProfileImage(downloadURL);
+      setUpload({ isUploading: false, uploadProgress: 0 });
+    } catch (error) {
+      console.error("Error getting download URL:", error);
+      Alert.alert(
+        "Upload failed",
+        "Failed to get image URL. Please try again.",
+      );
+      setUpload({ isUploading: false, uploadProgress: 0 });
+      setIsProfileImageLoading(false);
+    }
   };
 
   const monitorFileUpload = (uploadTask: FirebaseStorageTypes.Task) => {
