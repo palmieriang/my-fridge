@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
 import React, { useContext, useEffect, useState } from "react";
-import { Alert, Button, Platform, Text, View } from "react-native";
+import { Alert, Button, Text, View } from "react-native";
 
 import styles from "./styles";
 import { authStore, localeStore, themeStore } from "../../store";
@@ -16,7 +16,8 @@ const Settings = () => {
   } = useContext(authStore);
   const {
     theme,
-    themeContext: { changeTheme, themeName },
+    themeName,
+    themeContext: { changeTheme },
   } = useContext(themeStore);
 
   const [selectedLocale, setSelectedLocale] = useState<string>(locale);
@@ -31,7 +32,7 @@ const Settings = () => {
   }, [themeName]);
 
   const languageData = [
-    { section: true, label: t("chooseLanguage"), key: "title" },
+    { label: t("chooseLanguage"), value: "", key: "title" },
     { label: t("english"), value: "en", key: "english" },
     { label: t("spanish"), value: "es", key: "spanish" },
     { label: t("italian"), value: "it", key: "italian" },
@@ -40,7 +41,7 @@ const Settings = () => {
   ];
 
   const themeData = [
-    { section: true, label: t("changeTheme"), key: "title" },
+    { label: t("changeTheme"), value: "", key: "title" },
     { label: "Light Red", value: "lightRed", key: "lightRed" },
     { label: "Light Blue", value: "lightBlue", key: "lightBlue" },
     { label: "Dark Red", value: "darkRed", key: "darkRed" },
@@ -48,11 +49,13 @@ const Settings = () => {
   ];
 
   const handleLocaleChange = (newLocale: string) => {
+    if (!newLocale) return;
     setSelectedLocale(newLocale);
     changeLocale({ newLocale, id });
   };
 
   const handleThemeChange = (newTheme: string) => {
+    if (!newTheme) return;
     setSelectedTheme(newTheme);
     changeTheme({ newTheme, id });
   };
@@ -86,14 +89,10 @@ const Settings = () => {
     >
       <Profile />
       <View style={styles.selectorContainer}>
-        <Text style={styles.initValueTextStyle}>{t("changeLanguage")}</Text>
         <Picker
           selectedValue={selectedLocale}
           onValueChange={handleLocaleChange}
-          style={Platform.OS === "android" ? styles.androidPicker : undefined}
-          dropdownIconColor={theme.text}
         >
-          <Picker.Item label={t("chooseLanguage")} value="" />
           {languageData.map((lang) => (
             <Picker.Item
               key={lang.value}
@@ -104,14 +103,7 @@ const Settings = () => {
         </Picker>
       </View>
       <View style={styles.selectorContainer}>
-        <Text style={styles.initValueTextStyle}>{t("changeTheme")}</Text>
-        <Picker
-          selectedValue={selectedTheme}
-          onValueChange={handleThemeChange}
-          style={Platform.OS === "android" ? styles.androidPicker : undefined}
-          dropdownIconColor={theme.text}
-        >
-          <Picker.Item label={t("chooseTheme") ?? "Choose theme"} value="" />
+        <Picker selectedValue={selectedTheme} onValueChange={handleThemeChange}>
           {themeData.map((themeOption) => (
             <Picker.Item
               key={themeOption.value}

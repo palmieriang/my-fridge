@@ -40,6 +40,7 @@ const themeStore = createContext(themes.lightRed);
 const { Provider } = themeStore;
 
 const ThemeProvider = ({ children }) => {
+  const [themeName, setThemeName] = useState("lightRed");
   const [theme, setTheme] = useState(themes.lightRed);
   const {
     userData: { theme: themeFromFirebase },
@@ -48,6 +49,7 @@ const ThemeProvider = ({ children }) => {
   useEffect(() => {
     if (themeFromFirebase) {
       setTheme(themes[themeFromFirebase]);
+      setThemeName(themeFromFirebase);
     }
   }, [themeFromFirebase]);
 
@@ -57,6 +59,7 @@ const ThemeProvider = ({ children }) => {
         changeColor(newTheme, id)
           .then(() => {
             setTheme(themes[newTheme]);
+            setThemeName(newTheme);
           })
           .catch((error) => console.log("Error changing theme: ", error));
       },
@@ -65,7 +68,9 @@ const ThemeProvider = ({ children }) => {
   );
 
   return (
-    <Provider value={{ theme, setTheme, themeContext }}>{children}</Provider>
+    <Provider value={{ theme, setTheme, themeName, themeContext }}>
+      {children}
+    </Provider>
   );
 };
 
