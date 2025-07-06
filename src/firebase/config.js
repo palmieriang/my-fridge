@@ -96,16 +96,6 @@ export const getDbService = () => {
   return _firestoreInstance;
 };
 
-export const getStorageService = () => {
-  if (!_storageInstance) {
-    console.error(
-      "Firebase Storage service not initialized. Ensure initializeFirebaseServices() has been called.",
-    );
-    return getStorage(getApp());
-  }
-  return _storageInstance;
-};
-
 export const getUsersRef = () => {
   if (!usersRef) {
     console.error(
@@ -125,14 +115,4 @@ export const getProductsRef = () => {
     return getFirestore(getApp()).collection("products");
   }
   return productsRef;
-};
-
-export const getProfileImagesRef = () => {
-  if (!profileImagesRef) {
-    console.error(
-      "Firebase 'profileImages' storage reference not initialized. Ensure initializeFirebaseServices() has been called.",
-    );
-    return getStorage(getApp()).ref("profileImages");
-  }
-  return profileImagesRef;
 };
