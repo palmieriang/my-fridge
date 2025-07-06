@@ -1,11 +1,7 @@
 import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
+import type { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
-import {
-  getDownloadURL,
-  UploadTask,
-  UploadTaskSnapshot,
-} from "firebase/storage";
 import React, { useContext, useState, useEffect } from "react";
 import {
   ActivityIndicator,
@@ -62,7 +58,9 @@ const Profile = () => {
     }
   }, [profileImg, upload.isUploading]);
 
-  const handleUploadProgress = (snapshot: UploadTaskSnapshot) => {
+  const handleUploadProgress = (
+    snapshot: FirebaseStorageTypes.TaskSnapshot,
+  ) => {
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log("Upload is " + progress + "% done");
     setUpload({ isUploading: true, uploadProgress: progress });
@@ -75,24 +73,25 @@ const Profile = () => {
     setIsProfileImageLoading(false);
   };
 
-  const handleUploadComplete = (uploadTask: UploadTask) => {
-    getDownloadURL(uploadTask.snapshot.ref)
-      .then((downloadURL) => {
-        authContext.updateProfileImage(downloadURL);
-        setUpload({ isUploading: false, uploadProgress: 0 });
-      })
-      .catch((error) => {
-        console.error("Error getting download URL:", error);
-        Alert.alert(
-          "Upload failed",
-          "Failed to get image URL. Please try again.",
-        );
-        setUpload({ isUploading: false, uploadProgress: 0 });
-        setIsProfileImageLoading(false);
-      });
+  const handleUploadComplete = async (
+    uploadTask: FirebaseStorageTypes.Task,
+  ) => {
+    try {
+      const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+      authContext.updateProfileImage(downloadURL);
+      setUpload({ isUploading: false, uploadProgress: 0 });
+    } catch (error) {
+      console.error("Error getting download URL:", error);
+      Alert.alert(
+        "Upload failed",
+        "Failed to get image URL. Please try again.",
+      );
+      setUpload({ isUploading: false, uploadProgress: 0 });
+      setIsProfileImageLoading(false);
+    }
   };
 
-  const monitorFileUpload = (uploadTask: UploadTask) => {
+  const monitorFileUpload = (uploadTask: FirebaseStorageTypes.Task) => {
     uploadTask.on(
       "state_changed",
       handleUploadProgress,

@@ -1,14 +1,15 @@
+import { getApp } from "@react-native-firebase/app";
 import {
   createUserWithEmailAndPassword,
   deleteUser,
-  GoogleAuthProvider,
+  // GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
   sendEmailVerification,
-  signInWithCredential,
+  // signInWithCredential,
   signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
+  // signInWithPopup, // This is only available in web
+} from "@react-native-firebase/auth";
 import {
   deleteDoc,
   doc,
@@ -22,22 +23,22 @@ import {
   updateDoc,
   where,
   writeBatch,
-} from "firebase/firestore";
+} from "@react-native-firebase/firestore";
 import {
   deleteObject,
   getDownloadURL,
+  getStorage,
   ref,
   uploadBytesResumable,
-} from "firebase/storage";
+} from "@react-native-firebase/storage";
+import { Alert } from "react-native";
 
 import { ActionTypes } from "../src/constants";
 import {
-  app,
   getAuthService,
   getDbService,
   getUsersRef,
   getProductsRef,
-  getProfileImagesRef,
 } from "../src/firebase/config";
 
 // Auth
@@ -60,7 +61,7 @@ export async function createUser(fullName, email, password) {
     await addUserData(uid, data);
     return { uid }; // Returning the uid for potential use
   } catch (error) {
-    alert(error.message);
+    Alert.alert("Error creating user", error.message);
   }
 }
 
@@ -78,81 +79,84 @@ export async function deleteAccount() {
     await deleteUser(user);
   } catch (error) {
     console.log("ERROR in deleteAccount ", error.message);
+    Alert.alert("Account Deletion Failed", error.message);
   }
 }
 
 export function authSignIn(email, password) {
+  console.log("authSignIn :", email);
   return signInWithEmailAndPassword(getAuthService(), email, password).catch(
     (error) => {
       console.log("ERROR in authSignIn ", error.message);
+      Alert.alert("Sign In Failed", error.message);
     },
   );
 }
 
-function isUserEqual(googleUser, firebaseUser) {
-  if (firebaseUser) {
-    const providerData = firebaseUser.providerData;
-    for (let i = 0; i < providerData.length; i++) {
-      if (
-        providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
-        providerData[i].uid === googleUser.user.id // or googleUser.getBasicProfile().getId() or googleUser.getId()
-      ) {
-        // We don't need to reauth the Firebase connection.
-        return true;
-      }
-    }
-  }
-  return false;
-}
+// function isUserEqual(googleUser, firebaseUser) {
+//   if (firebaseUser) {
+//     const providerData = firebaseUser.providerData;
+//     for (let i = 0; i < providerData.length; i++) {
+//       if (
+//         providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
+//         providerData[i].uid === googleUser.user.id // or googleUser.getBasicProfile().getId() or googleUser.getId()
+//       ) {
+//         // We don't need to reauth the Firebase connection.
+//         return true;
+//       }
+//     }
+//   }
+//   return false;
+// }
 
-function onSignIn(googleUser) {
-  // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-  const unsubscribe = onAuthStateChanged(
-    getAuthService(),
-    async (firebaseUser) => {
-      unsubscribe();
-      // Check if we are already signed-in Firebase with the correct user.
-      if (!isUserEqual(googleUser, firebaseUser)) {
-        // Build Firebase credential with the Google ID token.
-        const credential = GoogleAuthProvider.credential(
-          googleUser.idToken,
-          googleUser.accessToken,
-        );
+// function onSignIn(googleUser) {
+//   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
+//   const unsubscribe = onAuthStateChanged(
+//     getAuthService(),
+//     async (firebaseUser) => {
+//       unsubscribe();
+//       // Check if we are already signed-in Firebase with the correct user.
+//       if (!isUserEqual(googleUser, firebaseUser)) {
+//         // Build Firebase credential with the Google ID token.
+//         const credential = GoogleAuthProvider.credential(
+//           googleUser.idToken,
+//           googleUser.accessToken,
+//         );
 
-        // Sign in with credential from the Google user.
-        try {
-          const result = await signInWithCredential(getAuthService(), credential);
-          if (result.additionalUserInfo.isNewUser) {
-            const uid = result.user.uid;
-            const data = {
-              id: uid,
-              email: result.user.email,
-              fullName: result.additionalUserInfo.profile.name,
-              locale: result.additionalUserInfo.profile.locale,
-              profileImg: result.additionalUserInfo.profile.picture,
-              theme: "lightRed",
-            };
-            await addUserData(uid, data);
-          }
-        } catch (error) {
-          console.log("onSignIn error", error);
-        }
-      } else {
-        console.log("User already signed-in Firebase.");
-      }
-    },
-  );
-}
+//         // Sign in with credential from the Google user.
+//         try {
+//           const result = await signInWithCredential(getAuthService(), credential);
+//           if (result.additionalUserInfo.isNewUser) {
+//             const uid = result.user.uid;
+//             const data = {
+//               id: uid,
+//               email: result.user.email,
+//               fullName: result.additionalUserInfo.profile.name,
+//               locale: result.additionalUserInfo.profile.locale,
+//               profileImg: result.additionalUserInfo.profile.picture,
+//               theme: "lightRed",
+//             };
+//             await addUserData(uid, data);
+//           }
+//         } catch (error) {
+//           console.log("onSignIn error", error);
+//         }
+//       } else {
+//         console.log("User already signed-in Firebase.");
+//       }
+//     },
+//   );
+// }
 
-export async function signInWithGoogle() {
-  const provider = new GoogleAuthProvider();
-  try {
-    const result = await signInWithPopup(getAuthService(), provider); // this is only available in web
-    onSignIn(result);
-  } catch (error) {
-    console.log("signInWithGoogle error: ", error.message);
-  }
-}
+// export async function signInWithGoogle() {
+//   const provider = new GoogleAuthProvider();
+//   try {
+//     const result = await signInWithPopup(getAuthService(), provider); // this is only available in web
+//     onSignIn(result);
+//   } catch (error) {
+//     console.log("signInWithGoogle error: ", error.message);
+//   }
+// }
 
 export function authSignOut() {
   return getAuthService().signOut();
@@ -173,6 +177,7 @@ export function persistentLogin(callback, callbackData) {
         await getProfileImageFromFirebase(user.uid, callback);
       } catch (error) {
         console.log("Restoring token failed", error);
+        Alert.alert("Authentication Failed", error.message);
       }
     } else {
       callback({ type: ActionTypes.SIGN_OUT });
@@ -204,7 +209,7 @@ export async function getUserData(userID) {
 export function sendVerificationEmail() {
   const user = getAuthService().currentUser;
   if (!user) {
-    console.log("No user is currently signed in to delete account.");
+    console.log("No user is signed in to send verification email.");
     return Promise.reject(new Error("No user signed in."));
   }
 
@@ -227,11 +232,11 @@ export function saveProduct({ name, date, place, authorID }) {
     createdAt: timestamp,
   };
   return setDoc(doc(getProductsRef()), data).catch((error) => {
-    alert(error);
+    Alert.alert("Error saving product", error.message);
   });
   // if setDoc doesn't work, try addDoc
   // return addDoc(getProductsRef(), data).catch((error) => {
-  //   alert(error);
+  //   Alert.alert("Error saving product", error.message);
   // });
 }
 
@@ -256,6 +261,7 @@ export const getProductsFromPlace = (userID, place, callback) => {
     },
     (error) => {
       console.log("getProductsFromPlace ", error);
+      Alert.alert("Error fetching products", error.message);
     },
   );
 
@@ -282,6 +288,7 @@ export const getAllProducts = (userID, callback) => {
     },
     (error) => {
       console.log("Error in getAllProducts", error);
+      Alert.alert("Error fetching all products", error.message);
     },
   );
 
@@ -295,6 +302,7 @@ export async function getProductById(id) {
     return productDocSnap.data();
   } catch (error) {
     console.log("getProductById error: ", error);
+    Alert.alert("Error fetching product", error.message);
   }
 }
 
@@ -308,19 +316,23 @@ export function modifyProduct({ name, date, place, authorID }, existingId) {
     createdAt: timestamp,
   };
   return setDoc(doc(getProductsRef(), existingId), data).catch((error) => {
-    alert(error);
+    Alert.alert("Error modifying product", error.message);
   });
 }
 
 export function moveProduct(id, place) {
   return updateDoc(doc(getProductsRef(), id), {
     place,
-  }).catch((error) => console.log("Error in moveProduct: ", error));
+  }).catch((error) => {
+    console.log("Error in moveProduct: ", error);
+    Alert.alert("Error moving product", error.message);
+  });
 }
 
 export function deleteProduct(existingId) {
   return deleteDoc(doc(getProductsRef(), existingId)).catch((error) => {
     console.log("Error in deleteProduct: ", error);
+    Alert.alert("Error deleting product", error.message);
   });
 }
 
@@ -336,29 +348,40 @@ export async function deleteAllProductsFromUser(uid) {
     await batch.commit();
   } catch (error) {
     console.log("Error deleting products:", error);
+    Alert.alert("Error deleting all products", error.message);
   }
 }
 
 // Settings
 
 export function uploadImage(id, blob, metadata) {
-  return uploadBytesResumable(ref(getProfileImagesRef(), `${id}`), blob, metadata);
+  const storageInstance = getStorage(getApp());
+  const storageRef = ref(storageInstance, `profileImages/${id}`);
+  return uploadBytesResumable(storageRef, blob, metadata);
 }
 
 export async function getProfileImageFromFirebase(userUID, callback) {
   try {
-    const url = await getDownloadURL(ref(getProfileImagesRef(), `${userUID}`));
+    const storageInstance = getStorage(getApp());
+    const storageRef = ref(storageInstance, `profileImages/${userUID}`);
+    const url = await getDownloadURL(storageRef);
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log("Profile img error:", error.message);
+    Alert.alert("Error fetching profile image", error.message);
+    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
 export async function deleteProfileImage(userUID, callback) {
   try {
-    await deleteObject(ref(getProfileImagesRef(), `${userUID}`));
+    const storageInstance = getStorage(getApp());
+    const storageRef = ref(storageInstance, `profileImages/${userUID}`);
+    await deleteObject(storageRef);
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error) {
     console.log("Delete profile img error: ", error.message);
+    Alert.alert("Error deleting profile image", error.message);
+    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
 
