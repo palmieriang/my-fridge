@@ -8,6 +8,7 @@
     "eject": "npx expo eject",
     "lint": "eslint ./src",
     "lint:fix": "yarn lint --fix",
+    "postinstall": "node ./eas-build-pre-install.js",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
