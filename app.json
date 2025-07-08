@@ -19,8 +19,7 @@
     "android": {
       "package": "com.myfridge.App",
       "versionCode": 18,
-      "permissions": [],
-      "googleServicesFile": "./android/app/google-services.json"
+      "permissions": []
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -32,8 +31,7 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.myfridge.App",
-      "googleServicesFile": "./ios/GoogleService-Info.plist"
+      "bundleIdentifier": "com.myfridge.App"
     },
     "plugins": [
       [
