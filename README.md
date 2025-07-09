@@ -17,6 +17,28 @@ A React Native (Expo Bare Workflow) app to manage food inventory in your fridge 
 
 ## 🚀 Getting Started
 
+### 0. Node.js Version (Recommended)
+
+This project is built and tested with Node.js LTS version `18.20.6`.
+It is highly recommended to use [nvm (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage your Node.js versions.
+
+Once nvm is installed:
+
+```
+# Navigate to the project root
+cd /path/to/my-fridge
+
+# This command will read the .nvmrc file and switch to the recommended Node.js version
+nvm use
+```
+
+If you don't have Node.js 18.20.6 installed via nvm, you will be prompted to install it.
+
+```
+nvm install 18.20.6
+nvm use
+```
+
 ### 1. Install dependencies
 
 ```
@@ -24,6 +46,8 @@ yarn install
 ```
 
 ### 2. Start Expo
+
+Ensure you are using the correct Node.js version (see step 0), then start the development server:
 
 ```
 yarn start
@@ -58,7 +82,7 @@ firebase emulators:start --import=./firebase-emulators-data
 
 ### Install Firebase CLI
 
-https://firebase.google.com/docs/cli#install-cli-mac-linux
+[https://firebase.google.com/docs/cli#install-cli-mac-linux](https://firebase.google.com/docs/cli#install-cli-mac-linux)
 
 ### Initialize Emulator Suite
 
@@ -66,27 +90,37 @@ https://firebase.google.com/docs/cli#install-cli-mac-linux
 firebase init emulators
 ```
 
-### Prebuild the project (required once for Bare Workflow)
+### Configure Android SDK Location
+
+Ensure your `ANDROID_HOME` environment variable is set to your Android SDK path (e.g., `/Users/yourusername/Library/Android/sdk`).
+Add the following to your shell's configuration file (e.g., `~/.zshrc` or `~/.bash_profile`):
 
 ```
-npx expo prebuild
+export ANDROID_HOME=/Users/yourusername/Library/Android/sdk # Replace with your actual path
+export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator
+```
+
+### Prebuild the project
+
+This command generates the `android/` and `ios/` native directories. It should be run whenever `app.json` or native dependencies change, or on a fresh clone before running native builds.
+
+```
+npx expo prebuild --clean
 ```
 
 ### Add native Firebase config files:
 
-Place `google-services.json` in: `android/app/`
-
-Place `GoogleService-Info.plist` in: `ios/`
+Place `google-services.json` and `GoogleService-Info.plist` in the project root
 
 ### Reference them in `app.json` or `app.config.js`:
 
 ```
 {
   "android": {
-    "googleServicesFile": "./android/app/google-services.json"
+    "googleServicesFile": "./google-services.json"
   },
   "ios": {
-    "googleServicesFile": "./ios/GoogleService-Info.plist"
+    "googleServicesFile": "./GoogleService-Info.plist"
   }
 }
 ```
@@ -142,16 +176,6 @@ For full instructions: https://docs.expo.dev/build/setup/
   * Auth: 9099
   * Firestore: 8080
   * Storage: 9199
-
-## 📦 Dependencies Overview
-
-expo — managed workflow base
-
-@react-native-firebase/app, auth, firestore, storage — Firebase SDK for native modules
-
-firebase — not used anymore; remove if still present
-
-@react-native-async-storage/async-storage — needed only if you re-enable Firebase JS SDK
 
 ## ✅ Status
 
