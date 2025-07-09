@@ -1,12 +1,18 @@
 import { getApp } from "@react-native-firebase/app";
-import { getAuth, connectAuthEmulator } from "@react-native-firebase/auth";
+import {
+  getAuth,
+  connectAuthEmulator,
+  onAuthStateChanged,
+} from "@react-native-firebase/auth";
 import {
   getFirestore,
   connectFirestoreEmulator,
+  collection,
 } from "@react-native-firebase/firestore";
 import {
   getStorage,
   connectStorageEmulator,
+  ref,
 } from "@react-native-firebase/storage";
 import { Platform } from "react-native";
 
@@ -22,11 +28,9 @@ export const initializeFirebaseServices = async () => {
   console.log("[Firebase] Initializing Firebase services...");
 
   try {
-    // Get the default Firebase App instance using the modular getApp()
     const appInstance = getApp();
     console.log("[Firebase] Got default app instance:", appInstance.name);
 
-    // Initialize service instances using the modular API, passing the app instance
     _authInstance = getAuth(appInstance);
     console.log("[Firebase] Auth initialized:", _authInstance.app.name);
 
@@ -39,13 +43,11 @@ export const initializeFirebaseServices = async () => {
     _storageInstance = getStorage(appInstance);
     console.log("[Firebase] Storage initialized:", _storageInstance.app.name);
 
-    // Setup Firestore refs
-    usersRef = _firestoreInstance.collection("users");
-    productsRef = _firestoreInstance.collection("products");
+    usersRef = collection(_firestoreInstance, "users");
+    productsRef = collection(_firestoreInstance, "products");
     console.log("[Firebase] Firestore collections set: users, products");
 
-    // Storage ref for profile images
-    profileImagesRef = _storageInstance.ref("profileImages");
+    profileImagesRef = ref(_storageInstance, "profileImages");
     console.log("[Firebase] Storage ref set: profileImages");
 
     if (__DEV__) {
@@ -60,8 +62,7 @@ export const initializeFirebaseServices = async () => {
       console.log("[Firebase] Emulators connected");
     }
 
-    // Listen to auth state changes for debugging
-    _authInstance.onAuthStateChanged((user) => {
+    onAuthStateChanged(_authInstance, (user) => {
       if (user) {
         console.log(`[Firebase] User logged in: ${user.uid}`);
       } else {
@@ -80,7 +81,6 @@ export const initializeFirebaseServices = async () => {
   }
 };
 
-// Export functions to get the initialized service instances
 export const getAuthService = () => {
   if (!_authInstance) {
     console.error(
@@ -106,8 +106,7 @@ export const getUsersRef = () => {
     console.error(
       "Firebase 'users' collection reference not initialized. Ensure initializeFirebaseServices() has been called.",
     );
-    // Fallback: If not initialized, try to get it, but this might lead to issues if app is not initialized
-    return getFirestore(getApp()).collection("users");
+    return collection(getFirestore(getApp()), "users");
   }
   return usersRef;
 };
@@ -117,7 +116,7 @@ export const getProductsRef = () => {
     console.error(
       "Firebase 'products' collection reference not initialized. Ensure initializeFirebaseServices() has been called.",
     );
-    return getFirestore(getApp()).collection("products");
+    return collection(getFirestore(getApp()), "products");
   }
   return productsRef;
 };

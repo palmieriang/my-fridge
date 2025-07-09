@@ -2,6 +2,7 @@ import { getApp } from "@react-native-firebase/app";
 import {
   createUserWithEmailAndPassword,
   deleteUser,
+  getIdToken,
   // GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
@@ -166,7 +167,7 @@ export function persistentLogin(callback, callbackData) {
   return onAuthStateChanged(getAuthService(), async (user) => {
     if (user) {
       try {
-        const idToken = await user.getIdToken(true);
+        const idToken = await getIdToken(user);
         const userData = await getUserData(user.uid);
 
         callbackData({
