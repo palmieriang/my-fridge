@@ -19,7 +19,8 @@
     "android": {
       "package": "com.myfridge.App",
       "versionCode": 18,
-      "permissions": []
+      "permissions": [],
+      "googleServicesFile": "./google-services.json"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -31,15 +32,22 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.myfridge.App"
+      "bundleIdentifier": "com.myfridge.App",
+      "googleServicesFile": "./GoogleService-Info.plist"
     },
     "plugins": [
+      "@react-native-firebase/app",
       [
         "expo-build-properties",
         {
           "android": {
             "compileSdkVersion": 35,
-            "targetSdkVersion": 35
+            "targetSdkVersion": 35,
+            "minSdkVersion": 24,
+            "usesCleartextTraffic": true
+          },
+          "ios": {
+            "useFrameworks": "static"
           }
         }
       ],

@@ -9,11 +9,13 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "module": "Node16",
+    "moduleResolution": "node16",
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@screens/*": ["src/screens/*"]
+      "@screens/*": ["src/screens/*"],
+      "*": ["node_modules/*"]
     }
   },
   "extends": "expo/tsconfig.base"
