@@ -214,7 +214,11 @@ export function sendVerificationEmail() {
     return Promise.reject(new Error("No user signed in."));
   }
 
-  return sendEmailVerification(user);
+  return sendEmailVerification(user).catch((error) => {
+    console.log("Error sending verification email: ", error.message);
+    Alert.alert("Error", "Failed to send verification email. " + error.message);
+    throw error;
+  });
 }
 
 export function sendResetPassword(email) {
@@ -235,10 +239,6 @@ export function saveProduct({ name, date, place, authorID }) {
   return setDoc(doc(getProductsRef()), data).catch((error) => {
     Alert.alert("Error saving product", error.message);
   });
-  // if setDoc doesn't work, try addDoc
-  // return addDoc(getProductsRef(), data).catch((error) => {
-  //   Alert.alert("Error saving product", error.message);
-  // });
 }
 
 export const getProductsFromPlace = (userID, place, callback) => {
@@ -369,10 +369,10 @@ export async function getProfileImageFromFirebase(userUID, callback) {
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log("Profile img error:", error.message);
-    // Alert.alert("Error fetching profile image", error.message);
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
+
 export async function deleteProfileImage(userUID, callback) {
   try {
     const storageInstance = getStorage(getApp());
