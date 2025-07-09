@@ -1,7 +1,13 @@
 import { getApp } from "@react-native-firebase/app";
-import { getAuth } from "@react-native-firebase/auth";
-import { getFirestore } from "@react-native-firebase/firestore";
-import { getStorage } from "@react-native-firebase/storage";
+import { getAuth, connectAuthEmulator } from "@react-native-firebase/auth";
+import {
+  getFirestore,
+  connectFirestoreEmulator,
+} from "@react-native-firebase/firestore";
+import {
+  getStorage,
+  connectStorageEmulator,
+} from "@react-native-firebase/storage";
 import { Platform } from "react-native";
 
 let _authInstance = null;
@@ -42,15 +48,14 @@ export const initializeFirebaseServices = async () => {
     profileImagesRef = _storageInstance.ref("profileImages");
     console.log("[Firebase] Storage ref set: profileImages");
 
-    // Emulators configuration
     if (__DEV__) {
       const debuggerHost = Platform.OS === "android" ? "10.0.2.2" : "localhost";
 
       console.log(`[Firebase] Connecting to emulators at ${debuggerHost}`);
 
-      _authInstance.useEmulator(`http://${debuggerHost}:9099`);
-      _firestoreInstance.useEmulator(debuggerHost, 8080);
-      _storageInstance.useEmulator(`http://${debuggerHost}:9199`);
+      connectAuthEmulator(_authInstance, `http://${debuggerHost}:9099`);
+      connectFirestoreEmulator(_firestoreInstance, debuggerHost, 8080);
+      connectStorageEmulator(_storageInstance, debuggerHost, 9199);
 
       console.log("[Firebase] Emulators connected");
     }

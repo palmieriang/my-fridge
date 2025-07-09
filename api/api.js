@@ -368,7 +368,7 @@ export async function getProfileImageFromFirebase(userUID, callback) {
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log("Profile img error:", error.message);
-    Alert.alert("Error fetching profile image", error.message);
+    // Alert.alert("Error fetching profile image", error.message);
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
