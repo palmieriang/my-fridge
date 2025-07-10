@@ -1754,30 +1754,30 @@
     invariant "^2.2.4"
 
 "@react-native-firebase/app@^22.2.1":
-  version "22.3.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-22.3.0.tgz#cc2d3980054b67596719bd568c113926c77e1c40"
-  integrity sha512-rT2vrY3jwDRk37WPKetQQLXqgxihOPQN40qj39nyhx00Q9KbHmPxUV93joTG27ngLVydDyrLEr21QgZTD0Wv4Q==
+  version "22.4.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/app/-/app-22.4.0.tgz#81985d95a26771843d9a46b5ddfe09ebb8485f14"
+  integrity sha512-mW49qYioddRZjCRiF4XMpt7pyPoh84pqU2obnFY0pWD9K0aFRv6+BfLBYrsAFY3xqA5cqf0uj+Nne0vrvmuAyw==
   dependencies:
     firebase "11.10.0"
 
 "@react-native-firebase/auth@^22.2.1":
-  version "22.3.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-22.3.0.tgz#4d62697a49df208b149ef20aafd1dafd6a3698ec"
-  integrity sha512-pTlapVR62TcOW561xDJ2CYaaHmmCtKNxsJlko9JabEq5OeINJ5urgQc2jLY+kyoifjBjoFVcByXRkjrpgjy6LQ==
+  version "22.4.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/auth/-/auth-22.4.0.tgz#7d0af466b54186cb3e9bb9e5b7b099c6f9458fc1"
+  integrity sha512-cmyTrh5i/XmQ5G+/7XQ8zLBCdSSLi4rLm1M1mBF5tuAd1CLyUy5SehXQX5/RJgRQ0B0vXd+TMNeNQKjD/nb+OA==
   dependencies:
     plist "^3.1.0"
 
 "@react-native-firebase/firestore@^22.2.1":
-  version "22.3.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-22.3.0.tgz#412d91c45638e2fab823862b41a4edd96d85fbf3"
-  integrity sha512-RfsqyrBLshj40PRDsZW4mL15W8ahmHM6oOkvzxlUSge/OWRbTmNIeKwnlbdlbQQZnh1VU0QB1Xg6uDWMLni3oA==
+  version "22.4.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/firestore/-/firestore-22.4.0.tgz#a0474c8913d997a34b2b956630506899840f1196"
+  integrity sha512-8kMh2FNdLQj9A9wDk8xye+iRneeL29Qx3OBbTiGLjsXTuybZdi6Ww+UpoClwwLorlmXA827GLyO4kNtwkYh1pQ==
   dependencies:
     react-native-url-polyfill "2.0.0"
 
 "@react-native-firebase/storage@^22.2.1":
-  version "22.3.0"
-  resolved "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-22.3.0.tgz#9ef005a577754072f6049d3c60275cb6b60e9281"
-  integrity sha512-3nhF/BHgu2LjrLL+DlWwk7zIjSrAoBUT/w5TsHmET6IjcF9kiLfIXV8JHva0y3AYKiEXn1C2aSzBpU7Ed4zhAg==
+  version "22.4.0"
+  resolved "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-22.4.0.tgz#56ea484ac06aa24f788134080887f180fb3d3e46"
+  integrity sha512-dUPnVRJb4NNsZeLHJqbQvYveq+mWKC4UL0L+OJIUstxGoYlIBu1uvltZoLBw8n7A6CYE/V93jUrTXfKEBEcw1A==
 
 "@react-native-google-signin/google-signin@^15.0.0":
   version "15.0.0"
@@ -3340,9 +3340,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.5.173:
-  version "1.5.180"
-  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.180.tgz#3e4f6e7494d6371e014af176dfdfd43c8a4b56df"
-  integrity sha512-ED+GEyEh3kYMwt2faNmgMB0b8O5qtATGgR4RmRsIp4T6p7B8vdMbIedYndnvZfsaXvSzegtpfqRMDNCjjiSduA==
+  version "1.5.181"
+  resolved "https://registry.npmjs.org/electron-to-chromium/-/electron-to-chromium-1.5.181.tgz#2f68dc900651858200a423acdf12c644f6b7f014"
+  integrity sha512-+ISMj8OIQ+0qEeDj14Rt8WwcTOiqHyAB+5bnK1K7xNNLjBJ4hRCQfUkw8RWtcLbfBzDwc15ZnKH0c7SNOfwiyA==
 
 emoji-regex@^8.0.0:
   version "8.0.0"

@@ -84,8 +84,12 @@ export async function deleteAccount() {
         await deleteProfileImage(user.uid);
         console.log("Profile image deleted for user:", user.uid);
       } catch (storageError) {
-        if (storageError.code === 'storage/object-not-found') {
-          console.log("No profile image found for user:", user.uid, "Skipping deletion.");
+        if (storageError.code === "storage/object-not-found") {
+          console.log(
+            "No profile image found for user:",
+            user.uid,
+            "Skipping deletion.",
+          );
         } else {
           console.error("Delete profile img error: ", storageError);
         }
@@ -126,7 +130,9 @@ export async function signInWithGoogle() {
 
     const userInfo = await GoogleSignin.signIn();
 
-    const googleCredential = GoogleAuthProvider.credential(userInfo.data.idToken);
+    const googleCredential = GoogleAuthProvider.credential(
+      userInfo.data.idToken,
+    );
 
     const firebaseSignInResult = await signInWithCredential(
       getAuthService(),
@@ -140,8 +146,7 @@ export async function signInWithGoogle() {
         email: firebaseSignInResult.user.email,
         fullName: firebaseSignInResult.user.displayName,
         locale: firebaseSignInResult.additionalUserInfo.profile.locale || "en",
-        profileImg:
-          firebaseSignInResult.user.photoURL,
+        profileImg: firebaseSignInResult.user.photoURL,
         theme: "lightBlue",
       };
       await addUserData(uid, data);
@@ -235,7 +240,7 @@ export async function sendVerificationEmail() {
     console.log("Error sending verification email: ", error.message);
     Alert.alert("Error", "Failed to send verification email. " + error.message);
     throw error;
-  }  
+  }
 }
 
 export function sendResetPassword(email) {
@@ -400,7 +405,7 @@ export async function deleteProfileImage(userUID, callback) {
     }
   } catch (error) {
     console.log("DEBUG Delete profile img error: ", error);
-   if (error.code !== 'storage/object-not-found' && callback) {
+    if (error.code !== "storage/object-not-found" && callback) {
       Alert.alert("Error deleting profile image", error.message);
     }
     if (callback) {
