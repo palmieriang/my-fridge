@@ -1,13 +1,11 @@
 import { getApp } from "@react-native-firebase/app";
 import {
   createUserWithEmailAndPassword,
-  deleteUser,
   getIdToken,
-  // GoogleAuthProvider,
+  GoogleAuthProvider,
   onAuthStateChanged,
   sendPasswordResetEmail,
-  sendEmailVerification,
-  // signInWithCredential,
+  signInWithCredential,
   signInWithEmailAndPassword,
   // signInWithPopup, // This is only available in web
 } from "@react-native-firebase/auth";
@@ -32,6 +30,10 @@ import {
   ref,
   uploadBytesResumable,
 } from "@react-native-firebase/storage";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 import { Alert } from "react-native";
 
 import { ActionTypes } from "../src/constants";
@@ -76,8 +78,23 @@ export async function deleteAccount() {
   try {
     await deleteAllProductsFromUser(user.uid);
     await deleteUserData(user.uid);
-    await deleteProfileImage(user.uid);
-    await deleteUser(user);
+
+    await (async () => {
+      try {
+        await deleteProfileImage(user.uid);
+        console.log("Profile image deleted for user:", user.uid);
+      } catch (storageError) {
+        if (storageError.code === 'storage/object-not-found') {
+          console.log("No profile image found for user:", user.uid, "Skipping deletion.");
+        } else {
+          console.error("Delete profile img error: ", storageError);
+        }
+      }
+    })();
+
+    await user.delete();
+
+    console.log("User account deleted:", user.uid);
   } catch (error) {
     console.log("ERROR in deleteAccount ", error.message);
     Alert.alert("Account Deletion Failed", error.message);
@@ -94,70 +111,67 @@ export function authSignIn(email, password) {
   );
 }
 
-// function isUserEqual(googleUser, firebaseUser) {
-//   if (firebaseUser) {
-//     const providerData = firebaseUser.providerData;
-//     for (let i = 0; i < providerData.length; i++) {
-//       if (
-//         providerData[i].providerId === GoogleAuthProvider.PROVIDER_ID &&
-//         providerData[i].uid === googleUser.user.id // or googleUser.getBasicProfile().getId() or googleUser.getId()
-//       ) {
-//         // We don't need to reauth the Firebase connection.
-//         return true;
-//       }
-//     }
-//   }
-//   return false;
-// }
+export async function signInWithGoogle() {
+  try {
+    GoogleSignin.configure({
+      webClientId:
+        "730096168799-tp1s3ttqstv44r6cm5p94aptetet47jg.apps.googleusercontent.com",
+      iosClientId:
+        "730096168799-reud7qc0fd59t8onecgupqihpcoccs5o.apps.googleusercontent.com",
+      // androidClientId: 'YOUR_ANDROID_CLIENT_ID', // <--- You can add this if you explicitly want to use it
+      offlineAccess: true,
+    });
 
-// function onSignIn(googleUser) {
-//   // We need to register an Observer on Firebase Auth to make sure auth is initialized.
-//   const unsubscribe = onAuthStateChanged(
-//     getAuthService(),
-//     async (firebaseUser) => {
-//       unsubscribe();
-//       // Check if we are already signed-in Firebase with the correct user.
-//       if (!isUserEqual(googleUser, firebaseUser)) {
-//         // Build Firebase credential with the Google ID token.
-//         const credential = GoogleAuthProvider.credential(
-//           googleUser.idToken,
-//           googleUser.accessToken,
-//         );
+    await GoogleSignin.hasPlayServices();
 
-//         // Sign in with credential from the Google user.
-//         try {
-//           const result = await signInWithCredential(getAuthService(), credential);
-//           if (result.additionalUserInfo.isNewUser) {
-//             const uid = result.user.uid;
-//             const data = {
-//               id: uid,
-//               email: result.user.email,
-//               fullName: result.additionalUserInfo.profile.name,
-//               locale: result.additionalUserInfo.profile.locale,
-//               profileImg: result.additionalUserInfo.profile.picture,
-//               theme: "lightRed",
-//             };
-//             await addUserData(uid, data);
-//           }
-//         } catch (error) {
-//           console.log("onSignIn error", error);
-//         }
-//       } else {
-//         console.log("User already signed-in Firebase.");
-//       }
-//     },
-//   );
-// }
+    const userInfo = await GoogleSignin.signIn();
 
-// export async function signInWithGoogle() {
-//   const provider = new GoogleAuthProvider();
-//   try {
-//     const result = await signInWithPopup(getAuthService(), provider); // this is only available in web
-//     onSignIn(result);
-//   } catch (error) {
-//     console.log("signInWithGoogle error: ", error.message);
-//   }
-// }
+    const googleCredential = GoogleAuthProvider.credential(userInfo.data.idToken);
+
+    const firebaseSignInResult = await signInWithCredential(
+      getAuthService(),
+      googleCredential,
+    );
+
+    if (firebaseSignInResult.additionalUserInfo.isNewUser) {
+      const uid = firebaseSignInResult.user.uid;
+      const data = {
+        id: uid,
+        email: firebaseSignInResult.user.email,
+        fullName: firebaseSignInResult.user.displayName,
+        locale: firebaseSignInResult.additionalUserInfo.profile.locale || "en",
+        profileImg:
+          firebaseSignInResult.user.photoURL,
+        theme: "lightBlue",
+      };
+      await addUserData(uid, data);
+      console.log("New user created via Google:", uid);
+    } else {
+      console.log(
+        "Existing user signed in via Google:",
+        firebaseSignInResult.user.uid,
+      );
+    }
+
+    return { user: firebaseSignInResult.user };
+  } catch (error) {
+    console.log("Google Sign-In error:", error);
+    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+      console.log("Google Sign-In cancelled by user");
+    } else if (error.code === statusCodes.IN_PROGRESS) {
+      console.log("Google Sign-In already in progress");
+    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+      Alert.alert(
+        "Google Play Services Not Available",
+        "Please update Google Play Services to use Google Sign-In.",
+      );
+    } else {
+      console.log("Google Sign-In error:", error);
+      Alert.alert("Google Sign-In Failed", error.message);
+    }
+    throw error; // Re-throw the error so calling components can also handle it if needed
+  }
+}
 
 export function authSignOut() {
   return getAuthService().signOut();
@@ -187,6 +201,7 @@ export function persistentLogin(callback, callbackData) {
 }
 
 export function addUserData(uid, data) {
+  console.log("Adding user data for UID:", uid, data);
   return setDoc(doc(getUsersRef(), uid), data).catch((error) =>
     console.log("Error adding user data: ", error),
   );
@@ -207,18 +222,20 @@ export async function getUserData(userID) {
   }
 }
 
-export function sendVerificationEmail() {
+export async function sendVerificationEmail() {
   const user = getAuthService().currentUser;
   if (!user) {
     console.log("No user is signed in to send verification email.");
     return Promise.reject(new Error("No user signed in."));
   }
 
-  return sendEmailVerification(user).catch((error) => {
+  try {
+    await user.sendEmailVerification();
+  } catch (error) {
     console.log("Error sending verification email: ", error.message);
     Alert.alert("Error", "Failed to send verification email. " + error.message);
     throw error;
-  });
+  }  
 }
 
 export function sendResetPassword(email) {
@@ -378,11 +395,17 @@ export async function deleteProfileImage(userUID, callback) {
     const storageInstance = getStorage(getApp());
     const storageRef = ref(storageInstance, `profileImages/${userUID}`);
     await deleteObject(storageRef);
-    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
+    if (callback) {
+      callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
+    }
   } catch (error) {
-    console.log("Delete profile img error: ", error.message);
-    Alert.alert("Error deleting profile image", error.message);
-    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
+    console.log("DEBUG Delete profile img error: ", error);
+   if (error.code !== 'storage/object-not-found' && callback) {
+      Alert.alert("Error deleting profile image", error.message);
+    }
+    if (callback) {
+      callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
+    }
   }
 }
 
