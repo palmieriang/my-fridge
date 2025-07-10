@@ -1,12 +1,13 @@
 import React from "react";
 import { View, TextInput, TextInputProps } from "react-native";
+import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
 
 type FormInputProps = TextInputProps & {
   labelValue: string;
   placeholderText: string;
-  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  Icon: React.FC<SvgProps>;
 };
 
 const FormInput = ({

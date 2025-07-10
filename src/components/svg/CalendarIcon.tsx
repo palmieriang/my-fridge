@@ -1,15 +1,17 @@
 import * as React from "react";
-import Svg, { G, Path } from "react-native-svg";
+import { ColorValue } from "react-native";
+import Svg, { G, Path, SvgProps } from "react-native-svg";
 
-type CalendarIconProps = {
-  height: number;
-  width: number;
-  fill: string;
-};
+const CalendarIcon = ({ height, width, fill }: SvgProps) => {
+  const finalFill: ColorValue = fill || "currentColor";
 
-const CalendarIcon = ({ height, width, fill }: CalendarIconProps) => {
   return (
-    <Svg height={height} width={width} fill={fill} viewBox="0 0 29.121 29.121">
+    <Svg
+      height={height}
+      width={width}
+      fill={finalFill}
+      viewBox="0 0 29.121 29.121"
+    >
       <G fill="#030104">
         <Path d="M21.706 6.146c1.116 0 2.02-.898 2.02-2.016V2.02c0-1.119-.903-2.02-2.02-2.02s-2.019.9-2.019 2.02v2.111a2.014 2.014 0 002.019 2.015z" />
         <Path d="M28.882 3.494h-4.066v1.027a3.078 3.078 0 01-3.075 3.076 3.076 3.076 0 01-3.074-3.076V3.494h-8.205v1.027c0 1.695-1.379 3.076-3.076 3.076s-3.075-1.38-3.075-3.076V3.494L.208 3.443v25.678h26.656l2.049-.006-.031-25.621zm-2.02 23.582H2.26V10.672h24.604v16.404h-.002z" />

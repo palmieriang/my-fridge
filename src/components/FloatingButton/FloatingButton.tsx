@@ -1,7 +1,12 @@
 // import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity, Text, StyleSheet } from "react-native";
 
-const FloatingButton = ({ onPress, color }) => (
+type FloatingButtonProps = {
+  color: string;
+  onPress: () => void;
+};
+
+const FloatingButton = ({ onPress, color }: FloatingButtonProps) => (
   <TouchableOpacity
     style={[styles.fab, { backgroundColor: color }]}
     onPress={onPress}
