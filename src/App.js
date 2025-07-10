@@ -2,6 +2,7 @@ import "react-native-gesture-handler";
 import { registerRootComponent } from "expo";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 
 import AppContainer from "./AppContainer";
 import { initializeFirebaseServices } from "./firebase/config";
@@ -28,10 +29,22 @@ export default function App() {
   }, []);
 
   if (!fontsLoaded || !firebaseReady) {
-    return null; // or a splash/loading screen here
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
   }
 
   return <AppContainer />;
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+});
 
 registerRootComponent(App);
