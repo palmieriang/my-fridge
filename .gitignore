@@ -92,8 +92,6 @@ coverage/
 
 /android
 /ios
-/google-services.json
-/GoogleService-Info.plist
 
 # The lines below are now largely redundant if /android and /ios are ignored,
 # but keeping them commented out for reference if you ever switch back to a bare workflow.
