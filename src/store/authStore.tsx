@@ -20,7 +20,43 @@ import {
 } from "../../api/api";
 import { ActionTypes } from "../constants";
 
-const initialState = {
+interface AuthStateType {
+  isLoading: boolean;
+  isSignout: boolean;
+  userToken: string | null;
+  user: any | null;
+  profileImg: string | null;
+}
+
+interface AuthContextMethods {
+  signIn: ({ email, password }: { email: string; password: string }) => void;
+  signInGoogle: () => void;
+  signOut: () => void;
+  signUp: ({
+    fullName,
+    email,
+    password,
+    confirmPassword,
+  }: {
+    fullName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => Promise<void>;
+  resetPassword: (email: string) => Promise<void>;
+  updateProfileImage: (url: string) => void;
+  deleteImage: (id: string) => void;
+  deleteUser: () => void;
+}
+
+interface AuthStoreValue {
+  authState: AuthStateType;
+  dispatch: React.Dispatch<any>;
+  authContext: AuthContextMethods;
+  userData: any;
+}
+
+const initialState: AuthStateType = {
   isLoading: true,
   isSignout: false,
   userToken: null,
@@ -28,7 +64,7 @@ const initialState = {
   profileImg: null,
 };
 
-const reducer = (prevState, action) => {
+const reducer = (prevState: AuthStateType, action: any) => {
   switch (action.type) {
     case ActionTypes.RESTORE_TOKEN:
     case ActionTypes.SIGN_IN:
@@ -42,6 +78,7 @@ const reducer = (prevState, action) => {
     case ActionTypes.SIGN_OUT:
       return {
         ...prevState,
+        isLoading: false,
         isSignout: true,
         userToken: null,
         user: null,
@@ -52,13 +89,29 @@ const reducer = (prevState, action) => {
         ...prevState,
         profileImg: action.imgUrl,
       };
+    default:
+      return prevState;
   }
 };
 
-const authStore = createContext(initialState);
-const { Provider, Consumer } = authStore;
+const authStore = createContext<AuthStoreValue>({
+  authState: initialState,
+  dispatch: () => null,
+  authContext: {
+    signIn: () => {},
+    signInGoogle: () => {},
+    signOut: () => {},
+    signUp: async () => {},
+    resetPassword: async () => {},
+    updateProfileImage: () => {},
+    deleteImage: () => {},
+    deleteUser: () => {},
+  },
+  userData: {},
+});
+const { Provider } = authStore;
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authState, dispatch] = useReducer(reducer, initialState);
   const [userData, setUserData] = useState({});
 
@@ -69,7 +122,7 @@ const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  const authContext = useMemo(
+  const authContext: AuthContextMethods = useMemo(
     () => ({
       signIn: ({ email, password }) => {
         authSignIn(email, password);
@@ -107,7 +160,7 @@ const AuthProvider = ({ children }) => {
               },
             ],
           );
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error in create user", error);
           Alert.alert(
             "Error creating account",
@@ -136,7 +189,7 @@ const AuthProvider = ({ children }) => {
               },
             ],
           );
-        } catch (error) {
+        } catch (error: any) {
           console.error("Error in reset password", error);
           Alert.alert(
             "Error sending reset email",
@@ -166,7 +219,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <Provider value={{ authState, dispatch, authContext, userData }}>
-      <Consumer>{children}</Consumer>
+      {children}
     </Provider>
   );
 };
