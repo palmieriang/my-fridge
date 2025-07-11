@@ -48,21 +48,21 @@ import {
 
 export async function createUser(fullName, email, password) {
   try {
-    const response = await createUserWithEmailAndPassword(
+    const { user } = await createUserWithEmailAndPassword(
       getAuthService(),
       email,
       password,
     );
-    const uid = response.user.uid;
-    const data = {
+    const uid = user.uid;
+    const userData = {
       id: uid,
       email,
       fullName,
       locale: "en",
       theme: "lightBlue",
     };
-    await addUserData(uid, data);
-    return { uid }; // Returning the uid for potential use
+    await addUserData(uid, userData);
+    return { uid };
   } catch (error) {
     Alert.alert("Error creating user", error.message);
   }
@@ -70,10 +70,7 @@ export async function createUser(fullName, email, password) {
 
 export async function deleteAccount() {
   const user = getAuthService().currentUser;
-  if (!user) {
-    console.log("No user is currently signed in to delete account.");
-    return;
-  }
+  if (!user) return;
 
   try {
     await deleteAllProductsFromUser(user.uid);
@@ -122,7 +119,6 @@ export async function signInWithGoogle() {
         "730096168799-tp1s3ttqstv44r6cm5p94aptetet47jg.apps.googleusercontent.com",
       iosClientId:
         "730096168799-reud7qc0fd59t8onecgupqihpcoccs5o.apps.googleusercontent.com",
-      // androidClientId: 'YOUR_ANDROID_CLIENT_ID', // <--- You can add this if you explicitly want to use it
       offlineAccess: true,
     });
 
@@ -130,35 +126,29 @@ export async function signInWithGoogle() {
 
     const userInfo = await GoogleSignin.signIn();
 
-    const googleCredential = GoogleAuthProvider.credential(
-      userInfo.data.idToken,
-    );
+    const credential = GoogleAuthProvider.credential(userInfo.data.idToken);
 
-    const firebaseSignInResult = await signInWithCredential(
+    const { user, additionalUserInfo } = await signInWithCredential(
       getAuthService(),
-      googleCredential,
+      credential,
     );
 
-    if (firebaseSignInResult.additionalUserInfo.isNewUser) {
-      const uid = firebaseSignInResult.user.uid;
-      const data = {
-        id: uid,
-        email: firebaseSignInResult.user.email,
-        fullName: firebaseSignInResult.user.displayName,
-        locale: firebaseSignInResult.additionalUserInfo.profile.locale || "en",
-        profileImg: firebaseSignInResult.user.photoURL,
+    if (additionalUserInfo?.isNewUser) {
+      const userData = {
+        id: user.uid,
+        email: user.email,
+        fullName: user.displayName,
+        locale: additionalUserInfo.profile.locale || "en",
+        profileImg: user.photoURL,
         theme: "lightBlue",
       };
-      await addUserData(uid, data);
-      console.log("New user created via Google:", uid);
+      await addUserData(user.uid, userData);
+      console.log("New user created via Google:", user.uid);
     } else {
-      console.log(
-        "Existing user signed in via Google:",
-        firebaseSignInResult.user.uid,
-      );
+      console.log("Existing user signed in via Google:", user.uid);
     }
 
-    return { user: firebaseSignInResult.user };
+    return { user };
   } catch (error) {
     console.log("Google Sign-In error:", error);
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -174,7 +164,7 @@ export async function signInWithGoogle() {
       console.log("Google Sign-In error:", error);
       Alert.alert("Google Sign-In Failed", error.message);
     }
-    throw error; // Re-throw the error so calling components can also handle it if needed
+    throw error;
   }
 }
 
@@ -189,15 +179,14 @@ export function persistentLogin(callback, callbackData) {
         const idToken = await getIdToken(user);
         const userData = await getUserData(user.uid);
 
-        callbackData({
-          ...userData,
-        });
+        callbackData(userData);
         callback({ type: ActionTypes.RESTORE_TOKEN, token: idToken, user });
 
         await getProfileImageFromFirebase(user.uid, callback);
       } catch (error) {
         console.log("Restoring token failed", error);
         Alert.alert("Authentication Failed", error.message);
+        callback({ type: ActionTypes.SIGN_OUT });
       }
     } else {
       callback({ type: ActionTypes.SIGN_OUT });
@@ -249,16 +238,11 @@ export function sendResetPassword(email) {
 
 // Products
 
-export function saveProduct({ name, date, place, authorID }) {
-  const timestamp = serverTimestamp();
-  const data = {
-    name,
-    date,
-    place,
-    authorID,
-    createdAt: timestamp,
-  };
-  return setDoc(doc(getProductsRef()), data).catch((error) => {
+export function saveProduct(data) {
+  return setDoc(doc(getProductsRef()), {
+    ...data,
+    createdAt: serverTimestamp(),
+  }).catch((error) => {
     Alert.alert("Error saving product", error.message);
   });
 }
@@ -271,24 +255,20 @@ export const getProductsFromPlace = (userID, place, callback) => {
     orderBy("createdAt", "desc"),
   );
 
-  const unsubscribe = onSnapshot(
+  return onSnapshot(
     productsQuery,
     (querySnapshot) => {
-      const newProducts = [];
-      querySnapshot.forEach((doc) => {
-        const product = doc.data();
-        product.id = doc.id;
-        newProducts.push(product);
-      });
-      callback(newProducts);
+      const products = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
+      callback(products);
     },
     (error) => {
       console.log("getProductsFromPlace ", error);
       Alert.alert("Error fetching products", error.message);
     },
   );
-
-  return unsubscribe;
 };
 
 export const getAllProducts = (userID, callback) => {
@@ -298,15 +278,13 @@ export const getAllProducts = (userID, callback) => {
     orderBy("createdAt", "desc"),
   );
 
-  const unsubscribe = onSnapshot(
+  return onSnapshot(
     productsQuery,
     (querySnapshot) => {
-      const products = [];
-      querySnapshot.forEach((doc) => {
-        const product = doc.data();
-        product.id = doc.id;
-        products.push(product);
-      });
+      const products = querySnapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      }));
       callback(products);
     },
     (error) => {
@@ -314,8 +292,6 @@ export const getAllProducts = (userID, callback) => {
       Alert.alert("Error fetching all products", error.message);
     },
   );
-
-  return unsubscribe;
 };
 
 export async function getProductById(id) {
@@ -329,16 +305,11 @@ export async function getProductById(id) {
   }
 }
 
-export function modifyProduct({ name, date, place, authorID }, existingId) {
-  const timestamp = serverTimestamp();
-  const data = {
-    name,
-    date,
-    place,
-    authorID,
-    createdAt: timestamp,
-  };
-  return setDoc(doc(getProductsRef(), existingId), data).catch((error) => {
+export function modifyProduct(data, id) {
+  return setDoc(doc(getProductsRef(), id), {
+    ...data,
+    createdAt: serverTimestamp(),
+  }).catch((error) => {
     Alert.alert("Error modifying product", error.message);
   });
 }
@@ -352,8 +323,8 @@ export function moveProduct(id, place) {
   });
 }
 
-export function deleteProduct(existingId) {
-  return deleteDoc(doc(getProductsRef(), existingId)).catch((error) => {
+export function deleteProduct(id) {
+  return deleteDoc(doc(getProductsRef(), id)).catch((error) => {
     console.log("Error in deleteProduct: ", error);
     Alert.alert("Error deleting product", error.message);
   });
@@ -400,9 +371,7 @@ export async function deleteProfileImage(userUID, callback) {
     const storageInstance = getStorage(getApp());
     const storageRef = ref(storageInstance, `profileImages/${userUID}`);
     await deleteObject(storageRef);
-    if (callback) {
-      callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
-    }
+    callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error) {
     console.log("DEBUG Delete profile img error: ", error);
     if (error.code !== "storage/object-not-found" && callback) {
@@ -414,20 +383,14 @@ export async function deleteProfileImage(userUID, callback) {
   }
 }
 
-export function changeColor(newTheme, id) {
-  const data = {
-    theme: newTheme,
-  };
-  return setDoc(doc(getUsersRef(), id), data, { merge: true }).catch((error) =>
-    console.log("Error: ", error),
+export function changeColor(theme, id) {
+  return setDoc(doc(getUsersRef(), id), { theme }, { merge: true }).catch(
+    (error) => console.log("Error: ", error),
   );
 }
 
-export function changeLanguage(newLocale, id) {
-  const data = {
-    locale: newLocale,
-  };
-  return setDoc(doc(getUsersRef(), id), data, { merge: true }).catch((error) =>
-    console.log("Error: ", error),
+export function changeLanguage(locale, id) {
+  return setDoc(doc(getUsersRef(), id), { locale }, { merge: true }).catch(
+    (error) => console.log("Error: ", error),
   );
 }
