@@ -22,9 +22,8 @@ import { ActionTypes } from "../constants";
 
 interface AuthStateType {
   isLoading: boolean;
-  isSignout: boolean;
-  userToken: string | null;
   user: any | null;
+  userToken: string | null;
   profileImg: string | null;
 }
 
@@ -57,33 +56,30 @@ interface AuthStoreValue {
 }
 
 const initialState: AuthStateType = {
-  isLoading: true,
-  isSignout: false,
-  userToken: null,
   user: null,
+  userToken: null,
+  isLoading: true,
   profileImg: null,
 };
 
 const reducer = (prevState: AuthStateType, action: any) => {
   switch (action.type) {
-    case ActionTypes.RESTORE_TOKEN:
     case ActionTypes.SIGN_IN:
       return {
         ...prevState,
-        isLoading: false,
-        isSignout: false,
-        userToken: action.token,
         user: action.user,
+        userToken: action.token,
+        isLoading: false,
       };
     case ActionTypes.SIGN_OUT:
       return {
         ...prevState,
-        isLoading: false,
-        isSignout: true,
-        userToken: null,
         user: null,
+        userToken: null,
+        isLoading: false,
         profileImg: null,
       };
+    case ActionTypes.RESTORE_TOKEN:
     case ActionTypes.PROFILE_IMG:
       return {
         ...prevState,
