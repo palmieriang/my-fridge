@@ -1,10 +1,10 @@
+import Loading from "@components/Loading/Loading";
 import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
 import type { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
 import React, { useContext, useState, useEffect } from "react";
 import {
-  ActivityIndicator,
   Alert,
   Image,
   Platform,
@@ -162,7 +162,7 @@ const Profile = () => {
         <View style={styles.pictureContainer}>
           {upload.isUploading ? (
             <View style={styles.progressContainer}>
-              <ActivityIndicator size="large" color="#fff" />
+              <Loading size="large" color="#fff" />
               <Text style={styles.profileField}>
                 Uploading: {upload.uploadProgress.toFixed(0)}%
               </Text>
@@ -170,9 +170,7 @@ const Profile = () => {
           ) : profileImg ? (
             <>
               {isProfileImageLoading && (
-                <View style={styles.activityIndicatorOverlay}>
-                  <ActivityIndicator size="large" color={theme.text} />
-                </View>
+                <Loading size="large" style={styles.activityIndicatorOverlay} />
               )}
               <Image
                 source={{ uri: profileImg }}

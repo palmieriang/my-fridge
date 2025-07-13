@@ -1,7 +1,7 @@
 import "react-native-gesture-handler";
+import Loading from "@components/Loading/Loading";
 import { NavigationContainer } from "@react-navigation/native";
 import React, { memo, useContext } from "react";
-import { ActivityIndicator, View, StyleSheet } from "react-native";
 
 import TabNavigator from "./navigation/TabNavigator";
 import { SignInStackScreen } from "./navigation/navigation";
@@ -18,11 +18,7 @@ const RootNavigator = () => {
   const { userToken, isLoading } = authState;
 
   if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+    return <Loading />;
   }
 
   return (
@@ -31,14 +27,6 @@ const RootNavigator = () => {
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 const AppContainer = () => {
   return (
