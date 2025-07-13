@@ -52,6 +52,10 @@ Ensure you are using the correct Node.js version (see step 0), then start the de
 ```
 yarn start
 ```
+or
+```
+ npx expo run:android 
+```
 
 ### 3. Start Firebase Emulators (optional, but recommended for dev)
 
@@ -111,6 +115,25 @@ npx expo prebuild --clean
 ### Add native Firebase config files:
 
 Place `google-services.json` and `GoogleService-Info.plist` in the project root
+
+
+These files are sensitive and must not be committed.
+
+⚠️ Placeholders for these files already exist in the repo to prevent build errors.
+
+To ensure your local versions are not accidentally committed, run:
+
+```
+git update-index --assume-unchanged google-services.json
+git update-index --assume-unchanged GoogleService-Info.plist
+```
+
+If you ever need to re-track changes to these files:
+
+```
+git update-index --no-assume-unchanged google-services.json
+git update-index --no-assume-unchanged GoogleService-Info.plist
+```
 
 ### Reference them in `app.json` or `app.config.js`:
 
