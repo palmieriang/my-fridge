@@ -7,6 +7,7 @@ import {
   sendPasswordResetEmail,
   signInWithCredential,
   signInWithEmailAndPassword,
+  signOut,
   // signInWithPopup, // This is only available in web
 } from "@react-native-firebase/auth";
 import {
@@ -168,8 +169,15 @@ export async function signInWithGoogle() {
   }
 }
 
-export function authSignOut() {
-  return getAuthService().signOut();
+export async function authSignOut(dispatch) {
+  try {
+    await signOut(getAuthService());
+    console.log("User logged out");
+    dispatch?.({ type: ActionTypes.SIGN_OUT });
+  } catch (error) {
+    console.error("Error signing out:", error);
+    Alert.alert("Logout Failed", error.message);
+  }
 }
 
 export function persistentLogin(callback, callbackData) {

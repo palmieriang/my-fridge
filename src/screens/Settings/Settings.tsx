@@ -12,6 +12,7 @@ const Settings = () => {
   } = useContext(localeStore);
   const {
     authContext,
+    dispatch,
     userData: { id },
   } = useContext(authStore);
   const {
@@ -61,7 +62,7 @@ const Settings = () => {
   };
 
   const handleLogOut = () => {
-    authContext.signOut();
+    authContext.signOut(dispatch);
   };
 
   const handleDeleteUser = () => {

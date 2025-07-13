@@ -30,7 +30,7 @@ interface AuthStateType {
 interface AuthContextMethods {
   signIn: ({ email, password }: { email: string; password: string }) => void;
   signInGoogle: () => void;
-  signOut: () => void;
+  signOut: (dispatch: React.Dispatch<any>) => void;
   signUp: ({
     fullName,
     email,
@@ -62,31 +62,31 @@ const initialState: AuthStateType = {
   profileImg: null,
 };
 
-const reducer = (prevState: AuthStateType, action: any) => {
+const reducer = (state: AuthStateType, action: any) => {
   switch (action.type) {
+    case ActionTypes.RESTORE_TOKEN:
     case ActionTypes.SIGN_IN:
       return {
-        ...prevState,
+        ...state,
         user: action.user,
         userToken: action.token,
         isLoading: false,
       };
     case ActionTypes.SIGN_OUT:
       return {
-        ...prevState,
+        ...state,
         user: null,
         userToken: null,
         isLoading: false,
         profileImg: null,
       };
-    case ActionTypes.RESTORE_TOKEN:
     case ActionTypes.PROFILE_IMG:
       return {
-        ...prevState,
+        ...state,
         profileImg: action.imgUrl,
       };
     default:
-      return prevState;
+      return state;
   }
 };
 
@@ -127,7 +127,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         signInWithGoogle();
       },
       signOut: () => {
-        authSignOut();
+        authSignOut(dispatch);
       },
       signUp: async ({ fullName, email, password, confirmPassword }) => {
         if (password !== confirmPassword) {
@@ -210,7 +210,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         deleteAccount();
       },
     }),
-    [],
+    [dispatch],
   );
 
   return (
