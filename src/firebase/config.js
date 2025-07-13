@@ -22,14 +22,10 @@ let _storageInstance = null;
 
 let usersRef = null;
 let productsRef = null;
-let profileImagesRef = null;
 
 export const initializeFirebaseServices = async () => {
-  console.log("[Firebase] Initializing Firebase services...");
-
   try {
     const appInstance = getApp();
-    console.log("[Firebase] Got default app instance:", appInstance.name);
 
     _authInstance = getAuth(appInstance);
     console.log("[Firebase] Auth initialized:", _authInstance.app.name);
@@ -45,15 +41,10 @@ export const initializeFirebaseServices = async () => {
 
     usersRef = collection(_firestoreInstance, "users");
     productsRef = collection(_firestoreInstance, "products");
-    console.log("[Firebase] Firestore collections set: users, products");
-
-    profileImagesRef = ref(_storageInstance, "profileImages");
-    console.log("[Firebase] Storage ref set: profileImages");
+    console.log("[Firebase] Firestore collections set");
 
     if (__DEV__) {
       const debuggerHost = Platform.OS === "android" ? "10.0.2.2" : "localhost";
-
-      console.log(`[Firebase] Connecting to emulators at ${debuggerHost}`);
 
       connectAuthEmulator(_authInstance, `http://${debuggerHost}:9099`);
       connectFirestoreEmulator(_firestoreInstance, debuggerHost, 8080);
