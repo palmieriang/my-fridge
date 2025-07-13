@@ -1,9 +1,11 @@
 import { getApp } from "@react-native-firebase/app";
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   getIdToken,
   GoogleAuthProvider,
   onAuthStateChanged,
+  sendEmailVerification,
   sendPasswordResetEmail,
   signInWithCredential,
   signInWithEmailAndPassword,
@@ -54,16 +56,15 @@ export async function createUser(fullName, email, password) {
       email,
       password,
     );
-    const uid = user.uid;
     const userData = {
-      id: uid,
+      id: user.uid,
       email,
       fullName,
       locale: "en",
       theme: "lightBlue",
     };
-    await addUserData(uid, userData);
-    return { uid };
+    await addUserData(user.uid, userData);
+    return { uid: user.uid };
   } catch (error) {
     Alert.alert("Error creating user", error.message);
   }
@@ -81,20 +82,14 @@ export async function deleteAccount() {
       try {
         await deleteProfileImage(user.uid);
         console.log("Profile image deleted for user:", user.uid);
-      } catch (storageError) {
-        if (storageError.code === "storage/object-not-found") {
-          console.log(
-            "No profile image found for user:",
-            user.uid,
-            "Skipping deletion.",
-          );
-        } else {
-          console.error("Delete profile img error: ", storageError);
+      } catch (error) {
+        if (error.code !== "storage/object-not-found") {
+          console.error("Delete profile img error: ", error);
         }
       }
     })();
 
-    await user.delete();
+    await deleteUser(user);
 
     console.log("User account deleted:", user.uid);
   } catch (error) {
@@ -152,16 +147,7 @@ export async function signInWithGoogle() {
     return { user };
   } catch (error) {
     console.log("Google Sign-In error:", error);
-    if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-      console.log("Google Sign-In cancelled by user");
-    } else if (error.code === statusCodes.IN_PROGRESS) {
-      console.log("Google Sign-In already in progress");
-    } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-      Alert.alert(
-        "Google Play Services Not Available",
-        "Please update Google Play Services to use Google Sign-In.",
-      );
-    } else {
+    if (error.code !== statusCodes.SIGN_IN_CANCELLED) {
       console.log("Google Sign-In error:", error);
       Alert.alert("Google Sign-In Failed", error.message);
     }
@@ -186,10 +172,8 @@ export function persistentLogin(callback, callbackData) {
       try {
         const idToken = await getIdToken(user);
         const userData = await getUserData(user.uid);
-
         callbackData(userData);
         callback({ type: ActionTypes.RESTORE_TOKEN, token: idToken, user });
-
         await getProfileImageFromFirebase(user.uid, callback);
       } catch (error) {
         console.log("Restoring token failed", error);
@@ -202,8 +186,23 @@ export function persistentLogin(callback, callbackData) {
   });
 }
 
+export function sendResetPassword(email) {
+  return sendPasswordResetEmail(getAuthService(), email);
+}
+
+export async function sendVerificationEmail() {
+  const user = getAuthService().currentUser;
+  if (!user)
+    return Promise.reject(
+      new Error("No user is signed in to send verification email."),
+    );
+
+  return sendEmailVerification(user);
+}
+
+// Firestore: Users
+
 export function addUserData(uid, data) {
-  console.log("Adding user data for UID:", uid, data);
   return setDoc(doc(getUsersRef(), uid), data).catch((error) =>
     console.log("Error adding user data: ", error),
   );
@@ -216,35 +215,14 @@ export function deleteUserData(uid) {
 }
 
 export async function getUserData(userID) {
-  try {
-    const response = await getDoc(doc(getUsersRef(), userID));
-    return response.data();
-  } catch (error) {
-    throw new Error("Error fetching user data: " + error.message);
-  }
+  const snapshot = await getDoc(doc(getUsersRef(), userID));
+  if (!snapshot.exists())
+    throw new Error("User data not found for ID: " + userID);
+
+  return snapshot.data();
 }
 
-export async function sendVerificationEmail() {
-  const user = getAuthService().currentUser;
-  if (!user) {
-    console.log("No user is signed in to send verification email.");
-    return Promise.reject(new Error("No user signed in."));
-  }
-
-  try {
-    await user.sendEmailVerification();
-  } catch (error) {
-    console.log("Error sending verification email: ", error.message);
-    Alert.alert("Error", "Failed to send verification email. " + error.message);
-    throw error;
-  }
-}
-
-export function sendResetPassword(email) {
-  return sendPasswordResetEmail(getAuthService(), email);
-}
-
-// Products
+// Firestore: Products
 
 export function saveProduct(data) {
   return setDoc(doc(getProductsRef()), {
@@ -255,7 +233,7 @@ export function saveProduct(data) {
   });
 }
 
-export const getProductsFromPlace = (userID, place, callback) => {
+export function getProductsFromPlace(userID, place, callback) {
   const productsQuery = query(
     getProductsRef(),
     where("authorID", "==", userID),
@@ -277,9 +255,9 @@ export const getProductsFromPlace = (userID, place, callback) => {
       Alert.alert("Error fetching products", error.message);
     },
   );
-};
+}
 
-export const getAllProducts = (userID, callback) => {
+export function getAllProducts(userID, callback) {
   const productsQuery = query(
     getProductsRef(),
     where("authorID", "==", userID),
@@ -300,7 +278,7 @@ export const getAllProducts = (userID, callback) => {
       Alert.alert("Error fetching all products", error.message);
     },
   );
-};
+}
 
 export async function getProductById(id) {
   const productDocRef = doc(getProductsRef(), id);
@@ -354,19 +332,18 @@ export async function deleteAllProductsFromUser(uid) {
   }
 }
 
-// Settings
+// Storage
 
 export function uploadImage(id, blob, metadata) {
-  const storageInstance = getStorage(getApp());
-  const storageRef = ref(storageInstance, `profileImages/${id}`);
+  const storageRef = ref(getStorage(getApp()), `profileImages/${id}`);
   return uploadBytesResumable(storageRef, blob, metadata);
 }
 
 export async function getProfileImageFromFirebase(userUID, callback) {
   try {
-    const storageInstance = getStorage(getApp());
-    const storageRef = ref(storageInstance, `profileImages/${userUID}`);
-    const url = await getDownloadURL(storageRef);
+    const url = await getDownloadURL(
+      ref(getStorage(getApp()), `profileImages/${userUID}`),
+    );
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error) {
     console.log("Profile img error:", error.message);
@@ -376,20 +353,18 @@ export async function getProfileImageFromFirebase(userUID, callback) {
 
 export async function deleteProfileImage(userUID, callback) {
   try {
-    const storageInstance = getStorage(getApp());
-    const storageRef = ref(storageInstance, `profileImages/${userUID}`);
-    await deleteObject(storageRef);
+    await deleteObject(ref(getStorage(getApp()), `profileImages/${userUID}`));
     callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error) {
     console.log("DEBUG Delete profile img error: ", error);
     if (error.code !== "storage/object-not-found" && callback) {
       Alert.alert("Error deleting profile image", error.message);
     }
-    if (callback) {
-      callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
-    }
+    callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
+
+// Settings
 
 export function changeColor(theme, id) {
   return setDoc(doc(getUsersRef(), id), { theme }, { merge: true }).catch(
