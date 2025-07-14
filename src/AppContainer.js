@@ -1,6 +1,7 @@
 import "react-native-gesture-handler";
 import Loading from "@components/Loading/Loading";
 import { NavigationContainer } from "@react-navigation/native";
+import { StatusBar } from "expo-status-bar";
 import React, { memo, useContext } from "react";
 
 import TabNavigator from "./navigation/TabNavigator";
@@ -11,10 +12,12 @@ import {
   LocaleProvider,
   ProductsProvider,
   ThemeProvider,
+  themeStore,
 } from "./store";
 
 const RootNavigator = () => {
   const { authState } = useContext(authStore);
+  const { theme } = useContext(themeStore);
   const { userToken, isLoading } = authState;
 
   if (isLoading) {
@@ -22,9 +25,16 @@ const RootNavigator = () => {
   }
 
   return (
-    <NavigationContainer>
-      {userToken ? <TabNavigator /> : <SignInStackScreen />}
-    </NavigationContainer>
+    <>
+      <StatusBar
+        style="auto"
+        backgroundColor={userToken ? theme.primary : "#ffffff"}
+        translucent={false}
+      />
+      <NavigationContainer>
+        {userToken ? <TabNavigator /> : <SignInStackScreen />}
+      </NavigationContainer>
+    </>
   );
 };
 
