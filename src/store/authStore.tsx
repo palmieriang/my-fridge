@@ -12,7 +12,6 @@ import {
   authSignIn,
   authSignOut,
   createUser,
-  sendVerificationEmail,
   sendResetPassword,
   deleteProfileImage,
   signInWithGoogle,
@@ -144,7 +143,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         try {
           await createUser(fullName, email, password);
-          await sendVerificationEmail();
           Alert.alert(
             "Account created",
             "Please check your email and verify your account.",

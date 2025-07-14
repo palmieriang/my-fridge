@@ -170,7 +170,11 @@ const Profile = () => {
           ) : profileImg ? (
             <>
               {isProfileImageLoading && (
-                <Loading size="large" style={styles.activityIndicatorOverlay} />
+                <Loading
+                  size="large"
+                  color="#fff"
+                  style={styles.activityIndicatorOverlay}
+                />
               )}
               <Image
                 source={{ uri: profileImg }}

@@ -12,7 +12,6 @@ import {
 import {
   getStorage,
   connectStorageEmulator,
-  ref,
 } from "@react-native-firebase/storage";
 import { Platform } from "react-native";
 

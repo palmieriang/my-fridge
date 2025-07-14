@@ -64,6 +64,7 @@ export async function createUser(fullName, email, password) {
       theme: "lightBlue",
     };
     await addUserData(user.uid, userData);
+    await sendEmailVerification(user);
     return { uid: user.uid };
   } catch (error) {
     Alert.alert("Error creating user", error.message);
@@ -188,16 +189,6 @@ export function persistentLogin(callback, callbackData) {
 
 export function sendResetPassword(email) {
   return sendPasswordResetEmail(getAuthService(), email);
-}
-
-export async function sendVerificationEmail() {
-  const user = getAuthService().currentUser;
-  if (!user)
-    return Promise.reject(
-      new Error("No user is signed in to send verification email."),
-    );
-
-  return sendEmailVerification(user);
 }
 
 // Firestore: Users
