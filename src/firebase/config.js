@@ -27,16 +27,13 @@ export const initializeFirebaseServices = async () => {
     const appInstance = getApp();
 
     _authInstance = getAuth(appInstance);
-    console.log("[Firebase] Auth initialized:", _authInstance.app.name);
+    console.log("[Firebase] Auth initialized");
 
     _firestoreInstance = getFirestore(appInstance);
-    console.log(
-      "[Firebase] Firestore initialized:",
-      _firestoreInstance.app.name,
-    );
+    console.log("[Firebase] Firestore initialized");
 
     _storageInstance = getStorage(appInstance);
-    console.log("[Firebase] Storage initialized:", _storageInstance.app.name);
+    console.log("[Firebase] Storage initialized");
 
     usersRef = collection(_firestoreInstance, "users");
     productsRef = collection(_firestoreInstance, "products");
