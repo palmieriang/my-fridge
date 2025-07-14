@@ -13,6 +13,7 @@ import {
   View,
 } from "react-native";
 
+import { getImageBlobAndMetadata } from "./getImageBlobAndMetadata";
 import styles from "./styles";
 import { uploadImage } from "../../../api/api";
 import { authStore, themeStore } from "../../store";
@@ -66,28 +67,36 @@ const Profile = () => {
     setUpload({ isUploading: true, uploadProgress: progress });
   };
 
+  const resetState = () => {
+    setUpload({ isUploading: false, uploadProgress: 0 });
+    setIsProfileImageLoading(false);
+  };
+
   const handleUploadError = (error: Error) => {
     console.log("Error uploading image:", error);
     Alert.alert("Upload failed", "Failed to upload image. Please try again.");
-    setUpload({ isUploading: false, uploadProgress: 0 });
-    setIsProfileImageLoading(false);
+    resetState();
   };
 
   const handleUploadComplete = async (
     uploadTask: FirebaseStorageTypes.Task,
   ) => {
+    if (uploadTask.snapshot === null) {
+      resetState();
+      return;
+    }
+
     try {
       const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
       authContext.updateProfileImage(downloadURL);
-      setUpload({ isUploading: false, uploadProgress: 0 });
     } catch (error) {
       console.error("Error getting download URL:", error);
       Alert.alert(
         "Upload failed",
         "Failed to get image URL. Please try again.",
       );
-      setUpload({ isUploading: false, uploadProgress: 0 });
-      setIsProfileImageLoading(false);
+    } finally {
+      resetState();
     }
   };
 
@@ -100,7 +109,7 @@ const Profile = () => {
     );
   };
 
-  const useImagePicker = async () => {
+  const handleImagePicker = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: "images",
@@ -109,36 +118,25 @@ const Profile = () => {
         quality: 1,
       });
 
-      if (!result.canceled) {
-        setUpload({ isUploading: true, uploadProgress: 0 });
-
-        const { blob, metadata } = await getImageBlobAndMetadata(
-          result.assets[0].uri,
-        );
-
-        const uploadTask = uploadImage(userData.id, blob, metadata);
-        monitorFileUpload(uploadTask);
+      if (result.canceled || !result.assets?.[0]?.uri) {
+        return;
       }
+
+      setUpload({ isUploading: true, uploadProgress: 0 });
+
+      const { blob, metadata } = await getImageBlobAndMetadata(
+        result.assets[0].uri,
+      );
+      const uploadTask = uploadImage(userData.id, blob, metadata);
+      monitorFileUpload(uploadTask);
     } catch (error) {
-      console.error("Error in useImagePicker:", error);
+      console.error("Error in handleImagePicker:", error);
       Alert.alert(
         "Image Selection Failed",
         "Could not select image. Please try again.",
       );
-      setUpload({ isUploading: false, uploadProgress: 0 });
-      setIsProfileImageLoading(false);
+      resetState();
     }
-  };
-
-  const getImageBlobAndMetadata = async (uri: string) => {
-    const response = await fetch(uri);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch resource: ${response.statusText}`);
-    }
-    const blob = await response.blob();
-    const metadata = { contentType: "image/jpeg" };
-
-    return { blob, metadata };
   };
 
   const deleteProfileImg = () => {
@@ -158,7 +156,7 @@ const Profile = () => {
 
   return (
     <View style={[styles.profile, { backgroundColor: theme.primary }]}>
-      <TouchableOpacity onPress={useImagePicker}>
+      <TouchableOpacity onPress={handleImagePicker}>
         <View style={styles.pictureContainer}>
           {upload.isUploading ? (
             <View style={styles.progressContainer}>
