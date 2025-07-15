@@ -48,7 +48,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   }, [navigation]);
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       {filteredList.length > 0 ? (
         <FlatList
           key="list"
@@ -64,7 +64,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
           keyExtractor={(item) => item.id}
         />
       ) : (
-        <Text style={styles.text}>{t("error")}</Text>
+        <Text style={[styles.text, { color: theme.text }]}>{t("error")}</Text>
       )}
 
       <FloatingButton onPress={handleAddProduct} color={theme.primary} />

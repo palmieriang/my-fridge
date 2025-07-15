@@ -3,7 +3,6 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // paddingBottom: 24, check if needed
     width: "100%",
   },
   inputContainer: {
