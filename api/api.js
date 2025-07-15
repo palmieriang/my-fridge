@@ -272,9 +272,11 @@ export function getAllProducts(userID, callback) {
 }
 
 export async function getProductById(id) {
-  const productDocRef = doc(getProductsRef(), id);
   try {
-    const productDocSnap = await getDoc(productDocRef);
+    const productDocSnap = await getDoc(doc(getProductsRef(), id));
+    if (!productDocSnap.exists()) {
+      return undefined;
+    }
     return productDocSnap.data();
   } catch (error) {
     console.log("getProductById error: ", error);
@@ -291,20 +293,24 @@ export function modifyProduct(data, id) {
   });
 }
 
-export function moveProduct(id, place) {
-  return updateDoc(doc(getProductsRef(), id), {
-    place,
-  }).catch((error) => {
+export async function moveProduct(id, place) {
+  try {
+    await updateDoc(doc(getProductsRef(), id), {
+      place,
+    });
+  } catch (error) {
     console.log("Error in moveProduct: ", error);
     Alert.alert("Error moving product", error.message);
-  });
+  }
 }
 
-export function deleteProduct(id) {
-  return deleteDoc(doc(getProductsRef(), id)).catch((error) => {
+export async function deleteProduct(id) {
+  try {
+    await deleteDoc(doc(getProductsRef(), id));
+  } catch (error) {
     console.log("Error in deleteProduct: ", error);
     Alert.alert("Error deleting product", error.message);
-  });
+  }
 }
 
 export async function deleteAllProductsFromUser(uid) {
