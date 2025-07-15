@@ -47,11 +47,24 @@ const i18n = new I18n({
 });
 i18n.enableFallback = true;
 
+const defaultLocale: SupportedLocale = "en";
+
+const defaultLocalizationContext: LocalizationContextProps = {
+  t: (scope: string) => scope,
+  locale: defaultLocale,
+  setLocale: () => {},
+  changeLocale: async () => {},
+};
+
 const localeStore = createContext<{
   locale: SupportedLocale;
   setLocale: React.Dispatch<React.SetStateAction<SupportedLocale>>;
   localizationContext: LocalizationContextProps;
-} | null>(null);
+}>({
+  locale: defaultLocale,
+  setLocale: () => {},
+  localizationContext: defaultLocalizationContext,
+});
 
 const { Provider } = localeStore;
 
