@@ -19,18 +19,20 @@ import {
 } from "../../api/api";
 
 export interface Product {
-  id?: string;
+  id: string;
   name: string;
   date: string;
-  place: string;
+  place: "fridge" | "freezer";
   authorID: string;
   createdAt?: Timestamp;
 }
 
+export type NewProduct = Omit<Product, "id" | "createdAt">;
+
 interface ProductsContextMethods {
-  handleSaveProduct: (data: Product) => Promise<void>;
+  handleSaveProduct: (data: NewProduct) => Promise<void>;
   handleGetProduct: (id: string) => Promise<Product | undefined>;
-  handleModifyProduct: (data: Product, id: string) => Promise<void>;
+  handleModifyProduct: (data: NewProduct, id?: string) => Promise<void>;
   handleDeleteProduct: (id: string) => Promise<void>;
   handleFreezeProduct: (id: string, moveTo: string) => void;
 }
@@ -83,7 +85,7 @@ const ProductsProvider = ({ children }: ProductsProviderProps) => {
 
   const productsContext = useMemo<ProductsContextMethods>(
     () => ({
-      handleSaveProduct: async (data) => {
+      handleSaveProduct: async (data: NewProduct) => {
         try {
           await saveProduct(data);
         } catch (error) {

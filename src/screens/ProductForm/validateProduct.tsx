@@ -7,6 +7,9 @@ type ValidateProductProps = {
   t: (key: string) => string;
 };
 
+const isValidPlace = (p: string): p is "fridge" | "freezer" =>
+  p === "fridge" || p === "freezer";
+
 export const validateProduct = ({
   name,
   date,
@@ -21,7 +24,7 @@ export const validateProduct = ({
     Alert.alert(t("validationError"), t("selectDate"));
     return false;
   }
-  if (!place) {
+  if (!isValidPlace(place)) {
     Alert.alert(t("validationError"), t("selectPlace"));
     return false;
   }

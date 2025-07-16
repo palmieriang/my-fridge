@@ -25,7 +25,7 @@ const TabNavigator = () => {
   } = useContext(themeStore);
   const { productsList } = useContext(productsStore);
 
-  const routeTypeMapping = {
+  const routeTypeMapping: Record<string, "fridge" | "freezer" | "settings"> = {
     [t(FRIDGE)]: FRIDGE,
     [t(FREEZER)]: FREEZER,
     [t(SETTINGS)]: SETTINGS,
