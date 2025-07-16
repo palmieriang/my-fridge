@@ -15,6 +15,7 @@ import {
   FormScreenRouteProp,
 } from "../../navigation/navigation.d";
 import { authStore, localeStore, productsStore, themeStore } from "../../store";
+import { NewProduct } from "../../store/productsStore";
 import { convertToISODateString, convertToCustomFormat } from "../../utils";
 
 type ProductFormProps = {
@@ -40,17 +41,19 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
 
   const [name, setName] = useState(params.product?.name || "");
   const [date, setDate] = useState(params.product?.date || "");
-  const [place, setPlace] = useState(params.product?.place || "");
+  const [place, setPlace] = useState<"fridge" | "freezer" | "">(
+    params.product?.place || "",
+  );
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const userID = user.uid;
 
   const handleAddPress = async () => {
     if (validateProduct({ name, date, place, t })) {
-      const data = {
+      const data: NewProduct = {
         name,
         date,
-        place,
+        place: place as "fridge" | "freezer",
         authorID: userID,
       };
 
@@ -96,7 +99,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   };
 
   const navigateToList = () => {
-    navigation.navigate("list");
+    navigation.navigate("list" as never);
   };
 
   return (
