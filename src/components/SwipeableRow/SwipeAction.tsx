@@ -7,7 +7,7 @@ import styles from "./styles";
 type SwipeActionProps = {
   callback: () => void;
   color: string;
-  progress: Animated.Value;
+  progress: Animated.AnimatedInterpolation<string | number>;
   startValue: number;
   text: string;
 };
@@ -19,14 +19,9 @@ const SwipeAction = ({
   startValue,
   text,
 }: SwipeActionProps) => {
-  const trans = progress.interpolate({
-    inputRange: [0, 1],
-    outputRange: [startValue, 0],
-  });
-
   const containerStyle = {
     flex: 1,
-    transform: [{ translateX: trans }],
+    transform: [{ translateX: progress }],
   };
 
   return (

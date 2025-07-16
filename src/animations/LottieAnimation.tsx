@@ -29,13 +29,13 @@ const LottieAnimation = ({
 
   useEffect(() => {
     if (lottieRef.current && play) {
-      lottieRef.current.play();
+      lottieRef.current?.play();
     }
   }, [play]);
 
   useEffect(() => {
     if (reset) {
-      lottieRef.current.reset();
+      lottieRef.current?.reset();
     }
   }, [reset]);
 
@@ -51,6 +51,8 @@ const LottieAnimation = ({
       />
     );
   }
+
+  return null;
 };
 
 const styles = StyleSheet.create({

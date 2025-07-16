@@ -17,7 +17,7 @@ import fr from "../localization/fr.json";
 import it from "../localization/it.json";
 import pt from "../localization/pt.json";
 
-type SupportedLocale = "en" | "es" | "fr" | "it" | "pt";
+export type SupportedLocale = "en" | "es" | "fr" | "it" | "pt";
 type TranslateOptions = Record<string, unknown>;
 
 interface LocalizationContextProps {

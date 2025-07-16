@@ -4,6 +4,7 @@ import { Alert, Button, Text, View } from "react-native";
 
 import styles from "./styles";
 import { authStore, localeStore, themeStore } from "../../store";
+import { SupportedLocale } from "../../store/localeStore";
 import Profile from "../Profile/Profile";
 
 const Settings = () => {
@@ -21,7 +22,7 @@ const Settings = () => {
     themeContext: { changeTheme },
   } = useContext(themeStore);
 
-  const [selectedLocale, setSelectedLocale] = useState<string>(locale);
+  const [selectedLocale, setSelectedLocale] = useState<SupportedLocale>(locale);
   const [selectedTheme, setSelectedTheme] = useState<string>(themeName);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const Settings = () => {
     { label: "Dark Blue", value: "darkBlue", key: "darkBlue" },
   ];
 
-  const handleLocaleChange = (newLocale: string) => {
+  const handleLocaleChange = (newLocale: SupportedLocale) => {
     if (!newLocale) return;
     setSelectedLocale(newLocale);
     changeLocale({ newLocale, id });

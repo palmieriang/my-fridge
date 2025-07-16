@@ -23,7 +23,7 @@ type SwipeableRowProps = {
 type SwipeActionProps = {
   callback: () => void;
   color: string;
-  progress: Animated.Value;
+  progress: Animated.AnimatedInterpolation<string | number>;
   startValue: number;
   text: string;
 };
@@ -69,7 +69,11 @@ const SwipeableRow = forwardRef(
     );
 
     const renderLeftActions = useCallback(
-      (progress: Animated.Value) => {
+      (
+        progress: Animated.AnimatedInterpolation<string | number>,
+        _drag: Animated.AnimatedInterpolation<string | number>,
+        _swipeable: Swipeable,
+      ) => {
         const leftActions = [
           {
             callback: freezeFunction,
@@ -86,7 +90,11 @@ const SwipeableRow = forwardRef(
     );
 
     const renderRightActions = useCallback(
-      (progress: Animated.Value) => {
+      (
+        progress: Animated.AnimatedInterpolation<string | number>,
+        _drag: Animated.AnimatedInterpolation<string | number>,
+        _swipeable: Swipeable,
+      ) => {
         const rightActions = [
           {
             callback: modifyFunction,

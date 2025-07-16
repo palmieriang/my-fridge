@@ -2,6 +2,7 @@ import FloatingButton from "@components/FloatingButton/FloatingButton";
 import ProductCard from "@components/ProductCard/ProductCard";
 import React, { useContext, useEffect, useRef } from "react";
 import { FlatList, Text, View } from "react-native";
+import type { Swipeable } from "react-native-gesture-handler";
 
 import styles from "./styles";
 import {
@@ -27,7 +28,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
 
   const filteredList = productsList.filter((item) => item.place === place);
 
-  const swipeableRefs = useRef([]);
+  const swipeableRefs = useRef<(Swipeable | null)[]>([]);
 
   const handleAddProduct = () => {
     navigateToProductForm({
@@ -58,7 +59,9 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
             <ProductCard
               product={item}
               key={item.id}
-              ref={(el) => (swipeableRefs.current[index] = el)}
+              ref={(el) => {
+                swipeableRefs.current[index] = el;
+              }}
             />
           )}
           keyExtractor={(item) => item.id}
