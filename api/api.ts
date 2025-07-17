@@ -25,6 +25,7 @@ import {
   updateDoc,
   where,
   writeBatch,
+  FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
 import {
   deleteObject,
@@ -46,17 +47,22 @@ import {
   getUsersRef,
   getProductsRef,
 } from "../src/firebase/config";
+import type { NewProduct, Product, UserData } from "../src/store/types";
 
 // Auth
 
-export async function createUser(fullName, email, password) {
+export async function createUser(
+  fullName: string,
+  email: string,
+  password: string,
+) {
   try {
     const { user } = await createUserWithEmailAndPassword(
       getAuthService(),
       email,
       password,
     );
-    const userData = {
+    const userData: UserData = {
       id: user.uid,
       email,
       fullName,
@@ -66,7 +72,7 @@ export async function createUser(fullName, email, password) {
     await addUserData(user.uid, userData);
     await sendEmailVerification(user);
     return { uid: user.uid };
-  } catch (error) {
+  } catch (error: any) {
     Alert.alert("Error creating user", error.message);
   }
 }
@@ -83,7 +89,7 @@ export async function deleteAccount() {
       try {
         await deleteProfileImage(user.uid);
         console.log("Profile image deleted for user:", user.uid);
-      } catch (error) {
+      } catch (error: any) {
         if (error.code !== "storage/object-not-found") {
           console.error("Delete profile img error: ", error);
         }
@@ -93,16 +99,16 @@ export async function deleteAccount() {
     await deleteUser(user);
 
     console.log("User account deleted:", user.uid);
-  } catch (error) {
+  } catch (error: any) {
     console.log("ERROR in deleteAccount ", error.message);
     Alert.alert("Account Deletion Failed", error.message);
   }
 }
 
-export function authSignIn(email, password) {
+export function authSignIn(email: string, password: string) {
   console.log("authSignIn :", email);
   return signInWithEmailAndPassword(getAuthService(), email, password).catch(
-    (error) => {
+    (error: any) => {
       console.log("ERROR in authSignIn ", error.message);
       Alert.alert("Sign In Failed", error.message);
     },
@@ -123,7 +129,7 @@ export async function signInWithGoogle() {
 
     const userInfo = await GoogleSignin.signIn();
 
-    const credential = GoogleAuthProvider.credential(userInfo.data.idToken);
+    const credential = GoogleAuthProvider.credential(userInfo?.data?.idToken);
 
     const { user, additionalUserInfo } = await signInWithCredential(
       getAuthService(),
@@ -131,12 +137,12 @@ export async function signInWithGoogle() {
     );
 
     if (additionalUserInfo?.isNewUser) {
-      const userData = {
+      const userData: UserData = {
         id: user.uid,
-        email: user.email,
-        fullName: user.displayName,
-        locale: additionalUserInfo.profile.locale || "en",
-        profileImg: user.photoURL,
+        email: user.email ?? "",
+        fullName: user.displayName ?? "",
+        locale: additionalUserInfo.profile?.locale ?? "en",
+        profileImg: user.photoURL ?? undefined,
         theme: "lightBlue",
       };
       await addUserData(user.uid, userData);
@@ -146,7 +152,7 @@ export async function signInWithGoogle() {
     }
 
     return { user };
-  } catch (error) {
+  } catch (error: any) {
     console.log("Google Sign-In error:", error);
     if (error.code !== statusCodes.SIGN_IN_CANCELLED) {
       console.log("Google Sign-In error:", error);
@@ -156,18 +162,21 @@ export async function signInWithGoogle() {
   }
 }
 
-export async function authSignOut(dispatch) {
+export async function authSignOut(dispatch?: Function) {
   try {
     await signOut(getAuthService());
     console.log("User logged out");
     dispatch?.({ type: ActionTypes.SIGN_OUT });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error signing out:", error);
     Alert.alert("Logout Failed", error.message);
   }
 }
 
-export function persistentLogin(callback, callbackData) {
+export function persistentLogin(
+  callback: Function,
+  callbackData: (data: UserData) => void,
+) {
   return onAuthStateChanged(getAuthService(), async (user) => {
     if (user) {
       try {
@@ -176,7 +185,7 @@ export function persistentLogin(callback, callbackData) {
         callbackData(userData);
         callback({ type: ActionTypes.RESTORE_TOKEN, token: idToken, user });
         await getProfileImageFromFirebase(user.uid, callback);
-      } catch (error) {
+      } catch (error: any) {
         console.log("Restoring token failed", error);
         Alert.alert("Authentication Failed", error.message);
         callback({ type: ActionTypes.SIGN_OUT });
@@ -187,44 +196,46 @@ export function persistentLogin(callback, callbackData) {
   });
 }
 
-export function sendResetPassword(email) {
+export function sendResetPassword(email: string) {
   return sendPasswordResetEmail(getAuthService(), email);
 }
 
 // Firestore: Users
 
-export function addUserData(uid, data) {
-  return setDoc(doc(getUsersRef(), uid), data).catch((error) =>
+export function addUserData(uid: string, data: UserData) {
+  return setDoc(doc(getUsersRef(), uid), data).catch((error: any) =>
     console.log("Error adding user data: ", error),
   );
 }
 
-export function deleteUserData(uid) {
-  return deleteDoc(doc(getUsersRef(), uid)).catch((error) =>
+export function deleteUserData(uid: string) {
+  return deleteDoc(doc(getUsersRef(), uid)).catch((error: any) =>
     console.log("Error in deleteUserData: ", error),
   );
 }
 
-export async function getUserData(userID) {
+export async function getUserData(userID: string) {
   const snapshot = await getDoc(doc(getUsersRef(), userID));
   if (!snapshot.exists())
     throw new Error("User data not found for ID: " + userID);
 
-  return snapshot.data();
+  return snapshot.data() as UserData;
 }
 
 // Firestore: Products
 
-export function saveProduct(data) {
+export function saveProduct(data: NewProduct) {
   return setDoc(doc(getProductsRef()), {
     ...data,
     createdAt: serverTimestamp(),
-  }).catch((error) => {
-    Alert.alert("Error saving product", error.message);
-  });
+  }).catch((error: any) => Alert.alert("Error saving product", error.message));
 }
 
-export function getProductsFromPlace(userID, place, callback) {
+export function getProductsFromPlace(
+  userID: string,
+  place: "fridge" | "freezer",
+  callback: (products: Product[]) => void,
+) {
   const productsQuery = query(
     getProductsRef(),
     where("authorID", "==", userID),
@@ -234,21 +245,26 @@ export function getProductsFromPlace(userID, place, callback) {
 
   return onSnapshot(
     productsQuery,
-    (querySnapshot) => {
-      const products = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+    (snapshot) => {
+      const products = snapshot.docs.map(
+        (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => ({
+          ...doc.data(),
+          id: doc.id,
+        }),
+      );
       callback(products);
     },
-    (error) => {
+    (error: any) => {
       console.log("getProductsFromPlace ", error);
       Alert.alert("Error fetching products", error.message);
     },
   );
 }
 
-export function getAllProducts(userID, callback) {
+export function getAllProducts(
+  userID: string,
+  callback: (products: Product[]) => void,
+) {
   const productsQuery = query(
     getProductsRef(),
     where("authorID", "==", userID),
@@ -257,73 +273,73 @@ export function getAllProducts(userID, callback) {
 
   return onSnapshot(
     productsQuery,
-    (querySnapshot) => {
-      const products = querySnapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
+    (snapshot) => {
+      const products = snapshot.docs.map(
+        (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => ({
+          ...doc.data(),
+          id: doc.id,
+        }),
+      ) as Product[];
       callback(products);
     },
-    (error) => {
+    (error: any) => {
       console.log("Error in getAllProducts", error);
       Alert.alert("Error fetching all products", error.message);
     },
   );
 }
 
-export async function getProductById(id) {
+export async function getProductById(id: string): Promise<Product | undefined> {
   try {
-    const productDocSnap = await getDoc(doc(getProductsRef(), id));
-    if (!productDocSnap.exists()) {
-      return undefined;
-    }
-    return productDocSnap.data();
-  } catch (error) {
+    const productDoc = await getDoc(doc(getProductsRef(), id));
+    return productDoc.exists() ? (productDoc.data() as Product) : undefined;
+  } catch (error: any) {
     console.log("getProductById error: ", error);
     Alert.alert("Error fetching product", error.message);
   }
 }
 
-export function modifyProduct(data, id) {
+export function modifyProduct(data: NewProduct, id: string) {
   return setDoc(doc(getProductsRef(), id), {
     ...data,
+    id,
     createdAt: serverTimestamp(),
-  }).catch((error) => {
-    Alert.alert("Error modifying product", error.message);
-  });
+  }).catch((error: any) =>
+    Alert.alert("Error modifying product", error.message),
+  );
 }
 
-export async function moveProduct(id, place) {
+export async function moveProduct(id: string, place: "fridge" | "freezer") {
   try {
     await updateDoc(doc(getProductsRef(), id), {
       place,
     });
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error in moveProduct: ", error);
     Alert.alert("Error moving product", error.message);
   }
 }
 
-export async function deleteProduct(id) {
+export async function deleteProduct(id: string) {
   try {
     await deleteDoc(doc(getProductsRef(), id));
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error in deleteProduct: ", error);
     Alert.alert("Error deleting product", error.message);
   }
 }
 
-export async function deleteAllProductsFromUser(uid) {
+export async function deleteAllProductsFromUser(uid: string) {
   try {
-    const querySnapshot = await getDocs(
+    const snapshot = await getDocs(
       query(getProductsRef(), where("authorID", "==", uid)),
     );
     const batch = writeBatch(getDbService());
-    querySnapshot.forEach((doc) => {
-      batch.delete(doc.ref);
-    });
+    snapshot.forEach((doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) =>
+      batch.delete(doc.ref),
+    );
     await batch.commit();
-  } catch (error) {
+  } catch (error: any) {
     console.log("Error deleting products:", error);
     Alert.alert("Error deleting all products", error.message);
   }
@@ -331,28 +347,31 @@ export async function deleteAllProductsFromUser(uid) {
 
 // Storage
 
-export function uploadImage(id, blob, metadata) {
+export function uploadImage(id: string, blob: Blob, metadata?: any) {
   const storageRef = ref(getStorage(getApp()), `profileImages/${id}`);
   return uploadBytesResumable(storageRef, blob, metadata);
 }
 
-export async function getProfileImageFromFirebase(userUID, callback) {
+export async function getProfileImageFromFirebase(
+  userUID: string,
+  callback: Function,
+) {
   try {
     const url = await getDownloadURL(
       ref(getStorage(getApp()), `profileImages/${userUID}`),
     );
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
-  } catch (error) {
+  } catch (error: any) {
     console.log("Profile img error:", error.message);
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
 
-export async function deleteProfileImage(userUID, callback) {
+export async function deleteProfileImage(userUID: string, callback?: Function) {
   try {
     await deleteObject(ref(getStorage(getApp()), `profileImages/${userUID}`));
     callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
-  } catch (error) {
+  } catch (error: any) {
     console.log("DEBUG Delete profile img error: ", error);
     if (error.code !== "storage/object-not-found" && callback) {
       Alert.alert("Error deleting profile image", error.message);
@@ -363,14 +382,14 @@ export async function deleteProfileImage(userUID, callback) {
 
 // Settings
 
-export function changeColor(theme, id) {
+export function changeColor(theme: string, id: string) {
   return setDoc(doc(getUsersRef(), id), { theme }, { merge: true }).catch(
-    (error) => console.log("Error: ", error),
+    (error: any) => console.log("Error: ", error),
   );
 }
 
-export function changeLanguage(locale, id) {
+export function changeLanguage(locale: string, id: string) {
   return setDoc(doc(getUsersRef(), id), { locale }, { merge: true }).catch(
-    (error) => console.log("Error: ", error),
+    (error: any) => console.log("Error: ", error),
   );
 }

@@ -6,33 +6,21 @@ import React, {
   useState,
   useContext,
   useEffect,
-  ReactNode,
 } from "react";
 
 import { authStore } from "./authStore";
+import {
+  LocalizationContextProps,
+  LocaleProviderProps,
+  SupportedLocale,
+  TranslateOptions,
+} from "./types";
 import { changeLanguage } from "../../api/api";
 import en from "../localization/en.json";
 import es from "../localization/es.json";
 import fr from "../localization/fr.json";
 import it from "../localization/it.json";
 import pt from "../localization/pt.json";
-
-export type SupportedLocale = "en" | "es" | "fr" | "it" | "pt";
-type TranslateOptions = Record<string, unknown>;
-
-interface LocalizationContextProps {
-  t: (scope: string, options?: TranslateOptions) => string;
-  locale: SupportedLocale;
-  setLocale: React.Dispatch<React.SetStateAction<SupportedLocale>>;
-  changeLocale: (params: {
-    newLocale: SupportedLocale;
-    id: string;
-  }) => Promise<void>;
-}
-
-interface LocaleProviderProps {
-  children: ReactNode;
-}
 
 const deviceLocales = getLocales();
 const deviceLocale = (deviceLocales[0]?.languageCode ||

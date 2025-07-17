@@ -1,4 +1,3 @@
-import { Timestamp } from "@react-native-firebase/firestore";
 import React, {
   createContext,
   useContext,
@@ -9,6 +8,12 @@ import React, {
 } from "react";
 
 import { authStore } from "./authStore";
+import type {
+  Product,
+  NewProduct,
+  ProductsContextMethods,
+  ProductsStoreValue,
+} from "./types";
 import {
   getAllProducts,
   saveProduct,
@@ -17,30 +22,6 @@ import {
   deleteProduct,
   moveProduct,
 } from "../../api/api";
-
-export interface Product {
-  id: string;
-  name: string;
-  date: string;
-  place: "fridge" | "freezer";
-  authorID: string;
-  createdAt?: Timestamp;
-}
-
-export type NewProduct = Omit<Product, "id" | "createdAt">;
-
-interface ProductsContextMethods {
-  handleSaveProduct: (data: NewProduct) => Promise<void>;
-  handleGetProduct: (id: string) => Promise<Product | undefined>;
-  handleModifyProduct: (data: NewProduct, id?: string) => Promise<void>;
-  handleDeleteProduct: (id: string) => Promise<void>;
-  handleFreezeProduct: (id: string, moveTo: string) => void;
-}
-
-interface ProductsStoreValue {
-  productsList: Product[];
-  productsContext: ProductsContextMethods;
-}
 
 const productsStore = createContext<ProductsStoreValue>({
   productsList: [],
@@ -100,9 +81,9 @@ const ProductsProvider = ({ children }: ProductsProviderProps) => {
           return undefined;
         }
       },
-      handleModifyProduct: async (data, id) => {
+      handleModifyProduct: async (product, id) => {
         try {
-          await modifyProduct(data, id);
+          await modifyProduct(product, id);
         } catch (error) {
           console.log("Error: ", error);
         }
@@ -114,9 +95,9 @@ const ProductsProvider = ({ children }: ProductsProviderProps) => {
           console.log("Error: ", error);
         }
       },
-      handleFreezeProduct: async (id, moveTo) => {
+      handleFreezeProduct: async (id: string, place: "fridge" | "freezer") => {
         try {
-          await moveProduct(id, moveTo);
+          await moveProduct(id, place);
         } catch (error) {
           console.log("Error: ", error);
         }

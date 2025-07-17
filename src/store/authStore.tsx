@@ -18,41 +18,7 @@ import {
   deleteAccount,
 } from "../../api/api";
 import { ActionTypes } from "../constants";
-
-interface AuthStateType {
-  isLoading: boolean;
-  user: any | null;
-  userToken: string | null;
-  profileImg: string | null;
-}
-
-interface AuthContextMethods {
-  signIn: ({ email, password }: { email: string; password: string }) => void;
-  signInGoogle: () => void;
-  signOut: (dispatch: React.Dispatch<any>) => void;
-  signUp: ({
-    fullName,
-    email,
-    password,
-    confirmPassword,
-  }: {
-    fullName: string;
-    email: string;
-    password: string;
-    confirmPassword: string;
-  }) => Promise<void>;
-  resetPassword: (email: string) => Promise<void>;
-  updateProfileImage: (url: string) => void;
-  deleteImage: (id: string) => void;
-  deleteUser: () => void;
-}
-
-interface AuthStoreValue {
-  authState: AuthStateType;
-  dispatch: React.Dispatch<any>;
-  authContext: AuthContextMethods;
-  userData: any;
-}
+import { AuthStateType, AuthContextMethods, AuthStoreValue } from "./types";
 
 const initialState: AuthStateType = {
   user: null,

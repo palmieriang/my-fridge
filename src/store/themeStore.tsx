@@ -7,29 +7,13 @@ import React, {
 } from "react";
 
 import { authStore } from "./authStore";
+import {
+  ThemeType,
+  ThemesMap,
+  ThemeContextMethods,
+  ThemeStoreValue,
+} from "./types";
 import { changeColor } from "../../api/api";
-
-interface ThemeType {
-  foreground: string;
-  background: string;
-  text: string;
-  primary: string;
-}
-
-interface ThemesMap {
-  [key: string]: ThemeType;
-}
-
-interface ThemeContextMethods {
-  changeTheme: ({ newTheme, id }: { newTheme: string; id: string }) => void;
-}
-
-interface ThemeStoreValue {
-  theme: ThemeType;
-  setTheme: React.Dispatch<React.SetStateAction<ThemeType>>;
-  themeName: string;
-  themeContext: ThemeContextMethods;
-}
 
 const themes: ThemesMap = {
   lightRed: {

@@ -15,7 +15,7 @@ import {
   FormScreenRouteProp,
 } from "../../navigation/navigation.d";
 import { authStore, localeStore, productsStore, themeStore } from "../../store";
-import { NewProduct } from "../../store/productsStore";
+import type { NewProduct } from "../../store/types";
 import { convertToISODateString, convertToCustomFormat } from "../../utils";
 
 type ProductFormProps = {

@@ -4,7 +4,7 @@ import { Alert, Button, Text, View } from "react-native";
 
 import styles from "./styles";
 import { authStore, localeStore, themeStore } from "../../store";
-import { SupportedLocale } from "../../store/localeStore";
+import type { SupportedLocale } from "../../store/types";
 import Profile from "../Profile/Profile";
 
 const Settings = () => {
