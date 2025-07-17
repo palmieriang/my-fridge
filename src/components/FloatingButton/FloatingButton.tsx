@@ -1,5 +1,5 @@
-// import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity, Text } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
 
 import styles from "./styles";
 
@@ -13,8 +13,7 @@ const FloatingButton = ({ onPress, color }: FloatingButtonProps) => (
     style={[styles.fab, { backgroundColor: color }]}
     onPress={onPress}
   >
-    <Text style={{ color: "white", fontSize: 24 }}>+</Text>
-    {/* <Ionicons name="add" size={24} color="white" /> */}
+    <Ionicons name="add" size={30} color="white" />
   </TouchableOpacity>
 );
 
