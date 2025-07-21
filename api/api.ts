@@ -32,7 +32,7 @@ import {
   getDownloadURL,
   getStorage,
   ref,
-  uploadBytesResumable,
+  putFile,
 } from "@react-native-firebase/storage";
 import {
   GoogleSignin,
@@ -46,6 +46,7 @@ import {
   getDbService,
   getUsersRef,
   getProductsRef,
+  getStorageService,
 } from "../src/firebase/config";
 import type { NewProduct, Product, UserData } from "../src/store/types";
 
@@ -347,9 +348,11 @@ export async function deleteAllProductsFromUser(uid: string) {
 
 // Storage
 
-export function uploadImage(id: string, blob: Blob, metadata?: any) {
-  const storageRef = ref(getStorage(getApp()), `profileImages/${id}`);
-  return uploadBytesResumable(storageRef, blob, metadata);
+export function uploadImage(id: string, fileUri: string, metadata?: any) {
+  const storage = getStorageService();
+  const storageRef = ref(storage, `profileImages/${id}`);
+
+  return putFile(storageRef, fileUri, metadata);
 }
 
 export async function getProfileImageFromFirebase(
@@ -372,7 +375,6 @@ export async function deleteProfileImage(userUID: string, callback?: Function) {
     await deleteObject(ref(getStorage(getApp()), `profileImages/${userUID}`));
     callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error: any) {
-    console.log("DEBUG Delete profile img error: ", error);
     if (error.code !== "storage/object-not-found" && callback) {
       Alert.alert("Error deleting profile image", error.message);
     }

@@ -107,3 +107,13 @@ export const getProductsRef = () => {
   }
   return productsRef;
 };
+
+export const getStorageService = () => {
+  if (!_storageInstance) {
+    console.error(
+      "Firebase Storage service not initialized. Ensure initializeFirebaseServices() has been called.",
+    );
+    return getStorage(getApp());
+  }
+  return _storageInstance;
+};

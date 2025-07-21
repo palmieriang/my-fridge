@@ -63,7 +63,6 @@ const Profile = () => {
     snapshot: FirebaseStorageTypes.TaskSnapshot,
   ) => {
     const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    console.log("Upload is " + progress + "% done");
     setUpload({ isUploading: true, uploadProgress: progress });
   };
 
@@ -101,6 +100,7 @@ const Profile = () => {
   };
 
   const monitorFileUpload = (uploadTask: FirebaseStorageTypes.Task) => {
+    console.log("Monitoring upload task:", uploadTask);
     uploadTask.on(
       "state_changed",
       handleUploadProgress,
@@ -117,17 +117,20 @@ const Profile = () => {
         aspect: [4, 3],
         quality: 1,
       });
+      console.log("Image picker result:", result);
 
       if (result.canceled || !result.assets?.[0]?.uri) {
+        console.log("Image selection was canceled or no image was selected.");
         return;
       }
 
       setUpload({ isUploading: true, uploadProgress: 0 });
 
-      const { blob, metadata } = await getImageBlobAndMetadata(
-        result.assets[0].uri,
-      );
-      const uploadTask = uploadImage(userData.id, blob, metadata);
+      const uri = result.assets[0].uri;
+      const { metadata } = await getImageBlobAndMetadata(uri);
+
+      const uploadTask = uploadImage(userData.id, uri, metadata);
+
       monitorFileUpload(uploadTask);
     } catch (error) {
       console.error("Error in handleImagePicker:", error);
