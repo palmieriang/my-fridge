@@ -1,4 +1,3 @@
-import { getApp } from "@react-native-firebase/app";
 import {
   createUserWithEmailAndPassword,
   deleteUser,
@@ -30,7 +29,6 @@ import {
 import {
   deleteObject,
   getDownloadURL,
-  getStorage,
   ref,
   putFile,
 } from "@react-native-firebase/storage";
@@ -349,8 +347,7 @@ export async function deleteAllProductsFromUser(uid: string) {
 // Storage
 
 export function uploadImage(id: string, fileUri: string, metadata?: any) {
-  const storage = getStorageService();
-  const storageRef = ref(storage, `profileImages/${id}`);
+  const storageRef = ref(getStorageService(), `profileImages/${id}`);
 
   return putFile(storageRef, fileUri, metadata);
 }
@@ -361,7 +358,7 @@ export async function getProfileImageFromFirebase(
 ) {
   try {
     const url = await getDownloadURL(
-      ref(getStorage(getApp()), `profileImages/${userUID}`),
+      ref(getStorageService(), `profileImages/${userUID}`),
     );
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error: any) {
@@ -372,7 +369,7 @@ export async function getProfileImageFromFirebase(
 
 export async function deleteProfileImage(userUID: string, callback?: Function) {
   try {
-    await deleteObject(ref(getStorage(getApp()), `profileImages/${userUID}`));
+    await deleteObject(ref(getStorageService(), `profileImages/${userUID}`));
     callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error: any) {
     if (error.code !== "storage/object-not-found" && callback) {

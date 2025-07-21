@@ -100,7 +100,6 @@ const Profile = () => {
   };
 
   const monitorFileUpload = (uploadTask: FirebaseStorageTypes.Task) => {
-    console.log("Monitoring upload task:", uploadTask);
     uploadTask.on(
       "state_changed",
       handleUploadProgress,
@@ -117,7 +116,6 @@ const Profile = () => {
         aspect: [4, 3],
         quality: 1,
       });
-      console.log("Image picker result:", result);
 
       if (result.canceled || !result.assets?.[0]?.uri) {
         console.log("Image selection was canceled or no image was selected.");
