@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState, forwardRef } from "react";
+import { useContext, useEffect, useState, forwardRef } from "react";
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 

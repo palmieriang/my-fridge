@@ -1,5 +1,5 @@
 import { FontAwesome } from "@expo/vector-icons";
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { View, StyleProp, ViewStyle } from "react-native";
 
 import styles from "./styles";

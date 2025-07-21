@@ -1,12 +1,6 @@
 import { getLocales } from "expo-localization";
 import { I18n } from "i18n-js";
-import React, {
-  createContext,
-  useMemo,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
+import { createContext, useMemo, useState, useContext, useEffect } from "react";
 
 import { authStore } from "./authStore";
 import {

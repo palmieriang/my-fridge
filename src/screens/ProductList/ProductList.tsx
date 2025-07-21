@@ -1,6 +1,6 @@
 import FloatingButton from "@components/FloatingButton/FloatingButton";
 import ProductCard from "@components/ProductCard/ProductCard";
-import React, { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { FlatList, Text, View } from "react-native";
 import type { Swipeable } from "react-native-gesture-handler";
 

@@ -8,7 +8,7 @@ import ProductList from "@screens/ProductList/ProductList";
 import Registration from "@screens/Registration/Registration";
 import Settings from "@screens/Settings/Settings";
 import SignIn from "@screens/SignIn/SignIn";
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 import { RootStackParamList } from "./navigation.d";
 import { FRIDGE, FREEZER, SETTINGS } from "../constants";

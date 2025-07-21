@@ -3,7 +3,7 @@ import FormInput from "@components/FormInput/FormInput";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { Picker } from "@react-native-picker/picker";
-import React, { useContext, useState } from "react";
+import { useContext, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 

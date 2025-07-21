@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import Loading from "@components/Loading/Loading";
 import { registerRootComponent } from "expo";
 import { useFonts } from "expo-font";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import AppContainer from "./AppContainer";
 import { initializeFirebaseServices } from "./firebase/config";

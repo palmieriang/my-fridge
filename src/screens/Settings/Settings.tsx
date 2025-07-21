@@ -1,5 +1,5 @@
 import { Picker } from "@react-native-picker/picker";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Text, View } from "react-native";
 
 import styles from "./styles";

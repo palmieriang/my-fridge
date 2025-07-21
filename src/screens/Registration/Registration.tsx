@@ -3,7 +3,7 @@ import FormInput from "@components/FormInput/FormInput";
 import EmailIcon from "@components/svg/EmailIcon";
 import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import {
   KeyboardAvoidingView,
   Platform,

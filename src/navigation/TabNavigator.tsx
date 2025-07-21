@@ -3,7 +3,7 @@ import {
   createBottomTabNavigator,
   BottomTabNavigationOptions,
 } from "@react-navigation/bottom-tabs";
-import React, { useContext } from "react";
+import { useContext } from "react";
 
 import {
   FridgeStackScreen,

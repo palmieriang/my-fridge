@@ -1,5 +1,5 @@
 import { Timestamp } from "@react-native-firebase/firestore";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 // authStore
 

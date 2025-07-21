@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { View, TextInput, TextInputProps } from "react-native";
 import { SvgProps } from "react-native-svg";
 
@@ -7,7 +7,7 @@ import styles from "./styles";
 type FormInputProps = TextInputProps & {
   labelValue: string;
   placeholderText: string;
-  Icon: React.FC<SvgProps>;
+  Icon: FC<SvgProps>;
 };
 
 const FormInput = ({

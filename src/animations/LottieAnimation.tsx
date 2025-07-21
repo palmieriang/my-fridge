@@ -1,5 +1,5 @@
 import LottieView from "lottie-react-native";
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { StyleSheet, ViewProps } from "react-native";
 
 import DoorAnimation from "./15131-elevator-doors.json";

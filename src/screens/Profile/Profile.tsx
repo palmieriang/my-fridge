@@ -3,7 +3,7 @@ import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
 import type { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
-import React, { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import {
   Alert,
   Image,

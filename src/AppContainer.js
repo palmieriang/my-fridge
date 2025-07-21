@@ -2,7 +2,7 @@ import "react-native-gesture-handler";
 import Loading from "@components/Loading/Loading";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import React, { memo, useContext } from "react";
+import { memo, useContext } from "react";
 
 import TabNavigator from "./navigation/TabNavigator";
 import { SignInStackScreen } from "./navigation/navigation";

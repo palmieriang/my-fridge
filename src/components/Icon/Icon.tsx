@@ -1,7 +1,6 @@
 import FreezerIcon from "@components/svg/FreezerIcon";
 import FridgeIcon from "@components/svg/FridgeIcon";
 import SettingsIcon from "@components/svg/SettingsIcon";
-import React from "react";
 
 import { FRIDGE, FREEZER, SETTINGS } from "../../constants";
 
