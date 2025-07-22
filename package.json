@@ -1,5 +1,5 @@
 {
-  "main": "./src/App.js",
+  "main": "./src/App.tsx",
   "scripts": {
     "start": "npx expo start",
     "android": "npx expo start --android",

@@ -13,7 +13,7 @@ export default function App() {
   const [firebaseReady, setFirebaseReady] = useState(false);
 
   useEffect(() => {
-    const initFirebase = async () => {
+    const initFirebase = async (): Promise<void> => {
       console.log("[App] Firebase init started");
       try {
         await initializeFirebaseServices();
