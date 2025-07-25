@@ -10,11 +10,7 @@ import {
   TranslateOptions,
 } from "./types";
 import { changeLanguage } from "../../api/api";
-import en from "../localization/en.json";
-import es from "../localization/es.json";
-import fr from "../localization/fr.json";
-import it from "../localization/it.json";
-import pt from "../localization/pt.json";
+import { en, es, fr, it, pt } from "../localization";
 
 const deviceLocales = getLocales();
 const deviceLocale = (deviceLocales[0]?.languageCode ||
