@@ -5,6 +5,7 @@ import { FlatList, Text, View } from "react-native";
 import type { Swipeable } from "react-native-gesture-handler";
 
 import styles from "./styles";
+import { FRIDGE } from "../../constants";
 import {
   ProductListNavigationProp,
   ProductListRouteProp,
@@ -22,11 +23,11 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
     localizationContext: { t },
   } = useContext(localeStore);
   const { theme } = useContext(themeStore);
-  const { productsList } = useContext(productsStore);
+  const { fridgeProducts, freezerProducts } = useContext(productsStore);
 
   const { place } = route.params;
 
-  const filteredList = productsList.filter((item) => item.place === place);
+  const filteredList = place === FRIDGE ? fridgeProducts : freezerProducts;
 
   const swipeableRefs = useRef<(Swipeable | null)[]>([]);
 

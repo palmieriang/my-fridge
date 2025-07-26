@@ -90,6 +90,8 @@ export interface ProductsContextMethods {
 
 export interface ProductsStoreValue {
   productsList: Product[];
+  fridgeProducts: Product[];
+  freezerProducts: Product[];
   productsContext: ProductsContextMethods;
 }
 

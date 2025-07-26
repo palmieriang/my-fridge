@@ -7,6 +7,7 @@ import {
   ReactNode,
 } from "react";
 
+import { FRIDGE, FREEZER } from "../constants";
 import { authStore } from "./authStore";
 import type {
   Product,
@@ -25,6 +26,8 @@ import {
 
 const productsStore = createContext<ProductsStoreValue>({
   productsList: [],
+  fridgeProducts: [],
+  freezerProducts: [],
   productsContext: {
     handleSaveProduct: async () => {},
     handleGetProduct: async () => undefined,
@@ -47,6 +50,16 @@ const ProductsProvider = ({ children }: ProductsProviderProps) => {
 
   const [productsList, setProductsList] = useState<Product[]>([]);
   const userID = user?.uid;
+
+  const fridgeProducts = useMemo(
+    () => productsList.filter((item) => item.place === FRIDGE),
+    [productsList],
+  );
+
+  const freezerProducts = useMemo(
+    () => productsList.filter((item) => item.place === FREEZER),
+    [productsList],
+  );
 
   useEffect(() => {
     let unsubscribe: (() => void) | undefined;
@@ -107,7 +120,16 @@ const ProductsProvider = ({ children }: ProductsProviderProps) => {
   );
 
   return (
-    <Provider value={{ productsList, productsContext }}>{children}</Provider>
+    <Provider
+      value={{
+        productsList,
+        fridgeProducts,
+        freezerProducts,
+        productsContext,
+      }}
+    >
+      {children}
+    </Provider>
   );
 };
 
