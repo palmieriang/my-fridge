@@ -180,7 +180,7 @@ export function persistentLogin(
     if (user) {
       try {
         const idToken = await getIdToken(user);
-        const userData = await getUserData(user.uid);
+        const userData = await getUserDataWithRetry(user.uid);
         callbackData(userData);
         callback({ type: ActionTypes.RESTORE_TOKEN, token: idToken, user });
         await getProfileImageFromFirebase(user.uid, callback);
@@ -201,10 +201,12 @@ export function sendResetPassword(email: string) {
 
 // Firestore: Users
 
-export function addUserData(uid: string, data: UserData) {
-  return setDoc(doc(getUsersRef(), uid), data).catch((error: any) =>
-    console.log("Error adding user data: ", error),
-  );
+export async function addUserData(uid: string, data: UserData) {
+  try {
+    await setDoc(doc(getUsersRef(), uid), data);
+  } catch (error: any) {
+    console.error("Error adding user data:", error);
+  }
 }
 
 export function deleteUserData(uid: string) {
@@ -219,6 +221,31 @@ export async function getUserData(userID: string) {
     throw new Error("User data not found for ID: " + userID);
 
   return snapshot.data() as UserData;
+}
+
+async function getUserDataWithRetry(
+  userID: string,
+  maxRetries: number = 3,
+  delay: number = 1000,
+): Promise<UserData> {
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      if (i > 0) {
+        console.log(`[getUserData] Retry attempt ${i + 1} for user:`, userID);
+      }
+      return await getUserData(userID);
+    } catch (error: any) {
+      console.log(`[getUserData] Attempt ${i + 1} failed:`, error.message);
+
+      if (i === maxRetries - 1) {
+        throw error;
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
+  }
+
+  throw new Error("Max retries exceeded");
 }
 
 // Firestore: Products
@@ -362,7 +389,9 @@ export async function getProfileImageFromFirebase(
     );
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error: any) {
-    console.log("Profile img error:", error.message);
+    if (error.code !== "storage/object-not-found") {
+      console.log("Profile img error:", error.message);
+    }
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
