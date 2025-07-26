@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { Typography } from "../../typography/responsive";
+import { responsive } from "../../utils/responsive";
 
 export default StyleSheet.create({
   profile: {
@@ -12,9 +13,9 @@ export default StyleSheet.create({
     marginTop: 30,
   },
   picture: {
-    height: 150,
-    width: 150,
-    borderRadius: 100,
+    height: responsive.avatarLarge,
+    width: responsive.avatarLarge,
+    borderRadius: responsive.avatarLarge / 2,
     position: "relative",
   },
   activityIndicatorOverlay: {
@@ -26,7 +27,7 @@ export default StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
-    borderRadius: 75,
+    borderRadius: responsive.avatarLarge / 2,
     zIndex: 2,
   },
   profileField: {

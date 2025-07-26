@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { Typography } from "../../typography/responsive";
+import { responsive } from "../../utils/responsive";
 
 export default StyleSheet.create({
   inputContainer: {
@@ -13,8 +14,8 @@ export default StyleSheet.create({
     flexDirection: "row",
     marginTop: 10,
     marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: responsive.containerPadding,
+    marginRight: responsive.containerPadding,
     maxHeight: 56,
     overflow: "hidden",
   },

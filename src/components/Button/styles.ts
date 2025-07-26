@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { Typography } from "../../typography/responsive";
+import { responsive } from "../../utils/responsive";
 
 export default StyleSheet.create({
   button: {
@@ -8,9 +9,9 @@ export default StyleSheet.create({
     backgroundColor: "#48bbec",
     borderRadius: 5,
     justifyContent: "center",
-    height: 48,
-    marginLeft: 30,
-    marginRight: 30,
+    height: responsive.minTouchTarget,
+    marginLeft: responsive.containerPadding,
+    marginRight: responsive.containerPadding,
     marginTop: 10,
   },
   buttonTitle: {

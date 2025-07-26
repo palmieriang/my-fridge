@@ -1,6 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { Typography } from "../../typography/responsive";
+import { vh } from "../../utils/responsive";
 
 export default StyleSheet.create({
   container: {
@@ -10,7 +11,7 @@ export default StyleSheet.create({
   animationContainer: {
     backgroundColor: "#fff",
     alignItems: "center",
-    height: 280,
+    height: vh(35),
   },
   footerView: {
     alignItems: "center",

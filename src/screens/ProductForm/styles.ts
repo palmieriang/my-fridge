@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
 
+import { responsive } from "../../utils/responsive";
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -13,8 +15,8 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginTop: 10,
     marginBottom: 10,
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: responsive.containerPadding,
+    marginRight: responsive.containerPadding,
     overflow: "hidden",
   },
   iosHeight: {
