@@ -215,25 +215,25 @@ export function deleteUserData(uid: string) {
   );
 }
 
-export async function getUserData(userID: string) {
-  const snapshot = await getDoc(doc(getUsersRef(), userID));
+export async function getUserData(uid: string) {
+  const snapshot = await getDoc(doc(getUsersRef(), uid));
   if (!snapshot.exists())
-    throw new Error("User data not found for ID: " + userID);
+    throw new Error("User data not found for ID: " + uid);
 
   return snapshot.data() as UserData;
 }
 
 async function getUserDataWithRetry(
-  userID: string,
+  uid: string,
   maxRetries: number = 3,
   delay: number = 1000,
 ): Promise<UserData> {
   for (let i = 0; i < maxRetries; i++) {
     try {
       if (i > 0) {
-        console.log(`[getUserData] Retry attempt ${i + 1} for user:`, userID);
+        console.log(`[getUserData] Retry attempt ${i + 1} for user:`, uid);
       }
-      return await getUserData(userID);
+      return await getUserData(uid);
     } catch (error: any) {
       console.log(`[getUserData] Attempt ${i + 1} failed:`, error.message);
 
@@ -258,13 +258,13 @@ export function saveProduct(data: NewProduct) {
 }
 
 export function getProductsFromPlace(
-  userID: string,
+  uid: string,
   place: "fridge" | "freezer",
   callback: (products: Product[]) => void,
 ) {
   const productsQuery = query(
     getProductsRef(),
-    where("authorID", "==", userID),
+    where("authorID", "==", uid),
     where("place", "==", place),
     orderBy("createdAt", "desc"),
   );
@@ -288,12 +288,12 @@ export function getProductsFromPlace(
 }
 
 export function getAllProducts(
-  userID: string,
+  uid: string,
   callback: (products: Product[]) => void,
 ) {
   const productsQuery = query(
     getProductsRef(),
-    where("authorID", "==", userID),
+    where("authorID", "==", uid),
     orderBy("createdAt", "desc"),
   );
 
@@ -380,12 +380,12 @@ export function uploadImage(id: string, fileUri: string, metadata?: any) {
 }
 
 export async function getProfileImageFromFirebase(
-  userUID: string,
+  uid: string,
   callback: Function,
 ) {
   try {
     const url = await getDownloadURL(
-      ref(getStorageService(), `profileImages/${userUID}`),
+      ref(getStorageService(), `profileImages/${uid}`),
     );
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error: any) {
@@ -396,9 +396,9 @@ export async function getProfileImageFromFirebase(
   }
 }
 
-export async function deleteProfileImage(userUID: string, callback?: Function) {
+export async function deleteProfileImage(uid: string, callback?: Function) {
   try {
-    await deleteObject(ref(getStorageService(), `profileImages/${userUID}`));
+    await deleteObject(ref(getStorageService(), `profileImages/${uid}`));
     callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   } catch (error: any) {
     if (error.code !== "storage/object-not-found" && callback) {
