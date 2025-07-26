@@ -1,5 +1,6 @@
-import { adjust } from "@components/utils/dimensions";
 import { StyleSheet } from "react-native";
+
+import { Typography } from "../../typography/responsive";
 
 export default StyleSheet.create({
   container: {
@@ -28,7 +29,7 @@ export default StyleSheet.create({
   authLink: {
     color: "#dd2c00",
     fontFamily: "OpenSans-Bold",
-    fontSize: adjust(14),
+    fontSize: Typography.body,
     marginTop: 20,
   },
 });

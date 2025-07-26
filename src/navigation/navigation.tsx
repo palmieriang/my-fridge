@@ -1,4 +1,3 @@
-import { adjust } from "@components/utils/dimensions";
 import {
   createStackNavigator,
   StackNavigationOptions,
@@ -13,6 +12,7 @@ import { useContext } from "react";
 import { RootStackParamList } from "./navigation.d";
 import { FRIDGE, FREEZER, SETTINGS } from "../constants";
 import { localeStore, themeStore } from "../store";
+import { Typography } from "../typography/responsive";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -30,7 +30,7 @@ const screenOptions: StackNavigationOptions = {
   headerTintColor: "#fff",
   headerTitleStyle: {
     fontFamily: "Nunito-Bold",
-    fontSize: adjust(18),
+    fontSize: Typography.subtitle,
     textTransform: "uppercase",
   },
 };

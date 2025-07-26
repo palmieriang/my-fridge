@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { adjust } from "../utils/dimensions";
+import { Typography } from "../../typography/responsive";
 
 export default StyleSheet.create({
   inputContainer: {
@@ -28,7 +28,7 @@ export default StyleSheet.create({
     backgroundColor: "white",
     flex: 1,
     fontFamily: "OpenSans-Regular",
-    fontSize: adjust(14),
+    fontSize: Typography.body,
     justifyContent: "center",
     padding: 14,
   },

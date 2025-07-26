@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { adjust } from "../utils/dimensions";
+import { Typography } from "../../typography/responsive";
 
 export default StyleSheet.create({
   actionButton: {
@@ -13,7 +13,7 @@ export default StyleSheet.create({
   actionText: {
     color: "white",
     fontFamily: "OpenSans-Regular",
-    fontSize: adjust(13),
+    fontSize: Typography.caption,
     backgroundColor: "transparent",
     padding: 10,
   },

@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { adjust } from "../utils/dimensions";
+import { Typography } from "../../typography/responsive";
 
 export default StyleSheet.create({
   button: {
@@ -16,7 +16,7 @@ export default StyleSheet.create({
   buttonTitle: {
     color: "#fff",
     fontFamily: "OpenSans-Bold",
-    fontSize: adjust(16),
+    fontSize: Typography.bodyLarge,
     textShadowColor: "#000",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 1,

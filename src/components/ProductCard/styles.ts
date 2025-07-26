@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { adjust } from "../utils/dimensions";
+import { Typography } from "../../typography/responsive";
 
 export default StyleSheet.create({
   card: {
@@ -15,13 +15,13 @@ export default StyleSheet.create({
     marginBottom: 5,
   },
   date: {
-    fontSize: adjust(12),
+    fontSize: Typography.caption,
     marginBottom: 10,
     fontFamily: "OpenSans-Light",
   },
   title: {
     fontFamily: "OpenSans-Regular",
-    fontSize: adjust(16),
+    fontSize: Typography.bodyLarge,
     marginBottom: 10,
     marginTop: 5,
   },
@@ -33,16 +33,16 @@ export default StyleSheet.create({
   },
   counterText: {
     fontFamily: "OpenSans-Bold",
-    fontSize: adjust(32),
+    fontSize: Typography.display,
   },
   counterLabel: {
     fontFamily: "OpenSans-Light",
-    fontSize: adjust(12),
+    fontSize: Typography.caption,
     marginLeft: 10,
   },
   expired: {
     fontFamily: "LilitaOne-Regular",
-    fontSize: adjust(32),
+    fontSize: Typography.display,
     textTransform: "uppercase",
   },
 });

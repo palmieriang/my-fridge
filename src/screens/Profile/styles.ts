@@ -1,5 +1,6 @@
-import { adjust } from "@components/utils/dimensions";
 import { StyleSheet } from "react-native";
+
+import { Typography } from "../../typography/responsive";
 
 export default StyleSheet.create({
   profile: {
@@ -24,14 +25,14 @@ export default StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)", // Dim background during any loading
-    borderRadius: 75, // Match container radius
-    zIndex: 2, // Ensure it's on top
+    backgroundColor: "rgba(0,0,0,0.5)",
+    borderRadius: 75,
+    zIndex: 2,
   },
   profileField: {
     color: "#fff",
     fontFamily: "OpenSans-Regular",
-    fontSize: adjust(13),
+    fontSize: Typography.body,
     marginTop: 20,
   },
   progressContainer: {
