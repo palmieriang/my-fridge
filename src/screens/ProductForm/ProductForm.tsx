@@ -4,11 +4,18 @@ import CalendarIcon from "@components/svg/CalendarIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { Picker } from "@react-native-picker/picker";
 import { useContext, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+  Alert,
+  Text,
+} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
-import { validateProduct } from "./validateProduct";
+import { validateProductWithErrors } from "./validateProduct";
 import { FRIDGE, FREEZER } from "../../constants";
 import {
   FormScreenNavigationProp,
@@ -45,28 +52,41 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
     params.product?.place || "",
   );
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [errors, setErrors] = useState<{
+    name?: string;
+    date?: string;
+    place?: string;
+  }>({});
 
   const userID = user.uid;
 
   const handleAddPress = async () => {
-    if (validateProduct({ name, date, place, t })) {
-      const data: NewProduct = {
-        name,
-        date,
-        place: place as "fridge" | "freezer",
-        authorID: userID,
-      };
+    setErrors({});
 
-      try {
-        if (existingId) {
-          await productsContext.handleModifyProduct(data, existingId);
-        } else {
-          await productsContext.handleSaveProduct(data);
-        }
-        navigateToList();
-      } catch (error) {
-        console.log("Error: ", error);
+    const validation = validateProductWithErrors({ name, date, place, t });
+
+    if (!validation.isValid) {
+      setErrors(validation.errors);
+      return;
+    }
+
+    const data: NewProduct = {
+      name: name.trim(),
+      date,
+      place: place as "fridge" | "freezer",
+      authorID: userID,
+    };
+
+    try {
+      if (existingId) {
+        await productsContext.handleModifyProduct(data, existingId);
+      } else {
+        await productsContext.handleSaveProduct(data);
       }
+      navigateToList();
+    } catch (error) {
+      console.error("Error saving product:", error);
+      Alert.alert(t("validationError"), t("productSaveError"));
     }
   };
 
@@ -116,6 +136,8 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           Icon={ShoppingBasketIcon}
           autoCapitalize="sentences"
           underlineColorAndroid="transparent"
+          error={errors.name}
+          showError={!!errors.name}
         />
         <FormInput
           labelValue={date}
@@ -124,6 +146,8 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           Icon={CalendarIcon}
           editable={!showDatePicker}
           onFocus={handleDatePress}
+          error={errors.date}
+          showError={!!errors.date}
         />
         <DateTimePickerModal
           date={new Date(initPickerDate)}
@@ -132,16 +156,26 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           onConfirm={handleDatePicked}
           onCancel={handleDatePickerHide}
         />
-        <View style={styles.inputContainer}>
+        <View
+          style={[styles.inputContainer, errors.place && styles.pickerError]}
+        >
           <Picker
             selectedValue={place}
             onValueChange={(itemValue) => setPlace(itemValue)}
-            itemStyle={styles.iosHeight}
+            itemStyle={Platform.OS === "ios" ? styles.iosHeight : undefined}
+            style={
+              Platform.OS === "android"
+                ? styles.androidPicker
+                : styles.pickerPlaceholder
+            }
           >
             <Picker.Item label={t("choosePlace")} value="" />
             <Picker.Item label={t(FRIDGE)} value="fridge" />
             <Picker.Item label={t(FREEZER)} value="freezer" />
           </Picker>
+          {errors.place && (
+            <Text style={styles.pickerErrorText}>{errors.place}</Text>
+          )}
         </View>
         <Button
           text={existingId ? t("modify") : t("add")}

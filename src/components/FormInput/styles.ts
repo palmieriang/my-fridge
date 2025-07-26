@@ -13,11 +13,12 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     marginTop: 10,
-    marginBottom: 10,
+    marginBottom: 20,
     marginLeft: responsive.containerPadding,
     marginRight: responsive.containerPadding,
     maxHeight: 56,
-    overflow: "hidden",
+    overflow: "visible",
+    position: "relative",
   },
   iconStyle: {
     alignItems: "center",
@@ -32,5 +33,16 @@ export default StyleSheet.create({
     fontSize: Typography.body,
     justifyContent: "center",
     padding: 14,
+  },
+  inputError: {
+    borderColor: "#dd2c00",
+    borderWidth: 1,
+  },
+  errorText: {
+    position: "absolute",
+    bottom: -20,
+    color: "#dd2c00",
+    fontFamily: "OpenSans-Regular",
+    fontSize: Typography.caption,
   },
 });
