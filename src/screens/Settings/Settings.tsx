@@ -39,6 +39,7 @@ const Settings = () => {
     { label: t("spanish"), value: "es", key: "spanish" },
     { label: t("italian"), value: "it", key: "italian" },
     { label: t("french"), value: "fr", key: "french" },
+    { label: t("german"), value: "de", key: "german" },
     { label: t("portuguese"), value: "pt", key: "portuguese" },
   ];
 

@@ -10,13 +10,14 @@ import {
   TranslateOptions,
 } from "./types";
 import { changeLanguage } from "../../api/api";
-import { en, es, fr, it, pt } from "../localization";
+import { de, en, es, fr, it, pt } from "../localization";
 
 const deviceLocales = getLocales();
 const deviceLocale = (deviceLocales[0]?.languageCode ||
   "en") as SupportedLocale;
 
 const i18n = new I18n({
+  de,
   en,
   es,
   fr,

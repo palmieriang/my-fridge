@@ -49,7 +49,7 @@ export interface UserData {
 
 // localeStore
 
-export type SupportedLocale = "en" | "es" | "fr" | "it" | "pt";
+export type SupportedLocale = "en" | "es" | "fr" | "it" | "pt" | "de";
 
 export type TranslateOptions = Record<string, unknown>;
 
