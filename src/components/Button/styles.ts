@@ -7,7 +7,7 @@ export default StyleSheet.create({
   button: {
     alignItems: "center",
     backgroundColor: "#48bbec",
-    borderRadius: 5,
+    borderRadius: 4,
     justifyContent: "center",
     height: responsive.minTouchTarget,
     marginHorizontal: responsive.containerMargin,

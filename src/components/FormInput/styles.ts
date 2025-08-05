@@ -8,7 +8,7 @@ export default StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     borderColor: "#ccc",
-    borderRadius: 5,
+    borderRadius: 4,
     borderWidth: StyleSheet.hairlineWidth,
     flex: 1,
     flexDirection: "row",

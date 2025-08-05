@@ -9,7 +9,7 @@ export default StyleSheet.create({
   },
   selectorContainer: {
     backgroundColor: "#fff",
-    borderRadius: 5,
+    borderRadius: 4,
     marginTop: 20,
     minWidth: 200,
   },

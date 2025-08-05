@@ -13,6 +13,7 @@ export default StyleSheet.create({
     justifyContent: "space-between",
     margin: responsive.containerMargin,
     marginVertical: 5,
+    borderRadius: 4,
   },
   date: {
     fontSize: Typography.caption,

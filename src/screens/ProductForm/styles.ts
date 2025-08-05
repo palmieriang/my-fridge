@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   inputContainer: {
     backgroundColor: "#fff",
     borderColor: "#ccc",
-    borderRadius: 5,
+    borderRadius: 4,
     borderWidth: StyleSheet.hairlineWidth,
     flex: 1,
     marginTop: 10,
