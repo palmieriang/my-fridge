@@ -18,6 +18,7 @@ import {
 } from "../../navigation/navigation.d";
 import { localeStore, themeStore } from "../../store";
 import { productsStore } from "../../store/productsStore";
+import { convertToISODateString } from "../../utils";
 
 type ProductListProps = {
   navigation: ProductListNavigationProp;
@@ -34,6 +35,9 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   const { place } = route.params;
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState<"default" | "earlier" | "later">(
+    "default",
+  );
 
   const filteredList = place === FRIDGE ? fridgeProducts : freezerProducts;
 
@@ -41,12 +45,24 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
     product.name.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  const sortedList = [...searchFilteredList].sort((a, b) => {
+    if (sortOrder === "default") {
+      return 0;
+    }
+
+    const dateA = new Date(convertToISODateString(a.date));
+    const dateB = new Date(convertToISODateString(b.date));
+
+    if (sortOrder === "earlier") {
+      return dateA.getTime() - dateB.getTime();
+    } else {
+      return dateB.getTime() - dateA.getTime();
+    }
+  });
+
   useEffect(() => {
-    swipeableRefs.current = swipeableRefs.current.slice(
-      0,
-      searchFilteredList.length,
-    );
-  }, [searchFilteredList.length]);
+    swipeableRefs.current = swipeableRefs.current.slice(0, sortedList.length);
+  }, [sortedList.length]);
 
   const swipeableRefs = useRef<(Swipeable | null)[]>([]);
 
@@ -54,6 +70,15 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
     navigateToProductForm({
       title: t("addItem"),
     });
+  };
+
+  const handleSortToggle = () => {
+    const nextOrder = {
+      default: "earlier",
+      earlier: "later",
+      later: "default",
+    } as const;
+    setSortOrder(nextOrder[sortOrder]);
   };
 
   const navigateToProductForm = (params: { title: string }) => {
@@ -77,7 +102,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
             styles.searchInput,
             { color: theme.text, backgroundColor: theme.background },
           ]}
-          placeholder={t("search") || "Search products..."}
+          placeholder={t("search")}
           placeholderTextColor="#999"
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -91,13 +116,29 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
             <Text style={styles.clearButtonText}>✕</Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity style={styles.sortButton} onPress={handleSortToggle}>
+          <Text style={styles.sortButtonText}>
+            {sortOrder === "default" && "📅"}
+            {sortOrder === "earlier" && "⏰"}
+            {sortOrder === "later" && "⌛"}
+          </Text>
+        </TouchableOpacity>
       </View>
 
-      {searchFilteredList.length > 0 ? (
+      {sortOrder !== "default" && (
+        <View style={styles.sortIndicator}>
+          <Text style={[styles.sortIndicatorText, { color: theme.text }]}>
+            {sortOrder === "earlier" && t("sortEarlier")}
+            {sortOrder === "later" && t("sortLater")}
+          </Text>
+        </View>
+      )}
+
+      {sortedList.length > 0 ? (
         <FlatList
           key="list"
           style={[styles.list, { backgroundColor: theme.background }]}
-          data={searchFilteredList}
+          data={sortedList}
           renderItem={({ item, index }) => (
             <ProductCard
               product={item}

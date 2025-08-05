@@ -40,6 +40,9 @@
   "selectDate": "Seleziona una data.",
   "selectPlace": "Seleziona un luogo.",
   "settings": "Impostazioni",
+  "sortDefault": "Ordine predefinito",
+  "sortEarlier": "Prima quelli che scadono prima",
+  "sortLater": "Prima quelli che scadono dopo",
   "spanish": "Spagnolo",
   "title": "Frigo",
   "validationError": "Prodotto non valido"

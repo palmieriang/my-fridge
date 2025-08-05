@@ -41,6 +41,9 @@
   "selectDate": "Veuillez sélectionner une date.",
   "selectPlace": "Veuillez sélectionner un lieu.",
   "settings": "Réglages",
+  "sortDefault": "Ordre par défaut",
+  "sortEarlier": "Expiration plus proche en premier",
+  "sortLater": "Expiration plus tardive en premier",
   "spanish": "Espagnol",
   "title": "Frigo",
   "validationError": "Erreur de validation"

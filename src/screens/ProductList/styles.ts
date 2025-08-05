@@ -48,6 +48,33 @@ export default StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
   },
+  sortButton: {
+    position: "absolute",
+    right: 50,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: "#f0f0f0",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+  },
+  sortButtonText: {
+    fontSize: 16,
+  },
+  sortIndicator: {
+    paddingHorizontal: responsive.containerPadding,
+    paddingVertical: 8,
+    backgroundColor: "#f8f8f8",
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+  },
+  sortIndicatorText: {
+    fontSize: Typography.caption,
+    fontFamily: "OpenSans-Regular",
+    textAlign: "center",
+    fontStyle: "italic",
+  },
   noResultsText: {
     textAlign: "center",
     fontSize: Typography.body,

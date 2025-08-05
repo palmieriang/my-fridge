@@ -41,6 +41,9 @@
   "selectDate": "Please select a date.",
   "selectPlace": "Please select a place.",
   "settings": "Settings",
+  "sortDefault": "Default order",
+  "sortEarlier": "Expiring earlier first", 
+  "sortLater": "Expiring later first",
   "spanish": "Spanish",
   "title": "Fridge",
   "validationError": "Validation Error"

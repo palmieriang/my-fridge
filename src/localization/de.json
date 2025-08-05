@@ -41,6 +41,9 @@
   "selectDate": "Bitte wählen Sie ein Datum.",
   "selectPlace": "Bitte wählen Sie einen Ort.",
   "settings": "Einstellungen",
+  "sortDefault": "Standardreihenfolge",
+  "sortEarlier": "Früher ablaufende zuerst",
+  "sortLater": "Später ablaufende zuerst",
   "spanish": "Spanisch",
   "title": "Kühlschrank",
   "validationError": "Validierungsfehler"

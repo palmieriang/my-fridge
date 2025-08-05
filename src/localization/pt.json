@@ -40,6 +40,9 @@
   "selectDate": "Selecione uma data.",
   "selectPlace": "Selecione um local.",
   "settings": "Definições",
+  "sortDefault": "Ordem padrão",
+  "sortEarlier": "Primeiro os que expiram mais cedo",
+  "sortLater": "Primeiro os que expiram mais tarde",
   "spanish": "Espanhol",
   "title": "Frigorífico",
   "validationError": "Erro de validação"

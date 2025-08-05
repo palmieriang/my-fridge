@@ -41,6 +41,9 @@
   "selectDate": "Por favor, selecciona una fecha.",
   "selectPlace": "Por favor, selecciona un lugar.",
   "settings": "Ajustes",
+  "sortDefault": "Orden predeterminado",
+  "sortEarlier": "Primero los que caducan antes",
+  "sortLater": "Primero los que caducan después",
   "spanish": "Español",
   "title": "Nevera",
   "validationError": "Error de validación"
