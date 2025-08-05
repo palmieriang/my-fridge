@@ -25,7 +25,8 @@ export const responsive = {
   minTouchTarget: Math.max(44, vw(12)),
 
   // Spacing
-  containerPadding: vw(5),
+  containerPadding: vw(3.5),
+  containerMargin: vw(2.5),
 
   // Component sizes
   buttonHeight: Math.max(48, vh(6)),

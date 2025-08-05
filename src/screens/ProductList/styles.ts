@@ -6,7 +6,6 @@ import { responsive } from "../../utils/responsive";
 export default StyleSheet.create({
   list: {
     flex: 1,
-    paddingTop: 10,
   },
   text: {
     height: 50,
@@ -16,7 +15,7 @@ export default StyleSheet.create({
     marginTop: 20,
   },
   searchContainer: {
-    paddingHorizontal: responsive.containerPadding,
+    paddingHorizontal: responsive.containerMargin,
     paddingTop: 10,
     paddingBottom: 5,
     position: "relative",

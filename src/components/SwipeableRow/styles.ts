@@ -7,8 +7,7 @@ export default StyleSheet.create({
     alignItems: "center",
     flex: 1,
     justifyContent: "center",
-    marginTop: 5,
-    marginBottom: 5,
+    marginVertical: 5,
   },
   actionText: {
     color: "white",

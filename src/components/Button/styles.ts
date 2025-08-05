@@ -10,8 +10,7 @@ export default StyleSheet.create({
     borderRadius: 5,
     justifyContent: "center",
     height: responsive.minTouchTarget,
-    marginLeft: responsive.containerPadding,
-    marginRight: responsive.containerPadding,
+    marginHorizontal: responsive.containerMargin,
     marginTop: 10,
   },
   buttonTitle: {

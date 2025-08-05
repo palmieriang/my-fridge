@@ -1,18 +1,18 @@
 import { StyleSheet } from "react-native";
 
 import { Typography } from "../../typography/responsive";
+import { responsive } from "../../utils/responsive";
 
 export default StyleSheet.create({
   card: {
     alignItems: "flex-end",
     flex: 1,
     flexWrap: "wrap",
-    padding: 15,
+    padding: responsive.containerPadding,
     flexDirection: "row",
     justifyContent: "space-between",
-    margin: 10,
-    marginTop: 5,
-    marginBottom: 5,
+    margin: responsive.containerMargin,
+    marginVertical: 5,
   },
   date: {
     fontSize: Typography.caption,
