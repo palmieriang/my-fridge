@@ -6,6 +6,7 @@ import { responsive } from "../../utils/responsive";
 export default StyleSheet.create({
   list: {
     flex: 1,
+    paddingTop: 10,
   },
   text: {
     height: 50,
@@ -14,10 +15,16 @@ export default StyleSheet.create({
     paddingLeft: 20,
     marginTop: 20,
   },
-  searchContainer: {
+  controlsContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     paddingHorizontal: responsive.containerMargin,
     paddingTop: 10,
     paddingBottom: 5,
+    gap: 8,
+  },
+  searchContainer: {
+    flex: 1,
     position: "relative",
     flexDirection: "row",
     alignItems: "center",
@@ -25,7 +32,7 @@ export default StyleSheet.create({
   searchInput: {
     flex: 1,
     height: 48,
-    borderRadius: 8,
+    borderRadius: 4,
     paddingHorizontal: 15,
     paddingRight: 45,
     borderWidth: 1,
@@ -35,7 +42,7 @@ export default StyleSheet.create({
   },
   clearButton: {
     position: "absolute",
-    right: 20,
+    right: 12,
     width: 24,
     height: 24,
     borderRadius: 12,
@@ -49,18 +56,17 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   sortButton: {
-    position: "absolute",
-    right: 50,
-    width: 32,
-    height: 32,
-    borderRadius: 16,
+    width: 48,
+    height: 48,
+    borderRadius: 4,
     backgroundColor: "#f0f0f0",
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 1,
+    borderWidth: 1,
+    borderColor: "#e0e0e0",
   },
   sortButtonText: {
-    fontSize: 16,
+    fontSize: 18,
   },
   sortIndicator: {
     paddingHorizontal: responsive.containerPadding,

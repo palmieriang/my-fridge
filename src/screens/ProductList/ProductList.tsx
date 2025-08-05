@@ -96,26 +96,28 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
-      <View style={styles.searchContainer}>
-        <TextInput
-          style={[
-            styles.searchInput,
-            { color: theme.text, backgroundColor: theme.background },
-          ]}
-          placeholder={t("search")}
-          placeholderTextColor="#999"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          autoCapitalize="none"
-        />
-        {searchQuery.length > 0 && (
-          <TouchableOpacity
-            style={styles.clearButton}
-            onPress={() => setSearchQuery("")}
-          >
-            <Text style={styles.clearButtonText}>✕</Text>
-          </TouchableOpacity>
-        )}
+      <View style={styles.controlsContainer}>
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={[
+              styles.searchInput,
+              { color: theme.text, backgroundColor: theme.background },
+            ]}
+            placeholder={t("search")}
+            placeholderTextColor="#999"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            autoCapitalize="none"
+          />
+          {searchQuery.length > 0 && (
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={() => setSearchQuery("")}
+            >
+              <Text style={styles.clearButtonText}>✕</Text>
+            </TouchableOpacity>
+          )}
+        </View>
         <TouchableOpacity style={styles.sortButton} onPress={handleSortToggle}>
           <Text style={styles.sortButtonText}>
             {sortOrder === "default" && "📅"}
@@ -152,7 +154,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
         />
       ) : filteredList.length > 0 ? (
         <Text style={[styles.noResultsText, { color: theme.text }]}>
-          {t("noSearchResults") || "No products found matching your search."}
+          {t("noSearchResults")}
         </Text>
       ) : (
         <Text style={[styles.text, { color: theme.text }]}>{t("error")}</Text>
