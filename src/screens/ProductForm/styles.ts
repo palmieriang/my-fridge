@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import { Typography } from "../../typography/responsive";
 import { responsive } from "../../utils/responsive";
@@ -9,8 +10,8 @@ export const styles = StyleSheet.create({
     width: "100%",
   },
   inputContainer: {
-    backgroundColor: "#fff",
-    borderColor: "#ccc",
+    backgroundColor: COLORS.WHITE,
+    borderColor: COLORS.MEDIUM_DARK_GRAY,
     borderRadius: 4,
     borderWidth: StyleSheet.hairlineWidth,
     flex: 1,
@@ -21,13 +22,13 @@ export const styles = StyleSheet.create({
     position: "relative",
   },
   pickerError: {
-    borderColor: "#dd2c00",
+    borderColor: COLORS.ERROR,
     borderWidth: 1,
   },
   pickerErrorText: {
     position: "absolute",
     bottom: -20,
-    color: "#dd2c00",
+    color: COLORS.ERROR,
     fontFamily: "OpenSans-Regular",
     fontSize: Typography.caption,
   },
@@ -35,11 +36,11 @@ export const styles = StyleSheet.create({
     height: 120,
   },
   pickerPlaceholder: {
-    color: "#636c72",
-    fontSize: Typography.body,
+    color: COLORS.DARK_GRAY,
+    fontSize: Typography.caption,
   },
   androidPicker: {
-    color: "#636c72",
-    fontSize: Typography.body,
+    color: COLORS.DARK_GRAY,
+    fontSize: Typography.caption,
   },
 });

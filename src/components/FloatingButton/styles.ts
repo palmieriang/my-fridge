@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 export default StyleSheet.create({
   fab: {
@@ -11,7 +12,7 @@ export default StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     elevation: 1,
-    shadowColor: "#000",
+    shadowColor: COLORS.BLACK,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 2,

@@ -157,7 +157,11 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           onCancel={handleDatePickerHide}
         />
         <View
-          style={[styles.inputContainer, errors.place && styles.pickerError]}
+          style={[
+            styles.inputContainer,
+            { backgroundColor: theme.foreground },
+            errors.place && styles.pickerError,
+          ]}
         >
           <Picker
             selectedValue={place}

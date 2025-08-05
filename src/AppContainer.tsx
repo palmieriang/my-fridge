@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { memo, useContext } from "react";
 
+import { COLORS } from "./constants/colors";
 import TabNavigator from "./navigation/TabNavigator";
 import { SignInStackScreen } from "./navigation/navigation";
 import {
@@ -28,7 +29,7 @@ const RootNavigator = () => {
     <>
       <StatusBar
         style="auto"
-        backgroundColor={userToken ? theme.primary : "#ffffff"}
+        backgroundColor={userToken ? theme.primary : COLORS.WHITE}
         translucent={false}
       />
       <NavigationContainer>

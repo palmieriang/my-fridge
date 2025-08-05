@@ -1,8 +1,10 @@
-import { FC } from "react";
+import { FC, useContext } from "react";
 import { View, TextInput, TextInputProps, Text } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
+import { COLORS } from "../../constants/colors";
+import { themeStore } from "../../store";
 
 type FormInputProps = TextInputProps & {
   labelValue: string;
@@ -20,21 +22,31 @@ const FormInput = ({
   showError = false,
   ...rest
 }: FormInputProps) => {
+  const { theme } = useContext(themeStore);
+
   return (
     <View
-      style={styles.inputContainer}
+      style={[
+        styles.inputContainer,
+        { backgroundColor: theme.foreground },
+        showError && styles.inputError,
+      ]}
       accessible
       accessibilityLabel={placeholderText}
     >
       <View style={styles.iconStyle}>
-        <Icon width={25} height={25} fill={showError ? "#dd2c00" : "black"} />
+        <Icon
+          width={25}
+          height={25}
+          fill={showError ? COLORS.ERROR : theme.text}
+        />
       </View>
       <TextInput
         autoCapitalize="none"
         numberOfLines={1}
         placeholder={placeholderText}
-        placeholderTextColor="#757575"
-        style={[styles.input, showError && styles.inputError]}
+        placeholderTextColor={COLORS.DARK_GRAY}
+        style={styles.input}
         value={labelValue}
         {...rest}
       />

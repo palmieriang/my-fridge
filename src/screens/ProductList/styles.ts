@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native";
 
+import { COLORS } from "../../constants/colors";
 import { Typography } from "../../typography/responsive";
 import { responsive } from "../../utils/responsive";
 
@@ -18,7 +19,7 @@ export default StyleSheet.create({
   controlsContainer: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: responsive.containerMargin,
+    marginHorizontal: responsive.containerMargin,
     paddingTop: 10,
     paddingBottom: 5,
     gap: 8,
@@ -36,7 +37,7 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     paddingRight: 45,
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: COLORS.MEDIUM_LIGHT_GRAY,
     fontSize: Typography.body,
     fontFamily: "OpenSans-Regular",
   },
@@ -46,34 +47,33 @@ export default StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 12,
-    backgroundColor: "#ccc",
+    backgroundColor: COLORS.MEDIUM_DARK_GRAY,
     justifyContent: "center",
     alignItems: "center",
   },
   clearButtonText: {
-    color: "#fff",
-    fontSize: 14,
+    color: COLORS.WHITE,
+    fontSize: Typography.body,
     fontWeight: "bold",
   },
   sortButton: {
     width: 48,
     height: 48,
     borderRadius: 4,
-    backgroundColor: "#f0f0f0",
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#e0e0e0",
+    borderColor: COLORS.MEDIUM_LIGHT_GRAY,
   },
   sortButtonText: {
-    fontSize: 18,
+    fontSize: Typography.subtitle,
   },
   sortIndicator: {
     paddingHorizontal: responsive.containerPadding,
     paddingVertical: 8,
-    backgroundColor: "#f8f8f8",
+    backgroundColor: COLORS.LIGHT_GRAY,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: COLORS.MEDIUM_LIGHT_GRAY,
   },
   sortIndicatorText: {
     fontSize: Typography.caption,

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import { Typography } from "../../typography/responsive";
 
@@ -8,7 +9,7 @@ export default StyleSheet.create({
     width: "100%",
   },
   selectorContainer: {
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.WHITE,
     borderRadius: 4,
     marginTop: 20,
     minWidth: 200,
@@ -27,7 +28,7 @@ export default StyleSheet.create({
     marginTop: 20,
   },
   authLink: {
-    color: "#dd2c00",
+    color: COLORS.ERROR,
     fontFamily: "OpenSans-Bold",
     fontSize: Typography.body,
     marginTop: 20,

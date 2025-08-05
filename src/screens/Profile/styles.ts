@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import { Typography } from "../../typography/responsive";
 import { responsive } from "../../utils/responsive";
@@ -31,7 +32,7 @@ export default StyleSheet.create({
     zIndex: 2,
   },
   profileField: {
-    color: "#fff",
+    color: COLORS.WHITE,
     fontFamily: "OpenSans-Regular",
     fontSize: Typography.body,
     marginTop: 20,

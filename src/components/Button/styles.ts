@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import { Typography } from "../../typography/responsive";
 import { responsive } from "../../utils/responsive";
@@ -6,7 +7,7 @@ import { responsive } from "../../utils/responsive";
 export default StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: "#48bbec",
+    backgroundColor: COLORS.PRIMARY_BLUE,
     borderRadius: 4,
     justifyContent: "center",
     height: responsive.minTouchTarget,
@@ -14,15 +15,15 @@ export default StyleSheet.create({
     marginTop: 10,
   },
   buttonTitle: {
-    color: "#fff",
+    color: COLORS.WHITE,
     fontFamily: "OpenSans-Bold",
     fontSize: Typography.bodyLarge,
-    textShadowColor: "#000",
+    textShadowColor: COLORS.BLACK,
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 1,
     textTransform: "uppercase",
   },
   buttonDelete: {
-    backgroundColor: "#e74c3c",
+    backgroundColor: COLORS.PRIMARY_RED,
   },
 });

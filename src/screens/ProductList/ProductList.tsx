@@ -12,6 +12,7 @@ import type { Swipeable } from "react-native-gesture-handler";
 
 import styles from "./styles";
 import { FRIDGE } from "../../constants";
+import { COLORS } from "../../constants/colors";
 import {
   ProductListNavigationProp,
   ProductListRouteProp,
@@ -101,10 +102,10 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
           <TextInput
             style={[
               styles.searchInput,
-              { color: theme.text, backgroundColor: theme.background },
+              { color: theme.text, backgroundColor: theme.foreground },
             ]}
             placeholder={t("search")}
-            placeholderTextColor="#999"
+            placeholderTextColor={COLORS.DARK_GRAY}
             value={searchQuery}
             onChangeText={setSearchQuery}
             autoCapitalize="none"
@@ -118,7 +119,10 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
             </TouchableOpacity>
           )}
         </View>
-        <TouchableOpacity style={styles.sortButton} onPress={handleSortToggle}>
+        <TouchableOpacity
+          style={[styles.sortButton, { backgroundColor: theme.foreground }]}
+          onPress={handleSortToggle}
+        >
           <Text style={styles.sortButtonText}>
             {sortOrder === "default" && "📅"}
             {sortOrder === "earlier" && "⏰"}

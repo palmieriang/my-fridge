@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import { Typography } from "../../typography/responsive";
 
@@ -13,13 +14,13 @@ export default StyleSheet.create({
     marginTop: 20,
   },
   footerText: {
-    color: "#2e2e2d",
+    color: COLORS.DARK_GRAY,
     fontFamily: "OpenSans-Regular",
     fontSize: Typography.caption,
     padding: 10,
   },
   footerLink: {
-    color: "#48BBEC",
+    color: COLORS.PRIMARY_BLUE,
     fontFamily: "OpenSans-Bold",
     fontSize: Typography.body,
     padding: 10,

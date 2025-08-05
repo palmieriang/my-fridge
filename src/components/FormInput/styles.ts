@@ -1,13 +1,13 @@
 import { StyleSheet } from "react-native";
 
+import { COLORS } from "../../constants/colors";
 import { Typography } from "../../typography/responsive";
 import { responsive } from "../../utils/responsive";
 
 export default StyleSheet.create({
   inputContainer: {
     alignItems: "center",
-    backgroundColor: "#fff",
-    borderColor: "#ccc",
+    borderColor: COLORS.MEDIUM_DARK_GRAY,
     borderRadius: 4,
     borderWidth: StyleSheet.hairlineWidth,
     flex: 1,
@@ -21,12 +21,11 @@ export default StyleSheet.create({
   },
   iconStyle: {
     alignItems: "center",
-    borderRightColor: "#ccc",
+    borderRightColor: COLORS.MEDIUM_DARK_GRAY,
     borderRightWidth: StyleSheet.hairlineWidth,
     padding: 14,
   },
   input: {
-    backgroundColor: "white",
     flex: 1,
     fontFamily: "OpenSans-Regular",
     fontSize: Typography.body,
@@ -34,13 +33,13 @@ export default StyleSheet.create({
     padding: 14,
   },
   inputError: {
-    borderColor: "#dd2c00",
+    borderColor: COLORS.ERROR,
     borderWidth: 1,
   },
   errorText: {
     position: "absolute",
     bottom: -20,
-    color: "#dd2c00",
+    color: COLORS.ERROR,
     fontFamily: "OpenSans-Regular",
     fontSize: Typography.caption,
   },

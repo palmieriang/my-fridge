@@ -1,6 +1,7 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { useContext } from "react";
 import { View, StyleProp, ViewStyle } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
 import { authStore } from "../../store";
@@ -21,9 +22,9 @@ const SocialIcon = () => {
     <View style={(styles as StylesType).iconsContainer}>
       <FontAwesome.Button
         borderRadius={50}
-        color="#fff"
+        color={COLORS.WHITE}
         name="google"
-        backgroundColor="#ea4335"
+        backgroundColor={COLORS.GOOGLE_RED}
         onPress={signInGoogle}
         size={26}
         iconStyle={styles.icons}

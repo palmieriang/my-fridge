@@ -8,31 +8,32 @@ import {
   ThemeStoreValue,
 } from "./types";
 import { changeColor } from "../../api/api";
+import { COLORS } from "../constants/colors";
 
 const themes: ThemesMap = {
   lightRed: {
-    foreground: "#ffffff",
-    background: "#F3F3F3",
-    text: "black",
-    primary: "#e74c3c",
+    foreground: COLORS.WHITE,
+    background: COLORS.LIGHT_BACKGROUND,
+    text: COLORS.BLACK,
+    primary: COLORS.PRIMARY_RED,
   },
   lightBlue: {
-    foreground: "#ffffff",
-    background: "#F3F3F3",
-    text: "black",
-    primary: "#48bbec",
+    foreground: COLORS.WHITE,
+    background: COLORS.LIGHT_BACKGROUND,
+    text: COLORS.BLACK,
+    primary: COLORS.PRIMARY_BLUE,
   },
   darkRed: {
-    foreground: "#242424",
-    background: "#131313",
-    text: "white",
-    primary: "#e74c3c",
+    foreground: COLORS.DARK_FOREGROUND,
+    background: COLORS.DARK_BACKGROUND,
+    text: COLORS.WHITE,
+    primary: COLORS.PRIMARY_RED,
   },
   darkBlue: {
-    foreground: "#242424",
-    background: "#131313",
-    text: "white",
-    primary: "#48bbec",
+    foreground: COLORS.DARK_FOREGROUND,
+    background: COLORS.DARK_BACKGROUND,
+    text: COLORS.WHITE,
+    primary: COLORS.PRIMARY_BLUE,
   },
 };
 

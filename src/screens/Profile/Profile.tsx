@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import { getImageBlobAndMetadata } from "./getImageBlobAndMetadata";
 import styles from "./styles";
@@ -161,7 +162,7 @@ const Profile = () => {
         <View style={styles.pictureContainer}>
           {upload.isUploading ? (
             <View style={styles.progressContainer}>
-              <Loading size="large" color="#fff" />
+              <Loading size="large" color={COLORS.WHITE} />
               <Text style={styles.profileField}>
                 Uploading: {upload.uploadProgress.toFixed(0)}%
               </Text>
@@ -171,7 +172,7 @@ const Profile = () => {
               {isProfileImageLoading && (
                 <Loading
                   size="large"
-                  color="#fff"
+                  color={COLORS.WHITE}
                   style={styles.activityIndicatorOverlay}
                 />
               )}
@@ -192,7 +193,7 @@ const Profile = () => {
                   style={styles.deleteIcon}
                   width={24}
                   height={24}
-                  fill="#fff"
+                  fill={COLORS.WHITE}
                   onPress={deleteProfileImg}
                 />
               )}

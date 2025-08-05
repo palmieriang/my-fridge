@@ -8,6 +8,7 @@ import Registration from "@screens/Registration/Registration";
 import Settings from "@screens/Settings/Settings";
 import SignIn from "@screens/SignIn/SignIn";
 import { useContext } from "react";
+import { COLORS } from "src/constants/colors";
 
 import { RootStackParamList } from "./navigation.d";
 import { FRIDGE, FREEZER, SETTINGS } from "../constants";
@@ -27,7 +28,7 @@ const screenOptions: StackNavigationOptions = {
     },
   },
   headerTitleAlign: "center",
-  headerTintColor: "#fff",
+  headerTintColor: COLORS.WHITE,
   headerTitleStyle: {
     fontFamily: "Nunito-Bold",
     fontSize: Typography.subtitle,
@@ -135,7 +136,7 @@ export function SignInStackScreen() {
     <Stack.Navigator
       screenOptions={{
         ...screenOptions,
-        headerTintColor: "#48bbec",
+        headerTintColor: COLORS.PRIMARY_BLUE,
       }}
     >
       <Stack.Screen
