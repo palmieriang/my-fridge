@@ -35,7 +35,7 @@ export default StyleSheet.create({
   },
   clearButton: {
     position: "absolute",
-    right: 12,
+    right: 20,
     width: 24,
     height: 24,
     borderRadius: 12,
