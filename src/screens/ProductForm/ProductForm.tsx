@@ -167,11 +167,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
             selectedValue={place}
             onValueChange={(itemValue) => setPlace(itemValue)}
             itemStyle={Platform.OS === "ios" ? styles.iosHeight : undefined}
-            style={
-              Platform.OS === "android"
-                ? styles.androidPicker
-                : styles.pickerPlaceholder
-            }
+            style={[styles.pickerPlaceholder, { color: theme.text }]}
           >
             <Picker.Item label={t("choosePlace")} value="" />
             <Picker.Item label={t(FRIDGE)} value="fridge" />

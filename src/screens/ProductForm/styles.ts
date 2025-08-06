@@ -36,11 +36,6 @@ export const styles = StyleSheet.create({
     height: 120,
   },
   pickerPlaceholder: {
-    color: COLORS.DARK_GRAY,
-    fontSize: Typography.caption,
-  },
-  androidPicker: {
-    color: COLORS.DARK_GRAY,
     fontSize: Typography.caption,
   },
 });

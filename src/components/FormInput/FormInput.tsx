@@ -46,7 +46,7 @@ const FormInput = ({
         numberOfLines={1}
         placeholder={placeholderText}
         placeholderTextColor={COLORS.DARK_GRAY}
-        style={styles.input}
+        style={[styles.input, { color: theme.text }]}
         value={labelValue}
         {...rest}
       />
