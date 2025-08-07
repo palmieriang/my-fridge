@@ -12,11 +12,15 @@ import {
   ScrollView,
   Text,
   View,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
 import LottieAnimation from "../../animations/LottieAnimation";
 import { authStore } from "../../store";
+import { validateEmail, validatePassword } from "../../utils/validation";
 
 interface SignInProps {
   navigation: {
@@ -30,65 +34,144 @@ const SignIn = ({ navigation }: SignInProps) => {
   const [playAnimation, setPlayAnimation] = useState(false);
   const [resetAnimation, setResetAnimation] = useState(false);
   const [isToggled, toggle] = useToggle(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   const { authContext } = useContext(authStore);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
+  const buttonScaleAnim = useRef(new Animated.Value(1)).current;
 
   const fadeIn = () => {
     toggle();
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1000,
-      useNativeDriver: false,
+      duration: 800,
+      useNativeDriver: true,
     }).start();
   };
 
   const fadeOut = () => {
     Animated.timing(fadeAnim, {
       toValue: 0,
-      duration: 500,
-      useNativeDriver: false,
+      duration: 400,
+      useNativeDriver: true,
     }).start(() => {
       toggle();
     });
   };
 
-  const handleSignIn = () => {
-    if (email.length > 3 && password.length > 3) {
-      setPlayAnimation(true);
-    }
+  const animateButtonPress = () => {
+    Animated.sequence([
+      Animated.timing(buttonScaleAnim, {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(buttonScaleAnim, {
+        toValue: 1,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
   };
 
-  const signInAfterAnimation = () => {
-    authContext.signIn({ email, password });
-    setPlayAnimation(false);
-    setResetAnimation(true);
+  const handleEmailValidation = (email: string) => {
+    const result = validateEmail(email);
+    setEmailError(result.error);
+    return result.isValid;
+  };
+
+  const handlePasswordValidation = (password: string) => {
+    const result = validatePassword(password);
+    setPasswordError(result.error);
+    return result.isValid;
+  };
+
+  const handleSignIn = async () => {
+    const isEmailValid = handleEmailValidation(email);
+    const isPasswordValid = handlePasswordValidation(password);
+
+    if (!isEmailValid || !isPasswordValid) {
+      return;
+    }
+
+    setIsLoading(true);
+    animateButtonPress();
+
+    setTimeout(() => {
+      setPlayAnimation(true);
+    }, 200);
+  };
+
+  const signInAfterAnimation = async () => {
+    try {
+      await authContext.signIn({ email, password });
+      setPlayAnimation(false);
+      setResetAnimation(true);
+    } catch (error: any) {
+      setIsLoading(false);
+      setPlayAnimation(false);
+      setResetAnimation(true);
+
+      Alert.alert(
+        "Sign In Failed",
+        error?.message || "Please check your credentials and try again.",
+        [{ text: "OK" }],
+      );
+    }
   };
 
   const handleResetPassword = async () => {
+    if (!handleEmailValidation(email)) {
+      return;
+    }
+
+    setIsLoading(true);
     try {
       await authContext.resetPassword(email);
-    } catch (error) {
-      console.log(error);
+      Alert.alert(
+        "Password Reset",
+        "Check your email for password reset instructions.",
+        [{ text: "OK", onPress: fadeIn }],
+      );
+    } catch (error: any) {
+      Alert.alert(
+        "Reset Failed",
+        error?.message || "Unable to send reset email. Please try again.",
+        [{ text: "OK" }],
+      );
+    } finally {
+      setIsLoading(false);
     }
-    fadeIn();
   };
 
   const handleCreateAccount = () => {
     navigation.navigate("registration");
   };
 
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (emailError) setEmailError("");
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    if (passwordError) setPasswordError("");
+  };
+
   return (
     <KeyboardAvoidingView
-      style={{ flex: 1 }}
+      style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={0}
     >
       <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ paddingBottom: 24 }} // move to style?
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
         <View style={styles.animationContainer}>
           <LottieAnimation
@@ -100,36 +183,57 @@ const SignIn = ({ navigation }: SignInProps) => {
             reset={resetAnimation}
           />
         </View>
-        <FormInput
-          labelValue={email}
-          onChangeText={setEmail}
-          placeholderText="Email"
-          Icon={UsernameIcon}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          underlineColorAndroid="transparent"
-        />
-        {isToggled && (
-          <Animated.View
-            style={{
-              opacity: fadeAnim,
-            }}
-          >
-            <FormInput
-              labelValue={password}
-              onChangeText={setPassword}
-              placeholderText="Password"
-              Icon={PadlockIcon}
-              autoCapitalize="none"
-              underlineColorAndroid="transparent"
-              secureTextEntry
+
+        <View style={styles.formContainer}>
+          <FormInput
+            labelValue={email}
+            onChangeText={handleEmailChange}
+            placeholderText="Email"
+            Icon={UsernameIcon}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            underlineColorAndroid="transparent"
+            error={emailError}
+            showError={!!emailError}
+          />
+
+          {isToggled && (
+            <Animated.View
+              style={{
+                opacity: fadeAnim,
+              }}
+            >
+              <FormInput
+                labelValue={password}
+                onChangeText={handlePasswordChange}
+                placeholderText="Password"
+                Icon={PadlockIcon}
+                autoCapitalize="none"
+                underlineColorAndroid="transparent"
+                secureTextEntry
+                error={passwordError}
+                showError={!!passwordError}
+              />
+            </Animated.View>
+          )}
+
+          <Animated.View style={{ transform: [{ scale: buttonScaleAnim }] }}>
+            <Button
+              text={isToggled ? "Sign in" : "Reset password"}
+              onPress={isToggled ? handleSignIn : handleResetPassword}
             />
           </Animated.View>
-        )}
-        <Button
-          text={isToggled ? "Sign in" : "Reset password"}
-          onPress={isToggled ? handleSignIn : handleResetPassword}
-        />
+
+          {isLoading && (
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="small" color={COLORS.PRIMARY_BLUE} />
+              <Text style={styles.loadingText}>
+                {isToggled ? "Signing in..." : "Sending reset email..."}
+              </Text>
+            </View>
+          )}
+        </View>
+
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
             New user?{" "}
@@ -139,9 +243,9 @@ const SignIn = ({ navigation }: SignInProps) => {
           </Text>
           <Text
             onPress={isToggled ? fadeOut : fadeIn}
-            style={{ ...styles.footerLink, marginBottom: 10 }}
+            style={[styles.footerLink, styles.resetLink]}
           >
-            {isToggled ? "Reset password" : "Login"}
+            {isToggled ? "Reset password" : "Back to login"}
           </Text>
           <Text style={styles.footerText}>Sign In with: </Text>
           <SocialIcon />
