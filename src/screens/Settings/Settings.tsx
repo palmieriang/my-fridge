@@ -95,6 +95,11 @@ const Settings = () => {
         <Picker
           selectedValue={selectedLocale}
           onValueChange={handleLocaleChange}
+          style={{
+            color: theme.text,
+            backgroundColor: theme.foreground,
+          }}
+          dropdownIconColor={theme.text}
         >
           {languageData.map((lang) => (
             <Picker.Item
@@ -106,7 +111,15 @@ const Settings = () => {
         </Picker>
       </View>
       <View style={styles.selectorContainer}>
-        <Picker selectedValue={selectedTheme} onValueChange={handleThemeChange}>
+        <Picker
+          selectedValue={selectedTheme}
+          onValueChange={handleThemeChange}
+          style={{
+            color: theme.text,
+            backgroundColor: theme.foreground,
+          }}
+          dropdownIconColor={theme.text}
+        >
           {themeData.map((themeOption) => (
             <Picker.Item
               key={themeOption.value}
