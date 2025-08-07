@@ -111,15 +111,15 @@ const SignIn = ({ navigation }: SignInProps) => {
       setPlayAnimation(false);
       setResetAnimation(true);
     } catch (error: any) {
-      setIsLoading(false);
-      setPlayAnimation(false);
-      setResetAnimation(true);
-
       Alert.alert(
         "Sign In Failed",
         error?.message || "Please check your credentials and try again.",
         [{ text: "OK" }],
       );
+    } finally {
+      setIsLoading(false);
+      setPlayAnimation(false);
+      setResetAnimation(true);
     }
   };
 
