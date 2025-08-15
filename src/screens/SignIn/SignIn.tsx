@@ -4,7 +4,8 @@ import SocialIcon from "@components/SocialIcon/SocialIcon";
 import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
 import useToggle from "@components/utils/useToggle";
-import { useState, useContext, useRef } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useState, useContext, useRef, useCallback } from "react";
 import {
   Animated,
   KeyboardAvoidingView,
@@ -19,7 +20,7 @@ import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
 import LottieAnimation from "../../animations/LottieAnimation";
-import { authStore } from "../../store";
+import { authStore, localeStore } from "../../store";
 import { validateEmail, validatePassword } from "../../utils/validation";
 
 interface SignInProps {
@@ -40,9 +41,19 @@ const SignIn = ({ navigation }: SignInProps) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const { authContext } = useContext(authStore);
+  const {
+    localizationContext: { t },
+  } = useContext(localeStore);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const buttonScaleAnim = useRef(new Animated.Value(1)).current;
+
+  useFocusEffect(
+    useCallback(() => {
+      setEmailError("");
+      setPasswordError("");
+    }, []),
+  );
 
   const fadeIn = () => {
     toggle();
@@ -193,6 +204,8 @@ const SignIn = ({ navigation }: SignInProps) => {
             Icon={UsernameIcon}
             keyboardType="email-address"
             autoCapitalize="none"
+            autoComplete="email"
+            textContentType="emailAddress"
             underlineColorAndroid="transparent"
             error={emailError}
             showError={!!emailError}
@@ -210,6 +223,8 @@ const SignIn = ({ navigation }: SignInProps) => {
                 placeholderText="Password"
                 Icon={PadlockIcon}
                 autoCapitalize="none"
+                autoComplete="current-password"
+                textContentType="password"
                 underlineColorAndroid="transparent"
                 secureTextEntry={!showPassword}
                 showPasswordToggle
@@ -225,7 +240,7 @@ const SignIn = ({ navigation }: SignInProps) => {
 
           <Animated.View style={{ transform: [{ scale: buttonScaleAnim }] }}>
             <Button
-              text={isToggled ? "Sign in" : "Reset password"}
+              text={isToggled ? t("signIn") : t("resetPassword")}
               onPress={isToggled ? handleSignIn : handleResetPassword}
             />
           </Animated.View>
@@ -234,7 +249,7 @@ const SignIn = ({ navigation }: SignInProps) => {
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="small" color={COLORS.PRIMARY_BLUE} />
               <Text style={styles.loadingText}>
-                {isToggled ? "Signing in..." : "Sending reset email..."}
+                {isToggled ? t("signingIn") : t("sendingResetEmail")}
               </Text>
             </View>
           )}
@@ -242,18 +257,18 @@ const SignIn = ({ navigation }: SignInProps) => {
 
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
-            New user?{" "}
+            {t("newUser")}{" "}
             <Text onPress={handleCreateAccount} style={styles.footerLink}>
-              Create an account
+              {t("createAccount")}
             </Text>
           </Text>
           <Text
             onPress={isToggled ? fadeOut : fadeIn}
             style={[styles.footerLink, styles.resetLink]}
           >
-            {isToggled ? "Reset password" : "Back to login"}
+            {isToggled ? t("resetPassword") : t("backToLogin")}
           </Text>
-          <Text style={styles.footerText}>Sign In with: </Text>
+          <Text style={styles.footerText}>{t("signInWith")} </Text>
           <SocialIcon />
         </View>
       </ScrollView>
