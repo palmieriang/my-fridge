@@ -14,6 +14,12 @@ import {
 
 import styles from "./styles";
 import { authStore } from "../../store";
+import {
+  validateEmail,
+  validatePassword,
+  validatePasswordConfirmation,
+  validateRequired,
+} from "../../utils/validation";
 
 interface RegistrationProps {
   navigation: {
@@ -26,13 +32,88 @@ const Registration = ({ navigation }: RegistrationProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [fullNameError, setFullNameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
 
   const { authContext } = useContext(authStore);
 
-  const handleRegistration = () => {
-    authContext
-      .signUp({ fullName, email, password, confirmPassword })
-      .then(() => navigation.navigate("signin"));
+  const handleFullNameValidation = (name: string) => {
+    const result = validateRequired(name.trim(), "Full name");
+    setFullNameError(result.error);
+    return result.isValid;
+  };
+
+  const handleEmailValidation = (email: string) => {
+    const result = validateEmail(email);
+    setEmailError(result.error);
+    return result.isValid;
+  };
+
+  const handlePasswordValidation = (password: string) => {
+    const result = validatePassword(password);
+    setPasswordError(result.error);
+    return result.isValid;
+  };
+
+  const handleConfirmPasswordValidation = (confirmPassword: string) => {
+    const result = validatePasswordConfirmation(password, confirmPassword);
+    setConfirmPasswordError(result.error);
+    return result.isValid;
+  };
+
+  const handleFullNameChange = (text: string) => {
+    setFullName(text);
+    if (fullNameError) setFullNameError("");
+  };
+
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+    if (emailError) setEmailError("");
+  };
+
+  const handlePasswordChange = (text: string) => {
+    setPassword(text);
+    if (passwordError) setPasswordError("");
+    if (confirmPassword && confirmPasswordError) {
+      const result = validatePasswordConfirmation(text, confirmPassword);
+      setConfirmPasswordError(result.error);
+    }
+  };
+
+  const handleConfirmPasswordChange = (text: string) => {
+    setConfirmPassword(text);
+    if (confirmPasswordError) setConfirmPasswordError("");
+  };
+
+  const handleRegistration = async () => {
+    const isFullNameValid = handleFullNameValidation(fullName);
+    const isEmailValid = handleEmailValidation(email);
+    const isPasswordValid = handlePasswordValidation(password);
+    const isConfirmPasswordValid =
+      handleConfirmPasswordValidation(confirmPassword);
+
+    if (
+      !isFullNameValid ||
+      !isEmailValid ||
+      !isPasswordValid ||
+      !isConfirmPasswordValid
+    ) {
+      return;
+    }
+
+    try {
+      await authContext.signUp({
+        fullName: fullName.trim(),
+        email,
+        password,
+        confirmPassword,
+      });
+      navigation.navigate("signin");
+    } catch (error) {
+      console.error("Registration error:", error);
+    }
   };
 
   const handleGoToLogin = () => {
@@ -52,38 +133,46 @@ const Registration = ({ navigation }: RegistrationProps) => {
       >
         <FormInput
           labelValue={fullName}
-          onChangeText={setFullName}
+          onChangeText={handleFullNameChange}
           placeholderText="Full Name"
           Icon={UsernameIcon}
-          autoCapitalize="none"
+          autoCapitalize="words"
           underlineColorAndroid="transparent"
+          error={fullNameError}
+          showError={!!fullNameError}
         />
         <FormInput
           labelValue={email}
-          onChangeText={setEmail}
+          onChangeText={handleEmailChange}
           placeholderText="Email"
           Icon={EmailIcon}
           keyboardType="email-address"
           autoCapitalize="none"
           underlineColorAndroid="transparent"
+          error={emailError}
+          showError={!!emailError}
         />
         <FormInput
           labelValue={password}
-          onChangeText={setPassword}
+          onChangeText={handlePasswordChange}
           placeholderText="Password"
           Icon={PadlockIcon}
           autoCapitalize="none"
           underlineColorAndroid="transparent"
           secureTextEntry
+          error={passwordError}
+          showError={!!passwordError}
         />
         <FormInput
           labelValue={confirmPassword}
-          onChangeText={setConfirmPassword}
+          onChangeText={handleConfirmPasswordChange}
           placeholderText="Confirm password"
           Icon={PadlockIcon}
           autoCapitalize="none"
           underlineColorAndroid="transparent"
           secureTextEntry
+          error={confirmPasswordError}
+          showError={!!confirmPasswordError}
         />
         <Button text="Create account" onPress={handleRegistration} />
         <View style={styles.footerView}>
