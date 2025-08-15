@@ -11,7 +11,7 @@ import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
 import { COLORS } from "../../constants/colors";
-import { themeStore } from "../../store";
+import { localeStore, themeStore } from "../../store";
 
 type FormInputProps = TextInputProps & {
   labelValue: string;
@@ -36,6 +36,9 @@ const FormInput = ({
   ...rest
 }: FormInputProps) => {
   const { theme } = useContext(themeStore);
+  const {
+    localizationContext: { t },
+  } = useContext(localeStore);
 
   return (
     <View
@@ -69,7 +72,7 @@ const FormInput = ({
           onPress={onTogglePasswordVisibility}
           accessible
           accessibilityLabel={
-            isPasswordVisible ? "Hide password" : "Show password"
+            isPasswordVisible ? t("hidePassword") : t("showPassword")
           }
         >
           <Ionicons
