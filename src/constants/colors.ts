@@ -18,6 +18,9 @@ export const COLORS = {
 
   // Status colors
   ERROR: "#dd2c00",
+  SUCCESS: "#4caf50",
+  WARNING: "#ff9800",
+  INFO: "#2196f3",
 
   // Social/External
   GOOGLE_RED: "#ea4335",

@@ -1,5 +1,6 @@
 import Button from "@components/Button/Button";
 import FormInput from "@components/FormInput/FormInput";
+import PasswordStrengthIndicator from "@components/PasswordStrengthIndicator/PasswordStrengthIndicator";
 import EmailIcon from "@components/svg/EmailIcon";
 import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
@@ -22,7 +23,6 @@ import {
   validatePasswordConfirmation,
   validateStrongPassword,
   validateFullName,
-  getPasswordStrength,
 } from "../../utils/validation";
 
 interface RegistrationProps {
@@ -41,15 +41,6 @@ const Registration = ({ navigation }: RegistrationProps) => {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState(
-    getPasswordStrength("", {
-      weak: COLORS.ERROR,
-      fair: "#ff9800",
-      good: "#2196f3",
-      strong: "#4caf50",
-      default: COLORS.DARK_GRAY,
-    }),
-  );
   const [acceptTerms, setAcceptTerms] = useState(false);
 
   const { authContext } = useContext(authStore);
@@ -90,15 +81,6 @@ const Registration = ({ navigation }: RegistrationProps) => {
 
   const handlePasswordChange = (text: string) => {
     setPassword(text);
-    setPasswordStrength(
-      getPasswordStrength(text, {
-        weak: COLORS.ERROR,
-        fair: "#ff9800",
-        good: "#2196f3",
-        strong: "#4caf50",
-        default: COLORS.DARK_GRAY,
-      }),
-    );
     if (passwordError) setPasswordError("");
     if (confirmPassword && confirmPasswordError) {
       const result = validatePasswordConfirmation(text, confirmPassword);
@@ -206,31 +188,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
           showError={!!passwordError}
         />
 
-        {password.length > 0 && (
-          <View style={styles.passwordStrengthContainer}>
-            <View style={styles.strengthBarContainer}>
-              {[1, 2, 3, 4].map((level) => (
-                <View
-                  key={level}
-                  style={[
-                    styles.strengthBar,
-                    {
-                      backgroundColor:
-                        level <= passwordStrength.strength
-                          ? passwordStrength.color
-                          : COLORS.LIGHT_GRAY,
-                    },
-                  ]}
-                />
-              ))}
-            </View>
-            <Text
-              style={[styles.strengthText, { color: passwordStrength.color }]}
-            >
-              {passwordStrength.text}
-            </Text>
-          </View>
-        )}
+        <PasswordStrengthIndicator password={password} />
 
         <FormInput
           labelValue={confirmPassword}

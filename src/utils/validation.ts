@@ -1,3 +1,5 @@
+import { COLORS } from "../constants/colors";
+
 export interface ValidationResult {
   isValid: boolean;
   error: string;
@@ -150,11 +152,11 @@ export const getPasswordStrength = (
     strong: string;
     default: string;
   } = {
-    weak: "#f44336",
-    fair: "#ff9800",
-    good: "#2196f3",
-    strong: "#4caf50",
-    default: "#999",
+    weak: COLORS.ERROR,
+    fair: COLORS.WARNING,
+    good: COLORS.INFO,
+    strong: COLORS.SUCCESS,
+    default: COLORS.DARK_GRAY,
   },
 ): PasswordStrength => {
   if (!password) {
