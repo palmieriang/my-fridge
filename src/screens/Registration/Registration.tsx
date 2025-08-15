@@ -10,15 +10,19 @@ import {
   ScrollView,
   Text,
   View,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
+import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
 import { authStore } from "../../store";
 import {
   validateEmail,
-  validatePassword,
   validatePasswordConfirmation,
-  validateRequired,
+  validateStrongPassword,
+  validateFullName,
+  getPasswordStrength,
 } from "../../utils/validation";
 
 interface RegistrationProps {
@@ -36,11 +40,22 @@ const Registration = ({ navigation }: RegistrationProps) => {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(
+    getPasswordStrength("", {
+      weak: COLORS.ERROR,
+      fair: "#ff9800",
+      good: "#2196f3",
+      strong: "#4caf50",
+      default: COLORS.DARK_GRAY,
+    }),
+  );
+  const [acceptTerms, setAcceptTerms] = useState(false);
 
   const { authContext } = useContext(authStore);
 
   const handleFullNameValidation = (name: string) => {
-    const result = validateRequired(name.trim(), "Full name");
+    const result = validateFullName(name);
     setFullNameError(result.error);
     return result.isValid;
   };
@@ -52,7 +67,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
   };
 
   const handlePasswordValidation = (password: string) => {
-    const result = validatePassword(password);
+    const result = validateStrongPassword(password);
     setPasswordError(result.error);
     return result.isValid;
   };
@@ -75,6 +90,15 @@ const Registration = ({ navigation }: RegistrationProps) => {
 
   const handlePasswordChange = (text: string) => {
     setPassword(text);
+    setPasswordStrength(
+      getPasswordStrength(text, {
+        weak: COLORS.ERROR,
+        fair: "#ff9800",
+        good: "#2196f3",
+        strong: "#4caf50",
+        default: COLORS.DARK_GRAY,
+      }),
+    );
     if (passwordError) setPasswordError("");
     if (confirmPassword && confirmPasswordError) {
       const result = validatePasswordConfirmation(text, confirmPassword);
@@ -103,6 +127,17 @@ const Registration = ({ navigation }: RegistrationProps) => {
       return;
     }
 
+    if (!acceptTerms) {
+      Alert.alert(
+        "Terms Required",
+        "Please accept the Terms and Conditions to create an account.",
+        [{ text: "OK" }],
+      );
+      return;
+    }
+
+    setIsLoading(true);
+
     try {
       await authContext.signUp({
         fullName: fullName.trim(),
@@ -111,8 +146,15 @@ const Registration = ({ navigation }: RegistrationProps) => {
         confirmPassword,
       });
       navigation.navigate("signin");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Registration error:", error);
+      Alert.alert(
+        "Registration Failed",
+        error?.message || "Unable to create account. Please try again.",
+        [{ text: "OK" }],
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -163,6 +205,33 @@ const Registration = ({ navigation }: RegistrationProps) => {
           error={passwordError}
           showError={!!passwordError}
         />
+
+        {password.length > 0 && (
+          <View style={styles.passwordStrengthContainer}>
+            <View style={styles.strengthBarContainer}>
+              {[1, 2, 3, 4].map((level) => (
+                <View
+                  key={level}
+                  style={[
+                    styles.strengthBar,
+                    {
+                      backgroundColor:
+                        level <= passwordStrength.strength
+                          ? passwordStrength.color
+                          : COLORS.LIGHT_GRAY,
+                    },
+                  ]}
+                />
+              ))}
+            </View>
+            <Text
+              style={[styles.strengthText, { color: passwordStrength.color }]}
+            >
+              {passwordStrength.text}
+            </Text>
+          </View>
+        )}
+
         <FormInput
           labelValue={confirmPassword}
           onChangeText={handleConfirmPasswordChange}
@@ -174,7 +243,30 @@ const Registration = ({ navigation }: RegistrationProps) => {
           error={confirmPasswordError}
           showError={!!confirmPasswordError}
         />
+
+        <View style={styles.termsContainer}>
+          <Text
+            style={[styles.checkbox, acceptTerms && styles.checkboxChecked]}
+            onPress={() => setAcceptTerms(!acceptTerms)}
+          >
+            {acceptTerms ? "✓" : ""}
+          </Text>
+          <Text style={styles.termsText}>
+            I accept the{" "}
+            <Text style={styles.termsLink}>Terms and Conditions</Text> and{" "}
+            <Text style={styles.termsLink}>Privacy Policy</Text>
+          </Text>
+        </View>
+
         <Button text="Create account" onPress={handleRegistration} />
+
+        {isLoading && (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="small" color={COLORS.PRIMARY_BLUE} />
+            <Text style={styles.loadingText}>Creating account...</Text>
+          </View>
+        )}
+
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
             Already got an account?{" "}

@@ -35,6 +35,32 @@ export const validatePassword = (
   return { isValid: true, error: "" };
 };
 
+export const validateStrongPassword = (password: string): ValidationResult => {
+  if (!password) {
+    return { isValid: false, error: "Password is required" };
+  }
+
+  if (password.length < 8) {
+    return {
+      isValid: false,
+      error: "Password must be at least 8 characters",
+    };
+  }
+
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasLowerCase = /[a-z]/.test(password);
+  const hasNumbers = /\d/.test(password);
+
+  if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
+    return {
+      isValid: false,
+      error: "Password must contain uppercase, lowercase, and numbers",
+    };
+  }
+
+  return { isValid: true, error: "" };
+};
+
 export const validatePasswordConfirmation = (
   password: string,
   confirmPassword: string,
@@ -45,6 +71,39 @@ export const validatePasswordConfirmation = (
 
   if (password !== confirmPassword) {
     return { isValid: false, error: "Passwords do not match" };
+  }
+
+  return { isValid: true, error: "" };
+};
+
+export const validateFullName = (name: string): ValidationResult => {
+  const trimmedName = name.trim();
+
+  if (!trimmedName) {
+    return { isValid: false, error: "Full name is required" };
+  }
+
+  if (trimmedName.length < 2) {
+    return {
+      isValid: false,
+      error: "Full name must be at least 2 characters",
+    };
+  }
+
+  if (trimmedName.length > 50) {
+    return {
+      isValid: false,
+      error: "Full name must be less than 50 characters",
+    };
+  }
+
+  // Check for at least first and last name
+  const nameParts = trimmedName.split(" ").filter((part) => part.length > 0);
+  if (nameParts.length < 2) {
+    return {
+      isValid: false,
+      error: "Please enter your first and last name",
+    };
   }
 
   return { isValid: true, error: "" };
@@ -74,4 +133,47 @@ export const validateMinLength = (
   }
 
   return { isValid: true, error: "" };
+};
+
+export interface PasswordStrength {
+  strength: number;
+  text: string;
+  color: string;
+}
+
+export const getPasswordStrength = (
+  password: string,
+  colors: {
+    weak: string;
+    fair: string;
+    good: string;
+    strong: string;
+    default: string;
+  } = {
+    weak: "#f44336",
+    fair: "#ff9800",
+    good: "#2196f3",
+    strong: "#4caf50",
+    default: "#999",
+  },
+): PasswordStrength => {
+  if (!password) {
+    return { strength: 0, text: "", color: colors.default };
+  }
+
+  let score = 0;
+  const checks = {
+    length: password.length >= 8,
+    uppercase: /[A-Z]/.test(password),
+    lowercase: /[a-z]/.test(password),
+    numbers: /\d/.test(password),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+
+  score = Object.values(checks).filter(Boolean).length;
+
+  if (score <= 2) return { strength: 1, text: "Weak", color: colors.weak };
+  if (score <= 3) return { strength: 2, text: "Fair", color: colors.fair };
+  if (score <= 4) return { strength: 3, text: "Good", color: colors.good };
+  return { strength: 4, text: "Strong", color: colors.strong };
 };
