@@ -1,4 +1,11 @@
-import { createContext, useEffect, useMemo, useReducer, useState } from "react";
+import {
+  createContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+  ReactNode,
+} from "react";
 import { Alert } from "react-native";
 
 import {
@@ -66,7 +73,7 @@ const authStore = createContext<AuthStoreValue>({
 });
 const { Provider } = authStore;
 
-const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, dispatch] = useReducer(reducer, initialState);
   const [userData, setUserData] = useState({});
 

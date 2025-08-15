@@ -4,6 +4,7 @@ import {
   useCallback,
   forwardRef,
   useImperativeHandle,
+  ReactElement,
 } from "react";
 import { View, I18nManager } from "react-native";
 import Swipeable, {
@@ -16,7 +17,7 @@ import { FRIDGE } from "../../constants";
 import { localeStore } from "../../store";
 
 type SwipeableRowProps = {
-  children: React.ReactElement;
+  children: ReactElement;
   modifyFunction: () => void;
   deleteFunction: () => void;
   freezeFunction: () => void;

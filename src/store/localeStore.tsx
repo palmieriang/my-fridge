@@ -1,6 +1,14 @@
 import { getLocales } from "expo-localization";
 import { I18n } from "i18n-js";
-import { createContext, useMemo, useState, useContext, useEffect } from "react";
+import {
+  createContext,
+  useMemo,
+  useState,
+  useContext,
+  useEffect,
+  Dispatch,
+  SetStateAction,
+} from "react";
 
 import { authStore } from "./authStore";
 import {
@@ -37,7 +45,7 @@ const defaultLocalizationContext: LocalizationContextProps = {
 
 const localeStore = createContext<{
   locale: SupportedLocale;
-  setLocale: React.Dispatch<React.SetStateAction<SupportedLocale>>;
+  setLocale: Dispatch<SetStateAction<SupportedLocale>>;
   localizationContext: LocalizationContextProps;
 }>({
   locale: defaultLocale,

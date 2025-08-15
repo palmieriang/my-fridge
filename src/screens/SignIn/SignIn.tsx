@@ -268,7 +268,6 @@ const SignIn = ({ navigation }: SignInProps) => {
           >
             {isToggled ? t("resetPassword") : t("backToLogin")}
           </Text>
-          <Text style={styles.footerText}>{t("signInWith")} </Text>
           <SocialIcon />
         </View>
       </ScrollView>

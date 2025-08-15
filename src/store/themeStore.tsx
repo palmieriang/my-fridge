@@ -1,4 +1,11 @@
-import { createContext, useState, useContext, useEffect, useMemo } from "react";
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  ReactNode,
+} from "react";
 
 import { authStore } from "./authStore";
 import {
@@ -48,7 +55,7 @@ const themeStore = createContext<ThemeStoreValue>({
 
 const { Provider } = themeStore;
 
-const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
+const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [themeName, setThemeName] = useState<string>("lightRed");
   const [theme, setTheme] = useState<ThemeType>(themes.lightRed);
   const {

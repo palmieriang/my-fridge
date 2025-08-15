@@ -1,4 +1,3 @@
-import * as React from "react";
 import { ColorValue } from "react-native";
 import Svg, { G, Path, SvgProps } from "react-native-svg";
 

@@ -1,5 +1,5 @@
 import { Timestamp } from "@react-native-firebase/firestore";
-import { ReactNode } from "react";
+import { Dispatch, ReactNode, SetStateAction } from "react";
 
 // authStore
 
@@ -13,7 +13,7 @@ export interface AuthStateType {
 export interface AuthContextMethods {
   signIn: ({ email, password }: { email: string; password: string }) => void;
   signInGoogle: () => void;
-  signOut: (dispatch: React.Dispatch<any>) => void;
+  signOut: (dispatch: Dispatch<any>) => void;
   signUp: ({
     fullName,
     email,
@@ -33,7 +33,7 @@ export interface AuthContextMethods {
 
 export interface AuthStoreValue {
   authState: AuthStateType;
-  dispatch: React.Dispatch<any>;
+  dispatch: Dispatch<any>;
   authContext: AuthContextMethods;
   userData: any;
 }
@@ -56,7 +56,7 @@ export type TranslateOptions = Record<string, unknown>;
 export interface LocalizationContextProps {
   t: (scope: string, options?: TranslateOptions) => string;
   locale: SupportedLocale;
-  setLocale: React.Dispatch<React.SetStateAction<SupportedLocale>>;
+  setLocale: Dispatch<SetStateAction<SupportedLocale>>;
   changeLocale: (params: {
     newLocale: SupportedLocale;
     id: string;
@@ -114,7 +114,7 @@ export interface ThemeContextMethods {
 
 export interface ThemeStoreValue {
   theme: ThemeType;
-  setTheme: React.Dispatch<React.SetStateAction<ThemeType>>;
+  setTheme: Dispatch<SetStateAction<ThemeType>>;
   themeName: string;
   themeContext: ThemeContextMethods;
 }
