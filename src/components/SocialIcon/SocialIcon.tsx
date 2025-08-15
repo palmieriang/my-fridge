@@ -1,14 +1,21 @@
-import { FontAwesome } from "@expo/vector-icons";
 import { useContext } from "react";
-import { View, StyleProp, ViewStyle } from "react-native";
-import { COLORS } from "src/constants/colors";
+import {
+  View,
+  TouchableOpacity,
+  Text,
+  StyleProp,
+  ViewStyle,
+} from "react-native";
 
 import styles from "./styles";
 import { authStore } from "../../store";
 
 type StylesType = {
   iconsContainer: StyleProp<ViewStyle>;
-  icons: StyleProp<ViewStyle>;
+  googleButton: StyleProp<ViewStyle>;
+  googleButtonText: StyleProp<ViewStyle>;
+  googleIcon: StyleProp<ViewStyle>;
+  googleButtonContent: StyleProp<ViewStyle>;
 };
 
 const SocialIcon = () => {
@@ -20,15 +27,28 @@ const SocialIcon = () => {
 
   return (
     <View style={(styles as StylesType).iconsContainer}>
-      <FontAwesome.Button
-        borderRadius={50}
-        color={COLORS.WHITE}
-        name="google"
-        backgroundColor={COLORS.GOOGLE_RED}
+      <TouchableOpacity
+        style={(styles as StylesType).googleButton}
         onPress={signInGoogle}
-        size={26}
-        iconStyle={styles.icons}
-      />
+        activeOpacity={0.8}
+      >
+        <View style={(styles as StylesType).googleButtonContent}>
+          <View style={(styles as StylesType).googleIcon}>
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: "bold",
+                color: "#4285f4",
+              }}
+            >
+              G
+            </Text>
+          </View>
+          <Text style={(styles as StylesType).googleButtonText}>
+            Sign in with Google
+          </Text>
+        </View>
+      </TouchableOpacity>
     </View>
   );
 };
