@@ -20,26 +20,6 @@ export default StyleSheet.create({
     fontSize: Typography.caption,
     color: COLORS.DARK_GRAY,
   },
-  passwordStrengthContainer: {
-    marginHorizontal: 20,
-    marginTop: -15,
-    marginBottom: 10,
-  },
-  strengthBarContainer: {
-    flexDirection: "row",
-    gap: 4,
-    marginBottom: 5,
-  },
-  strengthBar: {
-    flex: 1,
-    height: 4,
-    borderRadius: 2,
-  },
-  strengthText: {
-    fontSize: Typography.caption,
-    fontFamily: "OpenSans-Regular",
-    textAlign: "center",
-  },
   termsContainer: {
     flexDirection: "row",
     alignItems: "flex-start",
