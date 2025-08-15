@@ -37,6 +37,7 @@ const SignIn = ({ navigation }: SignInProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const { authContext } = useContext(authStore);
 
@@ -210,7 +211,12 @@ const SignIn = ({ navigation }: SignInProps) => {
                 Icon={PadlockIcon}
                 autoCapitalize="none"
                 underlineColorAndroid="transparent"
-                secureTextEntry
+                secureTextEntry={!showPassword}
+                showPasswordToggle
+                isPasswordVisible={showPassword}
+                onTogglePasswordVisibility={() =>
+                  setShowPassword(!showPassword)
+                }
                 error={passwordError}
                 showError={!!passwordError}
               />

@@ -1,5 +1,12 @@
+import { Ionicons } from "@expo/vector-icons";
 import { FC, useContext } from "react";
-import { View, TextInput, TextInputProps, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  TextInputProps,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
@@ -12,6 +19,9 @@ type FormInputProps = TextInputProps & {
   Icon: FC<SvgProps>;
   error?: string;
   showError?: boolean;
+  showPasswordToggle?: boolean;
+  isPasswordVisible?: boolean;
+  onTogglePasswordVisibility?: () => void;
 };
 
 const FormInput = ({
@@ -20,6 +30,9 @@ const FormInput = ({
   Icon,
   error,
   showError = false,
+  showPasswordToggle = false,
+  isPasswordVisible = false,
+  onTogglePasswordVisibility,
   ...rest
 }: FormInputProps) => {
   const { theme } = useContext(themeStore);
@@ -50,6 +63,22 @@ const FormInput = ({
         value={labelValue}
         {...rest}
       />
+      {showPasswordToggle && (
+        <TouchableOpacity
+          style={styles.eyeIcon}
+          onPress={onTogglePasswordVisibility}
+          accessible
+          accessibilityLabel={
+            isPasswordVisible ? "Hide password" : "Show password"
+          }
+        >
+          <Ionicons
+            name={isPasswordVisible ? "eye-off" : "eye"}
+            size={20}
+            color={theme.text}
+          />
+        </TouchableOpacity>
+      )}
       {showError && error && <Text style={styles.errorText}>{error}</Text>}
     </View>
   );

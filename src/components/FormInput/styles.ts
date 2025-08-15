@@ -43,4 +43,10 @@ export default StyleSheet.create({
     fontFamily: "OpenSans-Regular",
     fontSize: Typography.caption,
   },
+  eyeIcon: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 14,
+    paddingLeft: 8,
+  },
 });

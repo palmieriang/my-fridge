@@ -42,6 +42,8 @@ const Registration = ({ navigation }: RegistrationProps) => {
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { authContext } = useContext(authStore);
 
@@ -183,7 +185,10 @@ const Registration = ({ navigation }: RegistrationProps) => {
           Icon={PadlockIcon}
           autoCapitalize="none"
           underlineColorAndroid="transparent"
-          secureTextEntry
+          secureTextEntry={!showPassword}
+          showPasswordToggle
+          isPasswordVisible={showPassword}
+          onTogglePasswordVisibility={() => setShowPassword(!showPassword)}
           error={passwordError}
           showError={!!passwordError}
         />
@@ -197,7 +202,12 @@ const Registration = ({ navigation }: RegistrationProps) => {
           Icon={PadlockIcon}
           autoCapitalize="none"
           underlineColorAndroid="transparent"
-          secureTextEntry
+          secureTextEntry={!showConfirmPassword}
+          showPasswordToggle
+          isPasswordVisible={showConfirmPassword}
+          onTogglePasswordVisibility={() =>
+            setShowConfirmPassword(!showConfirmPassword)
+          }
           error={confirmPasswordError}
           showError={!!confirmPasswordError}
         />

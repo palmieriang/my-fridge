@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { View, Text } from "react-native";
 import { COLORS } from "src/constants/colors";
 
@@ -16,7 +16,7 @@ interface PasswordStrengthIndicatorProps {
   };
 }
 
-const PasswordStrengthIndicator: React.FC<PasswordStrengthIndicatorProps> = ({
+const PasswordStrengthIndicator: FC<PasswordStrengthIndicatorProps> = ({
   password,
   colorScheme = {
     weak: COLORS.ERROR,
