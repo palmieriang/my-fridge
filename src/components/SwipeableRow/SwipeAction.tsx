@@ -1,12 +1,13 @@
-import { Animated, Text } from "react-native";
+import { Text } from "react-native";
 import { RectButton } from "react-native-gesture-handler";
+import Animated, { useAnimatedStyle } from "react-native-reanimated";
 
 import styles from "./styles";
 
 type SwipeActionProps = {
   callback: () => void;
   color: string;
-  progress: Animated.AnimatedInterpolation<string | number>;
+  progress: Animated.SharedValue<number>;
   startValue: number;
   text: string;
 };
@@ -18,10 +19,14 @@ const SwipeAction = ({
   startValue,
   text,
 }: SwipeActionProps) => {
-  const containerStyle = {
-    flex: 1,
-    transform: [{ translateX: progress }],
-  };
+  const containerStyle = useAnimatedStyle(() => ({
+    width: 96,
+    transform: [
+      {
+        translateX: progress.value,
+      },
+    ],
+  }));
 
   return (
     <Animated.View style={containerStyle}>

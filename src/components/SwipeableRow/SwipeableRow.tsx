@@ -5,8 +5,11 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Animated, View, I18nManager } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
+import { View, I18nManager } from "react-native";
+import Swipeable, {
+  SwipeableMethods,
+} from "react-native-gesture-handler/ReanimatedSwipeable";
+import type { SharedValue } from "react-native-reanimated";
 
 import SwipeAction from "./SwipeAction";
 import { FRIDGE } from "../../constants";
@@ -23,12 +26,12 @@ type SwipeableRowProps = {
 type SwipeActionProps = {
   callback: () => void;
   color: string;
-  progress: Animated.AnimatedInterpolation<string | number>;
+  progress: SharedValue<number>;
   startValue: number;
   text: string;
 };
 
-type actionStyleProps = {
+type ActionStyleProps = {
   flexDirection: "row-reverse" | "row";
   width: number;
 };
@@ -47,7 +50,7 @@ const SwipeableRow = forwardRef(
     const {
       localizationContext: { t },
     } = useContext(localeStore);
-    const swipeableRef = useRef<Swipeable>(null);
+    const swipeableRef = useRef<SwipeableMethods>(null);
 
     useImperativeHandle(ref, () => ({
       close: () => {
@@ -55,13 +58,13 @@ const SwipeableRow = forwardRef(
       },
     }));
 
-    const getActionStyle = (width: number): actionStyleProps => ({
+    const getActionStyle = (width: number): ActionStyleProps => ({
       width,
       flexDirection: I18nManager.isRTL ? "row-reverse" : "row",
     });
 
     const renderActions = (actions: SwipeActionProps[], width: number) => (
-      <View style={getActionStyle(width)}>
+      <View style={[getActionStyle(width), { flexDirection: "row" }]}>
         {actions.map((action, index) => (
           <SwipeAction key={index} {...action} />
         ))}
@@ -70,16 +73,16 @@ const SwipeableRow = forwardRef(
 
     const renderLeftActions = useCallback(
       (
-        progress: Animated.AnimatedInterpolation<string | number>,
-        _drag: Animated.AnimatedInterpolation<string | number>,
-        _swipeable: Swipeable,
+        progress: SharedValue<number>,
+        _translation: SharedValue<number>,
+        _methods: SwipeableMethods,
       ) => {
         const leftActions = [
           {
             callback: freezeFunction,
             color: "#497AFC",
             progress,
-            startValue: -100,
+            startValue: 0,
             text: place === FRIDGE ? t("freeze") : t(FRIDGE),
           },
         ];
@@ -91,23 +94,23 @@ const SwipeableRow = forwardRef(
 
     const renderRightActions = useCallback(
       (
-        progress: Animated.AnimatedInterpolation<string | number>,
-        _drag: Animated.AnimatedInterpolation<string | number>,
-        _swipeable: Swipeable,
+        progress: SharedValue<number>,
+        _translation: SharedValue<number>,
+        _methods: SwipeableMethods,
       ) => {
         const rightActions = [
           {
             callback: modifyFunction,
             color: "#ffab00",
             progress,
-            startValue: 100,
+            startValue: 0,
             text: t("modify"),
           },
           {
             callback: deleteFunction,
             color: "#dd2c00",
             progress,
-            startValue: 100,
+            startValue: 0,
             text: t("delete"),
           },
         ];
