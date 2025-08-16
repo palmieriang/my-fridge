@@ -1,18 +1,12 @@
 import FloatingButton from "@components/FloatingButton/FloatingButton";
 import ProductCard from "@components/ProductCard/ProductCard";
+import SearchBar from "@components/SearchBar/SearchBar";
 import { useContext, useEffect, useRef, useState } from "react";
-import {
-  FlatList,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import type { Swipeable } from "react-native-gesture-handler";
 
 import styles from "./styles";
 import { FRIDGE } from "../../constants";
-import { COLORS } from "../../constants/colors";
 import {
   ProductListNavigationProp,
   ProductListRouteProp,
@@ -98,27 +92,11 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <View style={styles.controlsContainer}>
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={[
-              styles.searchInput,
-              { color: theme.text, backgroundColor: theme.foreground },
-            ]}
-            placeholder={t("search")}
-            placeholderTextColor={COLORS.DARK_GRAY}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-            autoCapitalize="none"
-          />
-          {searchQuery.length > 0 && (
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => setSearchQuery("")}
-            >
-              <Text style={styles.clearButtonText}>✕</Text>
-            </TouchableOpacity>
-          )}
-        </View>
+        <SearchBar
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          placeholder={t("search")}
+        />
         <TouchableOpacity
           style={[styles.sortButton, { backgroundColor: theme.foreground }]}
           onPress={handleSortToggle}
