@@ -24,18 +24,6 @@ export default StyleSheet.create({
     paddingBottom: 5,
     gap: 8,
   },
-  sortButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 4,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: COLORS.MEDIUM_LIGHT_GRAY,
-  },
-  sortButtonText: {
-    fontSize: Typography.subtitle,
-  },
   sortIndicator: {
     paddingHorizontal: responsive.containerPadding,
     paddingVertical: 8,

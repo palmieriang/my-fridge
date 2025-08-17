@@ -1,8 +1,9 @@
 import FloatingButton from "@components/FloatingButton/FloatingButton";
 import ProductCard from "@components/ProductCard/ProductCard";
 import SearchBar from "@components/SearchBar/SearchBar";
+import SortButton from "@components/SortButton/SortButton";
 import { useContext, useEffect, useRef, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Text, View } from "react-native";
 import type { Swipeable } from "react-native-gesture-handler";
 
 import styles from "./styles";
@@ -97,16 +98,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
           onChangeText={setSearchQuery}
           placeholder={t("search")}
         />
-        <TouchableOpacity
-          style={[styles.sortButton, { backgroundColor: theme.foreground }]}
-          onPress={handleSortToggle}
-        >
-          <Text style={styles.sortButtonText}>
-            {sortOrder === "default" && "📅"}
-            {sortOrder === "earlier" && "⏰"}
-            {sortOrder === "later" && "⌛"}
-          </Text>
-        </TouchableOpacity>
+        <SortButton sortOrder={sortOrder} onSortToggle={handleSortToggle} />
       </View>
 
       {sortOrder !== "default" && (
