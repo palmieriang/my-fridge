@@ -7,7 +7,7 @@ import { responsive } from "../../utils/responsive";
 export default StyleSheet.create({
   list: {
     flex: 1,
-    paddingTop: 10,
+    paddingTop: 4,
   },
   text: {
     height: 50,
@@ -21,15 +21,16 @@ export default StyleSheet.create({
     alignItems: "center",
     marginHorizontal: responsive.containerMargin,
     paddingTop: 10,
-    paddingBottom: 5,
+    paddingBottom: 4,
     gap: 8,
   },
   sortIndicator: {
-    paddingHorizontal: responsive.containerPadding,
+    marginHorizontal: responsive.containerMargin,
+    marginTop: 4,
     paddingVertical: 8,
     backgroundColor: COLORS.LIGHT_GRAY,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.MEDIUM_LIGHT_GRAY,
+    borderWidth: 1,
+    borderColor: COLORS.MEDIUM_LIGHT_GRAY,
   },
   sortIndicatorText: {
     fontSize: Typography.caption,

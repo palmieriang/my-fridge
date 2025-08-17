@@ -1,5 +1,6 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useContext } from "react";
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 import styles from "./styles";
 import { themeStore } from "../../store";
@@ -17,13 +18,13 @@ const SortButton = ({ sortOrder, onSortToggle }: SortButtonProps) => {
   const getSortIcon = () => {
     switch (sortOrder) {
       case "default":
-        return "📅";
+        return <Ionicons name="swap-vertical" size={20} color={theme.text} />;
       case "earlier":
-        return "⏰";
+        return <Ionicons name="arrow-up" size={20} color={theme.text} />;
       case "later":
-        return "⌛";
+        return <Ionicons name="arrow-down" size={20} color={theme.text} />;
       default:
-        return "📅";
+        return <Ionicons name="swap-vertical" size={20} color={theme.text} />;
     }
   };
 
@@ -32,7 +33,7 @@ const SortButton = ({ sortOrder, onSortToggle }: SortButtonProps) => {
       style={[styles.sortButton, { backgroundColor: theme.foreground }]}
       onPress={onSortToggle}
     >
-      <Text style={styles.sortButtonText}>{getSortIcon()}</Text>
+      {getSortIcon()}
     </TouchableOpacity>
   );
 };

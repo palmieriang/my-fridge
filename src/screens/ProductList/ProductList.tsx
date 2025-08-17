@@ -102,7 +102,9 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
       </View>
 
       {sortOrder !== "default" && (
-        <View style={styles.sortIndicator}>
+        <View
+          style={[styles.sortIndicator, { backgroundColor: theme.foreground }]}
+        >
           <Text style={[styles.sortIndicatorText, { color: theme.text }]}>
             {sortOrder === "earlier" && t("sortEarlier")}
             {sortOrder === "later" && t("sortLater")}
