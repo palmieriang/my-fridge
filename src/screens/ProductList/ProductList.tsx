@@ -4,7 +4,7 @@ import SearchBar from "@components/SearchBar/SearchBar";
 import SortButton from "@components/SortButton/SortButton";
 import { useContext, useEffect, useRef, useState } from "react";
 import { FlatList, Text, View } from "react-native";
-import type { Swipeable } from "react-native-gesture-handler";
+import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
 import { FRIDGE } from "../../constants";
@@ -60,7 +60,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
     swipeableRefs.current = swipeableRefs.current.slice(0, sortedList.length);
   }, [sortedList.length]);
 
-  const swipeableRefs = useRef<(Swipeable | null)[]>([]);
+  const swipeableRefs = useRef<(SwipeableMethods | null)[]>([]);
 
   const handleAddProduct = () => {
     navigateToProductForm({

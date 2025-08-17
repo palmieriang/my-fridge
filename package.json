@@ -2,14 +2,22 @@
   "main": "./src/App.tsx",
   "scripts": {
     "start": "npx expo start",
+    "start:clear": "npx expo start --clear",
     "android": "npx expo start --android",
     "ios": "npx expo start --ios",
     "web": "npx expo start --web",
-    "eject": "npx expo eject",
+    "build:android": "eas build --platform android",
+    "build:ios": "eas build --platform ios",
+    "build:all": "eas build --platform all",
     "lint": "eslint ./src",
     "lint:fix": "yarn lint --fix",
-    "postinstall": "node ./eas-build-pre-install.js",
-    "typecheck": "tsc --noEmit"
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json}\"",
+    "typecheck": "tsc --noEmit",
+    "clean": "npx expo install --fix",
+    "clean:cache": "npx expo start --clear && yarn cache clean",
+    "validate": "yarn typecheck && yarn lint && yarn format:check",
+    "postinstall": "node ./eas-build-pre-install.js"
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "8.4.1",
