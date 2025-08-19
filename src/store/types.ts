@@ -117,4 +117,5 @@ export interface ThemeStoreValue {
   setTheme: Dispatch<SetStateAction<ThemeType>>;
   themeName: string;
   themeContext: ThemeContextMethods;
+  availableThemes: string[];
 }

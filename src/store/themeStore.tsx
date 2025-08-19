@@ -30,6 +30,30 @@ const themes: ThemesMap = {
     text: COLORS.BLACK,
     primary: COLORS.PRIMARY_BLUE,
   },
+  lightGreen: {
+    foreground: COLORS.WHITE,
+    background: COLORS.LIGHT_BACKGROUND,
+    text: COLORS.BLACK,
+    primary: COLORS.PRIMARY_GREEN,
+  },
+  lightPurple: {
+    foreground: COLORS.WHITE,
+    background: COLORS.LIGHT_BACKGROUND,
+    text: COLORS.BLACK,
+    primary: COLORS.PRIMARY_PURPLE,
+  },
+  lightOrange: {
+    foreground: COLORS.WHITE,
+    background: COLORS.LIGHT_BACKGROUND,
+    text: COLORS.BLACK,
+    primary: COLORS.PRIMARY_ORANGE,
+  },
+  lightTeal: {
+    foreground: COLORS.WHITE,
+    background: COLORS.LIGHT_BACKGROUND,
+    text: COLORS.BLACK,
+    primary: COLORS.PRIMARY_TEAL,
+  },
   darkRed: {
     foreground: COLORS.DARK_FOREGROUND,
     background: COLORS.DARK_BACKGROUND,
@@ -42,7 +66,33 @@ const themes: ThemesMap = {
     text: COLORS.WHITE,
     primary: COLORS.PRIMARY_BLUE,
   },
+  darkGreen: {
+    foreground: COLORS.DARK_FOREGROUND,
+    background: COLORS.DARK_BACKGROUND,
+    text: COLORS.WHITE,
+    primary: COLORS.PRIMARY_GREEN,
+  },
+  darkPurple: {
+    foreground: COLORS.DARK_FOREGROUND,
+    background: COLORS.DARK_BACKGROUND,
+    text: COLORS.WHITE,
+    primary: COLORS.PRIMARY_PURPLE,
+  },
+  darkOrange: {
+    foreground: COLORS.DARK_FOREGROUND,
+    background: COLORS.DARK_BACKGROUND,
+    text: COLORS.WHITE,
+    primary: COLORS.PRIMARY_ORANGE,
+  },
+  darkTeal: {
+    foreground: COLORS.DARK_FOREGROUND,
+    background: COLORS.DARK_BACKGROUND,
+    text: COLORS.WHITE,
+    primary: COLORS.PRIMARY_TEAL,
+  },
 };
+
+const AVAILABLE_THEMES = Object.keys(themes);
 
 const themeStore = createContext<ThemeStoreValue>({
   theme: themes.lightRed,
@@ -51,6 +101,7 @@ const themeStore = createContext<ThemeStoreValue>({
   themeContext: {
     changeTheme: () => {},
   },
+  availableThemes: AVAILABLE_THEMES,
 });
 
 const { Provider } = themeStore;
@@ -92,7 +143,15 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   );
 
   return (
-    <Provider value={{ theme, setTheme, themeName, themeContext }}>
+    <Provider
+      value={{
+        theme,
+        setTheme,
+        themeName,
+        themeContext,
+        availableThemes: AVAILABLE_THEMES,
+      }}
+    >
       {children}
     </Provider>
   );

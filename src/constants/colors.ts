@@ -3,6 +3,14 @@ export const COLORS = {
   PRIMARY_RED: "#e74c3c",
   PRIMARY_BLUE: "#48bbec",
 
+  PRIMARY_GREEN: "#27ae60",
+  SECONDARY_GREEN: "#2ecc71",
+  PRIMARY_PURPLE: "#9b59b6",
+  SECONDARY_PURPLE: "#8e44ad",
+  PRIMARY_ORANGE: "#e67e22",
+  PRIMARY_TEAL: "#1abc9c",
+  SECONDARY_TEAL: "#16a085",
+
   // Neutral colors
   WHITE: "#ffffff",
   BLACK: "#000000",

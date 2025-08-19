@@ -2,6 +2,7 @@ import { Picker } from "@react-native-picker/picker";
 import { useContext, useEffect, useState } from "react";
 import { Alert, Button, Text, View } from "react-native";
 
+import { generateThemeData } from "./generateThemeData";
 import styles from "./styles";
 import { authStore, localeStore, themeStore } from "../../store";
 import type { SupportedLocale } from "../../store/types";
@@ -20,6 +21,7 @@ const Settings = () => {
     theme,
     themeName,
     themeContext: { changeTheme },
+    availableThemes,
   } = useContext(themeStore);
 
   const [selectedLocale, setSelectedLocale] = useState<SupportedLocale>(locale);
@@ -43,13 +45,10 @@ const Settings = () => {
     { label: t("portuguese"), value: "pt", key: "portuguese" },
   ];
 
-  const themeData = [
-    { label: t("changeTheme"), value: "", key: "title" },
-    { label: "Light Red", value: "lightRed", key: "lightRed" },
-    { label: "Light Blue", value: "lightBlue", key: "lightBlue" },
-    { label: "Dark Red", value: "darkRed", key: "darkRed" },
-    { label: "Dark Blue", value: "darkBlue", key: "darkBlue" },
-  ];
+  const themeData = generateThemeData({
+    availableThemes,
+    changeThemeLabel: t("changeTheme"),
+  });
 
   const handleLocaleChange = (newLocale: SupportedLocale) => {
     if (!newLocale) return;
