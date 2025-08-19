@@ -7,7 +7,6 @@ import { responsive } from "../../utils/responsive";
 export default StyleSheet.create({
   button: {
     alignItems: "center",
-    backgroundColor: COLORS.PRIMARY_BLUE,
     borderRadius: 4,
     justifyContent: "center",
     height: responsive.minTouchTarget,
@@ -23,7 +22,24 @@ export default StyleSheet.create({
     textShadowRadius: 1,
     textTransform: "uppercase",
   },
-  buttonDelete: {
-    backgroundColor: COLORS.PRIMARY_RED,
+  buttonDanger: {
+    alignItems: "center",
+    backgroundColor: COLORS.ERROR,
+    borderRadius: 4,
+    justifyContent: "center",
+    height: responsive.minTouchTarget,
+    marginHorizontal: responsive.containerMargin,
+    marginTop: 10,
+  },
+  buttonSecondary: {
+    alignItems: "center",
+    backgroundColor: "transparent",
+    borderColor: COLORS.MEDIUM_DARK_GRAY,
+    borderRadius: 4,
+    borderWidth: 1,
+    justifyContent: "center",
+    height: responsive.minTouchTarget,
+    marginHorizontal: responsive.containerMargin,
+    marginTop: 10,
   },
 });

@@ -180,11 +180,12 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         <Button
           text={existingId ? t("modify") : t("add")}
           onPress={handleAddPress}
+          variant="primary"
         />
         <Button
           text={existingId ? t("delete") : t("cancel")}
           onPress={handleDeletePress}
-          buttonDelete
+          variant={existingId ? "danger" : "secondary"}
         />
       </ScrollView>
     </KeyboardAvoidingView>
