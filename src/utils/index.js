@@ -16,11 +16,12 @@ export function convertToCustomFormat(isoString) {
 }
 
 export function daysUntilDate(dateString) {
-  const date = moment(dateString, "D MMM YYYY");
-  const today = moment();
-  const difference = date.diff(today, "days");
+  const targetDate = moment(dateString, "D MMM YYYY").startOf("day");
+  const today = moment().startOf("day");
 
-  return difference;
+  const diffDays = targetDate.diff(today, "days");
+
+  return diffDays;
 }
 
 export const countExpiredItems = (productsList) => {

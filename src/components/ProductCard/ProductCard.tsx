@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useContext, useEffect, useState, forwardRef } from "react";
+import { useContext, forwardRef } from "react";
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 
@@ -23,8 +23,6 @@ const ProductCard = forwardRef<Swipeable, ProductCardProps>(
   ({ product }, ref) => {
     const { date, id, name, place } = product;
 
-    const [expired, setExpired] = useState(false);
-
     const { navigate } = useNavigation<FormScreenNavigationProp>();
 
     const {
@@ -34,14 +32,7 @@ const ProductCard = forwardRef<Swipeable, ProductCardProps>(
     const { productsContext } = useContext(productsStore);
 
     const days = daysUntilDate(date);
-
-    useEffect(() => {
-      if (days < 0) {
-        setExpired(true);
-      } else {
-        setExpired(false);
-      }
-    });
+    const expired = days < 0;
 
     const handleChange = () => {
       productsContext
