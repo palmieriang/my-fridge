@@ -35,6 +35,7 @@ export const PlacePicker: React.FC<PlacePickerProps> = ({
         onValueChange={onPlaceChange}
         itemStyle={Platform.OS === "ios" ? styles.iosHeight : undefined}
         style={[styles.picker, { color: theme.text }]}
+        dropdownIconColor={theme.text}
       >
         <Picker.Item label={t("choosePlace")} value="" />
         <Picker.Item label={t(FRIDGE)} value="fridge" />

@@ -64,6 +64,8 @@ const FormInput = ({
         placeholderTextColor={COLORS.DARK_GRAY}
         style={[styles.input, { color: theme.text }]}
         value={labelValue}
+        accessibilityLabel={placeholderText}
+        accessibilityHint={placeholderText}
         {...rest}
       />
       {showPasswordToggle && (

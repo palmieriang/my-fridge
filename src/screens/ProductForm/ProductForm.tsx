@@ -4,7 +4,7 @@ import { PlacePicker } from "@components/PlacePicker/PlacePicker";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { useContext } from "react";
-import { KeyboardAvoidingView, ScrollView, Platform } from "react-native";
+import { KeyboardAvoidingView, ScrollView, Platform, Text } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
@@ -67,20 +67,26 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
       keyboardVerticalOffset={0}
     >
       <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+        <Text style={[styles.label, { color: theme.text }]}>
+          {t("product")}
+        </Text>
         <FormInput
           labelValue={name}
           onChangeText={handleChangeName}
-          placeholderText={t("product")}
+          placeholderText={t("productPlaceholder")}
           Icon={ShoppingBasketIcon}
           autoCapitalize="sentences"
           underlineColorAndroid="transparent"
           error={errors.name}
           showError={!!errors.name}
         />
+        <Text style={[styles.label, { color: theme.text }]}>
+          {t("expirationDate")}
+        </Text>
         <FormInput
           labelValue={date}
           onChangeText={handleDatePress}
-          placeholderText={t("date")}
+          placeholderText={t("datePickerPlaceholder")}
           Icon={CalendarIcon}
           editable={!showDatePicker}
           onFocus={handleDatePress}
@@ -94,6 +100,9 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           onConfirm={handleDatePicked}
           onCancel={handleDatePickerHide}
         />
+        <Text style={[styles.label, { color: theme.text }]}>
+          {t("location")}
+        </Text>
         <PlacePicker
           selectedPlace={place}
           onPlaceChange={handlePlaceChange}
