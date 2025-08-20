@@ -31,15 +31,4 @@ export default StyleSheet.create({
     marginHorizontal: responsive.containerMargin,
     marginTop: 10,
   },
-  buttonSecondary: {
-    alignItems: "center",
-    backgroundColor: "transparent",
-    borderColor: COLORS.MEDIUM_DARK_GRAY,
-    borderRadius: 4,
-    borderWidth: 1,
-    justifyContent: "center",
-    height: responsive.minTouchTarget,
-    marginHorizontal: responsive.containerMargin,
-    marginTop: 10,
-  },
 });

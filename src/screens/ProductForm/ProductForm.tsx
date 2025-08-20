@@ -1,22 +1,19 @@
 import Button from "@components/Button/Button";
 import FormInput from "@components/FormInput/FormInput";
+import { PlacePicker } from "@components/PlacePicker/PlacePicker";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
-import { Picker } from "@react-native-picker/picker";
 import { useContext, useState } from "react";
 import {
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
-  View,
   Alert,
-  Text,
+  Platform,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
 import { validateProductWithErrors } from "./validateProduct";
-import { FRIDGE, FREEZER } from "../../constants";
 import {
   FormScreenNavigationProp,
   FormScreenRouteProp,
@@ -156,27 +153,11 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           onConfirm={handleDatePicked}
           onCancel={handleDatePickerHide}
         />
-        <View
-          style={[
-            styles.inputContainer,
-            { backgroundColor: theme.foreground },
-            errors.place && styles.pickerError,
-          ]}
-        >
-          <Picker
-            selectedValue={place}
-            onValueChange={(itemValue) => setPlace(itemValue)}
-            itemStyle={Platform.OS === "ios" ? styles.iosHeight : undefined}
-            style={[styles.pickerPlaceholder, { color: theme.text }]}
-          >
-            <Picker.Item label={t("choosePlace")} value="" />
-            <Picker.Item label={t(FRIDGE)} value="fridge" />
-            <Picker.Item label={t(FREEZER)} value="freezer" />
-          </Picker>
-          {errors.place && (
-            <Text style={styles.pickerErrorText}>{errors.place}</Text>
-          )}
-        </View>
+        <PlacePicker
+          selectedPlace={place}
+          onPlaceChange={(itemValue) => setPlace(itemValue)}
+          error={errors.place}
+        />
         <Button
           text={existingId ? t("modify") : t("add")}
           onPress={handleAddPress}
@@ -185,7 +166,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         <Button
           text={existingId ? t("delete") : t("cancel")}
           onPress={handleDeletePress}
-          variant={existingId ? "danger" : "secondary"}
+          variant="danger"
         />
       </ScrollView>
     </KeyboardAvoidingView>
