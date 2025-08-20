@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { useContext, forwardRef } from "react";
 import { Text, TouchableWithoutFeedback, View } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
+import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
 import { FRIDGE, FREEZER } from "../../constants";
@@ -19,7 +19,7 @@ type ProductCardProps = {
   };
 };
 
-const ProductCard = forwardRef<Swipeable, ProductCardProps>(
+const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
   ({ product }, ref) => {
     const { date, id, name, place } = product;
 

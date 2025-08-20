@@ -37,7 +37,7 @@ type ActionStyleProps = {
   width: number;
 };
 
-const SwipeableRow = forwardRef(
+const SwipeableRow = forwardRef<SwipeableMethods, SwipeableRowProps>(
   (
     {
       children,
@@ -56,6 +56,15 @@ const SwipeableRow = forwardRef(
     useImperativeHandle(ref, () => ({
       close: () => {
         swipeableRef.current?.close();
+      },
+      openLeft: () => {
+        swipeableRef.current?.openLeft();
+      },
+      openRight: () => {
+        swipeableRef.current?.openRight();
+      },
+      reset: () => {
+        swipeableRef.current?.reset();
       },
     }));
 
