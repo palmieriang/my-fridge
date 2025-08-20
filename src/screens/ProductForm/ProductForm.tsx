@@ -2,6 +2,7 @@ import Button from "@components/Button/Button";
 import FormInput from "@components/FormInput/FormInput";
 import { PlacePicker } from "@components/PlacePicker/PlacePicker";
 import CalendarIcon from "@components/svg/CalendarIcon";
+import FridgeIcon from "@components/svg/FridgeIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { useContext } from "react";
 import { KeyboardAvoidingView, ScrollView, Platform, Text } from "react-native";
@@ -107,6 +108,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           selectedPlace={place}
           onPlaceChange={handlePlaceChange}
           error={errors.place}
+          Icon={FridgeIcon}
         />
         <Button
           text={params?.id ? t("modify") : t("add")}

@@ -1,21 +1,25 @@
 import { Picker } from "@react-native-picker/picker";
-import { useContext } from "react";
+import { useContext, FC } from "react";
 import { Platform, Text, View } from "react-native";
+import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
 import { FRIDGE, FREEZER } from "../../constants";
+import { COLORS } from "../../constants/colors";
 import { localeStore, themeStore } from "../../store";
 
 type PlacePickerProps = {
   selectedPlace: "fridge" | "freezer" | "";
   onPlaceChange: (place: "fridge" | "freezer" | "") => void;
   error?: string;
+  Icon: FC<SvgProps>;
 };
 
 export const PlacePicker: React.FC<PlacePickerProps> = ({
   selectedPlace,
   onPlaceChange,
   error,
+  Icon,
 }) => {
   const {
     localizationContext: { t },
@@ -30,6 +34,9 @@ export const PlacePicker: React.FC<PlacePickerProps> = ({
         error && styles.containerError,
       ]}
     >
+      <View style={styles.iconStyle}>
+        <Icon width={25} height={25} fill={error ? COLORS.ERROR : theme.text} />
+      </View>
       <Picker
         selectedValue={selectedPlace}
         onValueChange={onPlaceChange}
