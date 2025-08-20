@@ -31,4 +31,12 @@ export default StyleSheet.create({
     marginHorizontal: responsive.containerMargin,
     marginTop: 10,
   },
+  buttonDisabled: {
+    opacity: 0.6,
+    backgroundColor: COLORS.MEDIUM_DARK_GRAY,
+  },
+  buttonTitleDisabled: {
+    color: COLORS.DARK_GRAY,
+    textShadowRadius: 0,
+  },
 });

@@ -8,24 +8,49 @@ type ButtonProps = {
   text: string;
   onPress: () => void;
   variant?: "primary" | "danger";
+  disabled?: boolean;
 };
 
-const Button = ({ text, onPress, variant = "primary" }: ButtonProps) => {
+const Button = ({
+  text,
+  onPress,
+  variant = "primary",
+  disabled = false,
+}: ButtonProps) => {
   const { theme } = useContext(themeStore);
 
   const getButtonStyle = () => {
-    switch (variant) {
-      case "danger":
-        return styles.buttonDanger;
-      case "primary":
-      default:
-        return [styles.button, { backgroundColor: theme.primary }];
+    const baseStyle = (() => {
+      switch (variant) {
+        case "danger":
+          return styles.buttonDanger;
+        case "primary":
+        default:
+          return [styles.button, { backgroundColor: theme.primary }];
+      }
+    })();
+
+    if (disabled) {
+      return [baseStyle, styles.buttonDisabled];
     }
+
+    return baseStyle;
+  };
+
+  const getTextStyle = () => {
+    if (disabled) {
+      return [styles.buttonTitle, styles.buttonTitleDisabled];
+    }
+    return styles.buttonTitle;
   };
 
   return (
-    <TouchableOpacity onPress={onPress} style={getButtonStyle()}>
-      <Text style={styles.buttonTitle}>{text}</Text>
+    <TouchableOpacity
+      onPress={disabled ? undefined : onPress}
+      style={getButtonStyle()}
+      disabled={disabled}
+    >
+      <Text style={getTextStyle()}>{text}</Text>
     </TouchableOpacity>
   );
 };

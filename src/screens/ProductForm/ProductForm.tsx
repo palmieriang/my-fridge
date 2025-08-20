@@ -3,24 +3,17 @@ import FormInput from "@components/FormInput/FormInput";
 import { PlacePicker } from "@components/PlacePicker/PlacePicker";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
-import { useContext, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  ScrollView,
-  Alert,
-  Platform,
-} from "react-native";
+import { useContext } from "react";
+import { KeyboardAvoidingView, ScrollView, Platform } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
-import { validateProductWithErrors } from "./validateProduct";
+import { useProductForm } from "./useProductForm";
 import {
   FormScreenNavigationProp,
   FormScreenRouteProp,
 } from "../../navigation/navigation.d";
 import { authStore, localeStore, productsStore, themeStore } from "../../store";
-import type { NewProduct } from "../../store/types";
-import { convertToISODateString, convertToCustomFormat } from "../../utils";
 
 type ProductFormProps = {
   navigation: FormScreenNavigationProp;
@@ -38,86 +31,34 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   const { theme } = useContext(themeStore);
   const { productsContext } = useContext(productsStore);
 
-  const existingId = params?.id || "";
-  const initPickerDate = params.product?.date
-    ? convertToISODateString(params.product?.date)
-    : new Date();
-
-  const [name, setName] = useState(params.product?.name || "");
-  const [date, setDate] = useState(params.product?.date || "");
-  const [place, setPlace] = useState<"fridge" | "freezer" | "">(
-    params.product?.place || "",
-  );
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [errors, setErrors] = useState<{
-    name?: string;
-    date?: string;
-    place?: string;
-  }>({});
-
-  const userID = user.uid;
-
-  const handleAddPress = async () => {
-    setErrors({});
-
-    const validation = validateProductWithErrors({ name, date, place, t });
-
-    if (!validation.isValid) {
-      setErrors(validation.errors);
-      return;
-    }
-
-    const data: NewProduct = {
-      name: name.trim(),
-      date,
-      place: place as "fridge" | "freezer",
-      authorID: userID,
-    };
-
-    try {
-      if (existingId) {
-        await productsContext.handleModifyProduct(data, existingId);
-      } else {
-        await productsContext.handleSaveProduct(data);
-      }
-      navigateToList();
-    } catch (error) {
-      console.error("Error saving product:", error);
-      Alert.alert(t("validationError"), t("productSaveError"));
-    }
-  };
-
-  const handleChangeName = (value: string) => {
-    setName(value);
-  };
-
-  const handleDatePress = () => {
-    setShowDatePicker(true);
-  };
-
-  const handleDatePicked = (pickedDate: Date) => {
-    setDate(convertToCustomFormat(pickedDate));
-    handleDatePickerHide();
-  };
-
-  const handleDatePickerHide = () => {
-    setShowDatePicker(false);
-  };
-
-  const handleDeletePress = async () => {
-    try {
-      if (existingId) {
-        await productsContext.handleDeleteProduct(existingId);
-      }
-      navigateToList();
-    } catch (error) {
-      console.log("Error: ", error);
-    }
-  };
-
   const navigateToList = () => {
     navigation.navigate("list" as never);
   };
+
+  const {
+    name,
+    date,
+    place,
+    showDatePicker,
+    errors,
+    isSubmitting,
+    isDeleting,
+    initPickerDate,
+    handleChangeName,
+    handleDatePress,
+    handleDatePicked,
+    handleDatePickerHide,
+    handlePlaceChange,
+    handleSubmit,
+    handleDelete,
+  } = useProductForm({
+    existingProduct: params.product,
+    existingId: params?.id || "",
+    userID: user.uid,
+    t,
+    onSuccess: navigateToList,
+    productsContext,
+  });
 
   return (
     <KeyboardAvoidingView
@@ -155,18 +96,20 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         />
         <PlacePicker
           selectedPlace={place}
-          onPlaceChange={(itemValue) => setPlace(itemValue)}
+          onPlaceChange={handlePlaceChange}
           error={errors.place}
         />
         <Button
-          text={existingId ? t("modify") : t("add")}
-          onPress={handleAddPress}
+          text={params?.id ? t("modify") : t("add")}
+          onPress={handleSubmit}
           variant="primary"
+          disabled={isSubmitting}
         />
         <Button
-          text={existingId ? t("delete") : t("cancel")}
-          onPress={handleDeletePress}
+          text={params?.id ? t("delete") : t("cancel")}
+          onPress={params?.id ? handleDelete : navigateToList}
           variant="danger"
+          disabled={isDeleting}
         />
       </ScrollView>
     </KeyboardAvoidingView>
