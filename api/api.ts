@@ -114,7 +114,7 @@ export function authSignIn(email: string, password: string) {
   );
 }
 
-export async function signInWithGoogle() {
+export async function signInWithGoogle(dispatch?: Function) {
   try {
     GoogleSignin.configure({
       webClientId:
@@ -148,6 +148,18 @@ export async function signInWithGoogle() {
       console.log("New user created via Google:", user.uid);
     } else {
       console.log("Existing user signed in via Google:", user.uid);
+      // Existing users keep their current profile image setup
+      // No automatic updates to avoid overriding user preferences
+    }
+
+    // Dispatch profile image to app state
+    if (dispatch) {
+      if (user.photoURL) {
+        dispatch({ type: ActionTypes.PROFILE_IMG, imgUrl: user.photoURL });
+      } else {
+        // Fallback to getting from stored user data or storage
+        await getProfileImageFromFirebase(user.uid, dispatch);
+      }
     }
 
     return { user };
@@ -217,8 +229,9 @@ export function deleteUserData(uid: string) {
 
 export async function getUserData(uid: string) {
   const snapshot = await getDoc(doc(getUsersRef(), uid));
-  if (!snapshot.exists())
+  if (!snapshot.exists()) {
     throw new Error("User data not found for ID: " + uid);
+  }
 
   return snapshot.data() as UserData;
 }
@@ -384,15 +397,35 @@ export async function getProfileImageFromFirebase(
   callback: Function,
 ) {
   try {
+    // First, try to get uploaded image from Firebase Storage
     const url = await getDownloadURL(
       ref(getStorageService(), `profileImages/${uid}`),
     );
     callback({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
   } catch (error: any) {
-    if (error.code !== "storage/object-not-found") {
+    if (error.code === "storage/object-not-found") {
+      // If no uploaded image, check user data for Google profile image
+      try {
+        const userData = await getUserData(uid);
+        if (userData.profileImg) {
+          callback({
+            type: ActionTypes.PROFILE_IMG,
+            imgUrl: userData.profileImg,
+          });
+        } else {
+          callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
+        }
+      } catch (userDataError: any) {
+        console.log(
+          "Error fetching user data for profile image:",
+          userDataError.message,
+        );
+        callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
+      }
+    } else {
       console.log("Profile img error:", error.message);
+      callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
     }
-    callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
 

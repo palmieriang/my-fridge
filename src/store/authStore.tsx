@@ -90,7 +90,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         authSignIn(email, password);
       },
       signInGoogle: () => {
-        signInWithGoogle();
+        signInWithGoogle(dispatch);
       },
       signOut: () => {
         authSignOut(dispatch);
