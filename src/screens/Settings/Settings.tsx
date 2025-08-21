@@ -1,12 +1,12 @@
+import { LanguagePicker } from "@components/Picker/LanguagePicker";
+import { ThemePicker } from "@components/Picker/ThemePicker";
+import { UserActions } from "@components/UserActions/UserActions";
+import BrushIcon from "@components/svg/BrushIcon";
+import LanguageIcon from "@components/svg/LanguageIcon";
 import { useContext, useEffect, useState } from "react";
 import { View } from "react-native";
 
 import styles from "./styles";
-import { LanguagePicker } from "../../components/Picker/LanguagePicker";
-import { ThemePicker } from "../../components/Picker/ThemePicker";
-import { UserActions } from "../../components/UserActions/UserActions";
-import BrushIcon from "../../components/svg/BrushIcon";
-import LanguageIcon from "../../components/svg/LanguageIcon";
 import { authStore, localeStore, themeStore } from "../../store";
 import type { SupportedLocale } from "../../store/types";
 import Profile from "../Profile/Profile";
