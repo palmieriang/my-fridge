@@ -18,7 +18,6 @@
     },
     "android": {
       "package": "com.myfridge.App",
-      "versionCode": 18,
       "permissions": [],
       "googleServicesFile": "./google-services.json"
     },
@@ -44,7 +43,11 @@
             "compileSdkVersion": 35,
             "targetSdkVersion": 35,
             "minSdkVersion": 24,
-            "usesCleartextTraffic": true
+            "usesCleartextTraffic": true,
+            "proguardFiles": [
+              "proguard-android-optimize.txt",
+              "proguard-rules.pro"
+            ]
           },
           "ios": {
             "useFrameworks": "static"
