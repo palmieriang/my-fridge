@@ -14,7 +14,6 @@ import {
   authSignOut,
   createUser,
   sendResetPassword,
-  deleteProfileImage,
   signInWithGoogle,
   deleteAccount,
 } from "../../api/api";
@@ -169,7 +168,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         dispatch({ type: ActionTypes.PROFILE_IMG, imgUrl: url });
       },
       deleteImage: (id) => {
-        deleteProfileImage(id, dispatch);
+        // Profile images are now handled by Cloud Functions during account deletion
+        dispatch({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
       },
       deleteUser: () => {
         deleteAccount();

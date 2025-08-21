@@ -61,6 +61,7 @@ export async function createUser(
       email,
       password,
     );
+    // Create user document (triggers Cloud Function for additional setup)
     const userData: UserData = {
       id: user.uid,
       email,
@@ -69,6 +70,7 @@ export async function createUser(
       theme: "lightBlue",
     };
     await addUserData(user.uid, userData);
+    console.log("User document created, Cloud Function will handle setup");
     await sendEmailVerification(user);
     return { uid: user.uid };
   } catch (error: any) {
@@ -81,22 +83,12 @@ export async function deleteAccount() {
   if (!user) return;
 
   try {
-    await deleteAllProductsFromUser(user.uid);
+    // Step 1: Delete user document first (triggers Cloud Function cleanup)
     await deleteUserData(user.uid);
+    console.log("User document deleted, Cloud Function will clean up data");
 
-    await (async () => {
-      try {
-        await deleteProfileImage(user.uid);
-        console.log("Profile image deleted for user:", user.uid);
-      } catch (error: any) {
-        if (error.code !== "storage/object-not-found") {
-          console.error("Delete profile img error: ", error);
-        }
-      }
-    })();
-
+    // Step 2: Delete Firebase Auth user (this should be last)
     await deleteUser(user);
-
     console.log("User account deleted:", user.uid);
   } catch (error: any) {
     console.log("ERROR in deleteAccount ", error.message);
@@ -136,6 +128,7 @@ export async function signInWithGoogle(dispatch?: Function) {
     );
 
     if (additionalUserInfo?.isNewUser) {
+      // Create user document (triggers Cloud Function for additional setup)
       const userData: UserData = {
         id: user.uid,
         email: user.email ?? "",
@@ -145,14 +138,15 @@ export async function signInWithGoogle(dispatch?: Function) {
         theme: "lightBlue",
       };
       await addUserData(user.uid, userData);
-      console.log("New user created via Google:", user.uid);
+      console.log(
+        "New Google user document created, Cloud Function will handle setup",
+      );
     } else {
       console.log("Existing user signed in via Google:", user.uid);
       // Existing users keep their current profile image setup
       // No automatic updates to avoid overriding user preferences
     }
 
-    // Dispatch profile image to app state
     if (dispatch) {
       if (user.photoURL) {
         dispatch({ type: ActionTypes.PROFILE_IMG, imgUrl: user.photoURL });
@@ -368,22 +362,6 @@ export async function deleteProduct(id: string) {
   }
 }
 
-export async function deleteAllProductsFromUser(uid: string) {
-  try {
-    const snapshot = await getDocs(
-      query(getProductsRef(), where("authorID", "==", uid)),
-    );
-    const batch = writeBatch(getDbService());
-    snapshot.forEach((doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) =>
-      batch.delete(doc.ref),
-    );
-    await batch.commit();
-  } catch (error: any) {
-    console.log("Error deleting products:", error);
-    Alert.alert("Error deleting all products", error.message);
-  }
-}
-
 // Storage
 
 export function uploadImage(id: string, fileUri: string, metadata?: any) {
@@ -426,18 +404,6 @@ export async function getProfileImageFromFirebase(
       console.log("Profile img error:", error.message);
       callback({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
     }
-  }
-}
-
-export async function deleteProfileImage(uid: string, callback?: Function) {
-  try {
-    await deleteObject(ref(getStorageService(), `profileImages/${uid}`));
-    callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
-  } catch (error: any) {
-    if (error.code !== "storage/object-not-found" && callback) {
-      Alert.alert("Error deleting profile image", error.message);
-    }
-    callback?.({ type: ActionTypes.PROFILE_IMG, imgUrl: null });
   }
 }
 

@@ -17,6 +17,11 @@
     "clean": "npx expo install --fix",
     "clean:cache": "npx expo start --clear && yarn cache clean",
     "validate": "yarn typecheck && yarn lint && yarn format:check",
+    "functions:build": "cd functions && yarn build",
+    "functions:deploy": "cd functions && yarn deploy",
+    "functions:serve": "cd functions && yarn serve",
+    "emulators:start": "firebase emulators:start",
+    "emulators:ui": "firebase emulators:start --only firestore,storage,auth,functions,ui",
     "postinstall": "node ./eas-build-pre-install.js"
   },
   "dependencies": {
