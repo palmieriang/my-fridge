@@ -1,11 +1,17 @@
 import Button from "@components/Button/Button";
 import FormInput from "@components/FormInput/FormInput";
-import { PlacePicker } from "@components/PlacePicker/PlacePicker";
+import { PlacePicker } from "@components/Picker/PlacePicker";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import FridgeIcon from "@components/svg/FridgeIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { useContext } from "react";
-import { KeyboardAvoidingView, ScrollView, Platform, Text } from "react-native";
+import {
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  Text,
+  View,
+} from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
@@ -110,18 +116,20 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           error={errors.place}
           Icon={FridgeIcon}
         />
-        <Button
-          text={params?.id ? t("modify") : t("add")}
-          onPress={handleSubmit}
-          variant="primary"
-          disabled={isSubmitting}
-        />
-        <Button
-          text={params?.id ? t("delete") : t("cancel")}
-          onPress={params?.id ? handleDelete : navigateToList}
-          variant="danger"
-          disabled={isDeleting}
-        />
+        <View style={styles.buttonContainer}>
+          <Button
+            text={params?.id ? t("modify") : t("add")}
+            onPress={handleSubmit}
+            variant="primary"
+            disabled={isSubmitting}
+          />
+          <Button
+            text={params?.id ? t("delete") : t("cancel")}
+            onPress={params?.id ? handleDelete : navigateToList}
+            variant="danger"
+            disabled={isDeleting}
+          />
+        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { View } from "react-native";
 
 import styles from "./styles";
-import { LanguagePicker } from "../../components/LanguagePicker/LanguagePicker";
-import { ThemePicker } from "../../components/ThemePicker/ThemePicker";
+import { LanguagePicker } from "../../components/Picker/LanguagePicker";
+import { ThemePicker } from "../../components/Picker/ThemePicker";
 import { UserActions } from "../../components/UserActions/UserActions";
 import BrushIcon from "../../components/svg/BrushIcon";
 import LanguageIcon from "../../components/svg/LanguageIcon";

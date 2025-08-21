@@ -12,16 +12,21 @@ export default StyleSheet.create({
     marginTop: 20,
     marginBottom: 8,
   },
-  selectorContainer: {
+  container: {
     alignItems: "center",
     borderColor: COLORS.MEDIUM_DARK_GRAY,
     borderRadius: 4,
     borderWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     marginHorizontal: responsive.containerMargin,
-    marginTop: 0,
-    minWidth: 200,
-    overflow: "hidden",
+    marginTop: 10,
+    maxHeight: 56,
+    overflow: "visible",
+    position: "relative",
+  },
+  containerError: {
+    borderColor: COLORS.ERROR,
+    borderWidth: 1,
   },
   iconStyle: {
     alignItems: "center",
@@ -31,5 +36,17 @@ export default StyleSheet.create({
   },
   picker: {
     flex: 1,
+    fontSize: Typography.caption,
+  },
+  iosHeight: {
+    height: responsive.minTouchTarget,
+  },
+  errorText: {
+    position: "absolute",
+    bottom: -18,
+    left: 0,
+    color: COLORS.ERROR,
+    fontSize: Typography.caption,
+    fontFamily: "OpenSans-Regular",
   },
 });

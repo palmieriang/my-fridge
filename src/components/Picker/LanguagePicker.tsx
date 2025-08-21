@@ -3,38 +3,43 @@ import { FC, useContext } from "react";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
-import { generateThemeData } from "./generateThemeData";
 import styles from "./styles";
 import { localeStore, themeStore } from "../../store";
+import type { SupportedLocale } from "../../store/types";
 
-interface ThemePickerProps {
-  selectedTheme: string;
-  onThemeChange: (theme: string) => void;
+interface LanguagePickerProps {
+  selectedLanguage: SupportedLocale;
+  onLanguageChange: (language: SupportedLocale) => void;
   Icon?: FC<SvgProps>;
 }
 
-export const ThemePicker: FC<ThemePickerProps> = ({
-  selectedTheme,
-  onThemeChange,
+export const LanguagePicker: FC<LanguagePickerProps> = ({
+  selectedLanguage,
+  onLanguageChange,
   Icon,
 }) => {
   const {
     localizationContext: { t },
   } = useContext(localeStore);
-  const { theme, availableThemes } = useContext(themeStore);
+  const { theme } = useContext(themeStore);
 
-  const themeData = generateThemeData({
-    availableThemes,
-  });
+  const languageData = [
+    { label: t("english"), value: "en", key: "english" },
+    { label: t("spanish"), value: "es", key: "spanish" },
+    { label: t("italian"), value: "it", key: "italian" },
+    { label: t("german"), value: "de", key: "german" },
+    { label: t("french"), value: "fr", key: "french" },
+    { label: t("portuguese"), value: "pt", key: "portuguese" },
+  ];
 
   return (
     <>
       <Text style={[styles.label, { color: theme.text }]}>
-        {t("changeTheme")}
+        {t("changeLanguage")}
       </Text>
       <View
         style={[
-          styles.selectorContainer,
+          styles.container,
           {
             backgroundColor: theme.foreground,
           },
@@ -46,8 +51,8 @@ export const ThemePicker: FC<ThemePickerProps> = ({
           </View>
         )}
         <Picker
-          selectedValue={selectedTheme}
-          onValueChange={onThemeChange}
+          selectedValue={selectedLanguage}
+          onValueChange={onLanguageChange}
           style={[
             styles.picker,
             {
@@ -57,11 +62,11 @@ export const ThemePicker: FC<ThemePickerProps> = ({
           ]}
           dropdownIconColor={theme.text}
         >
-          {themeData.map((themeOption) => (
+          {languageData.map((lang) => (
             <Picker.Item
-              key={themeOption.value}
-              label={themeOption.label}
-              value={themeOption.value}
+              key={lang.value}
+              label={lang.label}
+              value={lang.value}
             />
           ))}
         </Picker>
