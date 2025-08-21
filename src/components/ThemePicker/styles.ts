@@ -13,12 +13,23 @@ export default StyleSheet.create({
     marginBottom: 8,
   },
   selectorContainer: {
-    borderColor: COLORS.MEDIUM_LIGHT_GRAY,
+    alignItems: "center",
+    borderColor: COLORS.MEDIUM_DARK_GRAY,
     borderRadius: 4,
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+    flexDirection: "row",
     marginHorizontal: responsive.containerMargin,
     marginTop: 0,
     minWidth: 200,
     overflow: "hidden",
+  },
+  iconStyle: {
+    alignItems: "center",
+    borderRightColor: COLORS.MEDIUM_DARK_GRAY,
+    borderRightWidth: StyleSheet.hairlineWidth,
+    padding: 14,
+  },
+  picker: {
+    flex: 1,
   },
 });

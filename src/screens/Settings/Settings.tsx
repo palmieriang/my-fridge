@@ -5,6 +5,8 @@ import styles from "./styles";
 import { LanguagePicker } from "../../components/LanguagePicker/LanguagePicker";
 import { ThemePicker } from "../../components/ThemePicker/ThemePicker";
 import { UserActions } from "../../components/UserActions/UserActions";
+import BrushIcon from "../../components/svg/BrushIcon";
+import LanguageIcon from "../../components/svg/LanguageIcon";
 import { authStore, localeStore, themeStore } from "../../store";
 import type { SupportedLocale } from "../../store/types";
 import Profile from "../Profile/Profile";
@@ -51,10 +53,12 @@ const Settings = () => {
       <LanguagePicker
         selectedLanguage={selectedLocale}
         onLanguageChange={handleLocaleChange}
+        Icon={LanguageIcon}
       />
       <ThemePicker
         selectedTheme={selectedTheme}
         onThemeChange={handleThemeChange}
+        Icon={BrushIcon}
       />
       <UserActions />
     </View>
