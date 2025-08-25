@@ -1,9 +1,14 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState, useMemo } from "react";
 import { Alert } from "react-native";
 
 import { validateProductWithErrors } from "./validateProduct";
 import type { NewProduct } from "../../store/types";
-import { convertToCustomFormat, convertToISODateString } from "../../utils";
+import {
+  convertToCustomFormat,
+  convertToISODateString,
+  convertToFirestoreFormat,
+  convertToDisplayFormat,
+} from "../../utils";
 
 type UseProductFormProps = {
   existingProduct?: {
@@ -31,7 +36,9 @@ export const useProductForm = ({
   productsContext,
 }: UseProductFormProps) => {
   const [name, setName] = useState(existingProduct?.name || "");
-  const [date, setDate] = useState(existingProduct?.date || "");
+  const [date, setDate] = useState(
+    existingProduct?.date ? convertToDisplayFormat(existingProduct.date) : "",
+  );
   const [place, setPlace] = useState<"fridge" | "freezer" | "">(
     existingProduct?.place || "",
   );
@@ -44,9 +51,17 @@ export const useProductForm = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const initPickerDate = existingProduct?.date
-    ? convertToISODateString(existingProduct.date)
-    : new Date();
+  // For the date picker, we need a Date object or ISO string
+  // If we have an existing product, convert its date to ISO format for the picker
+  const initPickerDate = useMemo(() => {
+    if (existingProduct?.date) {
+      // existingProduct.date is in YYYY-MM-DD format from Firestore
+      // Convert to display format first, then to ISO for the picker
+      const displayDate = convertToDisplayFormat(existingProduct.date);
+      return convertToISODateString(displayDate);
+    }
+    return new Date().toISOString();
+  }, [existingProduct?.date]);
 
   const handleChangeName = useCallback(
     (value: string) => {
@@ -101,7 +116,7 @@ export const useProductForm = ({
 
     const data: NewProduct = {
       name: name.trim(),
-      date,
+      date: convertToFirestoreFormat(date), // Convert to YYYY-MM-DD format
       place: place as "fridge" | "freezer",
       authorID: userID,
     };

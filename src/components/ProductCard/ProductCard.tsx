@@ -7,7 +7,7 @@ import styles from "./styles";
 import { FRIDGE, FREEZER } from "../../constants";
 import { FormScreenNavigationProp } from "../../navigation/navigation.d";
 import { localeStore, productsStore, themeStore } from "../../store";
-import { daysUntilDate } from "../../utils";
+import { daysUntilDate, convertToDisplayFormat } from "../../utils";
 import SwipeableRow from "../SwipeableRow/SwipeableRow";
 
 type ProductCardProps = {
@@ -33,6 +33,7 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
 
     const days = daysUntilDate(date);
     const expired = days < 0;
+    const displayDate = convertToDisplayFormat(date);
 
     const handleChange = () => {
       productsContext
@@ -68,7 +69,9 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
           <TouchableWithoutFeedback onPress={handleChange}>
             <View style={[styles.card, { backgroundColor: theme.foreground }]}>
               <View>
-                <Text style={[styles.date, { color: theme.text }]}>{date}</Text>
+                <Text style={[styles.date, { color: theme.text }]}>
+                  {displayDate}
+                </Text>
                 <Text style={[styles.title, { color: theme.text }]}>
                   {name}
                 </Text>
