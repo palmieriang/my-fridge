@@ -1,3 +1,4 @@
+import NotificationSettings from "@components/NotificationSettings/NotificationSettings";
 import { LanguagePicker } from "@components/Picker/LanguagePicker";
 import { ThemePicker } from "@components/Picker/ThemePicker";
 import { UserActions } from "@components/UserActions/UserActions";
@@ -60,6 +61,7 @@ const Settings = () => {
         onThemeChange={handleThemeChange}
         Icon={BrushIcon}
       />
+      <NotificationSettings />
       <UserActions />
     </View>
   );

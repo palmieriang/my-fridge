@@ -45,6 +45,7 @@ export interface UserData {
   locale: string;
   theme: string;
   profileImg?: string;
+  notificationsEnabled?: boolean;
 }
 
 // localeStore
@@ -118,4 +119,42 @@ export interface ThemeStoreValue {
   themeName: string;
   themeContext: ThemeContextMethods;
   availableThemes: string[];
+}
+
+// Notifications
+
+export interface NotificationPermissionResult {
+  success: boolean;
+  token?: string;
+  error?: string;
+}
+
+export interface NotificationResult {
+  success: boolean;
+  error?: string;
+}
+
+// notificationStore
+
+export interface NotificationStateType {
+  notificationsEnabled: boolean;
+  loading: boolean;
+}
+
+export interface NotificationContextMethods {
+  loadNotificationSettings: (userId: string) => Promise<void>;
+  setNotificationsEnabled: (enabled: boolean) => void;
+  toggleNotifications: (
+    userId: string,
+    t: (key: string) => string,
+  ) => Promise<void>;
+  showNotificationPermissionDialog: (
+    onAccept: () => void,
+    onDecline: () => void,
+  ) => void;
+}
+
+export interface NotificationStoreValue {
+  notificationState: NotificationStateType;
+  notificationContext: NotificationContextMethods;
 }

@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { memo, useContext } from "react";
 
+import NotificationOnboardingModal from "./components/NotificationOnboardingModal/NotificationOnboardingModal";
 import { COLORS } from "./constants/colors";
 import TabNavigator from "./navigation/TabNavigator";
 import { SignInStackScreen } from "./navigation/navigation";
@@ -11,6 +12,7 @@ import {
   authStore,
   AuthProvider,
   LocaleProvider,
+  NotificationProvider,
   ProductsProvider,
   ThemeProvider,
   themeStore,
@@ -45,7 +47,10 @@ const AppContainer = () => {
       <LocaleProvider>
         <ThemeProvider>
           <ProductsProvider>
-            <RootNavigator />
+            <NotificationProvider>
+              <RootNavigator />
+              <NotificationOnboardingModal />
+            </NotificationProvider>
           </ProductsProvider>
         </ThemeProvider>
       </LocaleProvider>

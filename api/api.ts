@@ -15,7 +15,6 @@ import {
   deleteDoc,
   doc,
   getDoc,
-  getDocs,
   onSnapshot,
   orderBy,
   query,
@@ -23,15 +22,17 @@ import {
   serverTimestamp,
   updateDoc,
   where,
-  writeBatch,
   FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
-import {
-  deleteObject,
-  getDownloadURL,
-  ref,
-  putFile,
-} from "@react-native-firebase/storage";
+import messaging, {
+  getMessaging,
+  requestPermission,
+  getToken,
+  AuthorizationStatus,
+  onMessage,
+  onTokenRefresh,
+} from "@react-native-firebase/messaging";
+import { getDownloadURL, ref, putFile } from "@react-native-firebase/storage";
 import {
   GoogleSignin,
   statusCodes,
@@ -41,12 +42,17 @@ import { Alert } from "react-native";
 import { ActionTypes } from "../src/constants";
 import {
   getAuthService,
-  getDbService,
   getUsersRef,
   getProductsRef,
   getStorageService,
 } from "../src/firebase/config";
-import type { NewProduct, Product, UserData } from "../src/store/types";
+import type {
+  NewProduct,
+  Product,
+  UserData,
+  NotificationPermissionResult,
+  NotificationResult,
+} from "../src/store/types";
 
 // Auth
 
@@ -228,6 +234,16 @@ export async function getUserData(uid: string) {
   }
 
   return snapshot.data() as UserData;
+}
+
+export async function getUserNotificationSettings(uid: string) {
+  const snapshot = await getDoc(doc(getUsersRef(), uid));
+  if (!snapshot.exists()) {
+    return { notificationsEnabled: false };
+  }
+
+  const userData = snapshot.data() as UserData;
+  return { notificationsEnabled: userData?.notificationsEnabled || false };
 }
 
 async function getUserDataWithRetry(
@@ -419,4 +435,152 @@ export function changeLanguage(locale: string, id: string) {
   return setDoc(doc(getUsersRef(), id), { locale }, { merge: true }).catch(
     (error: any) => console.log("Error: ", error),
   );
+}
+
+// Notifications
+
+export async function requestNotificationPermission(
+  userId: string,
+): Promise<NotificationPermissionResult> {
+  try {
+    // Request permission from the user using modular API
+    const messagingInstance = getMessaging();
+    const authStatus = await requestPermission(messagingInstance);
+
+    const enabled =
+      authStatus === AuthorizationStatus.AUTHORIZED ||
+      authStatus === AuthorizationStatus.PROVISIONAL;
+
+    if (enabled) {
+      const fcmToken = await getToken(messagingInstance);
+
+      if (fcmToken) {
+        await updateDoc(doc(getUsersRef(), userId), {
+          fcmToken,
+          notificationsEnabled: true,
+        });
+
+        console.log("✅ Notifications enabled and token saved:", fcmToken);
+
+        return {
+          success: true,
+          token: fcmToken,
+        };
+      } else {
+        throw new Error("Failed to get FCM token");
+      }
+    } else {
+      // User denied permission
+      await updateDoc(doc(getUsersRef(), userId), {
+        notificationsEnabled: false,
+        fcmToken: null,
+      });
+
+      return {
+        success: false,
+        error: "Permission denied by user",
+      };
+    }
+  } catch (error: any) {
+    console.error("❌ Error requesting notification permission:", error);
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+    };
+  }
+}
+
+export async function disableNotifications(
+  userId: string,
+): Promise<NotificationResult> {
+  try {
+    await updateDoc(doc(getUsersRef(), userId), {
+      notificationsEnabled: false,
+      fcmToken: null,
+    });
+
+    console.log("✅ Notifications disabled for user:", userId);
+
+    return { success: true };
+  } catch (error: any) {
+    console.error("❌ Error disabling notifications:", error);
+    return {
+      success: false,
+      error: error.message || "Unknown error",
+    };
+  }
+}
+
+export function setupNotificationListeners(navigation?: any): () => void {
+  const messagingInstance = getMessaging();
+
+  // Handle foreground notifications
+  const unsubscribeOnMessage = onMessage(
+    messagingInstance,
+    async (remoteMessage) => {
+      console.log("📱 Foreground notification received:", remoteMessage);
+
+      if (remoteMessage.data?.type === "expiring_products") {
+        Alert.alert(
+          remoteMessage.notification?.title || "🚨 Products Expiring",
+          remoteMessage.notification?.body || "Check your fridge!",
+          [
+            { text: "Dismiss", style: "cancel" },
+            {
+              text: "View Products",
+              onPress: () => {
+                // Navigate to products screen
+                if (navigation) {
+                  navigation.navigate("ProductList");
+                }
+              },
+            },
+          ],
+        );
+      }
+    },
+  );
+
+  // Handle notification opened app (background/quit state)
+  const unsubscribeOnNotificationOpenedApp =
+    messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log("📱 Notification opened app:", remoteMessage);
+
+      if (remoteMessage.data?.type === "expiring_products") {
+        if (navigation) {
+          navigation.navigate("ProductList");
+        }
+      }
+    });
+
+  // Handle token refresh
+  const unsubscribeOnTokenRefresh = onTokenRefresh(
+    messagingInstance,
+    async (fcmToken) => {
+      console.log("🔄 FCM token refreshed:", fcmToken);
+      // You'll need to pass userId and getUsersRef to update the token
+    },
+  );
+
+  // Return cleanup function
+  return () => {
+    unsubscribeOnMessage();
+    unsubscribeOnNotificationOpenedApp();
+    unsubscribeOnTokenRefresh();
+  };
+}
+
+export async function updateFCMToken(
+  userId: string,
+  newToken: string,
+): Promise<void> {
+  try {
+    await updateDoc(doc(getUsersRef(), userId), {
+      fcmToken: newToken,
+    });
+
+    console.log("✅ FCM token updated for user:", userId);
+  } catch (error: any) {
+    console.error("❌ Error updating FCM token:", error);
+  }
 }
