@@ -239,11 +239,14 @@ export async function getUserData(uid: string) {
 export async function getUserNotificationSettings(uid: string) {
   const snapshot = await getDoc(doc(getUsersRef(), uid));
   if (!snapshot.exists()) {
-    return { notificationsEnabled: false };
+    return { notificationsEnabled: false, hasCompletedOnboarding: false };
   }
 
   const userData = snapshot.data() as UserData;
-  return { notificationsEnabled: userData?.notificationsEnabled || false };
+  return {
+    notificationsEnabled: userData?.notificationsEnabled || false,
+    hasCompletedOnboarding: userData?.hasCompletedOnboarding || false,
+  };
 }
 
 async function getUserDataWithRetry(
@@ -443,7 +446,6 @@ export async function requestNotificationPermission(
   userId: string,
 ): Promise<NotificationPermissionResult> {
   try {
-    // Request permission from the user using modular API
     const messagingInstance = getMessaging();
     const authStatus = await requestPermission(messagingInstance);
 
@@ -458,6 +460,7 @@ export async function requestNotificationPermission(
         await updateDoc(doc(getUsersRef(), userId), {
           fcmToken,
           notificationsEnabled: true,
+          hasCompletedOnboarding: true,
         });
 
         console.log("✅ Notifications enabled and token saved:", fcmToken);
@@ -474,6 +477,7 @@ export async function requestNotificationPermission(
       await updateDoc(doc(getUsersRef(), userId), {
         notificationsEnabled: false,
         fcmToken: null,
+        hasCompletedOnboarding: true,
       });
 
       return {
@@ -497,6 +501,7 @@ export async function disableNotifications(
     await updateDoc(doc(getUsersRef(), userId), {
       notificationsEnabled: false,
       fcmToken: null,
+      hasCompletedOnboarding: true, // Mark onboarding as completed
     });
 
     console.log("✅ Notifications disabled for user:", userId);
@@ -582,5 +587,22 @@ export async function updateFCMToken(
     console.log("✅ FCM token updated for user:", userId);
   } catch (error: any) {
     console.error("❌ Error updating FCM token:", error);
+  }
+}
+
+export async function markNotificationOnboardingCompleted(
+  userId: string,
+): Promise<void> {
+  try {
+    await updateDoc(doc(getUsersRef(), userId), {
+      hasCompletedOnboarding: true,
+    });
+
+    console.log(
+      "✅ Notification onboarding marked completed for user:",
+      userId,
+    );
+  } catch (error: any) {
+    console.error("❌ Error marking onboarding completed:", error);
   }
 }

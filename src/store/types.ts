@@ -46,6 +46,7 @@ export interface UserData {
   theme: string;
   profileImg?: string;
   notificationsEnabled?: boolean;
+  hasCompletedOnboarding?: boolean;
 }
 
 // localeStore

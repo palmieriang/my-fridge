@@ -2,7 +2,10 @@ import { useContext, FC, useState } from "react";
 import { View, Text, Alert, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
-import { requestNotificationPermission } from "../../../api/api";
+import {
+  requestNotificationPermission,
+  markNotificationOnboardingCompleted,
+} from "../../../api/api";
 import { authStore, localeStore, themeStore } from "../../store";
 import Button from "../Button/Button";
 
@@ -33,6 +36,8 @@ const NotificationOnboarding: FC<NotificationOnboardingProps> = ({
     try {
       const result = await requestNotificationPermission(userId);
 
+      await markNotificationOnboardingCompleted(userId);
+
       if (result.success) {
         Alert.alert(
           t("notificationsOnboardingSuccess"),
@@ -44,11 +49,12 @@ const NotificationOnboarding: FC<NotificationOnboardingProps> = ({
           t("notificationsPermissionNeeded"),
           t("notificationsPermissionRequiredMessage"),
           [
-            { text: t("cancel"), style: "cancel" },
+            { text: t("cancel"), style: "cancel", onPress: onComplete },
             {
               text: t("notificationsOpenSettings"),
               onPress: () => {
                 // Open device settings. This would need platform-specific implementation
+                onComplete();
               },
             },
           ],
@@ -65,7 +71,22 @@ const NotificationOnboarding: FC<NotificationOnboardingProps> = ({
     }
   };
 
-  const handleSkip = () => {
+  const handleSkip = async () => {
+    if (!userId) {
+      if (onSkip) {
+        onSkip();
+      } else {
+        onComplete();
+      }
+      return;
+    }
+
+    try {
+      await markNotificationOnboardingCompleted(userId);
+    } catch (error) {
+      console.error("Error marking onboarding completed:", error);
+    }
+
     if (onSkip) {
       onSkip();
     } else {
