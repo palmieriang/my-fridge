@@ -78,7 +78,7 @@ const FormInput = ({
           }
         >
           <Ionicons
-            name={isPasswordVisible ? "eye" : "eye-off"}
+            name={isPasswordVisible ? "eye-off" : "eye"}
             size={20}
             color={theme.text}
           />

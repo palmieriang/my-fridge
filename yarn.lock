@@ -1825,6 +1825,11 @@
   dependencies:
     react-native-url-polyfill "2.0.0"
 
+"@react-native-firebase/messaging@^23.1.2":
+  version "23.1.2"
+  resolved "https://registry.npmjs.org/@react-native-firebase/messaging/-/messaging-23.1.2.tgz#311157883c88200209b3df9fd411a2b3e5af6a6b"
+  integrity sha512-B6ysoo6TMJGgIGNG+1j8SeImFHiiV4wrnB9nBDHr0y+oymGR7iVCNC8iaOd4RVd3FK96U3ojM35Dn2PPhSnrJg==
+
 "@react-native-firebase/storage@^22.2.1":
   version "22.4.0"
   resolved "https://registry.npmjs.org/@react-native-firebase/storage/-/storage-22.4.0.tgz#56ea484ac06aa24f788134080887f180fb3d3e46"
