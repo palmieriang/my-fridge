@@ -1,39 +1,27 @@
-const path = require("path");
-
 module.exports = {
   root: true,
-  env: {
-    es6: true,
-    node: true,
-  },
   extends: [
     "eslint:recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript",
-    "google",
     "plugin:@typescript-eslint/recommended",
   ],
+  env: {
+    browser: false,
+    node: true,
+    es2021: true,
+  },
   parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
   parserOptions: {
-    project: [
-      path.resolve(__dirname, "tsconfig.json"),
-      path.resolve(__dirname, "tsconfig.dev.json"),
-    ],
+    ecmaVersion: 2021,
     sourceType: "module",
   },
   ignorePatterns: [
     "/lib/**/*",
     "/generated/**/*",
-    ".eslintrc.cjs", // Ignore this config file
-  ],
-  plugins: [
-    "@typescript-eslint",
-    "import",
   ],
   rules: {
-    "quotes": ["error", "double"],
-    "import/no-unresolved": 0,
-    "indent": ["error", 2],
+    // Keep it simple and consistent with main project
+    "@typescript-eslint/no-explicit-any": "off",
+    "no-console": "off", // Allow console.log in Firebase Functions
   },
 };
