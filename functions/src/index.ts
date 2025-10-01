@@ -14,8 +14,9 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
 const isDevelopment = process.env.NODE_ENV === "development" || isEmulator;
 
-const ENABLE_NOTIFICATIONS = isDevelopment; // Only enable in dev/emulator
-const ENABLE_SERVER_VALIDATION = isDevelopment; // Enable in dev/emulator
+// Feature flags: auto-enabled in development, always enabled in production for now
+const ENABLE_NOTIFICATIONS = true; // Enable notifications in both dev and production
+const ENABLE_SERVER_VALIDATION = isDevelopment; // Only enable validation in development
 
 // Set global options for Gen2
 setGlobalOptions({
@@ -27,15 +28,7 @@ admin.initializeApp();
 const db = admin.firestore();
 const storage = admin.storage();
 
-// Log feature status for debugging
-console.info("Firebase Functions initialized with features:", {
-  environment: isDevelopment ? "development" : "production",
-  isEmulator,
-  nodeEnv: process.env.NODE_ENV,
-  functionsEmulator: process.env.FUNCTIONS_EMULATOR,
-  notifications: ENABLE_NOTIFICATIONS,
-  serverValidation: ENABLE_SERVER_VALIDATION,
-});
+
 
 // User creation function (Gen2) - triggers when user document is created
 export const onUserCreate = onDocumentCreated(
@@ -146,44 +139,18 @@ async function sendExpiringProductNotifications(): Promise<{
   usersChecked: number;
   targetDate: string;
 }> {
-  console.info(
-    "🚀 [sendExpiringProductNotifications] Starting expiring products check",
-  );
-
-  // Calculate target date first for consistent logging
+  // Calculate target date (tomorrow)
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const tomorrowStr = tomorrow.toISOString().split("T")[0];
-  console.info(
-    `📅 [sendExpiringProductNotifications] Target expiration date: ${tomorrowStr}`,
-  );
-
-  // Log current environment
-  console.info(`🌍 [sendExpiringProductNotifications] Environment info:`, {
-    isDevelopment,
-    isEmulator,
-    nodeEnv: process.env.NODE_ENV,
-    functionsEmulator: process.env.FUNCTIONS_EMULATOR,
-    enableNotifications: ENABLE_NOTIFICATIONS,
-  });
 
   // Get all users who have enabled notifications
-  console.info(
-    "👥 [sendExpiringProductNotifications] Querying users with notifications enabled...",
-  );
   const usersSnapshot = await db
     .collection("users")
     .where("notificationsEnabled", "==", true)
     .get();
 
-  console.info(
-    `👥 [sendExpiringProductNotifications] Found ${usersSnapshot.size} users with notifications enabled`,
-  );
-
   if (usersSnapshot.empty) {
-    console.warn(
-      "⚠️ [sendExpiringProductNotifications] No users found with notifications enabled",
-    );
     return {
       totalNotificationsSent: 0,
       usersChecked: 0,
@@ -192,43 +159,18 @@ async function sendExpiringProductNotifications(): Promise<{
   }
 
   let totalNotificationsSent = 0;
-  let userIndex = 0;
 
   for (const userDoc of usersSnapshot.docs) {
     const userId = userDoc.id;
-    userIndex++;
-
-    console.info(
-      `👤 [sendExpiringProductNotifications] Processing user ${userIndex}/${usersSnapshot.size}: ${userId}`,
-    );
-
-    // Log user data for debugging
-    const userData = userDoc.data();
-    console.info(`📋 [sendExpiringProductNotifications] User data:`, {
-      userId,
-      notificationsEnabled: userData?.notificationsEnabled,
-      hasFirebaseToken: !!userData?.fcmToken,
-      fcmTokenPreview: userData?.fcmToken
-        ? `${userData.fcmToken.substring(0, 20)}...`
-        : "none",
-    });
 
     // Find products expiring tomorrow
-    console.info(
-      `🔍 [sendExpiringProductNotifications] Querying products for user ${userId} expiring on ${tomorrowStr}...`,
-    );
     const expiringSnapshot = await db
       .collection("products")
       .where("authorID", "==", userId)
       .where("date", "==", tomorrowStr)
       .get();
 
-    console.info(
-      `📦 [sendExpiringProductNotifications] Found ${expiringSnapshot.size} products expiring for user ${userId}`,
-    );
-
     if (expiringSnapshot.size > 0) {
-      // Log the products found
       const allProducts = expiringSnapshot.docs.map((doc) => {
         const data = doc.data();
         return {
@@ -238,33 +180,19 @@ async function sendExpiringProductNotifications(): Promise<{
           place: data.place,
         };
       });
-      console.info(
-        `📝 [sendExpiringProductNotifications] Products expiring for user ${userId}:`,
-        allProducts,
-      );
 
       const productNames = allProducts
         .map((product) => product.name)
         .slice(0, 3); // Limit to first 3 items
 
       // Get user's FCM token for push notifications
-      console.info(
-        `🔑 [sendExpiringProductNotifications] Getting FCM token for user ${userId}...`,
-      );
       const userDocRef = await db.collection("users").doc(userId).get();
       const userDataFresh = userDocRef.data();
       const fcmToken = userDataFresh?.fcmToken;
 
       if (fcmToken) {
-        console.info(
-          `✅ [sendExpiringProductNotifications] FCM token found for user ${userId}: ${fcmToken.substring(0, 20)}...`,
-        );
-
         // Build notification message
         const notificationBody = `${expiringSnapshot.size} items: ${productNames.join(", ")}${expiringSnapshot.size > 3 ? "..." : ""}`;
-        console.info(
-          `📱 [sendExpiringProductNotifications] Building notification for user ${userId}: "${notificationBody}"`,
-        );
 
         const message = {
           token: fcmToken,
@@ -294,35 +222,16 @@ async function sendExpiringProductNotifications(): Promise<{
           },
         };
 
-        console.info(
-          `📤 [sendExpiringProductNotifications] Sending FCM message to user ${userId}...`,
-        );
         try {
           const response = await admin.messaging().send(message);
-          console.info(
-            `✅ [sendExpiringProductNotifications] Push notification sent successfully to user ${userId}. Message ID: ${response}`,
-          );
+          console.info(`Notification sent to user ${userId}. Message ID: ${response}`);
           totalNotificationsSent++;
         } catch (fcmError: any) {
-          console.error(
-            `❌ [sendExpiringProductNotifications] Failed to send push notification to user ${userId}:`,
-            {
-              error: fcmError.message,
-              code: fcmError.code,
-              details: fcmError.details,
-              stack: fcmError.stack,
-            },
-          );
+          console.error(`Failed to send notification to user ${userId}:`, fcmError.message);
         }
       } else {
-        console.warn(
-          `⚠️ [sendExpiringProductNotifications] No FCM token found for user ${userId}, skipping notification`,
-        );
+        console.warn(`No FCM token for user ${userId}, skipping notification`);
       }
-    } else {
-      console.info(
-        `ℹ️ [sendExpiringProductNotifications] No products expiring tomorrow for user ${userId}`,
-      );
     }
   }
 
@@ -332,10 +241,7 @@ async function sendExpiringProductNotifications(): Promise<{
     targetDate: tomorrowStr,
   };
 
-  console.info(
-    `🎉 [sendExpiringProductNotifications] Expiring products check complete:`,
-    result,
-  );
+  console.info(`Expiring products check complete: ${totalNotificationsSent} notifications sent to ${usersSnapshot.size} users`);
   return result;
 }
 
@@ -347,47 +253,21 @@ export const checkExpiringProducts = ENABLE_NOTIFICATIONS
         region: "us-central1",
         memory: "256MiB",
       },
-      async (event) => {
-        console.log("🚀 [checkExpiringProducts] Scheduled function triggered");
-        console.info("📋 [checkExpiringProducts] Event info:", {
-          scheduleTime: event.scheduleTime,
-          jobName: event.jobName,
-          timestamp: new Date().toISOString(),
-        });
-        console.info("🛠️ [checkExpiringProducts] Environment check:", {
-          enableNotifications: ENABLE_NOTIFICATIONS,
-          isDevelopment,
-          isEmulator,
-          nodeEnv: process.env.NODE_ENV,
-          functionsEmulator: process.env.FUNCTIONS_EMULATOR,
-        });
+      async () => {
+        console.info("Scheduled expiring products check triggered");
 
         try {
-          console.log(
-            "▶️ [checkExpiringProducts] Calling sendExpiringProductNotifications...",
-          );
           const result = await sendExpiringProductNotifications();
-          console.info(
-            "✅ [checkExpiringProducts] Scheduled check completed successfully:",
-            result,
-          );
+          console.info("Scheduled check completed successfully:", result);
         } catch (error: any) {
-          console.error(
-            "❌ [checkExpiringProducts] Error in scheduled expiring products check:",
-            {
-              message: error.message,
-              code: error.code,
-              details: error.details,
-              stack: error.stack,
-            },
-          );
-          // Re-throw to mark function as failed in Firebase
+          console.error("Error in scheduled expiring products check:", error.message);
           throw error;
         }
-        console.log("🏁 [checkExpiringProducts] Scheduled function finished");
       },
     )
   : undefined;
+
+
 
 // Test HTTP function to manually trigger expiring products check
 export const testExpiringProducts = onRequest(
@@ -395,26 +275,9 @@ export const testExpiringProducts = onRequest(
     region: "us-central1",
   },
   async (req, res) => {
-    console.info("🧪 [testExpiringProducts] Manual test endpoint triggered");
-    console.info("📋 [testExpiringProducts] Request info:", {
-      method: req.method,
-      url: req.url,
-      userAgent: req.get("User-Agent"),
-      timestamp: new Date().toISOString(),
-      headers: req.headers,
-    });
-    console.info("🛠️ [testExpiringProducts] Environment check:", {
-      enableNotifications: ENABLE_NOTIFICATIONS,
-      isDevelopment,
-      isEmulator,
-      nodeEnv: process.env.NODE_ENV,
-      functionsEmulator: process.env.FUNCTIONS_EMULATOR,
-    });
+    console.info("Manual test endpoint triggered");
 
     try {
-      console.log(
-        "▶️ [testExpiringProducts] Calling sendExpiringProductNotifications...",
-      );
       const result = await sendExpiringProductNotifications();
 
       const response = {
@@ -422,38 +285,18 @@ export const testExpiringProducts = onRequest(
         message: `Manual test complete. Sent ${result.totalNotificationsSent} notifications`,
         data: result,
         timestamp: new Date().toISOString(),
-        environment: {
-          isDevelopment,
-          isEmulator,
-          enableNotifications: ENABLE_NOTIFICATIONS,
-        },
       };
 
-      console.info(
-        "🎉 [testExpiringProducts] Manual test completed successfully:",
-        response,
-      );
+      console.info("Manual test completed successfully:", response);
       res.status(200).json(response);
     } catch (error: any) {
       const errorResponse = {
         success: false,
         error: error.message,
-        code: error.code,
-        details: error.details,
         timestamp: new Date().toISOString(),
-        environment: {
-          isDevelopment,
-          isEmulator,
-          enableNotifications: ENABLE_NOTIFICATIONS,
-        },
       };
 
-      console.error("❌ [testExpiringProducts] Error in manual test:", {
-        error: error.message,
-        code: error.code,
-        details: error.details,
-        stack: error.stack,
-      });
+      console.error("Error in manual test:", error.message);
       res.status(500).json(errorResponse);
     }
   },
