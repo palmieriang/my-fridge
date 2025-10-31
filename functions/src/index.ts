@@ -209,7 +209,7 @@ async function sendExpiringProductNotifications(): Promise<{
             notification: {
               icon: "ic_notification",
               color: "#FF6B35",
-              channelId: "expiring_products",
+              // Remove custom channel, use default
             },
           },
           apns: {

@@ -24,13 +24,14 @@ import {
   where,
   FirebaseFirestoreTypes,
 } from "@react-native-firebase/firestore";
-import messaging, {
+import {
   getMessaging,
   requestPermission,
   getToken,
   AuthorizationStatus,
   onMessage,
   onTokenRefresh,
+  onNotificationOpenedApp,
 } from "@react-native-firebase/messaging";
 import { getDownloadURL, ref, putFile } from "@react-native-firebase/storage";
 import {
@@ -546,9 +547,10 @@ export function setupNotificationListeners(navigation?: any): () => void {
     },
   );
 
-  // Handle notification opened app (background/quit state)
-  const unsubscribeOnNotificationOpenedApp =
-    messaging().onNotificationOpenedApp((remoteMessage) => {
+  // Handle notification opened app (background/quit state) - using modular API
+  const unsubscribeOnNotificationOpenedApp = onNotificationOpenedApp(
+    messagingInstance,
+    (remoteMessage) => {
       console.log("📱 Notification opened app:", remoteMessage);
 
       if (remoteMessage.data?.type === "expiring_products") {
@@ -556,7 +558,8 @@ export function setupNotificationListeners(navigation?: any): () => void {
           navigation.navigate("ProductList");
         }
       }
-    });
+    },
+  );
 
   // Handle token refresh
   const unsubscribeOnTokenRefresh = onTokenRefresh(
