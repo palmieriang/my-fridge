@@ -275,29 +275,22 @@ export const testExpiringProducts = onRequest(
     region: "us-central1",
   },
   async (req, res) => {
-    console.info("Manual test endpoint triggered");
+    console.info("Manual expiring products test triggered");
 
     try {
       const result = await sendExpiringProductNotifications();
 
-      const response = {
+      res.status(200).json({
         success: true,
-        message: `Manual test complete. Sent ${result.totalNotificationsSent} notifications`,
+        message: "Expiring products check completed",
         data: result,
-        timestamp: new Date().toISOString(),
-      };
-
-      console.info("Manual test completed successfully:", response);
-      res.status(200).json(response);
+      });
     } catch (error: any) {
-      const errorResponse = {
+      console.error("Error in test function:", error);
+      res.status(500).json({
         success: false,
         error: error.message,
-        timestamp: new Date().toISOString(),
-      };
-
-      console.error("Error in manual test:", error.message);
-      res.status(500).json(errorResponse);
+      });
     }
   },
 );
