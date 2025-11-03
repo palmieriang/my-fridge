@@ -295,6 +295,102 @@ export const testExpiringProducts = onRequest(
   },
 );
 
+// Direct test function - sends notification to a specific user by ID
+export const testDirectNotification = onRequest(
+  {
+    region: "us-central1",
+  },
+  async (req, res) => {
+    console.info("Direct notification test triggered");
+
+    try {
+      const { userId } = req.body;
+
+      if (!userId) {
+        res.status(400).json({
+          success: false,
+          error: "userId is required in request body",
+        });
+        return;
+      }
+
+      // Get user's FCM token
+      const userDoc = await db.collection("users").doc(userId).get();
+      
+      if (!userDoc.exists) {
+        res.status(404).json({
+          success: false,
+          error: `User ${userId} not found`,
+        });
+        return;
+      }
+
+      const userData = userDoc.data();
+      const fcmToken = userData?.fcmToken;
+
+      if (!fcmToken) {
+        res.status(400).json({
+          success: false,
+          error: `User ${userId} does not have an FCM token`,
+        });
+        return;
+      }
+
+      // Add a delay before sending the notification so user can minimize the app
+      const delayMs = 5000; // 5 seconds
+      console.info(`Waiting ${delayMs / 1000} seconds before sending notification to user ${userId}...`);
+      await new Promise((resolve) => setTimeout(resolve, delayMs));
+
+      const message = {
+        token: fcmToken,
+        notification: {
+          title: "🧪 Direct Test Notification",
+          body: "This is a direct test to your device. If you see this, background notifications work!",
+        },
+        data: {
+          type: "test_direct",
+          timestamp: new Date().toISOString(),
+        },
+        android: {
+          priority: "high" as const,
+          notification: {
+            icon: "ic_notification",
+            color: "#FF6B35",
+          },
+        },
+        apns: {
+          payload: {
+            aps: {
+              sound: "default",
+              badge: 1,
+            },
+          },
+        },
+      };
+
+      const response = await admin.messaging().send(message);
+      
+      console.info(`Direct test notification sent to user ${userId}. Message ID: ${response}`);
+
+      res.status(200).json({
+        success: true,
+        message: "Direct notification sent successfully",
+        data: {
+          userId,
+          messageId: response,
+          fcmToken: `${fcmToken.substring(0, 30)}...`,
+        },
+      });
+    } catch (error: any) {
+      console.error("Error sending direct notification:", error);
+      res.status(500).json({
+        success: false,
+        error: error.message,
+      });
+    }
+  },
+);
+
 // ============================================================================
 // SERVER-SIDE VALIDATION - Only enabled when ENABLE_SERVER_VALIDATION=true
 // ============================================================================
