@@ -14,8 +14,8 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
 const isDevelopment = process.env.NODE_ENV === "development" || isEmulator;
 
-// Feature flags: auto-enabled in development, always enabled in production for now
-const ENABLE_NOTIFICATIONS = true; // Enable notifications in both dev and production
+// Feature flags: auto-enabled in development, disabled in production until ready
+const ENABLE_NOTIFICATIONS = isDevelopment; // Only enable notifications in development
 const ENABLE_SERVER_VALIDATION = isDevelopment; // Only enable validation in development
 
 // Set global options for Gen2
