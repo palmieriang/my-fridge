@@ -1,6 +1,5 @@
 import "react-native-gesture-handler";
 import Loading from "@components/Loading/Loading";
-import { OfflineIndicator } from "@components/OfflineIndicator/OfflineIndicator";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { memo, useContext } from "react";
