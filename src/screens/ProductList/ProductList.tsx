@@ -1,4 +1,5 @@
 import FloatingButton from "@components/FloatingButton/FloatingButton";
+import { OfflineIndicator } from "@components/OfflineIndicator/OfflineIndicator";
 import ProductCard from "@components/ProductCard/ProductCard";
 import SearchBar from "@components/SearchBar/SearchBar";
 import SortButton from "@components/SortButton/SortButton";
@@ -92,6 +93,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
+      <OfflineIndicator />
       <View style={styles.controlsContainer}>
         <SearchBar
           value={searchQuery}

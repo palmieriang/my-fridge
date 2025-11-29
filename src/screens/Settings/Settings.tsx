@@ -1,4 +1,5 @@
 import NotificationSettings from "@components/NotificationSettings/NotificationSettings";
+import { OfflineIndicator } from "@components/OfflineIndicator/OfflineIndicator";
 import { LanguagePicker } from "@components/Picker/LanguagePicker";
 import { ThemePicker } from "@components/Picker/ThemePicker";
 import { UserActions } from "@components/UserActions/UserActions";
@@ -50,6 +51,7 @@ const Settings = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
+      <OfflineIndicator />
       <Profile />
       <LanguagePicker
         selectedLanguage={selectedLocale}

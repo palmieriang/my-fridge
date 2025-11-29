@@ -41,6 +41,7 @@
   "nameTooLong": "Product name cannot exceed 50 characters.",
   "newUser": "New user?",
   "noSearchResults": "No products found matching your search.",
+  "offlineMessage": "You're offline - Changes will sync later",
   "notificationsContinue": "Continue",
   "notificationsDisabled": "Notifications Disabled",
   "notificationsDisabledMessage": "You won't receive expiration alerts anymore. You can re-enable them anytime.",

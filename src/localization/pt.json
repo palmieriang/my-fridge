@@ -41,6 +41,7 @@
   "nameTooLong": "O nome é muito longo",
   "newUser": "Novo utilizador?",
   "noSearchResults": "Nenhum produto encontrado correspondente à sua pesquisa.",
+  "offlineMessage": "Está offline - As alterações serão sincronizadas depois",
   "notificationsContinue": "Continuar",
   "notificationsDisabled": "Notificações Desativadas",
   "notificationsDisabledMessage": "Não receberá mais alertas de expiração. Pode reativá-los a qualquer momento.",

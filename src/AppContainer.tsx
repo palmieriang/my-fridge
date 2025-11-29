@@ -1,5 +1,6 @@
 import "react-native-gesture-handler";
 import Loading from "@components/Loading/Loading";
+import { OfflineIndicator } from "@components/OfflineIndicator/OfflineIndicator";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
 import { memo, useContext } from "react";
@@ -12,6 +13,7 @@ import {
   authStore,
   AuthProvider,
   LocaleProvider,
+  NetworkProvider,
   NotificationProvider,
   ProductsProvider,
   ThemeProvider,
@@ -43,18 +45,20 @@ const RootNavigator = () => {
 
 const AppContainer = () => {
   return (
-    <AuthProvider>
-      <LocaleProvider>
-        <ThemeProvider>
-          <ProductsProvider>
-            <NotificationProvider>
-              <RootNavigator />
-              <NotificationOnboardingModal />
-            </NotificationProvider>
-          </ProductsProvider>
-        </ThemeProvider>
-      </LocaleProvider>
-    </AuthProvider>
+    <NetworkProvider>
+      <AuthProvider>
+        <LocaleProvider>
+          <ThemeProvider>
+            <ProductsProvider>
+              <NotificationProvider>
+                <RootNavigator />
+                <NotificationOnboardingModal />
+              </NotificationProvider>
+            </ProductsProvider>
+          </ThemeProvider>
+        </LocaleProvider>
+      </AuthProvider>
+    </NetworkProvider>
   );
 };
 
