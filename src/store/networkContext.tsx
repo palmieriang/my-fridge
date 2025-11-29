@@ -38,12 +38,6 @@ export const NetworkProvider = ({ children }: NetworkProviderProps) => {
       setIsConnected(state.isConnected ?? false);
       setIsInternetReachable(state.isInternetReachable);
       setConnectionType(state.type);
-
-      console.log("[Network] Connection changed:", {
-        isConnected: state.isConnected,
-        isInternetReachable: state.isInternetReachable,
-        type: state.type,
-      });
     });
 
     NetInfo.fetch().then((state: NetInfoState) => {

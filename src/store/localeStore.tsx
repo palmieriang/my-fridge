@@ -74,11 +74,13 @@ const LocaleProvider = ({ children }: LocaleProviderProps) => {
       locale,
       setLocale,
       changeLocale: async ({ newLocale, id }) => {
-        changeLanguage(newLocale, id)
-          .then(() => {
-            setLocale(newLocale);
-          })
-          .catch((error) => console.log("Error: ", error));
+        setLocale(newLocale);
+        changeLanguage(newLocale, id).catch((error) =>
+          console.warn(
+            "[Locale] Failed to sync to Firestore (will retry when online):",
+            error,
+          ),
+        );
       },
     }),
     [locale],

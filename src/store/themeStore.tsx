@@ -127,16 +127,19 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const themeContext: ThemeContextMethods = useMemo(
     () => ({
       changeTheme: ({ newTheme, id }) => {
-        changeColor(newTheme, id)
-          .then(() => {
-            if (themes[newTheme as keyof ThemesMap]) {
-              setTheme(themes[newTheme as keyof ThemesMap]);
-              setThemeName(newTheme);
-            } else {
-              console.error(`Attempted to set unknown theme: ${newTheme}`);
-            }
-          })
-          .catch((error: any) => console.log("Error changing theme: ", error));
+        if (themes[newTheme as keyof ThemesMap]) {
+          setTheme(themes[newTheme as keyof ThemesMap]);
+          setThemeName(newTheme);
+        } else {
+          console.error(`Attempted to set unknown theme: ${newTheme}`);
+          return;
+        }
+        changeColor(newTheme, id).catch((error: unknown) =>
+          console.warn(
+            "[Theme] Failed to sync to Firestore (will retry when online):",
+            error,
+          ),
+        );
       },
     }),
     [],
