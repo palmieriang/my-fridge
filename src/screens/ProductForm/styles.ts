@@ -18,4 +18,34 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     marginTop: 20,
   },
+  scanButtonContainer: {
+    marginHorizontal: responsive.containerMargin,
+    marginTop: 16,
+    marginBottom: 16,
+  },
+  scanButton: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    borderWidth: 2,
+  },
+  scanButtonText: {
+    fontSize: Typography.body,
+    fontFamily: "OpenSans-SemiBold",
+    marginLeft: 10,
+  },
+  scanningContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 12,
+  },
+  scanningText: {
+    marginLeft: 10,
+    fontSize: Typography.body,
+    fontFamily: "OpenSans-Regular",
+  },
 });

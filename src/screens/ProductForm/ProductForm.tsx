@@ -1,21 +1,27 @@
+import BarcodeScanner from "@components/BarcodeScanner/BarcodeScanner";
 import Button from "@components/Button/Button";
 import FormInput from "@components/FormInput/FormInput";
 import { PlacePicker } from "@components/Picker/PlacePicker";
+import BarcodeIcon from "@components/svg/BarcodeIcon";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import FridgeIcon from "@components/svg/FridgeIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
-import { useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
   Text,
   View,
+  TouchableOpacity,
+  ActivityIndicator,
+  Alert,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
 import { useProductForm } from "./useProductForm";
+import { lookupProductByBarcode } from "../../../api/openFoodFacts";
 import {
   FormScreenNavigationProp,
   FormScreenRouteProp,
@@ -37,6 +43,9 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   } = useContext(authStore);
   const { theme } = useContext(themeStore);
   const { productsContext } = useContext(productsStore);
+
+  const [showScanner, setShowScanner] = useState(false);
+  const [isLookingUp, setIsLookingUp] = useState(false);
 
   const navigateToList = () => {
     navigation.navigate("list" as never);
@@ -67,6 +76,45 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
     productsContext,
   });
 
+  const handleOpenScanner = useCallback(() => {
+    setShowScanner(true);
+  }, []);
+
+  const handleCloseScanner = useCallback(() => {
+    setShowScanner(false);
+  }, []);
+
+  const handleBarcodeScanned = useCallback(
+    async (barcode: string) => {
+      setShowScanner(false);
+      setIsLookingUp(true);
+
+      try {
+        const result = await lookupProductByBarcode(barcode);
+
+        if (result.found && result.product) {
+          handleChangeName(result.product.name);
+          Alert.alert(
+            t("productFound"),
+            t("productFoundMessage").replace("{name}", result.product.name),
+          );
+        } else {
+          Alert.alert(
+            t("productNotFound"),
+            t("productNotFoundMessage").replace("{barcode}", barcode),
+            [{ text: t("ok"), style: "default" }],
+          );
+        }
+      } catch (error) {
+        console.error("[BarcodeScanner] Error:", error);
+        Alert.alert(t("error"), t("barcodeLookupError"));
+      } finally {
+        setIsLookingUp(false);
+      }
+    },
+    [handleChangeName, t],
+  );
+
   return (
     <KeyboardAvoidingView
       style={{ flex: 1, backgroundColor: theme.background }}
@@ -74,6 +122,29 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
       keyboardVerticalOffset={0}
     >
       <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+        {!params?.id && (
+          <View style={styles.scanButtonContainer}>
+            {isLookingUp ? (
+              <View style={styles.scanningContainer}>
+                <ActivityIndicator size="small" color={theme.primary} />
+                <Text style={[styles.scanningText, { color: theme.text }]}>
+                  {t("lookingUpProduct")}
+                </Text>
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={[styles.scanButton, { borderColor: theme.primary }]}
+                onPress={handleOpenScanner}
+              >
+                <BarcodeIcon width={24} height={24} fill={theme.primary} />
+                <Text style={[styles.scanButtonText, { color: theme.primary }]}>
+                  {t("scanBarcode")}
+                </Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+
         <Text style={[styles.label, { color: theme.text }]}>
           {t("product")}
         </Text>
@@ -131,6 +202,12 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           />
         </View>
       </ScrollView>
+
+      <BarcodeScanner
+        visible={showScanner}
+        onClose={handleCloseScanner}
+        onBarcodeScanned={handleBarcodeScanned}
+      />
     </KeyboardAvoidingView>
   );
 };
