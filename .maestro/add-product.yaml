@@ -1,0 +1,43 @@
+appId: com.myfridge.App
+---
+# E2E Test: Add a new product to the fridge
+# This test simulates a user adding a product with name and expiration date
+# Prerequisites: User must be logged in
+
+# Step 1: Launch the app
+- launchApp
+
+# Step 2: Wait for main screen to load
+- extendedWaitUntil:
+    visible: "FRIDGE"
+    timeout: 15000
+
+# Step 3: Tap the floating add button (+ button)
+- tapOn: "Add item"
+
+# Step 4: Wait for the form to load and verify we're on the add screen
+- assertVisible: "Add item"
+
+# Step 5: Enter product name
+- tapOn: "Enter product name"
+- inputText: "Maestro Test Milk"
+
+# Step 6: Tap on date picker
+- tapOn: "Tap to select date"
+
+# Step 7: Confirm the date (tap OK/Confirm on the date picker)
+- tapOn:
+    text: "OK"
+
+# Step 8: Make sure Fridge is selected (it should be default)
+- assertVisible: "Fridge"
+
+# Step 9: Tap the Add button to save
+- tapOn:
+    text: "Add"
+
+# Step 10: Verify we're back on the list and the product appears
+- assertVisible: "FRIDGE"
+- assertVisible: "Maestro Test Milk"
+
+# Note: To clean up, manually delete the test product by swiping left on it

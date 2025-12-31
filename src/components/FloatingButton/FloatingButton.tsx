@@ -12,6 +12,8 @@ const FloatingButton = ({ onPress, color }: FloatingButtonProps) => (
   <TouchableOpacity
     style={[styles.fab, { backgroundColor: color }]}
     onPress={onPress}
+    accessibilityLabel="Add item"
+    testID="add-item-button"
   >
     <Ionicons name="add" size={30} color="white" />
   </TouchableOpacity>

@@ -1,0 +1,7 @@
+appId: com.myfridge.App
+---
+# Simple smoke test to verify app launches correctly
+- launchApp
+
+# Verify the main screen is visible (app is already authenticated)
+- assertVisible: "FRIDGE"
