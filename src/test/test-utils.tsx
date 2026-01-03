@@ -1,13 +1,13 @@
 import { render, RenderOptions } from "@testing-library/react-native";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, Dispatch } from "react";
 
 import {
-  themeStore,
-  localeStore,
-  productsStore,
-  authStore,
-  notificationStore,
-} from "../store";
+  ThemeStoreContext as themeStore,
+  LocaleStoreContext as localeStore,
+  ProductsStoreContext as productsStore,
+  AuthStoreContext as authStore,
+  NotificationStoreContext as notificationStore,
+} from "../store/contexts";
 import {
   SupportedLocale,
   AuthStateType,
@@ -16,7 +16,6 @@ import {
   NotificationStoreValue,
 } from "../store/types";
 
-// Mock theme values
 const mockThemeStoreValue: ThemeStoreValue = {
   theme: {
     foreground: "#FFFFFF",
@@ -32,19 +31,17 @@ const mockThemeStoreValue: ThemeStoreValue = {
   availableThemes: ["lightRed", "lightBlue", "lightGreen"],
 };
 
-// Mock locale values
 const mockLocalizationContext = {
   t: (scope: string) => scope,
   locale: "en" as SupportedLocale,
-  setLocale: jest.fn(),
+  setLocale: jest.fn() as Dispatch<any>,
   changeLocale: jest.fn(),
 };
 
-// Mock auth values
 const mockAuthState: AuthStateType = {
-  user: null,
+  user: { uid: "test-user-id" },
   isLoading: false,
-  userToken: null,
+  userToken: "mock-token",
   profileImg: null,
 };
 
@@ -59,7 +56,6 @@ const mockAuthContext: AuthContextMethods = {
   deleteUser: jest.fn(),
 };
 
-// Mock products values
 const mockProductsContext = {
   handleSaveProduct: jest.fn(),
   handleGetProduct: jest.fn(),
@@ -68,7 +64,6 @@ const mockProductsContext = {
   handleFreezeProduct: jest.fn(),
 };
 
-// Mock notification values
 const mockNotificationStoreValue: NotificationStoreValue = {
   notificationState: {
     notificationsEnabled: false,
@@ -89,30 +84,30 @@ interface AllProvidersProps {
 const AllProviders = ({ children }: AllProvidersProps) => {
   return (
     <authStore.Provider
-      value={{
-        authState: mockAuthState,
-        dispatch: jest.fn(),
-        authContext: mockAuthContext,
-        userData: null,
-      }}
+      value={
+        {
+          authState: mockAuthState,
+          dispatch: jest.fn(),
+          authContext: mockAuthContext,
+          userData: { locale: "en" },
+        } as any
+      }
     >
-      <themeStore.Provider value={mockThemeStoreValue}>
-        <localeStore.Provider
-          value={{
-            locale: "en" as SupportedLocale,
-            setLocale: jest.fn(),
-            localizationContext: mockLocalizationContext,
-          }}
-        >
+      <themeStore.Provider value={mockThemeStoreValue as any}>
+        <localeStore.Provider value={mockLocalizationContext as any}>
           <productsStore.Provider
-            value={{
-              productsList: [],
-              fridgeProducts: [],
-              freezerProducts: [],
-              productsContext: mockProductsContext,
-            }}
+            value={
+              {
+                productsList: [],
+                fridgeProducts: [],
+                freezerProducts: [],
+                productsContext: mockProductsContext,
+              } as any
+            }
           >
-            <notificationStore.Provider value={mockNotificationStoreValue}>
+            <notificationStore.Provider
+              value={mockNotificationStoreValue as any}
+            >
               {children}
             </notificationStore.Provider>
           </productsStore.Provider>
