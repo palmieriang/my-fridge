@@ -8,7 +8,8 @@ import {
 } from "react-native";
 
 import styles from "./styles";
-import { themeStore } from "../../store";
+import { COLORS } from "../../constants/colors";
+import { ThemeStoreContext } from "../../store/contexts";
 
 type LoadingProps = {
   color?: ColorValue;
@@ -17,11 +18,17 @@ type LoadingProps = {
 };
 
 const Loading = ({ color, size, style }: LoadingProps) => {
-  const { theme } = useContext(themeStore);
+  // Use useContext directly to allow rendering outside ThemeProvider
+  const themeContext = useContext(ThemeStoreContext);
+  const primaryColor = themeContext?.theme?.primary ?? COLORS.PRIMARY_RED;
 
   return (
     <View style={[styles.loadingContainer, style]}>
-      <ActivityIndicator size={size} color={color || theme.primary} />
+      <ActivityIndicator
+        size={size}
+        color={color || primaryColor}
+        testID="activity-indicator"
+      />
     </View>
   );
 };

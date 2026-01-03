@@ -1,9 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useContext } from "react";
 import { TouchableOpacity } from "react-native";
 
 import styles from "./styles";
-import { themeStore } from "../../store";
+import { useTheme } from "../../store";
 
 type SortOrder = "default" | "earlier" | "later";
 
@@ -13,7 +12,7 @@ interface SortButtonProps {
 }
 
 const SortButton = ({ sortOrder, onSortToggle }: SortButtonProps) => {
-  const { theme } = useContext(themeStore);
+  const { theme } = useTheme();
 
   const getSortIcon = () => {
     switch (sortOrder) {

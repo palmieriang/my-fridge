@@ -1,9 +1,8 @@
-import { useContext } from "react";
 import { View, TextInput, TouchableOpacity, Text } from "react-native";
 
 import styles from "./styles";
 import { COLORS } from "../../constants/colors";
-import { localeStore, themeStore } from "../../store";
+import { useLocale, useTheme } from "../../store";
 
 interface SearchBarProps {
   value: string;
@@ -12,10 +11,8 @@ interface SearchBarProps {
 }
 
 const SearchBar = ({ value, onChangeText, placeholder }: SearchBarProps) => {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme } = useContext(themeStore);
+  const { t } = useLocale();
+  const { theme } = useTheme();
 
   const handleClear = () => {
     onChangeText("");

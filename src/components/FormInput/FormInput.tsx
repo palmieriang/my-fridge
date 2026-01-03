@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import {
   View,
   TextInput,
@@ -11,7 +11,7 @@ import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
 import { COLORS } from "../../constants/colors";
-import { localeStore, themeStore } from "../../store";
+import { useLocale, useTheme } from "../../store";
 
 type FormInputProps = TextInputProps & {
   labelValue: string;
@@ -35,10 +35,8 @@ const FormInput = ({
   onTogglePasswordVisibility,
   ...rest
 }: FormInputProps) => {
-  const { theme } = useContext(themeStore);
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
+  const { theme } = useTheme();
+  const { t } = useLocale();
 
   return (
     <View

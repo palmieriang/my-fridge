@@ -1,5 +1,4 @@
 import {
-  useContext,
   useRef,
   useCallback,
   forwardRef,
@@ -14,7 +13,7 @@ import type { SharedValue } from "react-native-reanimated";
 
 import SwipeAction from "./SwipeAction";
 import { FRIDGE } from "../../constants";
-import { localeStore } from "../../store";
+import { useLocale } from "../../store";
 
 type SwipeableRowProps = {
   children: ReactElement;
@@ -48,9 +47,7 @@ const SwipeableRow = forwardRef<SwipeableMethods, SwipeableRowProps>(
     }: SwipeableRowProps,
     ref,
   ) => {
-    const {
-      localizationContext: { t },
-    } = useContext(localeStore);
+    const { t } = useLocale();
     const swipeableRef = useRef<SwipeableMethods>(null);
 
     useImperativeHandle(ref, () => ({

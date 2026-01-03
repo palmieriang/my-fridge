@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { useContext, forwardRef } from "react";
+import { forwardRef } from "react";
 import { Text, TouchableWithoutFeedback, View } from "react-native";
 import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
 import { FRIDGE, FREEZER } from "../../constants";
 import { FormScreenNavigationProp } from "../../navigation/navigation.d";
-import { localeStore, productsStore, themeStore } from "../../store";
+import { useLocale, useProducts, useTheme } from "../../store";
 import { daysUntilDate, convertToDisplayFormat } from "../../utils";
 import SwipeableRow from "../SwipeableRow/SwipeableRow";
 
@@ -25,11 +25,9 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
 
     const { navigate } = useNavigation<FormScreenNavigationProp>();
 
-    const {
-      localizationContext: { t },
-    } = useContext(localeStore);
-    const { theme } = useContext(themeStore);
-    const { productsContext } = useContext(productsStore);
+    const { t } = useLocale();
+    const { theme } = useTheme();
+    const { productsContext } = useProducts();
 
     const days = daysUntilDate(date);
     const expired = days < 0;

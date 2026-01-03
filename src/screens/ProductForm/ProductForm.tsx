@@ -6,7 +6,7 @@ import BarcodeIcon from "@components/svg/BarcodeIcon";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import FridgeIcon from "@components/svg/FridgeIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
-import { useCallback, useContext, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -26,7 +26,7 @@ import {
   FormScreenNavigationProp,
   FormScreenRouteProp,
 } from "../../navigation/navigation.d";
-import { authStore, localeStore, productsStore, themeStore } from "../../store";
+import { useAuth, useLocale, useProducts, useTheme } from "../../store";
 
 type ProductFormProps = {
   navigation: FormScreenNavigationProp;
@@ -35,14 +35,11 @@ type ProductFormProps = {
 
 const ProductForm = ({ navigation, route }: ProductFormProps) => {
   const { params } = route;
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const {
-    authState: { user },
-  } = useContext(authStore);
-  const { theme } = useContext(themeStore);
-  const { productsContext } = useContext(productsStore);
+  const { t } = useLocale();
+  const { authState } = useAuth();
+  const user = authState?.user;
+  const { theme } = useTheme();
+  const { productsContext } = useProducts();
 
   const [showScanner, setShowScanner] = useState(false);
   const [isLookingUp, setIsLookingUp] = useState(false);
@@ -70,7 +67,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   } = useProductForm({
     existingProduct: params.product,
     existingId: params?.id || "",
-    userID: user.uid,
+    userID: user?.uid ?? "",
     t,
     onSuccess: navigateToList,
     productsContext,

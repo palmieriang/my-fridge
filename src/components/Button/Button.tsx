@@ -1,8 +1,7 @@
-import { useContext } from "react";
 import { Text, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
-import { themeStore } from "../../store";
+import { useTheme } from "../../store";
 
 type ButtonProps = {
   text: string;
@@ -17,7 +16,7 @@ const Button = ({
   variant = "primary",
   disabled = false,
 }: ButtonProps) => {
-  const { theme } = useContext(themeStore);
+  const { theme } = useTheme();
 
   const getButtonStyle = () => {
     const baseStyle = (() => {

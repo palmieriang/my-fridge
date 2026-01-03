@@ -7,12 +7,11 @@ import ProductList from "@screens/ProductList/ProductList";
 import Registration from "@screens/Registration/Registration";
 import Settings from "@screens/Settings/Settings";
 import SignIn from "@screens/SignIn/SignIn";
-import { useContext } from "react";
 import { COLORS } from "src/constants/colors";
 
 import { RootStackParamList } from "./navigation.d";
 import { FRIDGE, FREEZER, SETTINGS } from "../constants";
-import { localeStore, themeStore } from "../store";
+import { useLocale, useTheme } from "../store";
 import { Typography } from "../typography/responsive";
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -37,12 +36,10 @@ const screenOptions: StackNavigationOptions = {
 };
 
 export function FridgeStackScreen() {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
+  const { t } = useLocale();
   const {
     theme: { primary },
-  } = useContext(themeStore);
+  } = useTheme();
 
   return (
     <Stack.Navigator
@@ -72,12 +69,10 @@ export function FridgeStackScreen() {
 }
 
 export function FreezerStackScreen() {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
+  const { t } = useLocale();
   const {
     theme: { primary },
-  } = useContext(themeStore);
+  } = useTheme();
 
   return (
     <Stack.Navigator
@@ -105,12 +100,10 @@ export function FreezerStackScreen() {
 }
 
 export function SettingsStackScreen() {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
+  const { t } = useLocale();
   const {
     theme: { primary },
-  } = useContext(themeStore);
+  } = useTheme();
 
   return (
     <Stack.Navigator

@@ -1,10 +1,10 @@
 import { Picker } from "@react-native-picker/picker";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
-import { localeStore, themeStore } from "../../store";
+import { useLocale, useTheme } from "../../store";
 import type { SupportedLocale } from "../../store/types";
 
 interface LanguagePickerProps {
@@ -18,10 +18,8 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
   onLanguageChange,
   Icon,
 }) => {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme } = useContext(themeStore);
+  const { t } = useLocale();
+  const { theme } = useTheme();
 
   const languageData = [
     { label: t("english"), value: "en", key: "english" },

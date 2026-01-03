@@ -1,13 +1,8 @@
-import {
-  createContext,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-  ReactNode,
-} from "react";
+import { useEffect, useMemo, useReducer, useState, ReactNode } from "react";
 import { Alert } from "react-native";
 
+import { AuthStoreContext } from "./contexts";
+import { AuthStateType, AuthContextMethods } from "./types";
 import {
   persistentLogin,
   authSignIn,
@@ -18,7 +13,6 @@ import {
   deleteAccount,
 } from "../../api/api";
 import { ActionTypes } from "../constants";
-import { AuthStateType, AuthContextMethods, AuthStoreValue } from "./types";
 
 const initialState: AuthStateType = {
   user: null,
@@ -55,22 +49,7 @@ const reducer = (state: AuthStateType, action: any) => {
   }
 };
 
-const authStore = createContext<AuthStoreValue>({
-  authState: initialState,
-  dispatch: () => null,
-  authContext: {
-    signIn: () => {},
-    signInGoogle: () => {},
-    signOut: () => {},
-    signUp: async () => {},
-    resetPassword: async () => {},
-    updateProfileImage: () => {},
-    deleteImage: () => {},
-    deleteUser: () => {},
-  },
-  userData: {},
-});
-const { Provider } = authStore;
+const { Provider } = AuthStoreContext;
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [authState, dispatch] = useReducer(reducer, initialState);
@@ -185,4 +164,4 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export { authStore, AuthProvider };
+export { AuthStoreContext as authStore, AuthProvider };

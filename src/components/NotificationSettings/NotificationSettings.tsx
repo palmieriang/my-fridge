@@ -1,24 +1,16 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { View, Text, Switch } from "react-native";
 
 import styles from "./styles";
 import { COLORS } from "../../constants/colors";
-import {
-  authStore,
-  localeStore,
-  notificationStore,
-  themeStore,
-} from "../../store";
+import { useAuth, useLocale, useNotifications, useTheme } from "../../store";
 
 const NotificationSettings = () => {
-  const { authState } = useContext(authStore);
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme } = useContext(themeStore);
-  const { notificationState, notificationContext } =
-    useContext(notificationStore);
-  const userId = authState.user?.uid;
+  const { authState } = useAuth();
+  const { t } = useLocale();
+  const { theme } = useTheme();
+  const { notificationState, notificationContext } = useNotifications();
+  const userId = authState?.user?.uid;
 
   const { notificationsEnabled, loading } = notificationState;
   const { loadNotificationSettings, toggleNotifications } = notificationContext;

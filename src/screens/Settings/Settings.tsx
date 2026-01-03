@@ -5,26 +5,23 @@ import { ThemePicker } from "@components/Picker/ThemePicker";
 import { UserActions } from "@components/UserActions/UserActions";
 import BrushIcon from "@components/svg/BrushIcon";
 import LanguageIcon from "@components/svg/LanguageIcon";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 
 import styles from "./styles";
-import { authStore, localeStore, themeStore } from "../../store";
+import { useAuth, useLocale, useTheme } from "../../store";
 import type { SupportedLocale } from "../../store/types";
 import Profile from "../Profile/Profile";
 
 const Settings = () => {
-  const {
-    localizationContext: { changeLocale, locale },
-  } = useContext(localeStore);
-  const {
-    userData: { id },
-  } = useContext(authStore);
+  const { changeLocale, locale } = useLocale();
+  const { userData } = useAuth();
+  const id = userData?.id;
   const {
     theme,
     themeName,
     themeContext: { changeTheme },
-  } = useContext(themeStore);
+  } = useTheme();
 
   const [selectedLocale, setSelectedLocale] = useState<SupportedLocale>(locale);
   const [selectedTheme, setSelectedTheme] = useState<string>(themeName);

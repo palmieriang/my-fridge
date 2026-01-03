@@ -1,4 +1,4 @@
-import { useContext, FC, useState } from "react";
+import { FC, useState } from "react";
 import { View, Text, Alert, TouchableOpacity } from "react-native";
 
 import styles from "./styles";
@@ -6,7 +6,7 @@ import {
   requestNotificationPermission,
   markNotificationOnboardingCompleted,
 } from "../../../api/api";
-import { authStore, localeStore, themeStore } from "../../store";
+import { useAuth, useLocale, useTheme } from "../../store";
 import Button from "../Button/Button";
 
 interface NotificationOnboardingProps {
@@ -18,12 +18,10 @@ const NotificationOnboarding: FC<NotificationOnboardingProps> = ({
   onComplete,
   onSkip,
 }) => {
-  const { authState } = useContext(authStore);
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme } = useContext(themeStore);
-  const userId = authState.user?.uid;
+  const { authState } = useAuth();
+  const { t } = useLocale();
+  const { theme } = useTheme();
+  const userId = authState?.user?.uid;
   const [isLoading, setIsLoading] = useState(false);
 
   const handleEnableNotifications = async () => {

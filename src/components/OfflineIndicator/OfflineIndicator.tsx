@@ -1,16 +1,13 @@
-import { useContext } from "react";
 import { Text, View } from "react-native";
 
 import styles from "./styles";
-import { localeStore, themeStore } from "../../store";
+import { useLocale, useTheme } from "../../store";
 import { useNetwork } from "../../store/networkContext";
 
 export const OfflineIndicator = () => {
   const { isConnected, isInternetReachable } = useNetwork();
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme } = useContext(themeStore);
+  const { t } = useLocale();
+  const { theme } = useTheme();
 
   const isOffline = !isConnected || isInternetReachable === false;
 

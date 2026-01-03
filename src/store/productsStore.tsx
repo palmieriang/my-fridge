@@ -1,20 +1,9 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useMemo,
-  ReactNode,
-} from "react";
+import { useContext, useState, useEffect, useMemo, ReactNode } from "react";
 
+import { ProductsStoreContext } from "./contexts";
 import { FRIDGE, FREEZER } from "../constants";
 import { authStore } from "./authStore";
-import type {
-  Product,
-  NewProduct,
-  ProductsContextMethods,
-  ProductsStoreValue,
-} from "./types";
+import type { Product, NewProduct, ProductsContextMethods } from "./types";
 import {
   getAllProducts,
   saveProduct,
@@ -24,29 +13,15 @@ import {
   moveProduct,
 } from "../../api/api";
 
-const productsStore = createContext<ProductsStoreValue>({
-  productsList: [],
-  fridgeProducts: [],
-  freezerProducts: [],
-  productsContext: {
-    handleSaveProduct: async () => {},
-    handleGetProduct: async () => undefined,
-    handleModifyProduct: async () => {},
-    handleDeleteProduct: async () => {},
-    handleFreezeProduct: () => {},
-  },
-});
-
 interface ProductsProviderProps {
   children: ReactNode;
 }
 
-const { Provider } = productsStore;
+const { Provider } = ProductsStoreContext;
 
 const ProductsProvider = ({ children }: ProductsProviderProps) => {
-  const {
-    authState: { user },
-  } = useContext(authStore);
+  const authContext = useContext(authStore);
+  const user = authContext?.authState?.user;
 
   const [productsList, setProductsList] = useState<Product[]>([]);
   const userID = user?.uid;
@@ -133,4 +108,4 @@ const ProductsProvider = ({ children }: ProductsProviderProps) => {
   );
 };
 
-export { productsStore, ProductsProvider };
+export { ProductsStoreContext as productsStore, ProductsProvider };

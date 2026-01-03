@@ -1,19 +1,12 @@
 import { getLocales } from "expo-localization";
 import { I18n } from "i18n-js";
-import {
-  createContext,
-  useMemo,
-  useState,
-  useContext,
-  useEffect,
-  Dispatch,
-  SetStateAction,
-} from "react";
+import { useMemo, useState, useContext, useEffect } from "react";
 
 import { authStore } from "./authStore";
+import { LocaleStoreContext } from "./contexts";
 import {
-  LocalizationContextProps,
   LocaleProviderProps,
+  LocalizationContextProps,
   SupportedLocale,
   TranslateOptions,
 } from "./types";
@@ -34,30 +27,13 @@ const i18n = new I18n({
 });
 i18n.enableFallback = true;
 
-const defaultLocale: SupportedLocale = "en";
-
-const defaultLocalizationContext: LocalizationContextProps = {
-  t: (scope: string) => scope,
-  locale: defaultLocale,
-  setLocale: () => {},
-  changeLocale: async () => {},
-};
-
-const localeStore = createContext<{
-  locale: SupportedLocale;
-  setLocale: Dispatch<SetStateAction<SupportedLocale>>;
-  localizationContext: LocalizationContextProps;
-}>({
-  locale: defaultLocale,
-  setLocale: () => {},
-  localizationContext: defaultLocalizationContext,
-});
-
-const { Provider } = localeStore;
+const { Provider } = LocaleStoreContext;
 
 const LocaleProvider = ({ children }: LocaleProviderProps) => {
-  const { userData } = useContext(authStore);
-  const localeFromFirebase = userData?.locale as SupportedLocale | undefined;
+  const authContext = useContext(authStore);
+  const localeFromFirebase = authContext?.userData?.locale as
+    | SupportedLocale
+    | undefined;
 
   const [locale, setLocale] = useState<SupportedLocale>(deviceLocale);
 
@@ -73,7 +49,13 @@ const LocaleProvider = ({ children }: LocaleProviderProps) => {
         i18n.t(scope, { ...options, locale }),
       locale,
       setLocale,
-      changeLocale: async ({ newLocale, id }) => {
+      changeLocale: async ({
+        newLocale,
+        id,
+      }: {
+        newLocale: SupportedLocale;
+        id: string;
+      }) => {
         setLocale(newLocale);
         changeLanguage(newLocale, id).catch((error) =>
           console.warn(
@@ -86,11 +68,7 @@ const LocaleProvider = ({ children }: LocaleProviderProps) => {
     [locale],
   );
 
-  return (
-    <Provider value={{ locale, setLocale, localizationContext }}>
-      {children}
-    </Provider>
-  );
+  return <Provider value={localizationContext}>{children}</Provider>;
 };
 
-export { localeStore, LocaleProvider };
+export { LocaleStoreContext as localeStore, LocaleProvider };

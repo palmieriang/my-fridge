@@ -1,6 +1,7 @@
-import { createContext, useState, ReactNode } from "react";
+import { useState, ReactNode } from "react";
 import { Alert } from "react-native";
 
+import { NotificationStoreContext } from "./contexts";
 import type {
   NotificationStateType,
   NotificationContextMethods,
@@ -11,21 +12,6 @@ import {
   requestNotificationPermission,
   disableNotifications,
 } from "../../api/api";
-
-const initialState: NotificationStateType = {
-  notificationsEnabled: false,
-  loading: false,
-};
-
-const NotificationContext = createContext<NotificationStoreValue>({
-  notificationState: initialState,
-  notificationContext: {
-    loadNotificationSettings: async () => {},
-    setNotificationsEnabled: () => {},
-    toggleNotifications: async () => {},
-    showNotificationPermissionDialog: () => {},
-  },
-});
 
 interface NotificationProviderProps {
   children: ReactNode;
@@ -155,10 +141,10 @@ export const NotificationProvider = ({
   };
 
   return (
-    <NotificationContext.Provider value={storeValue}>
+    <NotificationStoreContext.Provider value={storeValue}>
       {children}
-    </NotificationContext.Provider>
+    </NotificationStoreContext.Provider>
   );
 };
 
-export const notificationStore = NotificationContext;
+export const notificationStore = NotificationStoreContext;

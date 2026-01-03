@@ -1,19 +1,8 @@
-import {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-  useMemo,
-  ReactNode,
-} from "react";
+import { useState, useContext, useEffect, useMemo, ReactNode } from "react";
 
 import { authStore } from "./authStore";
-import {
-  ThemeType,
-  ThemesMap,
-  ThemeContextMethods,
-  ThemeStoreValue,
-} from "./types";
+import { ThemeStoreContext } from "./contexts";
+import { ThemeType, ThemesMap, ThemeContextMethods } from "./types";
 import { changeColor } from "../../api/api";
 import { COLORS } from "../constants/colors";
 
@@ -94,24 +83,13 @@ const themes: ThemesMap = {
 
 const AVAILABLE_THEMES = Object.keys(themes);
 
-const themeStore = createContext<ThemeStoreValue>({
-  theme: themes.lightRed,
-  setTheme: () => {},
-  themeName: "lightRed",
-  themeContext: {
-    changeTheme: () => {},
-  },
-  availableThemes: AVAILABLE_THEMES,
-});
-
-const { Provider } = themeStore;
+const { Provider } = ThemeStoreContext;
 
 const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [themeName, setThemeName] = useState<string>("lightRed");
   const [theme, setTheme] = useState<ThemeType>(themes.lightRed);
-  const {
-    userData: { theme: themeFromFirebase },
-  } = useContext(authStore);
+  const authContext = useContext(authStore);
+  const themeFromFirebase = authContext?.userData?.theme;
 
   useEffect(() => {
     if (themeFromFirebase) {
@@ -160,4 +138,4 @@ const ThemeProvider = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export { themeStore, ThemeProvider };
+export { ThemeStoreContext as themeStore, ThemeProvider };

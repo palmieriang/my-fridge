@@ -3,7 +3,7 @@ import { OfflineIndicator } from "@components/OfflineIndicator/OfflineIndicator"
 import ProductCard from "@components/ProductCard/ProductCard";
 import SearchBar from "@components/SearchBar/SearchBar";
 import SortButton from "@components/SortButton/SortButton";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FlatList, Text, View } from "react-native";
 import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
@@ -13,8 +13,7 @@ import {
   ProductListNavigationProp,
   ProductListRouteProp,
 } from "../../navigation/navigation.d";
-import { localeStore, themeStore } from "../../store";
-import { productsStore } from "../../store/productsStore";
+import { useLocale, useProducts, useTheme } from "../../store";
 import { convertToISODateString } from "../../utils";
 
 type ProductListProps = {
@@ -23,11 +22,9 @@ type ProductListProps = {
 };
 
 const ProductList = ({ navigation, route }: ProductListProps) => {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme } = useContext(themeStore);
-  const { fridgeProducts, freezerProducts } = useContext(productsStore);
+  const { t } = useLocale();
+  const { theme } = useTheme();
+  const { fridgeProducts, freezerProducts } = useProducts();
 
   const { place } = route.params;
 

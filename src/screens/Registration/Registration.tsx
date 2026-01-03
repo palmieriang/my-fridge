@@ -4,7 +4,7 @@ import PasswordStrengthIndicator from "@components/PasswordStrengthIndicator/Pas
 import EmailIcon from "@components/svg/EmailIcon";
 import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
-import { useState, useContext } from "react";
+import { useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -17,7 +17,7 @@ import {
 import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
-import { authStore } from "../../store";
+import { useAuth } from "../../store";
 import {
   validateEmail,
   validatePasswordConfirmation,
@@ -45,7 +45,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { authContext } = useContext(authStore);
+  const { authContext } = useAuth();
 
   const handleFullNameValidation = (name: string) => {
     const result = validateFullName(name);

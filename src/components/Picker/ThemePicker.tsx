@@ -1,11 +1,11 @@
 import { Picker } from "@react-native-picker/picker";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Text, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import { generateThemeData } from "./generateThemeData";
 import styles from "./styles";
-import { localeStore, themeStore } from "../../store";
+import { useLocale, useTheme } from "../../store";
 
 interface ThemePickerProps {
   selectedTheme: string;
@@ -18,10 +18,8 @@ export const ThemePicker: FC<ThemePickerProps> = ({
   onThemeChange,
   Icon,
 }) => {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme, availableThemes } = useContext(themeStore);
+  const { t } = useLocale();
+  const { theme, availableThemes } = useTheme();
 
   const themeData = generateThemeData({
     availableThemes,

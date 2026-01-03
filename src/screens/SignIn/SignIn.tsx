@@ -5,7 +5,7 @@ import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
 import useToggle from "@components/utils/useToggle";
 import { useFocusEffect } from "@react-navigation/native";
-import { useState, useContext, useRef, useCallback } from "react";
+import { useState, useRef, useCallback } from "react";
 import {
   Animated,
   KeyboardAvoidingView,
@@ -20,7 +20,7 @@ import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
 import LottieAnimation from "../../animations/LottieAnimation";
-import { authStore, localeStore } from "../../store";
+import { useAuth, useLocale } from "../../store";
 import { validateEmail, validatePassword } from "../../utils/validation";
 
 interface SignInProps {
@@ -40,10 +40,8 @@ const SignIn = ({ navigation }: SignInProps) => {
   const [passwordError, setPasswordError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const { authContext } = useContext(authStore);
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
+  const { authContext } = useAuth();
+  const { t } = useLocale();
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const buttonScaleAnim = useRef(new Animated.Value(1)).current;

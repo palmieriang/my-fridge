@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import {
   View,
   TouchableOpacity,
@@ -8,7 +7,7 @@ import {
 } from "react-native";
 
 import styles from "./styles";
-import { authStore } from "../../store";
+import { useAuth } from "../../store";
 
 type StylesType = {
   iconsContainer: StyleProp<ViewStyle>;
@@ -19,7 +18,7 @@ type StylesType = {
 };
 
 const SocialIcon = () => {
-  const { authContext } = useContext(authStore);
+  const { authContext } = useAuth();
 
   const signInGoogle = () => {
     authContext.signInGoogle();

@@ -3,7 +3,7 @@ import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
 import type { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Alert,
   Image,
@@ -17,7 +17,7 @@ import { COLORS } from "src/constants/colors";
 import { getImageBlobAndMetadata } from "./getImageBlobAndMetadata";
 import styles from "./styles";
 import { uploadImage } from "../../../api/api";
-import { authStore, themeStore } from "../../store";
+import { useAuth, useTheme } from "../../store";
 
 type UploadState = {
   isUploading: boolean;
@@ -29,8 +29,8 @@ const Profile = () => {
     userData,
     authContext,
     authState: { profileImg },
-  } = useContext(authStore);
-  const { theme } = useContext(themeStore);
+  } = useAuth();
+  const { theme } = useTheme();
   const [upload, setUpload] = useState<UploadState>({
     isUploading: false,
     uploadProgress: 0,

@@ -4,7 +4,7 @@ import {
   BarcodeScanningResult,
   BarcodeType,
 } from "expo-camera";
-import { useContext, useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 import {
   Modal,
   View,
@@ -14,7 +14,7 @@ import {
 } from "react-native";
 
 import { styles } from "./styles";
-import { localeStore, themeStore } from "../../store";
+import { useLocale, useTheme } from "../../store";
 
 const BARCODE_TYPES: BarcodeType[] = [
   "ean13",
@@ -39,10 +39,8 @@ export const BarcodeScanner = ({
 }: BarcodeScannerProps) => {
   const [permission, requestPermission] = useCameraPermissions();
   const [scanned, setScanned] = useState(false);
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { theme } = useContext(themeStore);
+  const { t } = useLocale();
+  const { theme } = useTheme();
 
   const handleBarCodeScanned = useCallback(
     (result: BarcodeScanningResult) => {

@@ -1,15 +1,13 @@
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { Alert, Text, View } from "react-native";
 
 import styles from "./styles";
-import { authStore, localeStore } from "../../store";
+import { useAuth, useLocale } from "../../store";
 import Button from "../Button/Button";
 
 export const UserActions: FC = () => {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
-  const { authContext, dispatch } = useContext(authStore);
+  const { t } = useLocale();
+  const { authContext, dispatch } = useAuth();
 
   const handleLogOut = () => {
     authContext.signOut(dispatch);

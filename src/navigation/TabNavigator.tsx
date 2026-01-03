@@ -3,7 +3,6 @@ import {
   createBottomTabNavigator,
   BottomTabNavigationOptions,
 } from "@react-navigation/bottom-tabs";
-import { useContext } from "react";
 
 import {
   FridgeStackScreen,
@@ -11,19 +10,17 @@ import {
   SettingsStackScreen,
 } from "./navigation";
 import { FRIDGE, FREEZER, SETTINGS } from "../constants";
-import { localeStore, productsStore, themeStore } from "../store";
+import { useLocale, useProducts, useTheme } from "../store";
 import { countExpiredItems } from "../utils";
 
 const Tab = createBottomTabNavigator();
 
 const TabNavigator = () => {
-  const {
-    localizationContext: { t },
-  } = useContext(localeStore);
+  const { t } = useLocale();
   const {
     theme: { primary },
-  } = useContext(themeStore);
-  const { productsList } = useContext(productsStore);
+  } = useTheme();
+  const { productsList } = useProducts();
 
   const routeTypeMapping: Record<string, "fridge" | "freezer" | "settings"> = {
     [t(FRIDGE)]: FRIDGE,
