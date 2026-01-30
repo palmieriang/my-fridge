@@ -25,7 +25,6 @@ export const useNotificationOnboarding =
       const loadOnboardingStatus = async () => {
         try {
           const settings = await getUserNotificationSettings(userId);
-          // If user has any notification preference set, they've completed onboarding
           setHasCompletedOnboarding(settings.hasCompletedOnboarding || false);
         } catch (error) {
           console.error("Error loading onboarding status:", error);
@@ -35,7 +34,6 @@ export const useNotificationOnboarding =
       loadOnboardingStatus();
     }, [authState.user?.uid]);
 
-    // Show onboarding if user is authenticated and hasn't completed it
     useEffect(() => {
       if (authState.userToken && !hasCompletedOnboarding) {
         const timer = setTimeout(() => {
