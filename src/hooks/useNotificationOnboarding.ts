@@ -17,14 +17,16 @@ export const useNotificationOnboarding =
     const { authState } = useContext(authStore);
 
     useEffect(() => {
+      const userId = authState.user?.uid;
+      if (!userId) {
+        return;
+      }
+
       const loadOnboardingStatus = async () => {
         try {
-          const userId = authState.user?.uid;
-          if (userId) {
-            const settings = await getUserNotificationSettings(userId);
-            // If user has any notification preference set, they've completed onboarding
-            setHasCompletedOnboarding(settings.hasCompletedOnboarding || false);
-          }
+          const settings = await getUserNotificationSettings(userId);
+          // If user has any notification preference set, they've completed onboarding
+          setHasCompletedOnboarding(settings.hasCompletedOnboarding || false);
         } catch (error) {
           console.error("Error loading onboarding status:", error);
         }

@@ -24,6 +24,10 @@ export const NotificationProvider = ({
   const [loading, setLoading] = useState(false);
 
   const loadNotificationSettings = async (userId: string) => {
+    if (!userId) {
+      return;
+    }
+
     setLoading(true);
     try {
       const settings = await getUserNotificationSettings(userId);

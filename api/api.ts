@@ -238,6 +238,15 @@ export async function getUserData(uid: string) {
 }
 
 export async function getUserNotificationSettings(uid: string) {
+  if (!uid) {
+    return { notificationsEnabled: false, hasCompletedOnboarding: false };
+  }
+
+  const currentUser = getAuthService().currentUser;
+  if (!currentUser || currentUser.uid !== uid) {
+    return { notificationsEnabled: false, hasCompletedOnboarding: false };
+  }
+
   const snapshot = await getDoc(doc(getUsersRef(), uid));
   if (!snapshot.exists()) {
     return { notificationsEnabled: false, hasCompletedOnboarding: false };
