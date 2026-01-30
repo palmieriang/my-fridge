@@ -1,7 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 
 import { getUserNotificationSettings } from "../../api/api";
-import { authStore } from "../store";
+import { useAuth } from "../store";
 
 interface UseNotificationOnboardingReturn {
   isOnboardingVisible: boolean;
@@ -14,7 +14,7 @@ export const useNotificationOnboarding =
   (): UseNotificationOnboardingReturn => {
     const [isOnboardingVisible, setIsOnboardingVisible] = useState(false);
     const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState(false);
-    const { authState } = useContext(authStore);
+    const { authState } = useAuth();
 
     useEffect(() => {
       const userId = authState.user?.uid;

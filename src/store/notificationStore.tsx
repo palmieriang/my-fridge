@@ -32,8 +32,11 @@ export const NotificationProvider = ({
     try {
       const settings = await getUserNotificationSettings(userId);
       setNotificationsEnabled(settings.notificationsEnabled);
-    } catch (error) {
-      console.error("Error loading notification settings:", error);
+    } catch (error: any) {
+      // Silently handle permission errors during logout
+      if (error?.code !== "firestore/permission-denied") {
+        console.error("Error loading notification settings:", error);
+      }
     } finally {
       setLoading(false);
     }

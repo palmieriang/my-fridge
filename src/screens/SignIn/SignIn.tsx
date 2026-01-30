@@ -45,6 +45,7 @@ const SignIn = ({ navigation }: SignInProps) => {
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const buttonScaleAnim = useRef(new Animated.Value(1)).current;
+  const isSigningIn = useRef(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -116,6 +117,12 @@ const SignIn = ({ navigation }: SignInProps) => {
   };
 
   const signInAfterAnimation = async () => {
+    // Prevent multiple sign-in calls from animation callbacks
+    if (isSigningIn.current) {
+      return;
+    }
+    isSigningIn.current = true;
+
     try {
       await authContext.signIn({ email, password });
       setPlayAnimation(false);
@@ -130,6 +137,7 @@ const SignIn = ({ navigation }: SignInProps) => {
       setIsLoading(false);
       setPlayAnimation(false);
       setResetAnimation(true);
+      isSigningIn.current = false;
     }
   };
 

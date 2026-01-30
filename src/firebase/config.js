@@ -49,14 +49,6 @@ export const initializeFirebaseServices = async () => {
       console.log("[Firebase] Emulators connected");
     }
 
-    onAuthStateChanged(_authInstance, (user) => {
-      if (user) {
-        console.log(`[Firebase] User logged in: ${user.uid}`);
-      } else {
-        console.log("[Firebase] User logged out");
-      }
-    });
-
     return {
       authInstance: _authInstance,
       firestoreInstance: _firestoreInstance,

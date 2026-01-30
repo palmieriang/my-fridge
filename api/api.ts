@@ -247,16 +247,24 @@ export async function getUserNotificationSettings(uid: string) {
     return { notificationsEnabled: false, hasCompletedOnboarding: false };
   }
 
-  const snapshot = await getDoc(doc(getUsersRef(), uid));
-  if (!snapshot.exists()) {
-    return { notificationsEnabled: false, hasCompletedOnboarding: false };
-  }
+  try {
+    const snapshot = await getDoc(doc(getUsersRef(), uid));
+    if (!snapshot.exists()) {
+      return { notificationsEnabled: false, hasCompletedOnboarding: false };
+    }
 
-  const userData = snapshot.data() as UserData;
-  return {
-    notificationsEnabled: userData?.notificationsEnabled || false,
-    hasCompletedOnboarding: userData?.hasCompletedOnboarding || false,
-  };
+    const userData = snapshot.data() as UserData;
+    return {
+      notificationsEnabled: userData?.notificationsEnabled || false,
+      hasCompletedOnboarding: userData?.hasCompletedOnboarding || false,
+    };
+  } catch (error: any) {
+    // Silently handle permission errors during logout transition
+    if (error?.code === "firestore/permission-denied") {
+      return { notificationsEnabled: false, hasCompletedOnboarding: false };
+    }
+    throw error;
+  }
 }
 
 async function getUserDataWithRetry(
