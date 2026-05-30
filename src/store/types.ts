@@ -77,6 +77,7 @@ export interface Product {
   date: string;
   place: "fridge" | "freezer";
   authorID: string;
+  quantity?: number;
   createdAt?: Timestamp;
 }
 

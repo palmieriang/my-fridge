@@ -104,5 +104,11 @@
   "sortLater": "Prima quelli che scadono dopo",
   "spanish": "Spagnolo",
   "title": "Frigo",
-  "validationError": "Prodotto non valido"
+  "validationError": "Prodotto non valido",
+  "quantity": "Quantità",
+  "quantityPlaceholder": "Inserisci la quantità",
+  "quantityInvalid": "La quantità deve essere un numero positivo.",
+  "outOfStock": "Esaurito",
+  "addToShoppingList": "Aggiungi alla lista della spesa",
+  "addToShoppingListSoon": "La funzione lista della spesa sarà disponibile presto!"
 }

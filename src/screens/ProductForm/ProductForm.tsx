@@ -5,6 +5,7 @@ import { PlacePicker } from "@components/Picker/PlacePicker";
 import BarcodeIcon from "@components/svg/BarcodeIcon";
 import CalendarIcon from "@components/svg/CalendarIcon";
 import FridgeIcon from "@components/svg/FridgeIcon";
+import LayersIcon from "@components/svg/LayersIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
 import { useCallback, useState } from "react";
 import {
@@ -52,6 +53,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
     name,
     date,
     place,
+    quantity,
     showDatePicker,
     errors,
     isSubmitting,
@@ -62,6 +64,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
     handleDatePicked,
     handleDatePickerHide,
     handlePlaceChange,
+    handleChangeQuantity,
     handleSubmit,
     handleDelete,
   } = useProductForm({
@@ -183,6 +186,19 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           onPlaceChange={handlePlaceChange}
           error={errors.place}
           Icon={FridgeIcon}
+        />
+        <Text style={[styles.label, { color: theme.text }]}>
+          {t("quantity")}
+        </Text>
+        <FormInput
+          labelValue={quantity}
+          onChangeText={handleChangeQuantity}
+          placeholderText={t("quantityPlaceholder")}
+          Icon={LayersIcon}
+          keyboardType="numeric"
+          returnKeyType="done"
+          error={errors.quantity}
+          showError={!!errors.quantity}
         />
         <View style={styles.buttonContainer}>
           <Button

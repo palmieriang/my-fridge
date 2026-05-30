@@ -100,5 +100,11 @@
   "sortLater": "Expiration plus tardive en premier",
   "spanish": "Espagnol",
   "title": "Frigo",
-  "validationError": "Erreur de validation"
+  "validationError": "Erreur de validation",
+  "quantity": "Quantité",
+  "quantityPlaceholder": "Entrez la quantité",
+  "quantityInvalid": "La quantité doit être un nombre positif.",
+  "outOfStock": "Épuisé",
+  "addToShoppingList": "Ajouter à la liste de courses",
+  "addToShoppingListSoon": "La fonctionnalité de liste de courses sera bientôt disponible !"
 }

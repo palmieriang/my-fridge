@@ -104,5 +104,11 @@
   "sortLater": "Primero los que caducan después",
   "spanish": "Español",
   "title": "Nevera",
-  "validationError": "Error de validación"
+  "validationError": "Error de validación",
+  "quantity": "Cantidad",
+  "quantityPlaceholder": "Ingresa la cantidad",
+  "quantityInvalid": "La cantidad debe ser un número positivo.",
+  "outOfStock": "Agotado",
+  "addToShoppingList": "Agregar a la lista de compras",
+  "addToShoppingListSoon": "¡La función de lista de compras estará disponible pronto!"
 }

@@ -6,6 +6,7 @@ type ValidateProductProps = {
   name: string;
   date: string | null;
   place: string;
+  quantity: string;
   t: (key: string) => string;
 };
 
@@ -15,6 +16,7 @@ type ValidationResult = {
     name?: string;
     date?: string;
     place?: string;
+    quantity?: string;
   };
 };
 
@@ -42,9 +44,10 @@ export const validateProduct = ({
   name,
   date,
   place,
+  quantity,
   t,
 }: ValidateProductProps): boolean => {
-  const result = validateProductWithErrors({ name, date, place, t });
+  const result = validateProductWithErrors({ name, date, place, quantity, t });
 
   if (!result.isValid) {
     const firstError = Object.values(result.errors)[0];
@@ -60,6 +63,7 @@ export const validateProductWithErrors = ({
   name,
   date,
   place,
+  quantity,
   t,
 }: ValidateProductProps): ValidationResult => {
   const errors: ValidationResult["errors"] = {};
@@ -98,6 +102,14 @@ export const validateProductWithErrors = ({
   // Place validation
   if (!isValidPlace(place)) {
     errors.place = t("selectPlace");
+  }
+
+  // Quantity validation
+  if (quantity !== "") {
+    const parsed = parseInt(quantity, 10);
+    if (isNaN(parsed) || parsed < 0) {
+      errors.quantity = t("quantityInvalid");
+    }
   }
 
   return {

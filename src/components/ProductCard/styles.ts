@@ -25,6 +25,7 @@ export default StyleSheet.create({
     fontSize: Typography.bodyLarge,
     marginBottom: 10,
     marginTop: 5,
+    flexShrink: 1,
   },
   counterContainer: {
     alignItems: "baseline",
@@ -45,5 +46,45 @@ export default StyleSheet.create({
     fontFamily: "LilitaOne-Regular",
     fontSize: Typography.display,
     textTransform: "uppercase",
+  },
+  quantityRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 2,
+    gap: 8,
+  },
+  titleRow: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: 6,
+  },
+  outOfStockRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 2,
+    gap: 8,
+  },
+  outOfStockLabel: {
+    fontFamily: "OpenSans-SemiBold",
+    fontSize: Typography.caption,
+  },
+  quantityBadge: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    gap: 3,
+  },
+  quantityMultiplier: {
+    fontFamily: "OpenSans-Light",
+    fontSize: Typography.caption,
+    color: "#666",
+  },
+  quantityNumber: {
+    fontFamily: "OpenSans-SemiBold",
+    fontSize: Typography.body,
+  },
+  shoppingListNudge: {
+    fontFamily: "OpenSans-Regular",
+    fontSize: Typography.caption,
+    textDecorationLine: "underline",
   },
 });

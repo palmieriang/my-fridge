@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { forwardRef } from "react";
-import { Text, TouchableWithoutFeedback, View } from "react-native";
+import { Alert, Text, TouchableWithoutFeedback, View } from "react-native";
 import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
@@ -16,12 +16,13 @@ type ProductCardProps = {
     id: string;
     name: string;
     place: "fridge" | "freezer";
+    quantity?: number;
   };
 };
 
 const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
   ({ product }, ref) => {
-    const { date, id, name, place } = product;
+    const { date, id, name, place, quantity } = product;
 
     const { navigate } = useNavigation<FormScreenNavigationProp>();
 
@@ -32,6 +33,13 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
     const days = daysUntilDate(date);
     const expired = days < 0;
     const displayDate = convertToDisplayFormat(date);
+    const outOfStock = quantity !== undefined && quantity <= 0;
+
+    const handleAddToShoppingList = () => {
+      Alert.alert(t("addToShoppingList"), t("addToShoppingListSoon"), [
+        { text: t("ok"), style: "default" },
+      ]);
+    };
 
     const handleChange = () => {
       productsContext
@@ -70,9 +78,42 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
                 <Text style={[styles.date, { color: theme.text }]}>
                   {displayDate}
                 </Text>
-                <Text style={[styles.title, { color: theme.text }]}>
-                  {name}
-                </Text>
+                <View style={styles.titleRow}>
+                  <Text
+                    style={[styles.title, { color: theme.text }]}
+                    numberOfLines={1}
+                  >
+                    {name}
+                  </Text>
+                  {quantity !== undefined && !outOfStock && (
+                    <View style={styles.quantityBadge}>
+                      <Text style={styles.quantityMultiplier}>×</Text>
+                      <Text
+                        style={[styles.quantityNumber, { color: theme.text }]}
+                      >
+                        {quantity}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+                {outOfStock && (
+                  <View style={styles.outOfStockRow}>
+                    <Text
+                      style={[styles.outOfStockLabel, { color: theme.primary }]}
+                    >
+                      {t("outOfStock")}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.shoppingListNudge,
+                        { color: theme.primary },
+                      ]}
+                      onPress={handleAddToShoppingList}
+                    >
+                      {t("addToShoppingList")}
+                    </Text>
+                  </View>
+                )}
               </View>
 
               {expired ? (

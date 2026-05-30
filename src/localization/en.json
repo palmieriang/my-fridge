@@ -22,7 +22,7 @@
   "english": "English",
   "error": "Start adding products to the fridge.",
   "expired": "Expired",
-  "expirationDate": "Expiration Date",
+  "expirationDate": "Expiry Date",
   "freeze": "Freeze",
   "freezer": "Freezer",
   "french": "French",
@@ -104,5 +104,11 @@
   "sortLater": "Expiring later first",
   "spanish": "Spanish",
   "title": "Fridge",
-  "validationError": "Validation Error"
+  "validationError": "Validation Error",
+  "quantity": "Quantity",
+  "quantityPlaceholder": "Enter quantity",
+  "quantityInvalid": "Quantity must be a positive number.",
+  "outOfStock": "Out of stock",
+  "addToShoppingList": "Add to shopping list",
+  "addToShoppingListSoon": "Shopping list feature coming soon!"
 }

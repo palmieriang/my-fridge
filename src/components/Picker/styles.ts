@@ -20,6 +20,7 @@ export default StyleSheet.create({
     flexDirection: "row",
     marginHorizontal: responsive.containerMargin,
     marginTop: 10,
+    marginBottom: 20,
     maxHeight: 56,
     overflow: "visible",
     position: "relative",

@@ -15,6 +15,7 @@ type UseProductFormProps = {
     name: string;
     date: string;
     place: "fridge" | "freezer";
+    quantity?: number;
   };
   existingId?: string;
   userID: string;
@@ -42,11 +43,15 @@ export const useProductForm = ({
   const [place, setPlace] = useState<"fridge" | "freezer" | "">(
     existingProduct?.place || "",
   );
+  const [quantity, setQuantity] = useState<string>(
+    existingProduct?.quantity != null ? String(existingProduct.quantity) : "1",
+  );
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [errors, setErrors] = useState<{
     name?: string;
     date?: string;
     place?: string;
+    quantity?: string;
   }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -102,26 +107,40 @@ export const useProductForm = ({
     [errors.place],
   );
 
+  const handleChangeQuantity = useCallback(
+    (value: string) => {
+      // Allow only digits
+      const cleaned = value.replace(/[^0-9]/g, "");
+      setQuantity(cleaned);
+      if (errors.quantity) {
+        setErrors((prev) => ({ ...prev, quantity: undefined }));
+      }
+    },
+    [errors.quantity],
+  );
+
   const handleSubmit = useCallback(async () => {
     setErrors({});
     setIsSubmitting(true);
 
-    const validation = validateProductWithErrors({ name, date, place, t });
-
-    if (!validation.isValid) {
-      setErrors(validation.errors);
-      setIsSubmitting(false);
-      return;
-    }
-
-    const data: NewProduct = {
-      name: name.trim(),
-      date: convertToFirestoreFormat(date), // Convert to YYYY-MM-DD format
-      place: place as "fridge" | "freezer",
-      authorID: userID,
-    };
-
     try {
+      const validation = validateProductWithErrors({ name, date, place, quantity, t });
+
+      if (!validation.isValid) {
+        setErrors(validation.errors);
+        return;
+      }
+
+      const parsedQuantity = quantity === "" ? 1 : parseInt(quantity, 10);
+
+      const data: NewProduct = {
+        name: name.trim(),
+        date: convertToFirestoreFormat(date), // Convert to YYYY-MM-DD format
+        place: place as "fridge" | "freezer",
+        authorID: userID,
+        quantity: parsedQuantity,
+      };
+
       if (existingId) {
         await productsContext.handleModifyProduct(data, existingId);
       } else {
@@ -134,7 +153,7 @@ export const useProductForm = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [name, date, place, t, userID, existingId, onSuccess, productsContext]);
+  }, [name, date, place, quantity, t, userID, existingId, onSuccess, productsContext]);
 
   const handleDelete = useCallback(async () => {
     if (!existingId) {
@@ -159,6 +178,7 @@ export const useProductForm = ({
     name,
     date,
     place,
+    quantity,
     showDatePicker,
     errors,
     isSubmitting,
@@ -171,6 +191,7 @@ export const useProductForm = ({
     handleDatePicked,
     handleDatePickerHide,
     handlePlaceChange,
+    handleChangeQuantity,
     handleSubmit,
     handleDelete,
   };

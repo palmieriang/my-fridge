@@ -104,5 +104,11 @@
   "sortLater": "Später ablaufende zuerst",
   "spanish": "Spanisch",
   "title": "Kühlschrank",
-  "validationError": "Validierungsfehler"
+  "validationError": "Validierungsfehler",
+  "quantity": "Menge",
+  "quantityPlaceholder": "Menge eingeben",
+  "quantityInvalid": "Die Menge muss eine positive Zahl sein.",
+  "outOfStock": "Nicht vorrätig",
+  "addToShoppingList": "Zur Einkaufsliste hinzufügen",
+  "addToShoppingListSoon": "Die Einkaufslisten-Funktion kommt bald!"
 }

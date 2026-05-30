@@ -104,5 +104,11 @@
   "sortLater": "Primeiro os que expiram mais tarde",
   "spanish": "Espanhol",
   "title": "Frigorífico",
-  "validationError": "Erro de validação"
+  "validationError": "Erro de validação",
+  "quantity": "Quantidade",
+  "quantityPlaceholder": "Insira a quantidade",
+  "quantityInvalid": "A quantidade deve ser um número positivo.",
+  "outOfStock": "Esgotado",
+  "addToShoppingList": "Adicionar à lista de compras",
+  "addToShoppingListSoon": "A funcionalidade de lista de compras estará disponível em breve!"
 }
