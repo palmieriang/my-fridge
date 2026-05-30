@@ -98,6 +98,31 @@ export interface ProductsStoreValue {
   productsContext: ProductsContextMethods;
 }
 
+// shoppingListStore
+
+export interface ShoppingItem {
+  id: string;
+  name: string;
+  checked: boolean;
+  authorID: string;
+  createdAt?: Timestamp;
+}
+
+export type NewShoppingItem = Omit<ShoppingItem, "id" | "createdAt">;
+
+export interface ShoppingListContextMethods {
+  handleAddItem: (name: string) => Promise<void>;
+  handleToggleItem: (id: string, checked: boolean) => Promise<void>;
+  handleUpdateItemName: (id: string, name: string) => Promise<void>;
+  handleDeleteItem: (id: string) => Promise<void>;
+  handleClearChecked: () => Promise<void>;
+}
+
+export interface ShoppingListStoreValue {
+  shoppingItems: ShoppingItem[];
+  shoppingListContext: ShoppingListContextMethods;
+}
+
 // themeStore
 
 export interface ThemeType {

@@ -6,6 +6,7 @@ import {
   ProductsStoreContext,
   NotificationStoreContext,
   LocaleStoreContext,
+  ShoppingListStoreContext,
 } from "./contexts";
 
 export function useAuth() {
@@ -46,6 +47,14 @@ export function useLocale() {
   const context = useContext(LocaleStoreContext);
   if (!context) {
     throw new Error("useLocale must be used within LocaleProvider");
+  }
+  return context;
+}
+
+export function useShoppingList() {
+  const context = useContext(ShoppingListStoreContext);
+  if (!context) {
+    throw new Error("useShoppingList must be used within ShoppingListProvider");
   }
   return context;
 }

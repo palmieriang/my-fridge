@@ -6,11 +6,12 @@ import ProductForm from "@screens/ProductForm/ProductForm";
 import ProductList from "@screens/ProductList/ProductList";
 import Registration from "@screens/Registration/Registration";
 import Settings from "@screens/Settings/Settings";
+import ShoppingList from "@screens/ShoppingList/ShoppingList";
 import SignIn from "@screens/SignIn/SignIn";
 import { COLORS } from "src/constants/colors";
 
 import { RootStackParamList } from "./navigation.d";
-import { FRIDGE, FREEZER, SETTINGS } from "../constants";
+import { FRIDGE, FREEZER, SETTINGS, SHOPPING_LIST } from "../constants";
 import { useLocale, useTheme } from "../store";
 import { Typography } from "../typography/responsive";
 
@@ -119,6 +120,31 @@ export function SettingsStackScreen() {
         name="settings"
         component={Settings}
         options={{ title: t(SETTINGS) }}
+      />
+    </Stack.Navigator>
+  );
+}
+
+export function ShoppingListStackScreen() {
+  const { t } = useLocale();
+  const {
+    theme: { primary },
+  } = useTheme();
+
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        ...screenOptions,
+        headerStyle: {
+          ...(screenOptions.headerStyle as object),
+          backgroundColor: primary,
+        },
+      }}
+    >
+      <Stack.Screen
+        name="shoppingList"
+        component={ShoppingList}
+        options={{ title: t(SHOPPING_LIST) }}
       />
     </Stack.Navigator>
   );

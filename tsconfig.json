@@ -20,7 +20,8 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@screens/*": ["src/screens/*"]
-    }
+    },
+    "types": ["jest"]
   },
   "extends": "expo/tsconfig.base",
   "exclude": [

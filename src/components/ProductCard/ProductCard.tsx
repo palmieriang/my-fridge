@@ -6,7 +6,7 @@ import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeab
 import styles from "./styles";
 import { FRIDGE, FREEZER } from "../../constants";
 import { FormScreenNavigationProp } from "../../navigation/navigation.d";
-import { useLocale, useProducts, useTheme } from "../../store";
+import { useLocale, useProducts, useShoppingList, useTheme } from "../../store";
 import { daysUntilDate, convertToDisplayFormat } from "../../utils";
 import SwipeableRow from "../SwipeableRow/SwipeableRow";
 
@@ -29,16 +29,20 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
     const { t } = useLocale();
     const { theme } = useTheme();
     const { productsContext } = useProducts();
+    const { shoppingListContext } = useShoppingList();
 
     const days = daysUntilDate(date);
     const expired = days < 0;
     const displayDate = convertToDisplayFormat(date);
     const outOfStock = quantity !== undefined && quantity <= 0;
 
-    const handleAddToShoppingList = () => {
-      Alert.alert(t("addToShoppingList"), t("addToShoppingListSoon"), [
-        { text: t("ok"), style: "default" },
-      ]);
+    const handleAddToShoppingList = async () => {
+      await shoppingListContext.handleAddItem(name);
+      Alert.alert(
+        t("addToShoppingList"),
+        t("itemAddedToShoppingList").replace("{name}", name),
+        [{ text: t("ok") }],
+      );
     };
 
     const handleChange = () => {

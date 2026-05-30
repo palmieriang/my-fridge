@@ -6,6 +6,7 @@ export type RootStackParamList = {
   list: { place: "fridge" | "freezer" };
   form: { id?: string; product?: Product; title: string };
   settings: undefined;
+  shoppingList: undefined;
   signin: undefined;
   registration: undefined;
 };
@@ -23,3 +24,10 @@ export type ProductListNavigationProp = StackNavigationProp<
 >;
 
 export type ProductListRouteProp = RouteProp<RootStackParamList, "list">;
+
+export type ShoppingListNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  "shoppingList"
+>;
+
+export type ShoppingListRouteProp = RouteProp<RootStackParamList, "shoppingList">;

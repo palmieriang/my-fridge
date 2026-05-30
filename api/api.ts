@@ -45,6 +45,7 @@ import {
   getAuthService,
   getUsersRef,
   getProductsRef,
+  getShoppingItemsRef,
   getStorageService,
 } from "../src/firebase/config";
 import type {
@@ -53,6 +54,8 @@ import type {
   UserData,
   NotificationPermissionResult,
   NotificationResult,
+  ShoppingItem,
+  NewShoppingItem,
 } from "../src/store/types";
 
 // Auth
@@ -624,5 +627,75 @@ export async function markNotificationOnboardingCompleted(
     );
   } catch (error: any) {
     console.error("❌ Error marking onboarding completed:", error);
+  }
+}
+
+// Shopping List
+
+export function saveShoppingItem(data: NewShoppingItem) {
+  return setDoc(doc(getShoppingItemsRef()), {
+    ...data,
+    createdAt: serverTimestamp(),
+  }).catch((error: any) =>
+    Alert.alert("Error saving shopping item", error.message),
+  );
+}
+
+export function getShoppingItems(
+  uid: string,
+  callback: (items: ShoppingItem[]) => void,
+) {
+  const itemsQuery = query(
+    getShoppingItemsRef(),
+    where("authorID", "==", uid),
+    orderBy("createdAt", "asc"),
+  );
+
+  return onSnapshot(
+    itemsQuery,
+    (snapshot) => {
+      const items = snapshot.docs.map(
+        (doc: FirebaseFirestoreTypes.QueryDocumentSnapshot) => ({
+          ...doc.data(),
+          id: doc.id,
+        }),
+      ) as ShoppingItem[];
+      callback(items);
+    },
+    (error: any) => {
+      console.log("getShoppingItems error:", error);
+    },
+  );
+}
+
+export async function toggleShoppingItem(id: string, checked: boolean) {
+  try {
+    await updateDoc(doc(getShoppingItemsRef(), id), { checked });
+  } catch (error: any) {
+    Alert.alert("Error updating item", error.message);
+  }
+}
+
+export async function updateShoppingItemName(id: string, name: string) {
+  try {
+    await updateDoc(doc(getShoppingItemsRef(), id), { name });
+  } catch (error: any) {
+    Alert.alert("Error updating item", error.message);
+  }
+}
+
+export async function deleteShoppingItem(id: string) {
+  try {
+    await deleteDoc(doc(getShoppingItemsRef(), id));
+  } catch (error: any) {
+    Alert.alert("Error deleting item", error.message);
+  }
+}
+
+export async function clearCheckedShoppingItems(ids: string[]) {
+  try {
+    await Promise.all(ids.map((id) => deleteDoc(doc(getShoppingItemsRef(), id))));
+  } catch (error: any) {
+    Alert.alert("Error clearing items", error.message);
   }
 }

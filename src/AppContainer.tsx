@@ -14,6 +14,7 @@ import {
   NetworkProvider,
   NotificationProvider,
   ProductsProvider,
+  ShoppingListProvider,
   ThemeProvider,
   useAuth,
   useTheme,
@@ -49,10 +50,12 @@ const AppContainer = () => {
         <LocaleProvider>
           <ThemeProvider>
             <ProductsProvider>
-              <NotificationProvider>
-                <RootNavigator />
-                <NotificationOnboardingModal />
-              </NotificationProvider>
+              <ShoppingListProvider>
+                <NotificationProvider>
+                  <RootNavigator />
+                  <NotificationOnboardingModal />
+                </NotificationProvider>
+              </ShoppingListProvider>
             </ProductsProvider>
           </ThemeProvider>
         </LocaleProvider>

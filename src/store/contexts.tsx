@@ -6,6 +6,7 @@ import {
   ProductsStoreValue,
   NotificationStoreValue,
   LocalizationContextProps,
+  ShoppingListStoreValue,
 } from "./types";
 
 export const AuthStoreContext = createContext<AuthStoreValue | undefined>(
@@ -22,4 +23,7 @@ export const NotificationStoreContext = createContext<
 >(undefined);
 export const LocaleStoreContext = createContext<
   LocalizationContextProps | undefined
+>(undefined);
+export const ShoppingListStoreContext = createContext<
+  ShoppingListStoreValue | undefined
 >(undefined);

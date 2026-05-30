@@ -28,5 +28,23 @@ service cloud.firestore {
       // Allow users to read and write their own documents in the users collection
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
+    match /shoppingItems/{itemId} {
+      allow create: if request.auth != null &&
+        request.resource.data.authorID is string &&
+        request.resource.data.authorID == request.auth.uid;
+
+      allow read: if request.auth != null &&
+        resource.data.authorID is string &&
+        resource.data.authorID == request.auth.uid;
+
+      allow update: if request.auth != null &&
+        resource.data.authorID is string &&
+        resource.data.authorID == request.auth.uid &&
+        request.resource.data.authorID == resource.data.authorID;
+
+      allow delete: if request.auth != null &&
+        resource.data.authorID is string &&
+        resource.data.authorID == request.auth.uid;
+    }
   }
 }

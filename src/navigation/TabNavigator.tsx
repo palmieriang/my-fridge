@@ -8,8 +8,9 @@ import {
   FridgeStackScreen,
   FreezerStackScreen,
   SettingsStackScreen,
+  ShoppingListStackScreen,
 } from "./navigation";
-import { FRIDGE, FREEZER, SETTINGS } from "../constants";
+import { FRIDGE, FREEZER, SETTINGS, SHOPPING_LIST } from "../constants";
 import { useLocale, useProducts, useTheme } from "../store";
 import { countExpiredItems } from "../utils";
 
@@ -22,9 +23,13 @@ const TabNavigator = () => {
   } = useTheme();
   const { productsList } = useProducts();
 
-  const routeTypeMapping: Record<string, "fridge" | "freezer" | "settings"> = {
+  const routeTypeMapping: Record<
+    string,
+    "fridge" | "freezer" | "settings" | "shoppingList"
+  > = {
     [t(FRIDGE)]: FRIDGE,
     [t(FREEZER)]: FREEZER,
+    [t(SHOPPING_LIST)]: SHOPPING_LIST,
     [t(SETTINGS)]: SETTINGS,
   };
 
@@ -51,6 +56,10 @@ const TabNavigator = () => {
         }}
       />
       <Tab.Screen name={t(FREEZER)} component={FreezerStackScreen} />
+      <Tab.Screen
+        name={t(SHOPPING_LIST)}
+        component={ShoppingListStackScreen}
+      />
       <Tab.Screen name={t(SETTINGS)} component={SettingsStackScreen} />
     </Tab.Navigator>
   );
