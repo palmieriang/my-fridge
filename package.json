@@ -25,8 +25,8 @@
     "functions:build": "cd functions && yarn build",
     "functions:deploy": "cd functions && yarn deploy",
     "functions:serve": "cd functions && yarn serve",
-    "emulators:start": "firebase emulators:start",
-    "emulators:ui": "firebase emulators:start --only firestore,storage,auth,functions,ui",
+    "emulators:start": "firebase emulators:start --import=./firebase-emulators-data --export-on-exit=./firebase-emulators-data",
+    "emulators:ui": "firebase emulators:start --only firestore,storage,auth,functions,ui --import=./firebase-emulators-data --export-on-exit=./firebase-emulators-data",
     "postinstall": "node ./eas-build-pre-install.js"
   },
   "dependencies": {
