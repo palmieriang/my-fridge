@@ -1,50 +1,18 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /products/{productId} {
-      // Create only for the authenticated owner.
-      allow create: if request.auth != null &&
-        request.resource.data.authorID is string &&
-        request.resource.data.authorID == request.auth.uid;
-
-      // Read only own products.
-      allow read: if request.auth != null &&
-        resource.data.authorID is string &&
-        resource.data.authorID == request.auth.uid;
-
-      // Update only own products and prevent authorID reassignment.
-      allow update: if request.auth != null &&
-        resource.data.authorID is string &&
-        resource.data.authorID == request.auth.uid &&
-        request.resource.data.authorID is string &&
-        request.resource.data.authorID == resource.data.authorID;
-
-      // Delete only own products.
-      allow delete: if request.auth != null &&
-        resource.data.authorID is string &&
-        resource.data.authorID == request.auth.uid;
-    }
     match /users/{userId} {
-      // Allow users to read and write their own documents in the users collection
+      // Users can only read and write their own document.
       allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    match /shoppingItems/{itemId} {
-      allow create: if request.auth != null &&
-        request.resource.data.authorID is string &&
-        request.resource.data.authorID == request.auth.uid;
 
-      allow read: if request.auth != null &&
-        resource.data.authorID is string &&
-        resource.data.authorID == request.auth.uid;
+      match /products/{productId} {
+        // Ownership is proven by the path — no authorID field needed.
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
 
-      allow update: if request.auth != null &&
-        resource.data.authorID is string &&
-        resource.data.authorID == request.auth.uid &&
-        request.resource.data.authorID == resource.data.authorID;
-
-      allow delete: if request.auth != null &&
-        resource.data.authorID is string &&
-        resource.data.authorID == request.auth.uid;
+      match /shoppingItems/{itemId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
     }
   }
 }

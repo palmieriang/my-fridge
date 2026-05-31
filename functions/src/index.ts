@@ -86,10 +86,11 @@ export const onUserDelete = onDocumentDeleted(
 
       console.info(`Cleaning up data for user: ${userId}`);
 
-      // Delete all products for this user
+      // Delete all products for this user (now stored in subcollection)
       const productsSnapshot = await db
+        .collection("users")
+        .doc(userId)
         .collection("products")
-        .where("authorID", "==", userId)
         .get();
 
       const batch = db.batch();
@@ -163,10 +164,11 @@ async function sendExpiringProductNotifications(): Promise<{
   for (const userDoc of usersSnapshot.docs) {
     const userId = userDoc.id;
 
-    // Find products expiring tomorrow
-    const expiringSnapshot = await db
-      .collection("products")
-      .where("authorID", "==", userId)
+// Find products expiring tomorrow (now stored in subcollection)
+      const expiringSnapshot = await db
+        .collection("users")
+        .doc(userId)
+        .collection("products")
       .where("date", "==", tomorrowStr)
       .get();
 
@@ -343,10 +345,6 @@ function validateProductData(productData: any, productId: string): string[] {
     errors.push("Place must be either 'fridge' or 'freezer'");
   }
 
-  if (!productData.authorID || typeof productData.authorID !== "string") {
-    errors.push("Author ID is required");
-  }
-
   return errors;
 }
 
@@ -354,13 +352,14 @@ function validateProductData(productData: any, productId: string): string[] {
 export const validateProductOnCreate = ENABLE_SERVER_VALIDATION
   ? onDocumentCreated(
       {
-        document: "products/{productId}",
+        document: "users/{userId}/products/{productId}",
         region: "us-central1",
       },
       async (event) => {
         try {
           const productData = event.data?.data();
           const productId = event.params.productId;
+          const userId = event.params.userId;
 
           if (!productData) {
             console.warn(`No product data found for product: ${productId}`);
@@ -379,17 +378,27 @@ export const validateProductOnCreate = ENABLE_SERVER_VALIDATION
             );
 
             // Add validation errors to the document
-            await db.collection("products").doc(productId).update({
-              validationErrors: errors,
-              isValid: false,
-              validatedAt: FieldValue.serverTimestamp(),
-            });
+            await db
+              .collection("users")
+              .doc(userId)
+              .collection("products")
+              .doc(productId)
+              .update({
+                validationErrors: errors,
+                isValid: false,
+                validatedAt: FieldValue.serverTimestamp(),
+              });
           } else {
             // Mark as valid
-            await db.collection("products").doc(productId).update({
-              isValid: true,
-              validatedAt: FieldValue.serverTimestamp(),
-            });
+            await db
+              .collection("users")
+              .doc(userId)
+              .collection("products")
+              .doc(productId)
+              .update({
+                isValid: true,
+                validatedAt: FieldValue.serverTimestamp(),
+              });
 
             console.info(`Product ${productId} validated successfully`);
           }
@@ -404,7 +413,7 @@ export const validateProductOnCreate = ENABLE_SERVER_VALIDATION
 export const validateProductOnUpdate = ENABLE_SERVER_VALIDATION
   ? onDocumentUpdated(
       {
-        document: "products/{productId}",
+        document: "users/{userId}/products/{productId}",
         region: "us-central1",
       },
       async (event) => {
@@ -412,6 +421,7 @@ export const validateProductOnUpdate = ENABLE_SERVER_VALIDATION
           const productData = event.data?.after.data();
           const beforeData = event.data?.before.data();
           const productId = event.params.productId;
+          const userId = event.params.userId;
 
           if (!productData) {
             console.warn(`No product data found for product: ${productId}`);
@@ -432,8 +442,7 @@ export const validateProductOnUpdate = ENABLE_SERVER_VALIDATION
           const relevantFieldsChanged =
             productData.name !== beforeData?.name ||
             productData.date !== beforeData?.date ||
-            productData.place !== beforeData?.place ||
-            productData.authorID !== beforeData?.authorID;
+            productData.place !== beforeData?.place;
 
           if (!relevantFieldsChanged) {
             console.info(
@@ -453,18 +462,27 @@ export const validateProductOnUpdate = ENABLE_SERVER_VALIDATION
               errors,
             );
 
-            // Add validation errors to the document
-            await db.collection("products").doc(productId).update({
-              validationErrors: errors,
-              isValid: false,
-              validatedAt: FieldValue.serverTimestamp(),
-            });
+            await db
+              .collection("users")
+              .doc(userId)
+              .collection("products")
+              .doc(productId)
+              .update({
+                validationErrors: errors,
+                isValid: false,
+                validatedAt: FieldValue.serverTimestamp(),
+              });
           } else {
             // Mark as valid
-            await db.collection("products").doc(productId).update({
-              isValid: true,
-              validatedAt: FieldValue.serverTimestamp(),
-            });
+            await db
+              .collection("users")
+              .doc(userId)
+              .collection("products")
+              .doc(productId)
+              .update({
+                isValid: true,
+                validatedAt: FieldValue.serverTimestamp(),
+              });
 
             console.info(`Product ${productId} validated successfully`);
           }

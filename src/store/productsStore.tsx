@@ -55,43 +55,48 @@ const ProductsProvider = ({ children }: ProductsProviderProps) => {
   const productsContext = useMemo<ProductsContextMethods>(
     () => ({
       handleSaveProduct: async (data: NewProduct) => {
+        if (!userID) return;
         try {
-          await saveProduct(data);
+          await saveProduct(data, userID);
         } catch (error) {
           console.log("Error: ", error);
         }
       },
       handleGetProduct: async (id) => {
+        if (!userID) return undefined;
         try {
-          return await getProductById(id);
+          return await getProductById(id, userID);
         } catch (error) {
           console.log("Error: ", error);
           return undefined;
         }
       },
       handleModifyProduct: async (product, id) => {
+        if (!userID) return;
         try {
-          await modifyProduct(product, id);
+          await modifyProduct(product, id, userID);
         } catch (error) {
           console.log("Error: ", error);
         }
       },
       handleDeleteProduct: async (id) => {
+        if (!userID) return;
         try {
-          await deleteProduct(id);
+          await deleteProduct(id, userID);
         } catch (error) {
           console.log("Error: ", error);
         }
       },
       handleFreezeProduct: async (id: string, place: "fridge" | "freezer") => {
+        if (!userID) return;
         try {
-          await moveProduct(id, place);
+          await moveProduct(id, place, userID);
         } catch (error) {
           console.log("Error: ", error);
         }
       },
     }),
-    [],
+    [userID],
   );
 
   return (

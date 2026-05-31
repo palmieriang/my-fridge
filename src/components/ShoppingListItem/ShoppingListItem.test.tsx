@@ -23,7 +23,6 @@ const mockItem: ShoppingItem = {
   id: "1",
   name: "Milk",
   checked: false,
-  authorID: "user-1",
 };
 
 const defaultProps = {

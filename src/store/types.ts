@@ -76,7 +76,6 @@ export interface Product {
   name: string;
   date: string;
   place: "fridge" | "freezer";
-  authorID: string;
   quantity?: number;
   createdAt?: Timestamp;
 }
@@ -104,7 +103,6 @@ export interface ShoppingItem {
   id: string;
   name: string;
   checked: boolean;
-  authorID: string;
   createdAt?: Timestamp;
 }
 

@@ -20,8 +20,6 @@ let _firestoreInstance = null;
 let _storageInstance = null;
 
 let usersRef = null;
-let productsRef = null;
-let shoppingItemsRef = null;
 
 export const initializeFirebaseServices = async () => {
   try {
@@ -37,8 +35,6 @@ export const initializeFirebaseServices = async () => {
     console.log("[Firebase] Storage initialized");
 
     usersRef = collection(_firestoreInstance, "users");
-    productsRef = collection(_firestoreInstance, "products");
-    shoppingItemsRef = collection(_firestoreInstance, "shoppingItems");
     console.log("[Firebase] Firestore collections set");
 
     if (__DEV__) {
@@ -92,24 +88,14 @@ export const getUsersRef = () => {
   return usersRef;
 };
 
-export const getProductsRef = () => {
-  if (!productsRef) {
-    console.error(
-      "Firebase 'products' collection reference not initialized. Ensure initializeFirebaseServices() has been called.",
-    );
-    return collection(getFirestore(getApp()), "products");
-  }
-  return productsRef;
+export const getProductsRef = (uid) => {
+  const db = _firestoreInstance || getFirestore(getApp());
+  return collection(db, "users", uid, "products");
 };
 
-export const getShoppingItemsRef = () => {
-  if (!shoppingItemsRef) {
-    console.error(
-      "Firebase 'shoppingItems' collection reference not initialized. Ensure initializeFirebaseServices() has been called.",
-    );
-    return collection(getFirestore(getApp()), "shoppingItems");
-  }
-  return shoppingItemsRef;
+export const getShoppingItemsRef = (uid) => {
+  const db = _firestoreInstance || getFirestore(getApp());
+  return collection(db, "users", uid, "shoppingItems");
 };
 
 export const getStorageService = () => {

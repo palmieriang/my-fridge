@@ -297,8 +297,8 @@ async function getUserDataWithRetry(
 
 // Firestore: Products
 
-export function saveProduct(data: NewProduct) {
-  return setDoc(doc(getProductsRef()), {
+export function saveProduct(data: NewProduct, uid: string) {
+  return setDoc(doc(getProductsRef(uid)), {
     ...data,
     createdAt: serverTimestamp(),
   }).catch((error: any) => Alert.alert("Error saving product", error.message));
@@ -310,8 +310,7 @@ export function getProductsFromPlace(
   callback: (products: Product[]) => void,
 ) {
   const productsQuery = query(
-    getProductsRef(),
-    where("authorID", "==", uid),
+    getProductsRef(uid),
     where("place", "==", place),
     orderBy("createdAt", "desc"),
   );
@@ -339,8 +338,7 @@ export function getAllProducts(
   callback: (products: Product[]) => void,
 ) {
   const productsQuery = query(
-    getProductsRef(),
-    where("authorID", "==", uid),
+    getProductsRef(uid),
     orderBy("createdAt", "desc"),
   );
 
@@ -362,9 +360,12 @@ export function getAllProducts(
   );
 }
 
-export async function getProductById(id: string): Promise<Product | undefined> {
+export async function getProductById(
+  id: string,
+  uid: string,
+): Promise<Product | undefined> {
   try {
-    const productDoc = await getDoc(doc(getProductsRef(), id));
+    const productDoc = await getDoc(doc(getProductsRef(uid), id));
     return productDoc.exists() ? (productDoc.data() as Product) : undefined;
   } catch (error: any) {
     console.log("getProductById error: ", error);
@@ -372,8 +373,8 @@ export async function getProductById(id: string): Promise<Product | undefined> {
   }
 }
 
-export function modifyProduct(data: NewProduct, id: string) {
-  return setDoc(doc(getProductsRef(), id), {
+export function modifyProduct(data: NewProduct, id: string, uid: string) {
+  return setDoc(doc(getProductsRef(uid), id), {
     ...data,
     id,
     createdAt: serverTimestamp(),
@@ -382,9 +383,13 @@ export function modifyProduct(data: NewProduct, id: string) {
   );
 }
 
-export async function moveProduct(id: string, place: "fridge" | "freezer") {
+export async function moveProduct(
+  id: string,
+  place: "fridge" | "freezer",
+  uid: string,
+) {
   try {
-    await updateDoc(doc(getProductsRef(), id), {
+    await updateDoc(doc(getProductsRef(uid), id), {
       place,
     });
   } catch (error: any) {
@@ -393,9 +398,9 @@ export async function moveProduct(id: string, place: "fridge" | "freezer") {
   }
 }
 
-export async function deleteProduct(id: string) {
+export async function deleteProduct(id: string, uid: string) {
   try {
-    await deleteDoc(doc(getProductsRef(), id));
+    await deleteDoc(doc(getProductsRef(uid), id));
   } catch (error: any) {
     console.log("Error in deleteProduct: ", error);
     Alert.alert("Error deleting product", error.message);
@@ -632,8 +637,8 @@ export async function markNotificationOnboardingCompleted(
 
 // Shopping List
 
-export function saveShoppingItem(data: NewShoppingItem) {
-  return setDoc(doc(getShoppingItemsRef()), {
+export function saveShoppingItem(data: NewShoppingItem, uid: string) {
+  return setDoc(doc(getShoppingItemsRef(uid)), {
     ...data,
     createdAt: serverTimestamp(),
   }).catch((error: any) =>
@@ -646,8 +651,7 @@ export function getShoppingItems(
   callback: (items: ShoppingItem[]) => void,
 ) {
   const itemsQuery = query(
-    getShoppingItemsRef(),
-    where("authorID", "==", uid),
+    getShoppingItemsRef(uid),
     orderBy("createdAt", "asc"),
   );
 
@@ -668,33 +672,43 @@ export function getShoppingItems(
   );
 }
 
-export async function toggleShoppingItem(id: string, checked: boolean) {
+export async function toggleShoppingItem(
+  id: string,
+  checked: boolean,
+  uid: string,
+) {
   try {
-    await updateDoc(doc(getShoppingItemsRef(), id), { checked });
+    await updateDoc(doc(getShoppingItemsRef(uid), id), { checked });
   } catch (error: any) {
     Alert.alert("Error updating item", error.message);
   }
 }
 
-export async function updateShoppingItemName(id: string, name: string) {
+export async function updateShoppingItemName(
+  id: string,
+  name: string,
+  uid: string,
+) {
   try {
-    await updateDoc(doc(getShoppingItemsRef(), id), { name });
+    await updateDoc(doc(getShoppingItemsRef(uid), id), { name });
   } catch (error: any) {
     Alert.alert("Error updating item", error.message);
   }
 }
 
-export async function deleteShoppingItem(id: string) {
+export async function deleteShoppingItem(id: string, uid: string) {
   try {
-    await deleteDoc(doc(getShoppingItemsRef(), id));
+    await deleteDoc(doc(getShoppingItemsRef(uid), id));
   } catch (error: any) {
     Alert.alert("Error deleting item", error.message);
   }
 }
 
-export async function clearCheckedShoppingItems(ids: string[]) {
+export async function clearCheckedShoppingItems(ids: string[], uid: string) {
   try {
-    await Promise.all(ids.map((id) => deleteDoc(doc(getShoppingItemsRef(), id))));
+    await Promise.all(
+      ids.map((id) => deleteDoc(doc(getShoppingItemsRef(uid), id))),
+    );
   } catch (error: any) {
     Alert.alert("Error clearing items", error.message);
   }

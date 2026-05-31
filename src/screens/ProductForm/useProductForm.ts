@@ -137,7 +137,6 @@ export const useProductForm = ({
         name: name.trim(),
         date: convertToFirestoreFormat(date), // Convert to YYYY-MM-DD format
         place: place as "fridge" | "freezer",
-        authorID: userID,
         quantity: parsedQuantity,
       };
 
