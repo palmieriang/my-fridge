@@ -5,6 +5,7 @@ import {
   ThemeStoreContext,
   ProductsStoreContext,
   NotificationStoreContext,
+  AppTutorialStoreContext,
   LocaleStoreContext,
   ShoppingListStoreContext,
 } from "./contexts";
@@ -55,6 +56,14 @@ export function useShoppingList() {
   const context = useContext(ShoppingListStoreContext);
   if (!context) {
     throw new Error("useShoppingList must be used within ShoppingListProvider");
+  }
+  return context;
+}
+
+export function useAppTutorial() {
+  const context = useContext(AppTutorialStoreContext);
+  if (!context) {
+    throw new Error("useAppTutorial must be used within AppTutorialProvider");
   }
   return context;
 }

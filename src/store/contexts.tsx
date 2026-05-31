@@ -5,6 +5,7 @@ import {
   ThemeStoreValue,
   ProductsStoreValue,
   NotificationStoreValue,
+  AppTutorialStoreValue,
   LocalizationContextProps,
   ShoppingListStoreValue,
 } from "./types";
@@ -26,4 +27,7 @@ export const LocaleStoreContext = createContext<
 >(undefined);
 export const ShoppingListStoreContext = createContext<
   ShoppingListStoreValue | undefined
+>(undefined);
+export const AppTutorialStoreContext = createContext<
+  AppTutorialStoreValue | undefined
 >(undefined);

@@ -1,10 +1,13 @@
+import AppTutorialCoachmark from "@components/AppTutorialCoachmark/AppTutorialCoachmark";
 import FloatingButton from "@components/FloatingButton/FloatingButton";
 import { OfflineIndicator } from "@components/OfflineIndicator/OfflineIndicator";
 import ProductCard from "@components/ProductCard/ProductCard";
 import SearchBar from "@components/SearchBar/SearchBar";
 import SortButton from "@components/SortButton/SortButton";
-import { useEffect, useRef, useState } from "react";
-import { FlatList, Text, View } from "react-native";
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Alert, FlatList, Text, View, useWindowDimensions } from "react-native";
 import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
@@ -13,7 +16,7 @@ import {
   ProductListNavigationProp,
   ProductListRouteProp,
 } from "../../navigation/navigation.d";
-import { useLocale, useProducts, useTheme } from "../../store";
+import { useAppTutorial, useLocale, useProducts, useTheme } from "../../store";
 import { convertToISODateString } from "../../utils";
 
 type ProductListProps = {
@@ -21,10 +24,21 @@ type ProductListProps = {
   route: ProductListRouteProp;
 };
 
+const APP_TUTORIAL_TOTAL_STEPS = 7;
+const LIST_ADD_BUTTON_STEP = 0;
+const LIST_SWIPE_STEP = 5;
+const LIST_DONE_STEP = 6;
+const FAB_SIZE = 56;
+const FAB_RIGHT = 20;
+const FAB_BOTTOM = 20;
+
 const ProductList = ({ navigation, route }: ProductListProps) => {
   const { t } = useLocale();
   const { theme } = useTheme();
   const { fridgeProducts, freezerProducts } = useProducts();
+  const { appTutorialState, appTutorialContext } = useAppTutorial();
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const tabBarHeight = useBottomTabBarHeight();
 
   const { place } = route.params;
 
@@ -59,6 +73,26 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   }, [sortedList.length]);
 
   const swipeableRefs = useRef<(SwipeableMethods | null)[]>([]);
+  const resumePromptShownRef = useRef(false);
+
+  const tutorialStep = appTutorialState.currentStep;
+  const isFridgeList = place === FRIDGE;
+  const isTutorialVisibleOnList =
+    isFridgeList &&
+    appTutorialState.isActive &&
+    [LIST_ADD_BUTTON_STEP, LIST_SWIPE_STEP, LIST_DONE_STEP].includes(
+      tutorialStep,
+    );
+
+  const addButtonRect = useMemo(
+    () => ({
+      x: screenWidth - FAB_RIGHT - FAB_SIZE,
+      y: screenHeight - tabBarHeight - FAB_BOTTOM - FAB_SIZE,
+      width: FAB_SIZE,
+      height: FAB_SIZE,
+    }),
+    [screenHeight, screenWidth, tabBarHeight],
+  );
 
   const handleAddProduct = () => {
     navigateToProductForm({
@@ -75,9 +109,166 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
     setSortOrder(nextOrder[sortOrder]);
   };
 
-  const navigateToProductForm = (params: { title: string }) => {
+  const navigateToProductForm = (params: {
+    title: string;
+    tutorialMode?: boolean;
+  }) => {
     navigation.navigate("form", params);
   };
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!isFridgeList || appTutorialState.loading) {
+        return;
+      }
+
+      if (appTutorialState.isManualStartRequested) {
+        appTutorialContext.restartTutorial();
+        return;
+      }
+
+      if (
+        appTutorialState.hasCompleted ||
+        appTutorialState.hasDismissed ||
+        appTutorialState.isActive
+      ) {
+        return;
+      }
+
+      if (appTutorialState.shouldShowResumePrompt) {
+        if (resumePromptShownRef.current) {
+          return;
+        }
+
+        resumePromptShownRef.current = true;
+
+        Alert.alert(
+          t("appTutorialResumeTitle"),
+          t("appTutorialResumeMessage").replace(
+            "{step}",
+            String(appTutorialState.currentStep + 1),
+          ),
+          [
+            {
+              text: t("cancel"),
+              style: "cancel",
+              onPress: appTutorialContext.postponeTutorial,
+            },
+            {
+              text: t("appTutorialRestart"),
+              onPress: () => {
+                appTutorialContext.restartTutorial();
+              },
+            },
+            {
+              text: t("appTutorialResume"),
+              onPress: () => {
+                appTutorialContext.resumeTutorial();
+              },
+            },
+          ],
+        );
+
+        return;
+      }
+
+      appTutorialContext.startTutorial();
+
+      return () => {
+        resumePromptShownRef.current = false;
+      };
+    }, [
+      appTutorialContext,
+      appTutorialState.currentStep,
+      appTutorialState.hasCompleted,
+      appTutorialState.hasDismissed,
+      appTutorialState.isActive,
+      appTutorialState.isManualStartRequested,
+      appTutorialState.loading,
+      appTutorialState.shouldShowResumePrompt,
+      isFridgeList,
+      t,
+    ]),
+  );
+
+  useEffect(() => {
+    if (!isFridgeList || !appTutorialState.isActive) {
+      return;
+    }
+
+    if (tutorialStep >= 1 && tutorialStep <= 4) {
+      navigateToProductForm({
+        title: t("addItem"),
+        tutorialMode: true,
+      });
+    }
+  }, [appTutorialState.isActive, isFridgeList, t, tutorialStep]);
+
+  const handleTutorialSkip = () => {
+    appTutorialContext.dismissTutorial();
+  };
+
+  const handleTutorialNext = () => {
+    if (tutorialStep === LIST_ADD_BUTTON_STEP) {
+      appTutorialContext.goToStep(1);
+      navigateToProductForm({
+        title: t("addItem"),
+        tutorialMode: true,
+      });
+      return;
+    }
+
+    if (tutorialStep === LIST_SWIPE_STEP) {
+      appTutorialContext.goToStep(LIST_DONE_STEP);
+      return;
+    }
+
+    if (tutorialStep === LIST_DONE_STEP) {
+      appTutorialContext.completeTutorial();
+    }
+  };
+
+  const handleTutorialBack = () => {
+    if (tutorialStep === LIST_SWIPE_STEP) {
+      appTutorialContext.goToStep(3);
+      navigateToProductForm({
+        title: t("addItem"),
+        tutorialMode: true,
+      });
+      return;
+    }
+
+    if (tutorialStep === LIST_DONE_STEP) {
+      appTutorialContext.goToStep(LIST_SWIPE_STEP);
+    }
+  };
+
+  const tutorialCopy = useMemo(() => {
+    if (tutorialStep === LIST_ADD_BUTTON_STEP) {
+      return {
+        title: t("appTutorialStepAddTitle"),
+        description: t("appTutorialStepAddDescription"),
+        targetRect: addButtonRect,
+        isLastStep: false,
+      };
+    }
+
+    if (tutorialStep === LIST_SWIPE_STEP) {
+      return {
+        title: t("appTutorialStepSwipeTitle"),
+        description: t("appTutorialStepSwipeNoFocusDescription"),
+        targetRect: null,
+        isLastStep: false,
+      };
+    }
+
+    return {
+      title: t("appTutorialStepDoneTitle"),
+      description: t("appTutorialStepDoneDescription"),
+      targetRect: null,
+      isLastStep: true,
+    };
+  }, [addButtonRect, t, tutorialStep]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("blur", () => {
@@ -119,7 +310,6 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
           renderItem={({ item, index }) => (
             <ProductCard
               product={item}
-              key={item.id}
               ref={(el) => {
                 swipeableRefs.current[index] = el;
               }}
@@ -136,6 +326,26 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
       )}
 
       <FloatingButton onPress={handleAddProduct} color={theme.primary} />
+
+      <AppTutorialCoachmark
+        visible={isTutorialVisibleOnList}
+        title={tutorialCopy.title}
+        description={tutorialCopy.description}
+        targetRect={tutorialCopy.targetRect}
+        stepNumber={tutorialStep + 1}
+        totalSteps={APP_TUTORIAL_TOTAL_STEPS}
+        onNext={handleTutorialNext}
+        onBack={
+          tutorialStep === LIST_ADD_BUTTON_STEP ? undefined : handleTutorialBack
+        }
+        onSkip={handleTutorialSkip}
+        isLastStep={tutorialCopy.isLastStep}
+        backLabel={t("appTutorialBack")}
+        skipLabel={t("appTutorialSkip")}
+        nextLabel={t("appTutorialNext")}
+        doneLabel={t("appTutorialDone")}
+        highlightPadding={6}
+      />
     </View>
   );
 };

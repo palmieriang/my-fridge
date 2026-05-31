@@ -47,6 +47,9 @@ export interface UserData {
   profileImg?: string;
   notificationsEnabled?: boolean;
   hasCompletedOnboarding?: boolean;
+  hasCompletedAppTutorial?: boolean;
+  hasDismissedAppTutorial?: boolean;
+  appTutorialCurrentStep?: number;
 }
 
 // localeStore
@@ -182,4 +185,33 @@ export interface NotificationContextMethods {
 export interface NotificationStoreValue {
   notificationState: NotificationStateType;
   notificationContext: NotificationContextMethods;
+}
+
+// appTutorialStore
+
+export interface AppTutorialStateType {
+  loading: boolean;
+  isActive: boolean;
+  currentStep: number;
+  hasCompleted: boolean;
+  hasDismissed: boolean;
+  shouldShowResumePrompt: boolean;
+  isManualStartRequested: boolean;
+}
+
+export interface AppTutorialContextMethods {
+  requestManualStart: () => void;
+  clearManualStartRequest: () => void;
+  startTutorial: () => Promise<void>;
+  restartTutorial: () => Promise<void>;
+  resumeTutorial: () => Promise<void>;
+  goToStep: (step: number) => Promise<void>;
+  completeTutorial: () => Promise<void>;
+  dismissTutorial: () => Promise<void>;
+  postponeTutorial: () => void;
+}
+
+export interface AppTutorialStoreValue {
+  appTutorialState: AppTutorialStateType;
+  appTutorialContext: AppTutorialContextMethods;
 }

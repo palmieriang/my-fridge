@@ -270,6 +270,58 @@ export async function getUserNotificationSettings(uid: string) {
   }
 }
 
+export async function getUserAppTutorialSettings(uid: string) {
+  const defaultSettings = {
+    hasCompletedAppTutorial: false,
+    hasDismissedAppTutorial: false,
+    appTutorialCurrentStep: 0,
+  };
+
+  if (!uid) {
+    return defaultSettings;
+  }
+
+  const currentUser = getAuthService().currentUser;
+  if (!currentUser || currentUser.uid !== uid) {
+    return defaultSettings;
+  }
+
+  try {
+    const snapshot = await getDoc(doc(getUsersRef(), uid));
+    if (!snapshot.exists()) {
+      return defaultSettings;
+    }
+
+    const userData = snapshot.data() as UserData;
+    return {
+      hasCompletedAppTutorial: userData?.hasCompletedAppTutorial || false,
+      hasDismissedAppTutorial: userData?.hasDismissedAppTutorial || false,
+      appTutorialCurrentStep: userData?.appTutorialCurrentStep || 0,
+    };
+  } catch (error: any) {
+    if (error?.code === "firestore/permission-denied") {
+      return defaultSettings;
+    }
+
+    throw error;
+  }
+}
+
+export async function updateUserAppTutorialSettings(
+  uid: string,
+  data: {
+    hasCompletedAppTutorial?: boolean;
+    hasDismissedAppTutorial?: boolean;
+    appTutorialCurrentStep?: number;
+  },
+) {
+  return setDoc(doc(getUsersRef(), uid), data, { merge: true }).catch(
+    (error: any) => {
+      console.log("Error updating app tutorial settings:", error);
+    },
+  );
+}
+
 async function getUserDataWithRetry(
   uid: string,
   maxRetries: number = 3,

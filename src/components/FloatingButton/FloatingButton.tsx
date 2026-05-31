@@ -1,22 +1,30 @@
 import { Ionicons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
+import { forwardRef } from "react";
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 
 import styles from "./styles";
 
 type FloatingButtonProps = {
   color: string;
   onPress: () => void;
+  onLayout?: TouchableOpacityProps["onLayout"];
 };
 
-const FloatingButton = ({ onPress, color }: FloatingButtonProps) => (
-  <TouchableOpacity
-    style={[styles.fab, { backgroundColor: color }]}
-    onPress={onPress}
-    accessibilityLabel="Add item"
-    testID="add-item-button"
-  >
-    <Ionicons name="add" size={30} color="white" />
-  </TouchableOpacity>
+const FloatingButton = forwardRef<TouchableOpacity, FloatingButtonProps>(
+  ({ onPress, color, onLayout }, ref) => (
+    <TouchableOpacity
+      ref={ref}
+      style={[styles.fab, { backgroundColor: color }]}
+      onPress={onPress}
+      onLayout={onLayout}
+      accessibilityLabel="Add item"
+      testID="add-item-button"
+    >
+      <Ionicons name="add" size={30} color="white" />
+    </TouchableOpacity>
+  ),
 );
+
+FloatingButton.displayName = "FloatingButton";
 
 export default FloatingButton;

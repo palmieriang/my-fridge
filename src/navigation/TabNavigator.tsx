@@ -15,6 +15,7 @@ import { useLocale, useProducts, useTheme } from "../store";
 import { countExpiredItems } from "../utils";
 
 const Tab = createBottomTabNavigator();
+const SHOPPING_LIST_TAB = "shoppingListTab";
 
 const TabNavigator = () => {
   const { t } = useLocale();
@@ -29,7 +30,7 @@ const TabNavigator = () => {
   > = {
     [t(FRIDGE)]: FRIDGE,
     [t(FREEZER)]: FREEZER,
-    [t(SHOPPING_LIST)]: SHOPPING_LIST,
+    [t(SHOPPING_LIST_TAB)]: SHOPPING_LIST,
     [t(SETTINGS)]: SETTINGS,
   };
 
@@ -57,7 +58,7 @@ const TabNavigator = () => {
       />
       <Tab.Screen name={t(FREEZER)} component={FreezerStackScreen} />
       <Tab.Screen
-        name={t(SHOPPING_LIST)}
+        name={t(SHOPPING_LIST_TAB)}
         component={ShoppingListStackScreen}
       />
       <Tab.Screen name={t(SETTINGS)} component={SettingsStackScreen} />

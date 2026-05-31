@@ -9,6 +9,7 @@ import { COLORS } from "./constants/colors";
 import TabNavigator from "./navigation/TabNavigator";
 import { SignInStackScreen } from "./navigation/navigation";
 import {
+  AppTutorialProvider,
   AuthProvider,
   LocaleProvider,
   NetworkProvider,
@@ -52,8 +53,10 @@ const AppContainer = () => {
             <ProductsProvider>
               <ShoppingListProvider>
                 <NotificationProvider>
-                  <RootNavigator />
-                  <NotificationOnboardingModal />
+                  <AppTutorialProvider>
+                    <RootNavigator />
+                    <NotificationOnboardingModal />
+                  </AppTutorialProvider>
                 </NotificationProvider>
               </ShoppingListProvider>
             </ProductsProvider>

@@ -4,7 +4,12 @@ import { Product } from "src/store/productsStore";
 
 export type RootStackParamList = {
   list: { place: "fridge" | "freezer" };
-  form: { id?: string; product?: Product; title: string };
+  form: {
+    id?: string;
+    product?: Product;
+    title: string;
+    tutorialMode?: boolean;
+  };
   settings: undefined;
   shoppingList: undefined;
   signin: undefined;
@@ -30,4 +35,7 @@ export type ShoppingListNavigationProp = StackNavigationProp<
   "shoppingList"
 >;
 
-export type ShoppingListRouteProp = RouteProp<RootStackParamList, "shoppingList">;
+export type ShoppingListRouteProp = RouteProp<
+  RootStackParamList,
+  "shoppingList"
+>;
