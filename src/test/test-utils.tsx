@@ -7,6 +7,7 @@ import {
   ProductsStoreContext as productsStore,
   AuthStoreContext as authStore,
   NotificationStoreContext as notificationStore,
+  ShoppingListStoreContext as shoppingListStore,
 } from "../store/contexts";
 import {
   SupportedLocale,
@@ -14,6 +15,7 @@ import {
   AuthContextMethods,
   ThemeStoreValue,
   NotificationStoreValue,
+  ShoppingListStoreValue,
 } from "../store/types";
 
 const mockThemeStoreValue: ThemeStoreValue = {
@@ -77,6 +79,17 @@ const mockNotificationStoreValue: NotificationStoreValue = {
   },
 };
 
+const mockShoppingListStoreValue: ShoppingListStoreValue = {
+  shoppingItems: [],
+  shoppingListContext: {
+    handleAddItem: jest.fn(async () => {}),
+    handleToggleItem: jest.fn(async () => {}),
+    handleUpdateItemName: jest.fn(async () => {}),
+    handleDeleteItem: jest.fn(async () => {}),
+    handleClearChecked: jest.fn(async () => {}),
+  },
+};
+
 interface AllProvidersProps {
   children: ReactNode;
 }
@@ -108,7 +121,11 @@ const AllProviders = ({ children }: AllProvidersProps) => {
             <notificationStore.Provider
               value={mockNotificationStoreValue as any}
             >
-              {children}
+              <shoppingListStore.Provider
+                value={mockShoppingListStoreValue as any}
+              >
+                {children}
+              </shoppingListStore.Provider>
             </notificationStore.Provider>
           </productsStore.Provider>
         </localeStore.Provider>

@@ -1,3 +1,5 @@
+import ExpiryStatus from "@components/ProductCard/ExpiryStatus";
+import OutOfStockRow from "@components/ProductCard/OutOfStockRow";
 import { useNavigation } from "@react-navigation/native";
 import { forwardRef } from "react";
 import { Alert, Text, TouchableWithoutFeedback, View } from "react-native";
@@ -101,39 +103,23 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
                   )}
                 </View>
                 {outOfStock && (
-                  <View style={styles.outOfStockRow}>
-                    <Text
-                      style={[styles.outOfStockLabel, { color: theme.primary }]}
-                    >
-                      {t("outOfStock")}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.shoppingListNudge,
-                        { color: theme.primary },
-                      ]}
-                      onPress={handleAddToShoppingList}
-                    >
-                      {t("addToShoppingList")}
-                    </Text>
-                  </View>
+                  <OutOfStockRow
+                    color={theme.primary}
+                    outOfStockLabel={t("outOfStock")}
+                    addToShoppingListLabel={t("addToShoppingList")}
+                    onAddToShoppingList={handleAddToShoppingList}
+                  />
                 )}
               </View>
 
-              {expired ? (
-                <Text style={[styles.expired, { color: theme.primary }]}>
-                  {t("expired")}
-                </Text>
-              ) : (
-                <View style={styles.counterContainer}>
-                  <Text style={[styles.counterText, { color: theme.primary }]}>
-                    {days}
-                  </Text>
-                  <Text style={[styles.counterLabel, { color: theme.text }]}>
-                    {t("days").toUpperCase()}
-                  </Text>
-                </View>
-              )}
+              <ExpiryStatus
+                expired={expired}
+                days={days}
+                expiredLabel={t("expired")}
+                daysLabel={t("days").toUpperCase()}
+                primaryColor={theme.primary}
+                textColor={theme.text}
+              />
             </View>
           </TouchableWithoutFeedback>
         </View>

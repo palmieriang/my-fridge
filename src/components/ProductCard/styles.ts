@@ -27,46 +27,10 @@ export default StyleSheet.create({
     marginTop: 5,
     flexShrink: 1,
   },
-  counterContainer: {
-    alignItems: "baseline",
-    flex: 1,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  counterText: {
-    fontFamily: "OpenSans-Bold",
-    fontSize: Typography.display,
-  },
-  counterLabel: {
-    fontFamily: "OpenSans-Light",
-    fontSize: Typography.caption,
-    marginLeft: 10,
-  },
-  expired: {
-    fontFamily: "LilitaOne-Regular",
-    fontSize: Typography.display,
-    textTransform: "uppercase",
-  },
-  quantityRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 2,
-    gap: 8,
-  },
   titleRow: {
     flexDirection: "row",
     alignItems: "baseline",
     gap: 6,
-  },
-  outOfStockRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 2,
-    gap: 8,
-  },
-  outOfStockLabel: {
-    fontFamily: "OpenSans-SemiBold",
-    fontSize: Typography.caption,
   },
   quantityBadge: {
     flexDirection: "row",
@@ -81,10 +45,5 @@ export default StyleSheet.create({
   quantityNumber: {
     fontFamily: "OpenSans-SemiBold",
     fontSize: Typography.body,
-  },
-  shoppingListNudge: {
-    fontFamily: "OpenSans-Regular",
-    fontSize: Typography.caption,
-    textDecorationLine: "underline",
   },
 });
