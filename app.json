@@ -44,7 +44,7 @@
             "compileSdkVersion": 35,
             "targetSdkVersion": 35,
             "minSdkVersion": 24,
-            "usesCleartextTraffic": true,
+            "usesCleartextTraffic": false,
             "proguardFiles": [
               "proguard-android-optimize.txt",
               "proguard-rules.pro"

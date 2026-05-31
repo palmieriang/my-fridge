@@ -13,6 +13,7 @@ import { onSchedule } from "firebase-functions/v2/scheduler";
 // Check if running in Firebase emulator (most reliable for local development)
 const isEmulator = process.env.FUNCTIONS_EMULATOR === "true";
 const isDevelopment = process.env.NODE_ENV === "development" || isEmulator;
+const testEndpointSecret = process.env.TEST_EXPIRING_PRODUCTS_SECRET;
 
 // Feature flags: auto-enabled in development, disabled in production until ready
 const ENABLE_NOTIFICATIONS = isDevelopment; // Only enable notifications in development
@@ -277,6 +278,34 @@ export const testExpiringProducts = onRequest(
     region: "us-central1",
   },
   async (req, res) => {
+    if (req.method !== "POST") {
+      res.status(405).json({
+        success: false,
+        error: "Method not allowed. Use POST.",
+      });
+      return;
+    }
+
+    // In production-like environments, require an explicit secret.
+    if (!isDevelopment) {
+      if (!testEndpointSecret) {
+        res.status(403).json({
+          success: false,
+          error: "Endpoint disabled.",
+        });
+        return;
+      }
+
+      const providedSecret = req.get("x-test-secret");
+      if (providedSecret !== testEndpointSecret) {
+        res.status(403).json({
+          success: false,
+          error: "Forbidden.",
+        });
+        return;
+      }
+    }
+
     console.info("Manual expiring products test triggered");
 
     try {

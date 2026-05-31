@@ -1,8 +1,14 @@
 rules_version = '2';
 service firebase.storage {
   match /b/{bucket}/o {
+    match /profileImages/{userId} {
+      // Users can only access their own profile image.
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Deny access to any other storage path unless explicitly allowed above.
     match /{allPaths=**} {
-      allow read, write: if request.auth != null;
+      allow read, write: if false;
     }
   }
 }

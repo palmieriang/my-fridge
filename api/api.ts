@@ -541,7 +541,7 @@ export async function requestNotificationPermission(
           hasCompletedOnboarding: true,
         });
 
-        console.log("✅ Notifications enabled and token saved:", fcmToken);
+        console.log("✅ Notifications enabled and token saved");
 
         return {
           success: true,
@@ -642,7 +642,7 @@ export function setupNotificationListeners(navigation?: any): () => void {
   const unsubscribeOnTokenRefresh = onTokenRefresh(
     messagingInstance,
     async (fcmToken) => {
-      console.log("🔄 FCM token refreshed:", fcmToken);
+      console.log("🔄 FCM token refreshed");
       // You'll need to pass userId and getUsersRef to update the token
     },
   );
