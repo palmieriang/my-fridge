@@ -1,5 +1,4 @@
 import Loading from "@components/Loading/Loading";
-import DeleteIcon from "@components/svg/DeleteIcon";
 import UserIcon from "@components/svg/UserIcon";
 import type { FirebaseStorageTypes } from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
@@ -17,7 +16,7 @@ import { COLORS } from "src/constants/colors";
 import { getImageBlobAndMetadata } from "./getImageBlobAndMetadata";
 import styles from "./styles";
 import { uploadImage } from "../../../api/api";
-import { useAuth, useTheme } from "../../store";
+import { useAuth, useProducts, useTheme } from "../../store";
 
 type UploadState = {
   isUploading: boolean;
@@ -31,6 +30,7 @@ const Profile = () => {
     authState: { profileImg },
   } = useAuth();
   const { theme } = useTheme();
+  const { fridgeProducts, freezerProducts } = useProducts();
   const [upload, setUpload] = useState<UploadState>({
     isUploading: false,
     uploadProgress: 0,
@@ -158,57 +158,73 @@ const Profile = () => {
 
   return (
     <View style={[styles.profile, { backgroundColor: theme.primary }]}>
-      <TouchableOpacity onPress={handleImagePicker}>
-        <View style={styles.pictureContainer}>
-          {upload.isUploading ? (
-            <View style={styles.progressContainer}>
-              <Loading size="large" color={COLORS.WHITE} />
-              <Text style={styles.profileField}>
-                Uploading: {upload.uploadProgress.toFixed(0)}%
-              </Text>
-            </View>
-          ) : profileImg ? (
-            <>
-              {isProfileImageLoading && (
-                <Loading
-                  size="large"
-                  color={COLORS.WHITE}
-                  style={styles.activityIndicatorOverlay}
+      <View style={styles.avatarWrapper}>
+        <TouchableOpacity onPress={handleImagePicker}>
+          <View style={styles.pictureContainer}>
+            {upload.isUploading ? (
+              <View style={styles.progressContainer}>
+                <Loading size="large" color={COLORS.WHITE} />
+                <Text style={styles.uploadText}>
+                  {upload.uploadProgress.toFixed(0)}%
+                </Text>
+              </View>
+            ) : profileImg ? (
+              <>
+                {isProfileImageLoading && (
+                  <Loading
+                    size="large"
+                    color={COLORS.WHITE}
+                    style={styles.activityIndicatorOverlay}
+                  />
+                )}
+                <Image
+                  source={{ uri: profileImg }}
+                  style={styles.picture}
+                  onLoadEnd={() => setIsProfileImageLoading(false)}
+                  onError={(e) => {
+                    console.error(
+                      "Failed to load profile image:",
+                      e.nativeEvent.error,
+                    );
+                    setIsProfileImageLoading(false);
+                  }}
                 />
-              )}
-              <Image
-                source={{ uri: profileImg }}
-                style={styles.picture}
-                onLoadEnd={() => setIsProfileImageLoading(false)}
-                onError={(e) => {
-                  console.error(
-                    "Failed to load profile image:",
-                    e.nativeEvent.error,
-                  );
-                  setIsProfileImageLoading(false);
-                }}
-              />
-              {!upload.isUploading && !isProfileImageLoading && (
-                <DeleteIcon
-                  style={styles.deleteIcon}
-                  width={24}
-                  height={24}
-                  fill={COLORS.WHITE}
-                  onPress={deleteProfileImg}
-                />
-              )}
-            </>
-          ) : (
-            <UserIcon width={150} height={150} fill={theme.text} />
-          )}
+              </>
+            ) : (
+              <UserIcon width={56} height={56} fill={theme.text} />
+            )}
+          </View>
+        </TouchableOpacity>
+        {!upload.isUploading && profileImg && !isProfileImageLoading && (
+          <TouchableOpacity
+            style={styles.deleteBadge}
+            onPress={deleteProfileImg}
+            hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+            accessibilityRole="button"
+            accessibilityLabel="Remove profile photo"
+          >
+            <Text style={styles.deleteBadgeText}>{"\u2715"}</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={[styles.nameText, { color: theme.text }]} numberOfLines={1}>
+          {userData.fullName}
+        </Text>
+        <Text style={[styles.emailText, { color: theme.text }]} numberOfLines={1}>
+          {userData.email}
+        </Text>
+      </View>
+      <View style={styles.statsContainer}>
+        <View style={styles.statBadge}>
+          <Text style={styles.statEmoji}>{"\uD83E\uDDCA"}</Text>
+          <Text style={styles.statCount}>{fridgeProducts.length}</Text>
         </View>
-      </TouchableOpacity>
-      <Text style={[styles.profileField, { color: theme.text }]}>
-        {userData.fullName}
-      </Text>
-      <Text style={[styles.profileField, { color: theme.text }]}>
-        {userData.email}
-      </Text>
+        <View style={styles.statBadge}>
+          <Text style={styles.statEmoji}>{"\u2744\uFE0F"}</Text>
+          <Text style={styles.statCount}>{freezerProducts.length}</Text>
+        </View>
+      </View>
     </View>
   );
 };

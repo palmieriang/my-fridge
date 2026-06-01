@@ -57,11 +57,11 @@ const Settings = () => {
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <OfflineIndicator />
+      <Profile />
       <ScrollView
         contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
       >
-        <Profile />
         <LanguagePicker
           selectedLanguage={selectedLocale}
           onLanguageChange={handleLocaleChange}
