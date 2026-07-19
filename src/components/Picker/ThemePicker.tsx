@@ -23,6 +23,7 @@ export const ThemePicker: FC<ThemePickerProps> = ({
 
   const themeData = generateThemeData({
     availableThemes,
+    translate: t,
   });
 
   return (

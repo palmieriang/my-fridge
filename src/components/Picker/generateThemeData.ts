@@ -6,22 +6,18 @@ interface ThemePickerItem {
 
 interface GenerateThemeDataParams {
   availableThemes: string[];
+  translate: (scope: string) => string;
 }
 
 export const generateThemeData = ({
   availableThemes,
+  translate,
 }: GenerateThemeDataParams): ThemePickerItem[] => {
-  const themeEntries = availableThemes.map((themeKey) => {
-    const label = themeKey
-      .replace(/([A-Z])/g, " $1")
-      .replace(/^./, (str) => str.toUpperCase());
-
-    return {
-      label,
-      value: themeKey,
-      key: themeKey,
-    };
-  });
+  const themeEntries = availableThemes.map((themeKey) => ({
+    label: translate(themeKey),
+    value: themeKey,
+    key: themeKey,
+  }));
 
   return themeEntries;
 };

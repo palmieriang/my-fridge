@@ -1,26 +1,38 @@
 import { ThemePicker } from "./ThemePicker";
+import { generateThemeData } from "./generateThemeData";
 import { render, screen } from "../../test/test-utils";
-
-jest.mock("./generateThemeData", () => ({
-  generateThemeData: () => [
-    { label: "Light", value: "light" },
-    { label: "Dark", value: "dark" },
-  ],
-}));
 
 describe("ThemePicker", () => {
   it("should render theme picker label", () => {
     const onThemeChange = jest.fn();
-    render(<ThemePicker selectedTheme="light" onThemeChange={onThemeChange} />);
+    render(
+      <ThemePicker selectedTheme="lightRed" onThemeChange={onThemeChange} />,
+    );
 
     expect(screen.getByText("changeTheme")).toBeTruthy();
   });
 
+  it("should generate localized theme labels", () => {
+    const translate = jest.fn((scope: string) => `translated:${scope}`);
+
+    expect(
+      generateThemeData({ availableThemes: ["lightRed"], translate }),
+    ).toEqual([
+      {
+        key: "lightRed",
+        label: "translated:lightRed",
+        value: "lightRed",
+      },
+    ]);
+  });
+
   it("should call onThemeChange when invoked", () => {
     const onThemeChange = jest.fn();
-    render(<ThemePicker selectedTheme="light" onThemeChange={onThemeChange} />);
+    render(
+      <ThemePicker selectedTheme="lightRed" onThemeChange={onThemeChange} />,
+    );
 
-    onThemeChange("dark");
-    expect(onThemeChange).toHaveBeenCalledWith("dark");
+    onThemeChange("darkRed");
+    expect(onThemeChange).toHaveBeenCalledWith("darkRed");
   });
 });
