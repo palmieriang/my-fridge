@@ -4,10 +4,19 @@ import { Typography } from "../../typography/responsive";
 
 export const styles = StyleSheet.create({
   modalRoot: {
-    flex: 1,
+    ...StyleSheet.absoluteFillObject,
+    zIndex: 1000,
+    elevation: 1000,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(0, 0, 0, 0.72)",
+  },
+  overlayPanel: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
     backgroundColor: "rgba(0, 0, 0, 0.72)",
   },
   highlightBox: {

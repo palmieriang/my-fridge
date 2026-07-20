@@ -8,13 +8,14 @@ import CalendarIcon from "@components/svg/CalendarIcon";
 import FridgeIcon from "@components/svg/FridgeIcon";
 import LayersIcon from "@components/svg/LayersIcon";
 import ShoppingBasketIcon from "@components/svg/ShoppingBasketIcon";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useFocusEffect } from "@react-navigation/native";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
+  InteractionManager,
   Platform,
   Text,
-  useWindowDimensions,
   View,
   TouchableOpacity,
   ActivityIndicator,
@@ -37,7 +38,6 @@ import {
   useTheme,
 } from "../../store";
 import { measureViewInWindow, MeasuredRect } from "../../utils/layout";
-import { responsive } from "../../utils/responsive";
 
 type ProductFormProps = {
   navigation: FormScreenNavigationProp;
@@ -52,10 +52,10 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   const user = authState?.user;
   const { theme } = useTheme();
   const { productsContext } = useProducts();
-  const { width: screenWidth } = useWindowDimensions();
 
   const [showScanner, setShowScanner] = useState(false);
   const [isLookingUp, setIsLookingUp] = useState(false);
+  const [layoutRevision, setLayoutRevision] = useState(0);
   const productInputRef = useRef<View | null>(null);
   const dateInputRef = useRef<View | null>(null);
   const placePickerRef = useRef<View | null>(null);
@@ -70,25 +70,6 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
   );
   const [saveButtonRect, setSaveButtonRect] = useState<MeasuredRect | null>(
     null,
-  );
-
-  const normalizeFormTargetRect = useCallback(
-    (rect: MeasuredRect | null): MeasuredRect | null => {
-      if (!rect) {
-        return null;
-      }
-
-      const desiredHeight = 56;
-      const y = rect.y + Math.max(0, (rect.height - desiredHeight) / 2);
-
-      return {
-        x: responsive.containerMargin,
-        y,
-        width: Math.max(0, screenWidth - responsive.containerMargin * 2),
-        height: desiredHeight,
-      };
-    },
-    [screenWidth],
   );
 
   const tutorialStep = appTutorialState.currentStep;
@@ -168,31 +149,57 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
     [handleChangeName, t],
   );
 
-  useEffect(() => {
-    if (!isFormTutorialActive) {
-      return;
-    }
+  useFocusEffect(
+    useCallback(() => {
+      if (!isFormTutorialActive) {
+        return;
+      }
 
-    const updateLayout = () => {
       if (tutorialStep === 1) {
-        measureViewInWindow(productInputRef, setProductInputRect);
+        setProductInputRect(null);
       }
 
       if (tutorialStep === 2) {
-        measureViewInWindow(dateInputRef, setDateInputRect);
+        setDateInputRect(null);
       }
 
       if (tutorialStep === 3) {
-        measureViewInWindow(placePickerRef, setPlacePickerRect);
+        setPlacePickerRect(null);
       }
 
       if (tutorialStep === 4) {
-        measureViewInWindow(saveButtonRef, setSaveButtonRect);
+        setSaveButtonRect(null);
       }
-    };
 
-    requestAnimationFrame(updateLayout);
-  }, [isFormTutorialActive, tutorialStep]);
+      let frameId: number | null = null;
+      const interactionTask = InteractionManager.runAfterInteractions(() => {
+        frameId = requestAnimationFrame(() => {
+          if (tutorialStep === 1) {
+            measureViewInWindow(productInputRef, setProductInputRect);
+          }
+
+          if (tutorialStep === 2) {
+            measureViewInWindow(dateInputRef, setDateInputRect);
+          }
+
+          if (tutorialStep === 3) {
+            measureViewInWindow(placePickerRef, setPlacePickerRect);
+          }
+
+          if (tutorialStep === 4) {
+            measureViewInWindow(saveButtonRef, setSaveButtonRect);
+          }
+        });
+      });
+
+      return () => {
+        interactionTask.cancel();
+        if (frameId !== null) {
+          cancelAnimationFrame(frameId);
+        }
+      };
+    }, [isFormTutorialActive, layoutRevision, tutorialStep]),
+  );
 
   const handleTutorialSkip = () => {
     appTutorialContext.dismissTutorial();
@@ -248,7 +255,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
       return {
         title: t("appTutorialStepNameTitle"),
         description: t("appTutorialStepNameDescription"),
-        targetRect: normalizeFormTargetRect(productInputRect),
+        targetRect: productInputRect,
       };
     }
 
@@ -256,7 +263,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
       return {
         title: t("appTutorialStepDateTitle"),
         description: t("appTutorialStepDateDescription"),
-        targetRect: normalizeFormTargetRect(dateInputRect),
+        targetRect: dateInputRect,
       };
     }
 
@@ -264,18 +271,17 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
       return {
         title: t("appTutorialStepPlaceTitle"),
         description: t("appTutorialStepPlaceDescription"),
-        targetRect: normalizeFormTargetRect(placePickerRect),
+        targetRect: placePickerRect,
       };
     }
 
     return {
       title: t("appTutorialStepSaveTitle"),
       description: t("appTutorialStepSaveDescription"),
-      targetRect: normalizeFormTargetRect(saveButtonRect),
+      targetRect: saveButtonRect,
     };
   }, [
     dateInputRect,
-    normalizeFormTargetRect,
     placePickerRect,
     productInputRect,
     saveButtonRect,
@@ -288,6 +294,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
       style={{ flex: 1, backgroundColor: theme.background }}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={0}
+      onLayout={() => setLayoutRevision((revision) => revision + 1)}
     >
       <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
         {!params?.id && (
@@ -318,9 +325,6 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         </Text>
         <FormInput
           ref={productInputRef}
-          containerOnLayout={() =>
-            measureViewInWindow(productInputRef, setProductInputRect)
-          }
           labelValue={name}
           onChangeText={handleChangeName}
           placeholderText={t("productPlaceholder")}
@@ -335,9 +339,6 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         </Text>
         <FormInput
           ref={dateInputRef}
-          containerOnLayout={() =>
-            measureViewInWindow(dateInputRef, setDateInputRect)
-          }
           labelValue={date}
           onChangeText={handleDatePress}
           placeholderText={t("datePickerPlaceholder")}
@@ -357,12 +358,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         <Text style={[styles.label, { color: theme.text }]}>
           {t("location")}
         </Text>
-        <View
-          ref={placePickerRef}
-          onLayout={() =>
-            measureViewInWindow(placePickerRef, setPlacePickerRect)
-          }
-        >
+        <View ref={placePickerRef}>
           <PlacePicker
             selectedPlace={place}
             onPlaceChange={handlePlaceChange}
@@ -386,9 +382,6 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         <View style={styles.buttonContainer}>
           <Button
             ref={saveButtonRef}
-            onLayout={() =>
-              measureViewInWindow(saveButtonRef, setSaveButtonRect)
-            }
             text={params?.id ? t("modify") : t("add")}
             onPress={handleSubmit}
             variant="primary"

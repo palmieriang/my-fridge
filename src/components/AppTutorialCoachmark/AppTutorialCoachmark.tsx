@@ -1,11 +1,5 @@
-import { FC, useMemo } from "react";
-import {
-  Modal,
-  Text,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from "react-native";
+import { FC, useCallback, useMemo, useRef, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import { styles } from "./styles";
 import { useTheme } from "../../store";
@@ -56,67 +50,139 @@ const AppTutorialCoachmark: FC<AppTutorialCoachmarkProps> = ({
   highlightPadding = DEFAULT_HIGHLIGHT_PADDING,
 }) => {
   const { theme } = useTheme();
-  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+  const rootRef = useRef<View | null>(null);
+  const [rootLayout, setRootLayout] = useState({
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  });
+  const { width: screenWidth, height: screenHeight } = rootLayout;
+
+  const measureRoot = useCallback(() => {
+    rootRef.current?.measureInWindow((x, y, width, height) => {
+      setRootLayout({ x, y, width, height });
+    });
+  }, []);
 
   const cardWidth = Math.min(screenWidth - SPACING * 2, 360);
 
+  const localTargetRect = useMemo(() => {
+    if (!targetRect || screenWidth <= 0 || screenHeight <= 0) {
+      return null;
+    }
+
+    return {
+      ...targetRect,
+      x: targetRect.x - rootLayout.x,
+      y: targetRect.y - rootLayout.y,
+    };
+  }, [rootLayout.x, rootLayout.y, screenHeight, screenWidth, targetRect]);
+
   const tooltipPosition = useMemo(() => {
-    if (!targetRect) {
+    if (!localTargetRect) {
       return {
         top: screenHeight * 0.34,
         left: (screenWidth - cardWidth) / 2,
       };
     }
 
-    const candidateBelow = targetRect.y + targetRect.height + SPACING;
-    const candidateAbove = targetRect.y - 200 - SPACING;
+    const candidateBelow = localTargetRect.y + localTargetRect.height + SPACING;
+    const candidateAbove = localTargetRect.y - 200 - SPACING;
 
     const top =
       candidateBelow + 220 < screenHeight
         ? candidateBelow
         : Math.max(SPACING, candidateAbove);
 
-    const centeredLeft = targetRect.x + targetRect.width / 2 - cardWidth / 2;
+    const centeredLeft =
+      localTargetRect.x + localTargetRect.width / 2 - cardWidth / 2;
     const left = Math.max(
       SPACING,
       Math.min(centeredLeft, screenWidth - cardWidth - SPACING),
     );
 
     return { top, left };
-  }, [cardWidth, screenHeight, screenWidth, targetRect]);
+  }, [cardWidth, localTargetRect, screenHeight, screenWidth]);
 
-  const highlightStyle = useMemo(() => {
-    if (!targetRect) {
+  const highlightRect = useMemo(() => {
+    if (!localTargetRect) {
       return null;
     }
 
+    const left = Math.max(0, localTargetRect.x - highlightPadding);
+    const top = Math.max(0, localTargetRect.y - highlightPadding);
+    const right = Math.min(
+      screenWidth,
+      localTargetRect.x + localTargetRect.width + highlightPadding,
+    );
+    const bottom = Math.min(
+      screenHeight,
+      localTargetRect.y + localTargetRect.height + highlightPadding,
+    );
+
     return {
-      left: Math.max(0, targetRect.x - highlightPadding),
-      top: Math.max(0, targetRect.y - highlightPadding),
-      width: targetRect.width + highlightPadding * 2,
-      height: targetRect.height + highlightPadding * 2,
-      backgroundColor: "transparent",
+      left,
+      top,
+      width: Math.max(0, right - left),
+      height: Math.max(0, bottom - top),
     };
-  }, [highlightPadding, targetRect]);
+  }, [highlightPadding, localTargetRect, screenHeight, screenWidth]);
+
+  if (!visible) {
+    return null;
+  }
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      statusBarTranslucent
-      animationType="fade"
-      onRequestClose={onSkip}
+    <View
+      ref={rootRef}
+      pointerEvents="box-none"
+      style={styles.modalRoot}
+      onLayout={measureRoot}
     >
-      <View style={styles.modalRoot}>
-        <View style={styles.overlay} />
-
-        {highlightStyle ? (
+      {highlightRect ? (
+        <>
+          <View style={[styles.overlayPanel, { height: highlightRect.top }]} />
           <View
-            pointerEvents="none"
-            style={[styles.highlightBox, highlightStyle]}
+            style={[
+              styles.overlayPanel,
+              {
+                top: highlightRect.top,
+                width: highlightRect.left,
+                height: highlightRect.height,
+              },
+            ]}
           />
-        ) : null}
+          <View
+            style={[
+              styles.overlayPanel,
+              {
+                top: highlightRect.top,
+                left: highlightRect.left + highlightRect.width,
+                right: 0,
+                height: highlightRect.height,
+              },
+            ]}
+          />
+          <View
+            style={[
+              styles.overlayPanel,
+              { top: highlightRect.top + highlightRect.height, bottom: 0 },
+            ]}
+          />
+        </>
+      ) : (
+        <View style={styles.overlay} />
+      )}
 
+      {highlightRect ? (
+        <View
+          pointerEvents="none"
+          style={[styles.highlightBox, highlightRect]}
+        />
+      ) : null}
+
+      {screenWidth > 0 && screenHeight > 0 ? (
         <View
           style={[
             styles.tooltip,
@@ -173,8 +239,8 @@ const AppTutorialCoachmark: FC<AppTutorialCoachmarkProps> = ({
             </TouchableOpacity>
           </View>
         </View>
-      </View>
-    </Modal>
+      ) : null}
+    </View>
   );
 };
 

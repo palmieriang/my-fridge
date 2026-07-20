@@ -4,10 +4,23 @@ import { OfflineIndicator } from "@components/OfflineIndicator/OfflineIndicator"
 import ProductCard from "@components/ProductCard/ProductCard";
 import SearchBar from "@components/SearchBar/SearchBar";
 import SortButton from "@components/SortButton/SortButton";
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Alert, FlatList, Text, View, useWindowDimensions } from "react-native";
+import {
+  ElementRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import {
+  Alert,
+  FlatList,
+  InteractionManager,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
@@ -18,6 +31,7 @@ import {
 } from "../../navigation/navigation.d";
 import { useAppTutorial, useLocale, useProducts, useTheme } from "../../store";
 import { convertToISODateString } from "../../utils";
+import { measureViewInWindow, MeasuredRect } from "../../utils/layout";
 
 type ProductListProps = {
   navigation: ProductListNavigationProp;
@@ -28,17 +42,12 @@ const APP_TUTORIAL_TOTAL_STEPS = 7;
 const LIST_ADD_BUTTON_STEP = 0;
 const LIST_SWIPE_STEP = 5;
 const LIST_DONE_STEP = 6;
-const FAB_SIZE = 56;
-const FAB_RIGHT = 20;
-const FAB_BOTTOM = 20;
 
 const ProductList = ({ navigation, route }: ProductListProps) => {
   const { t } = useLocale();
   const { theme } = useTheme();
   const { fridgeProducts, freezerProducts } = useProducts();
   const { appTutorialState, appTutorialContext } = useAppTutorial();
-  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
-  const tabBarHeight = useBottomTabBarHeight();
 
   const { place } = route.params;
 
@@ -46,6 +55,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   const [sortOrder, setSortOrder] = useState<"default" | "earlier" | "later">(
     "default",
   );
+  const [layoutRevision, setLayoutRevision] = useState(0);
 
   const filteredList = place === FRIDGE ? fridgeProducts : freezerProducts;
 
@@ -73,7 +83,9 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   }, [sortedList.length]);
 
   const swipeableRefs = useRef<(SwipeableMethods | null)[]>([]);
+  const addButtonRef = useRef<ElementRef<typeof TouchableOpacity> | null>(null);
   const resumePromptShownRef = useRef(false);
+  const [addButtonRect, setAddButtonRect] = useState<MeasuredRect | null>(null);
 
   const tutorialStep = appTutorialState.currentStep;
   const isFridgeList = place === FRIDGE;
@@ -84,14 +96,27 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
       tutorialStep,
     );
 
-  const addButtonRect = useMemo(
-    () => ({
-      x: screenWidth - FAB_RIGHT - FAB_SIZE,
-      y: screenHeight - tabBarHeight - FAB_BOTTOM - FAB_SIZE,
-      width: FAB_SIZE,
-      height: FAB_SIZE,
-    }),
-    [screenHeight, screenWidth, tabBarHeight],
+  useFocusEffect(
+    useCallback(() => {
+      if (!isTutorialVisibleOnList || tutorialStep !== LIST_ADD_BUTTON_STEP) {
+        return;
+      }
+
+      setAddButtonRect(null);
+      let frameId: number | null = null;
+      const interactionTask = InteractionManager.runAfterInteractions(() => {
+        frameId = requestAnimationFrame(() => {
+          measureViewInWindow(addButtonRef, setAddButtonRect);
+        });
+      });
+
+      return () => {
+        interactionTask.cancel();
+        if (frameId !== null) {
+          cancelAnimationFrame(frameId);
+        }
+      };
+    }, [isTutorialVisibleOnList, layoutRevision, tutorialStep]),
   );
 
   const handleAddProduct = () => {
@@ -280,7 +305,10 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   }, [navigation]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: theme.background }}>
+    <View
+      style={{ flex: 1, backgroundColor: theme.background }}
+      onLayout={() => setLayoutRevision((revision) => revision + 1)}
+    >
       <OfflineIndicator />
       <View style={styles.controlsContainer}>
         <SearchBar
@@ -325,7 +353,11 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
         <Text style={[styles.text, { color: theme.text }]}>{t("error")}</Text>
       )}
 
-      <FloatingButton onPress={handleAddProduct} color={theme.primary} />
+      <FloatingButton
+        ref={addButtonRef}
+        onPress={handleAddProduct}
+        color={theme.primary}
+      />
 
       <AppTutorialCoachmark
         visible={isTutorialVisibleOnList}
