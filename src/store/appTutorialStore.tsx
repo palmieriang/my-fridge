@@ -109,11 +109,6 @@ const AppTutorialProvider = ({ children }: { children: ReactNode }) => {
         }));
       },
       startTutorial: async () => {
-        await persistTutorialState({
-          hasDismissedAppTutorial: false,
-          appTutorialCurrentStep: APP_TUTORIAL_FIRST_STEP,
-        });
-
         setAppTutorialState((prev) => ({
           ...prev,
           isActive: true,
@@ -122,14 +117,13 @@ const AppTutorialProvider = ({ children }: { children: ReactNode }) => {
           shouldShowResumePrompt: false,
           isManualStartRequested: false,
         }));
-      },
-      restartTutorial: async () => {
+
         await persistTutorialState({
-          hasCompletedAppTutorial: false,
           hasDismissedAppTutorial: false,
           appTutorialCurrentStep: APP_TUTORIAL_FIRST_STEP,
         });
-
+      },
+      restartTutorial: async () => {
         setAppTutorialState((prev) => ({
           ...prev,
           isActive: true,
@@ -139,12 +133,14 @@ const AppTutorialProvider = ({ children }: { children: ReactNode }) => {
           shouldShowResumePrompt: false,
           isManualStartRequested: false,
         }));
+
+        await persistTutorialState({
+          hasCompletedAppTutorial: false,
+          hasDismissedAppTutorial: false,
+          appTutorialCurrentStep: APP_TUTORIAL_FIRST_STEP,
+        });
       },
       resumeTutorial: async () => {
-        await persistTutorialState({
-          hasDismissedAppTutorial: false,
-        });
-
         setAppTutorialState((prev) => ({
           ...prev,
           isActive: true,
@@ -152,13 +148,12 @@ const AppTutorialProvider = ({ children }: { children: ReactNode }) => {
           shouldShowResumePrompt: false,
           isManualStartRequested: false,
         }));
-      },
-      goToStep: async (step: number) => {
+
         await persistTutorialState({
-          appTutorialCurrentStep: step,
           hasDismissedAppTutorial: false,
         });
-
+      },
+      goToStep: async (step: number) => {
         setAppTutorialState((prev) => ({
           ...prev,
           isActive: true,
@@ -166,14 +161,13 @@ const AppTutorialProvider = ({ children }: { children: ReactNode }) => {
           hasDismissed: false,
           shouldShowResumePrompt: false,
         }));
+
+        await persistTutorialState({
+          appTutorialCurrentStep: step,
+          hasDismissedAppTutorial: false,
+        });
       },
       completeTutorial: async () => {
-        await persistTutorialState({
-          hasCompletedAppTutorial: true,
-          hasDismissedAppTutorial: false,
-          appTutorialCurrentStep: APP_TUTORIAL_FIRST_STEP,
-        });
-
         setAppTutorialState((prev) => ({
           ...prev,
           isActive: false,
@@ -183,12 +177,14 @@ const AppTutorialProvider = ({ children }: { children: ReactNode }) => {
           shouldShowResumePrompt: false,
           isManualStartRequested: false,
         }));
+
+        await persistTutorialState({
+          hasCompletedAppTutorial: true,
+          hasDismissedAppTutorial: false,
+          appTutorialCurrentStep: APP_TUTORIAL_FIRST_STEP,
+        });
       },
       dismissTutorial: async () => {
-        await persistTutorialState({
-          hasDismissedAppTutorial: true,
-        });
-
         setAppTutorialState((prev) => ({
           ...prev,
           isActive: false,
@@ -196,6 +192,10 @@ const AppTutorialProvider = ({ children }: { children: ReactNode }) => {
           shouldShowResumePrompt: false,
           isManualStartRequested: false,
         }));
+
+        await persistTutorialState({
+          hasDismissedAppTutorial: true,
+        });
       },
       postponeTutorial: () => {
         setAppTutorialState((prev) => ({

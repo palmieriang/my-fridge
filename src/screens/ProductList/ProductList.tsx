@@ -236,10 +236,6 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   const handleTutorialNext = () => {
     if (tutorialStep === LIST_ADD_BUTTON_STEP) {
       appTutorialContext.goToStep(1);
-      navigateToProductForm({
-        title: t("addItem"),
-        tutorialMode: true,
-      });
       return;
     }
 
@@ -256,10 +252,6 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   const handleTutorialBack = () => {
     if (tutorialStep === LIST_SWIPE_STEP) {
       appTutorialContext.goToStep(3);
-      navigateToProductForm({
-        title: t("addItem"),
-        tutorialMode: true,
-      });
       return;
     }
 
