@@ -156,5 +156,21 @@
   "appTutorialStepSwipeNoFocusDescription": "Cuando tengas productos en la lista, desliza cualquier fila para mostrar las acciones Modificar y Eliminar.",
   "appTutorialStepSwipeEmptyDescription": "Cuando tengas productos en la lista, desliza una fila para mostrar las acciones Modificar y Eliminar.",
   "appTutorialStepDoneTitle": "Todo listo",
-  "appTutorialStepDoneDescription": "¡Muy bien! Ahora sabes cómo agregar, organizar y gestionar productos."
+  "appTutorialStepDoneDescription": "¡Muy bien! Ahora sabes cómo agregar, organizar y gestionar productos.",
+  "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+  "confirmPasswordPlaceholder": "Confirmar contraseña",
+  "creatingAccount": "Creando cuenta...",
+  "emailPlaceholder": "Email",
+  "fullNamePlaceholder": "Nombre completo",
+  "passwordPlaceholder": "Contraseña",
+  "passwordResetMessage": "Revisa tu correo para las instrucciones de restablecimiento.",
+  "passwordResetTitle": "Restablecer contraseña",
+  "registrationFailed": "Error en el registro",
+  "registrationFailedMessage": "No se pudo crear la cuenta. Inténtalo de nuevo.",
+  "resetFailed": "Error al restablecer",
+  "resetFailedMessage": "No se pudo enviar el correo de restablecimiento. Inténtalo de nuevo.",
+  "signInFailed": "Error al iniciar sesión",
+  "signInFailedMessage": "Comprueba tus credenciales e inténtalo de nuevo.",
+  "termsRequiredMessage": "Acepta los términos para crear una cuenta.",
+  "termsText": "Acepto los Términos y Condiciones y la Política de privacidad"
 }

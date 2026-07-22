@@ -156,5 +156,21 @@
   "appTutorialStepSwipeNoFocusDescription": "Quando hai prodotti in elenco, scorri una qualsiasi riga per visualizzare le azioni Modifica ed Elimina.",
   "appTutorialStepSwipeEmptyDescription": "Quando hai prodotti in elenco, scorri una riga per visualizzare le azioni Modifica ed Elimina.",
   "appTutorialStepDoneTitle": "Hai finito",
-  "appTutorialStepDoneDescription": "Ottimo! Ora sai come aggiungere, organizzare e gestire i prodotti."
+  "appTutorialStepDoneDescription": "Ottimo! Ora sai come aggiungere, organizzare e gestire i prodotti.",
+  "alreadyHaveAccount": "Hai già un account?",
+  "confirmPasswordPlaceholder": "Conferma password",
+  "creatingAccount": "Creazione account...",
+  "emailPlaceholder": "Email",
+  "fullNamePlaceholder": "Nome e Cognome",
+  "passwordPlaceholder": "Password",
+  "passwordResetMessage": "Controlla la tua email per le istruzioni su come reimpostare la password.",
+  "passwordResetTitle": "Reimposta password",
+  "registrationFailed": "Registrazione non riuscita",
+  "registrationFailedMessage": "Impossibile creare l'account. Riprova.",
+  "resetFailed": "Reimpostazione non riuscita",
+  "resetFailedMessage": "Impossibile inviare l'email di reimpostazione. Riprova.",
+  "signInFailed": "Accesso non riuscito",
+  "signInFailedMessage": "Controlla le credenziali e riprova.",
+  "termsRequiredMessage": "Accetta i termini per creare un account.",
+  "termsText": "Accetto i Termini e Condizioni e l'Informativa sulla Privacy"
 }

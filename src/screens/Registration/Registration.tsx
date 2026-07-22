@@ -17,7 +17,7 @@ import {
 import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
-import { useAuth } from "../../store";
+import { useAuth, useLocale } from "../../store";
 import {
   validateEmail,
   validatePasswordConfirmation,
@@ -46,6 +46,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const { authContext } = useAuth();
+  const { t } = useLocale();
 
   const handleFullNameValidation = (name: string) => {
     const result = validateFullName(name);
@@ -113,9 +114,9 @@ const Registration = ({ navigation }: RegistrationProps) => {
 
     if (!acceptTerms) {
       Alert.alert(
-        "Terms Required",
-        "Please accept the Terms and Conditions to create an account.",
-        [{ text: "OK" }],
+        t("attention"),
+        t("termsRequiredMessage"),
+        [{ text: t("ok") }],
       );
       return;
     }
@@ -133,9 +134,9 @@ const Registration = ({ navigation }: RegistrationProps) => {
     } catch (error: any) {
       console.error("Registration error:", error);
       Alert.alert(
-        "Registration Failed",
-        error?.message || "Unable to create account. Please try again.",
-        [{ text: "OK" }],
+        t("registrationFailed"),
+        error?.message || t("registrationFailedMessage"),
+        [{ text: t("ok") }],
       );
     } finally {
       setIsLoading(false);
@@ -160,7 +161,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
         <FormInput
           labelValue={fullName}
           onChangeText={handleFullNameChange}
-          placeholderText="Full Name"
+          placeholderText={t("fullNamePlaceholder")}
           Icon={UsernameIcon}
           autoCapitalize="words"
           underlineColorAndroid="transparent"
@@ -170,7 +171,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
         <FormInput
           labelValue={email}
           onChangeText={handleEmailChange}
-          placeholderText="Email"
+          placeholderText={t("emailPlaceholder")}
           Icon={EmailIcon}
           keyboardType="email-address"
           autoCapitalize="none"
@@ -181,7 +182,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
         <FormInput
           labelValue={password}
           onChangeText={handlePasswordChange}
-          placeholderText="Password"
+          placeholderText={t("passwordPlaceholder")}
           Icon={PadlockIcon}
           autoCapitalize="none"
           underlineColorAndroid="transparent"
@@ -198,7 +199,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
         <FormInput
           labelValue={confirmPassword}
           onChangeText={handleConfirmPasswordChange}
-          placeholderText="Confirm password"
+          placeholderText={t("confirmPasswordPlaceholder")}
           Icon={PadlockIcon}
           autoCapitalize="none"
           underlineColorAndroid="transparent"
@@ -220,26 +221,24 @@ const Registration = ({ navigation }: RegistrationProps) => {
             {acceptTerms ? "✓" : ""}
           </Text>
           <Text style={styles.termsText}>
-            I accept the{" "}
-            <Text style={styles.termsLink}>Terms and Conditions</Text> and{" "}
-            <Text style={styles.termsLink}>Privacy Policy</Text>
+            {t("termsText")}
           </Text>
         </View>
 
-        <Button text="Create account" onPress={handleRegistration} />
+        <Button text={t("createAccount")} onPress={handleRegistration} />
 
         {isLoading && (
           <View style={styles.loadingContainer}>
             <ActivityIndicator size="small" color={COLORS.PRIMARY_BLUE} />
-            <Text style={styles.loadingText}>Creating account...</Text>
+            <Text style={styles.loadingText}>{t("creatingAccount")}</Text>
           </View>
         )}
 
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
-            Already got an account?{" "}
+            {t("alreadyHaveAccount")}{" "}
             <Text onPress={handleGoToLogin} style={styles.footerLink}>
-              Log in
+              {t("signIn")}
             </Text>
           </Text>
         </View>

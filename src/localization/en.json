@@ -156,5 +156,21 @@
   "appTutorialStepSwipeNoFocusDescription": "When you have products in the list, swipe any row to reveal Modify and Delete actions.",
   "appTutorialStepSwipeEmptyDescription": "When you have products in the list, swipe a row to reveal Modify and Delete actions.",
   "appTutorialStepDoneTitle": "You're ready",
-  "appTutorialStepDoneDescription": "Great job! You now know how to add, organize, and manage products."
+  "appTutorialStepDoneDescription": "Great job! You now know how to add, organize, and manage products.",
+  "alreadyHaveAccount": "Already have an account?",
+  "confirmPasswordPlaceholder": "Confirm password",
+  "creatingAccount": "Creating account...",
+  "emailPlaceholder": "Email",
+  "fullNamePlaceholder": "Full Name",
+  "passwordPlaceholder": "Password",
+  "passwordResetMessage": "Check your email for instructions to reset your password.",
+  "passwordResetTitle": "Password reset",
+  "registrationFailed": "Registration failed",
+  "registrationFailedMessage": "Unable to create account. Please try again.",
+  "resetFailed": "Reset failed",
+  "resetFailedMessage": "Unable to send the reset email. Please try again.",
+  "signInFailed": "Sign-in failed",
+  "signInFailedMessage": "Please check your credentials and try again.",
+  "termsRequiredMessage": "Please accept the terms to create an account.",
+  "termsText": "I accept the Terms and Conditions and Privacy Policy"
 }

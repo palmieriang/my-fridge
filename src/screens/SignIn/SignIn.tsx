@@ -129,9 +129,9 @@ const SignIn = ({ navigation }: SignInProps) => {
       setResetAnimation(true);
     } catch (error: any) {
       Alert.alert(
-        "Sign In Failed",
-        error?.message || "Please check your credentials and try again.",
-        [{ text: "OK" }],
+        t("signInFailed"),
+        error?.message || t("signInFailedMessage"),
+        [{ text: t("ok") }],
       );
     } finally {
       setIsLoading(false);
@@ -150,15 +150,15 @@ const SignIn = ({ navigation }: SignInProps) => {
     try {
       await authContext.resetPassword(email);
       Alert.alert(
-        "Password Reset",
-        "Check your email for password reset instructions.",
-        [{ text: "OK", onPress: fadeIn }],
+        t("passwordResetTitle"),
+        t("passwordResetMessage"),
+        [{ text: t("ok"), onPress: fadeIn }],
       );
     } catch (error: any) {
       Alert.alert(
-        "Reset Failed",
-        error?.message || "Unable to send reset email. Please try again.",
-        [{ text: "OK" }],
+        t("resetFailed"),
+        error?.message || t("resetFailedMessage"),
+        [{ text: t("ok") }],
       );
     } finally {
       setIsLoading(false);
@@ -206,7 +206,7 @@ const SignIn = ({ navigation }: SignInProps) => {
           <FormInput
             labelValue={email}
             onChangeText={handleEmailChange}
-            placeholderText="Email"
+            placeholderText={t("emailPlaceholder")}
             Icon={UsernameIcon}
             keyboardType="email-address"
             autoCapitalize="none"
@@ -226,7 +226,7 @@ const SignIn = ({ navigation }: SignInProps) => {
               <FormInput
                 labelValue={password}
                 onChangeText={handlePasswordChange}
-                placeholderText="Password"
+                placeholderText={t("passwordPlaceholder")}
                 Icon={PadlockIcon}
                 autoCapitalize="none"
                 autoComplete="current-password"

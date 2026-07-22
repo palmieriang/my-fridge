@@ -151,6 +151,7 @@ export function ShoppingListStackScreen() {
 }
 
 export function SignInStackScreen() {
+  const { t } = useLocale();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -161,12 +162,12 @@ export function SignInStackScreen() {
       <Stack.Screen
         name="signin"
         component={SignIn}
-        options={{ title: "Login" }}
+        options={{ title: t("signIn") }}
       />
       <Stack.Screen
         name="registration"
         component={Registration}
-        options={{ title: "Create account" }}
+        options={{ title: t("createAccount") }}
       />
     </Stack.Navigator>
   );

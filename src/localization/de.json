@@ -156,5 +156,21 @@
   "appTutorialStepSwipeNoFocusDescription": "Wenn Produkte in der Liste sind, wische über eine beliebige Zeile, um die Aktionen Bearbeiten und Löschen anzuzeigen.",
   "appTutorialStepSwipeEmptyDescription": "Wenn Produkte in der Liste sind, wische über eine Zeile, um die Aktionen Bearbeiten und Löschen anzuzeigen.",
   "appTutorialStepDoneTitle": "Du bist bereit",
-  "appTutorialStepDoneDescription": "Super! Du weißt jetzt, wie man Produkte hinzufügt, organisiert und verwaltet."
+  "appTutorialStepDoneDescription": "Super! Du weißt jetzt, wie man Produkte hinzufügt, organisiert und verwaltet.",
+  "alreadyHaveAccount": "Haben Sie bereits ein Konto?",
+  "confirmPasswordPlaceholder": "Passwort bestätigen",
+  "creatingAccount": "Konto wird erstellt...",
+  "emailPlaceholder": "E-Mail",
+  "fullNamePlaceholder": "Vollständiger Name",
+  "passwordPlaceholder": "Passwort",
+  "passwordResetMessage": "Überprüfen Sie Ihre E-Mail für Anweisungen zum Zurücksetzen des Passworts.",
+  "passwordResetTitle": "Passwort zurücksetzen",
+  "registrationFailed": "Registrierung fehlgeschlagen",
+  "registrationFailedMessage": "Konto konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+  "resetFailed": "Zurücksetzen fehlgeschlagen",
+  "resetFailedMessage": "Zurücksetzungs-E-Mail konnte nicht gesendet werden. Bitte versuchen Sie es erneut.",
+  "signInFailed": "Anmeldung fehlgeschlagen",
+  "signInFailedMessage": "Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
+  "termsRequiredMessage": "Bitte akzeptieren Sie die Bedingungen, um ein Konto zu erstellen.",
+  "termsText": "Ich akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung"
 }

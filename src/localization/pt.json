@@ -156,5 +156,21 @@
   "appTutorialStepSwipeNoFocusDescription": "Quando tiver produtos na lista, deslize qualquer linha para mostrar as ações Modificar e Eliminar.",
   "appTutorialStepSwipeEmptyDescription": "Quando tiver produtos na lista, deslize uma linha para mostrar as ações Modificar e Eliminar.",
   "appTutorialStepDoneTitle": "Está pronto",
-  "appTutorialStepDoneDescription": "Excelente! Agora já sabe como adicionar, organizar e gerir produtos."
+  "appTutorialStepDoneDescription": "Excelente! Agora já sabe como adicionar, organizar e gerir produtos.",
+  "alreadyHaveAccount": "Já tem uma conta?",
+  "confirmPasswordPlaceholder": "Confirmar palavra-passe",
+  "creatingAccount": "A criar conta...",
+  "emailPlaceholder": "Email",
+  "fullNamePlaceholder": "Nome completo",
+  "passwordPlaceholder": "Palavra-passe",
+  "passwordResetMessage": "Verifique o seu email para obter instruções de redefinição.",
+  "passwordResetTitle": "Redefinição de palavra-passe",
+  "registrationFailed": "Falha no registo",
+  "registrationFailedMessage": "Não foi possível criar conta. Tente novamente.",
+  "resetFailed": "Falha ao redefinir",
+  "resetFailedMessage": "Não foi possível enviar o email de redefinição. Tente novamente.",
+  "signInFailed": "Falha ao iniciar sessão",
+  "signInFailedMessage": "Verifique as suas credenciais e tente novamente.",
+  "termsRequiredMessage": "Aceite os termos para criar uma conta.",
+  "termsText": "Aceito os Termos e Condições e a Política de privacidade"
 }

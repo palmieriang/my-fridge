@@ -152,5 +152,21 @@
   "appTutorialStepSwipeNoFocusDescription": "Quand vous avez des produits dans la liste, faites glisser n'importe quelle ligne pour afficher les actions Modifier et Supprimer.",
   "appTutorialStepSwipeEmptyDescription": "Quand vous avez des produits dans la liste, faites glisser une ligne pour afficher les actions Modifier et Supprimer.",
   "appTutorialStepDoneTitle": "C'est prêt",
-  "appTutorialStepDoneDescription": "Bravo ! Vous savez maintenant ajouter, organiser et gérer vos produits."
+  "appTutorialStepDoneDescription": "Bravo ! Vous savez maintenant ajouter, organiser et gérer vos produits.",
+  "alreadyHaveAccount": "Vous avez déjà un compte?",
+  "confirmPasswordPlaceholder": "Confirmer le mot de passe",
+  "creatingAccount": "Création du compte...",
+  "emailPlaceholder": "Email",
+  "fullNamePlaceholder": "Nom complet",
+  "passwordPlaceholder": "Mot de passe",
+  "passwordResetMessage": "Consultez votre e-mail pour les instructions de réinitialisation.",
+  "passwordResetTitle": "Réinitialisation du mot de passe",
+  "registrationFailed": "Échec de l'inscription",
+  "registrationFailedMessage": "Impossible de créer le compte. Veuillez réessayer.",
+  "resetFailed": "Échec de la réinitialisation",
+  "resetFailedMessage": "Impossible d'envoyer l'e-mail de réinitialisation. Veuillez réessayer.",
+  "signInFailed": "Échec de la connexion",
+  "signInFailedMessage": "Vérifiez vos identifiants et réessayez.",
+  "termsRequiredMessage": "Veuillez accepter les conditions pour créer un compte.",
+  "termsText": "J'accepte les Conditions générales et la Politique de confidentialité"
 }
