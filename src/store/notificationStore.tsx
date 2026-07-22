@@ -1,4 +1,4 @@
-import { useState, ReactNode } from "react";
+import { useState, useCallback, useMemo, ReactNode } from "react";
 import { Alert } from "react-native";
 
 import { NotificationStoreContext } from "./contexts";
@@ -23,7 +23,7 @@ export const NotificationProvider = ({
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const loadNotificationSettings = async (userId: string) => {
+  const loadNotificationSettings = useCallback(async (userId: string) => {
     if (!userId) {
       return;
     }
@@ -40,13 +40,13 @@ export const NotificationProvider = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const updateNotificationsEnabled = (enabled: boolean) => {
+  const updateNotificationsEnabled = useCallback((enabled: boolean) => {
     setNotificationsEnabled(enabled);
-  };
+  }, []);
 
-  const toggleNotifications = async (
+  const toggleNotifications = useCallback(async (
     userId: string,
     t: (key: string) => string,
   ) => {
@@ -107,9 +107,9 @@ export const NotificationProvider = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [notificationsEnabled]);
 
-  const showPermissionDialog = (
+  const showPermissionDialog = useCallback((
     onAccept: () => void,
     onDecline: () => void,
   ): void => {
@@ -128,24 +128,24 @@ export const NotificationProvider = ({
         },
       ],
     );
-  };
+  }, []);
 
-  const notificationState: NotificationStateType = {
+  const notificationState: NotificationStateType = useMemo(() => ({
     notificationsEnabled,
     loading,
-  };
+  }), [notificationsEnabled, loading]);
 
-  const notificationContext: NotificationContextMethods = {
+  const notificationContext: NotificationContextMethods = useMemo(() => ({
     loadNotificationSettings,
     setNotificationsEnabled: updateNotificationsEnabled,
     toggleNotifications,
     showNotificationPermissionDialog: showPermissionDialog,
-  };
+  }), [loadNotificationSettings, updateNotificationsEnabled, toggleNotifications, showPermissionDialog]);
 
-  const storeValue: NotificationStoreValue = {
+  const storeValue: NotificationStoreValue = useMemo(() => ({
     notificationState,
     notificationContext,
-  };
+  }), [notificationState, notificationContext]);
 
   return (
     <NotificationStoreContext.Provider value={storeValue}>

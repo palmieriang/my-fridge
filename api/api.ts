@@ -428,7 +428,6 @@ export async function getProductById(
 export function modifyProduct(data: NewProduct, id: string, uid: string) {
   return setDoc(doc(getProductsRef(uid), id), {
     ...data,
-    id,
     createdAt: serverTimestamp(),
   }).catch((error: any) =>
     Alert.alert("Error modifying product", error.message),
