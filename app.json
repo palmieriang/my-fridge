@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "My Fridge - Food Tracker",
+    "name": "My Fridge",
     "description": "Track groceries & expiration dates with barcode scanning. Get notified before food expires. Reduce waste, save money. 100% free, multi-language, cloud sync.",
     "slug": "myfridge",
     "platforms": [
