@@ -252,8 +252,15 @@ const SignIn = ({ navigation }: SignInProps) => {
           </Animated.View>
 
           {isLoading && (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator size="small" color={COLORS.PRIMARY_BLUE} />
+            <View
+              style={styles.loadingContainer}
+              accessibilityLiveRegion="polite"
+            >
+              <ActivityIndicator
+                size="small"
+                color={COLORS.PRIMARY_BLUE}
+                accessibilityElementsHidden={true}
+              />
               <Text style={styles.loadingText}>
                 {isToggled ? t("signingIn") : t("sendingResetEmail")}
               </Text>
@@ -264,13 +271,18 @@ const SignIn = ({ navigation }: SignInProps) => {
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
             {t("newUser")}{" "}
-            <Text onPress={handleCreateAccount} style={styles.footerLink}>
+            <Text
+              onPress={handleCreateAccount}
+              style={styles.footerLink}
+              accessibilityRole="link"
+            >
               {t("createAccount")}
             </Text>
           </Text>
           <Text
             onPress={isToggled ? fadeOut : fadeIn}
             style={[styles.footerLink, styles.resetLink]}
+            accessibilityRole="link"
           >
             {isToggled ? t("resetPassword") : t("backToLogin")}
           </Text>
