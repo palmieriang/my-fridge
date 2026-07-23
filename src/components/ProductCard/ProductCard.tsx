@@ -48,16 +48,11 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
     };
 
     const handleChange = () => {
-      productsContext
-        .handleGetProduct(id)
-        .then((product) => {
-          navigate("form", {
-            id,
-            product,
-            title: t("modifyItem"),
-          });
-        })
-        .catch((error) => console.log("Error: ", error));
+      navigate("form", {
+        id,
+        product: { id, name, date, place, quantity },
+        title: t("modifyItem"),
+      });
     };
 
     const handleFreeze = () => {

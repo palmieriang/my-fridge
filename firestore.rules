@@ -2,7 +2,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function isSignedPositiveNumber(value) {
-      return (value is int || value is float) && value > 0;
+      return (value is int || value is float) && value >= 0;
     }
 
     function isValidProductData(data) {
