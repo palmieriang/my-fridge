@@ -80,7 +80,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
     tutorialStep <= 4;
 
   const navigateToList = () => {
-    navigation.navigate("list" as never);
+    navigation.goBack();
   };
 
   const {
