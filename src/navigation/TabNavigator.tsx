@@ -24,6 +24,8 @@ const TabNavigator = () => {
   } = useTheme();
   const { productsList } = useProducts();
 
+  const expiredCount = countExpiredItems(productsList);
+
   const routeTypeMapping: Record<
     string,
     "fridge" | "freezer" | "settings" | "shoppingList"
@@ -53,7 +55,10 @@ const TabNavigator = () => {
         name={t(FRIDGE)}
         component={FridgeStackScreen}
         options={{
-          tabBarBadge: countExpiredItems(productsList),
+          tabBarBadge: expiredCount || undefined,
+          tabBarAccessibilityLabel: expiredCount
+            ? `${t("fridge")}, ${expiredCount} ${t("expiredItems")}`
+            : t("fridge"),
         }}
       />
       <Tab.Screen name={t(FREEZER)} component={FreezerStackScreen} />

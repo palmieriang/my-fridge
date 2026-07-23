@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 
 import styles from "./styles";
 import { useAuth, useLocale } from "../../store";
@@ -31,9 +31,14 @@ export const UserActions: FC = () => {
   return (
     <View style={styles.container}>
       <Button text={t("logout")} onPress={handleLogOut} />
-      <Text onPress={handleDeleteUser} style={styles.deleteLink}>
-        {t("deleteAccount")}
-      </Text>
+      <TouchableOpacity
+        onPress={handleDeleteUser}
+        accessibilityRole="button"
+        accessibilityLabel={t("deleteAccount")}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+      >
+        <Text style={styles.deleteLink}>{t("deleteAccount")}</Text>
+      </TouchableOpacity>
     </View>
   );
 };

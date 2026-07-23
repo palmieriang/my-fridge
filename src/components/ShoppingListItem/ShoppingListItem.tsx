@@ -48,12 +48,17 @@ const ShoppingListItem = forwardRef<SwipeableMethods, ShoppingListItemProps>(
     const renderRightActions = useCallback(
       () => (
         <View style={styles.deleteAction}>
-          <TouchableOpacity style={styles.deleteButton} onPress={onDelete}>
+          <TouchableOpacity
+            style={styles.deleteButton}
+            onPress={onDelete}
+            accessibilityRole="button"
+            accessibilityLabel={`${t("delete")} ${item.name}`}
+          >
             <Text style={styles.deleteText}>{t("delete")}</Text>
           </TouchableOpacity>
         </View>
       ),
-      [onDelete, t],
+      [onDelete, t, item.name],
     );
 
     return (
@@ -73,9 +78,18 @@ const ShoppingListItem = forwardRef<SwipeableMethods, ShoppingListItemProps>(
             ]}
             onPress={onToggle}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: item.checked }}
+            accessibilityLabel={item.name}
           >
             {item.checked && (
-              <Ionicons name="checkmark" size={13} color="white" />
+              <Ionicons
+                name="checkmark"
+                size={13}
+                color="white"
+                accessibilityElementsHidden={true}
+                importantForAccessibility="no"
+              />
             )}
           </TouchableOpacity>
 
@@ -88,19 +102,26 @@ const ShoppingListItem = forwardRef<SwipeableMethods, ShoppingListItemProps>(
               onSubmitEditing={onSaveEdit}
               autoFocus
               returnKeyType="done"
+              accessibilityLabel={t("modify")}
             />
           ) : (
-            <Text
-              style={[
-                styles.itemText,
-                { color: theme.text },
-                item.checked && styles.itemTextChecked,
-              ]}
+            <TouchableOpacity
               onPress={onStartEdit}
-              numberOfLines={2}
+              accessibilityRole="button"
+              accessibilityLabel={`${t("modify")} ${item.name}`}
+              style={{ flex: 1 }}
             >
-              {item.name}
-            </Text>
+              <Text
+                style={[
+                  styles.itemText,
+                  { color: theme.text },
+                  item.checked && styles.itemTextChecked,
+                ]}
+                numberOfLines={2}
+              >
+                {item.name}
+              </Text>
+            </TouchableOpacity>
           )}
         </View>
       </Swipeable>

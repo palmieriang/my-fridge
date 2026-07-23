@@ -168,5 +168,9 @@
   "signInFailed": "Échec de la connexion",
   "signInFailedMessage": "Vérifiez vos identifiants et réessayez.",
   "termsRequiredMessage": "Veuillez accepter les conditions pour créer un compte.",
-  "termsText": "J'accepte les Conditions générales et la Politique de confidentialité"
+  "termsText": "J'accepte les Conditions générales et la Politique de confidentialité",
+  "loading": "Chargement",
+  "clearSearch": "Effacer la recherche",
+  "expiredItems": "articles expirés",
+  "items": "articles"
 }

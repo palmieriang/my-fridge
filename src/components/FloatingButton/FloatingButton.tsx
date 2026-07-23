@@ -19,10 +19,16 @@ const FloatingButton = forwardRef<
     style={[styles.fab, { backgroundColor: color }]}
     onPress={onPress}
     onLayout={onLayout}
+    accessibilityRole="button"
     accessibilityLabel="Add item"
     testID="add-item-button"
   >
-    <Ionicons name="add" size={30} color="white" />
+    <Ionicons
+      name="add"
+      size={30}
+      color="white"
+      importantForAccessibility="no"
+    />
   </TouchableOpacity>
 ));
 

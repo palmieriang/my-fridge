@@ -28,7 +28,11 @@ const ExpiryStatus = ({
   }
 
   return (
-    <View style={styles.counterContainer}>
+    <View
+      style={styles.counterContainer}
+      accessible={true}
+      accessibilityLabel={`${days} ${daysLabel.toLowerCase()}`}
+    >
       <Text style={[styles.counterText, { color: primaryColor }]}>{days}</Text>
       <Text style={[styles.counterLabel, { color: textColor }]}>
         {daysLabel}

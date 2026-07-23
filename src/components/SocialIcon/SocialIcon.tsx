@@ -30,8 +30,13 @@ const SocialIcon = () => {
         style={(styles as StylesType).googleButton}
         onPress={signInGoogle}
         activeOpacity={0.8}
+        accessibilityRole="button"
+        accessibilityLabel="Sign in with Google"
       >
-        <View style={(styles as StylesType).googleButtonContent}>
+        <View
+          style={(styles as StylesType).googleButtonContent}
+          importantForAccessibility="no-hide-descendants"
+        >
           <View style={(styles as StylesType).googleIcon}>
             <Text
               style={{

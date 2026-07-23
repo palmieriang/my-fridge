@@ -159,7 +159,11 @@ const Profile = () => {
   return (
     <View style={[styles.profile, { backgroundColor: theme.primary }]}>
       <View style={styles.avatarWrapper}>
-        <TouchableOpacity onPress={handleImagePicker}>
+        <TouchableOpacity
+          onPress={handleImagePicker}
+          accessibilityRole="button"
+          accessibilityLabel={profileImg ? "Change profile photo" : "Add profile photo"}
+        >
           <View style={styles.pictureContainer}>
             {upload.isUploading ? (
               <View style={styles.progressContainer}>
@@ -216,13 +220,29 @@ const Profile = () => {
         </Text>
       </View>
       <View style={styles.statsContainer}>
-        <View style={styles.statBadge}>
-          <Text style={styles.statEmoji}>{"\uD83E\uDDCA"}</Text>
-          <Text style={styles.statCount}>{fridgeProducts.length}</Text>
+        <View
+          style={styles.statBadge}
+          accessible={true}
+          accessibilityLabel={`Fridge: ${fridgeProducts.length} items`}
+        >
+          <Text style={styles.statEmoji} accessibilityElementsHidden={true}>
+            {"\uD83E\uDDCA"}
+          </Text>
+          <Text style={styles.statCount} accessibilityElementsHidden={true}>
+            {fridgeProducts.length}
+          </Text>
         </View>
-        <View style={styles.statBadge}>
-          <Text style={styles.statEmoji}>{"\u2744\uFE0F"}</Text>
-          <Text style={styles.statCount}>{freezerProducts.length}</Text>
+        <View
+          style={styles.statBadge}
+          accessible={true}
+          accessibilityLabel={`Freezer: ${freezerProducts.length} items`}
+        >
+          <Text style={styles.statEmoji} accessibilityElementsHidden={true}>
+            {"\u2744\uFE0F"}
+          </Text>
+          <Text style={styles.statCount} accessibilityElementsHidden={true}>
+            {freezerProducts.length}
+          </Text>
         </View>
       </View>
     </View>

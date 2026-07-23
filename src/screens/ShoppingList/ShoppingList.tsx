@@ -82,6 +82,7 @@ const ShoppingList = () => {
               returnKeyType="done"
               onSubmitEditing={handleAdd}
               autoCapitalize="sentences"
+              accessibilityLabel={t("shoppingListPlaceholder")}
             />
             <TouchableOpacity
               style={[
@@ -93,6 +94,9 @@ const ShoppingList = () => {
               ]}
               onPress={handleAdd}
               disabled={!newItemName.trim()}
+              accessibilityRole="button"
+              accessibilityLabel={t("addItem")}
+              accessibilityState={{ disabled: !newItemName.trim() }}
             >
               <Text style={styles.addButtonText}>{t("addItemShort")}</Text>
             </TouchableOpacity>
@@ -104,6 +108,7 @@ const ShoppingList = () => {
               style={styles.list}
               data={orderedItems}
               keyExtractor={(item) => item.id}
+              accessibilityLabel={t("shoppingList")}
               renderItem={({ item, index }) => {
                 const isFirstChecked =
                   item.checked &&
@@ -154,6 +159,7 @@ const ShoppingList = () => {
             <TouchableOpacity
               style={[styles.clearButton, { borderColor: theme.primary }]}
               onPress={shoppingListContext.handleClearChecked}
+              accessibilityRole="button"
             >
               <Text style={[styles.clearButtonText, { color: theme.primary }]}>
                 {t("clearChecked")}

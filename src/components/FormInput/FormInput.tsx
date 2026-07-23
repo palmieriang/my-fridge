@@ -54,10 +54,12 @@ const FormInput = forwardRef<View, FormInputProps>(
           { backgroundColor: theme.foreground },
           showError && styles.inputError,
         ]}
-        accessible
-        accessibilityLabel={placeholderText}
       >
-        <View style={styles.iconStyle}>
+        <View
+          style={styles.iconStyle}
+          importantForAccessibility="no-hide-descendants"
+          accessibilityElementsHidden={true}
+        >
           <Icon
             width={25}
             height={25}
@@ -72,7 +74,6 @@ const FormInput = forwardRef<View, FormInputProps>(
           style={[styles.input, { color: theme.text }]}
           value={labelValue}
           accessibilityLabel={placeholderText}
-          accessibilityHint={placeholderText}
           {...rest}
         />
         {showPasswordToggle && (
@@ -91,7 +92,15 @@ const FormInput = forwardRef<View, FormInputProps>(
             />
           </TouchableOpacity>
         )}
-        {showError && error && <Text style={styles.errorText}>{error}</Text>}
+        {showError && error && (
+          <Text
+            style={styles.errorText}
+            accessibilityRole="alert"
+            accessibilityLiveRegion="assertive"
+          >
+            {error}
+          </Text>
+        )}
       </View>
     );
   },

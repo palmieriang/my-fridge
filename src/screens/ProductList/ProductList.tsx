@@ -314,6 +314,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
       {sortOrder !== "default" && (
         <View
           style={[styles.sortIndicator, { backgroundColor: theme.foreground }]}
+          accessibilityLiveRegion="polite"
         >
           <Text style={[styles.sortIndicatorText, { color: theme.text }]}>
             {sortOrder === "earlier" && t("sortEarlier")}
@@ -336,6 +337,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
             />
           )}
           keyExtractor={(item) => item.id}
+          accessibilityLabel={place === FRIDGE ? t("fridge") : t("freezer")}
         />
       ) : filteredList.length > 0 ? (
         <Text style={[styles.noResultsText, { color: theme.text }]}>

@@ -1,4 +1,4 @@
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
 
 import styles from "./OutOfStockRow.styles";
 
@@ -18,12 +18,16 @@ const OutOfStockRow = ({
   return (
     <View style={styles.row}>
       <Text style={[styles.label, { color }]}>{outOfStockLabel}</Text>
-      <Text
-        style={[styles.shoppingListNudge, { color }]}
+      <TouchableOpacity
         onPress={onAddToShoppingList}
+        accessibilityRole="button"
+        accessibilityLabel={addToShoppingListLabel}
+        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
       >
-        {addToShoppingListLabel}
-      </Text>
+        <Text style={[styles.shoppingListNudge, { color }]}>
+          {addToShoppingListLabel}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 };

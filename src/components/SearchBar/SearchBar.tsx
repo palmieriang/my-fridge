@@ -30,10 +30,18 @@ const SearchBar = ({ value, onChangeText, placeholder }: SearchBarProps) => {
         value={value}
         onChangeText={onChangeText}
         autoCapitalize="none"
+        accessibilityLabel={placeholder || t("search")}
       />
       {value.length > 0 && (
-        <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
-          <Text style={styles.clearButtonText}>✕</Text>
+        <TouchableOpacity
+          style={styles.clearButton}
+          onPress={handleClear}
+          accessibilityRole="button"
+          accessibilityLabel={t("clearSearch")}
+        >
+          <Text style={styles.clearButtonText} accessibilityElementsHidden={true}>
+            ✕
+          </Text>
         </TouchableOpacity>
       )}
     </View>

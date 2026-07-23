@@ -74,11 +74,17 @@ export const BarcodeScanner = ({
       animationType="slide"
       onRequestClose={handleClose}
       onShow={handleModalShow}
+      accessibilityViewIsModal={true}
     >
       <View style={styles.container}>
         {!permission ? (
           <View style={styles.centeredContainer}>
-            <ActivityIndicator size="large" color={theme.primary} />
+            <ActivityIndicator
+              size="large"
+              color={theme.primary}
+              accessibilityLabel={t("loading")}
+              accessibilityLiveRegion="polite"
+            />
           </View>
         ) : !permission.granted ? (
           <View style={styles.centeredContainer}>
@@ -88,12 +94,16 @@ export const BarcodeScanner = ({
             <TouchableOpacity
               style={[styles.button, { backgroundColor: theme.primary }]}
               onPress={handleRequestPermission}
+              accessibilityRole="button"
+              accessibilityLabel={t("grantPermission")}
             >
               <Text style={styles.buttonText}>{t("grantPermission")}</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.cancelButton]}
               onPress={handleClose}
+              accessibilityRole="button"
+              accessibilityLabel={t("cancel")}
             >
               <Text style={styles.cancelButtonText}>{t("cancel")}</Text>
             </TouchableOpacity>
@@ -125,6 +135,8 @@ export const BarcodeScanner = ({
                     { backgroundColor: theme.primary },
                   ]}
                   onPress={handleClose}
+                  accessibilityRole="button"
+                  accessibilityLabel={t("cancel")}
                 >
                   <Text style={styles.buttonText}>{t("cancel")}</Text>
                 </TouchableOpacity>

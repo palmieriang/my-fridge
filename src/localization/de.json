@@ -172,5 +172,9 @@
   "signInFailed": "Anmeldung fehlgeschlagen",
   "signInFailedMessage": "Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
   "termsRequiredMessage": "Bitte akzeptieren Sie die Bedingungen, um ein Konto zu erstellen.",
-  "termsText": "Ich akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung"
+  "termsText": "Ich akzeptiere die Nutzungsbedingungen und die Datenschutzerklärung",
+  "loading": "Laden",
+  "clearSearch": "Suche löschen",
+  "expiredItems": "abgelaufene Artikel",
+  "items": "Artikel"
 }

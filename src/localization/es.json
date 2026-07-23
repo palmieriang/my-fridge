@@ -172,5 +172,9 @@
   "signInFailed": "Error al iniciar sesión",
   "signInFailedMessage": "Comprueba tus credenciales e inténtalo de nuevo.",
   "termsRequiredMessage": "Acepta los términos para crear una cuenta.",
-  "termsText": "Acepto los Términos y Condiciones y la Política de privacidad"
+  "termsText": "Acepto los Términos y Condiciones y la Política de privacidad",
+  "loading": "Cargando",
+  "clearSearch": "Borrar búsqueda",
+  "expiredItems": "artículos vencidos",
+  "items": "artículos"
 }

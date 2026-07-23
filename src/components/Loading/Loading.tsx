@@ -15,9 +15,10 @@ type LoadingProps = {
   color?: ColorValue;
   size?: number | "small" | "large" | undefined;
   style?: StyleProp<ViewStyle>;
+  label?: string;
 };
 
-const Loading = ({ color, size, style }: LoadingProps) => {
+const Loading = ({ color, size, style, label }: LoadingProps) => {
   // Use useContext directly to allow rendering outside ThemeProvider
   const themeContext = useContext(ThemeStoreContext);
   const primaryColor = themeContext?.theme?.primary ?? COLORS.PRIMARY_RED;
@@ -28,6 +29,8 @@ const Loading = ({ color, size, style }: LoadingProps) => {
         size={size}
         color={color || primaryColor}
         testID="activity-indicator"
+        accessibilityLabel={label ?? "Loading"}
+        accessibilityLiveRegion="polite"
       />
     </View>
   );

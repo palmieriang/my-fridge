@@ -300,8 +300,8 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         {!params?.id && (
           <View style={styles.scanButtonContainer}>
             {isLookingUp ? (
-              <View style={styles.scanningContainer}>
-                <ActivityIndicator size="small" color={theme.primary} />
+              <View style={styles.scanningContainer} accessibilityLiveRegion="polite">
+                <ActivityIndicator size="small" color={theme.primary} accessibilityElementsHidden={true} />
                 <Text style={[styles.scanningText, { color: theme.text }]}>
                   {t("lookingUpProduct")}
                 </Text>
@@ -310,8 +310,15 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
               <TouchableOpacity
                 style={[styles.scanButton, { borderColor: theme.primary }]}
                 onPress={handleOpenScanner}
+                accessibilityRole="button"
+                accessibilityLabel={t("scanBarcode")}
               >
-                <BarcodeIcon width={24} height={24} fill={theme.primary} />
+                <BarcodeIcon
+                  width={24}
+                  height={24}
+                  fill={theme.primary}
+                  importantForAccessibility="no"
+                />
                 <Text style={[styles.scanButtonText, { color: theme.primary }]}>
                   {t("scanBarcode")}
                 </Text>

@@ -32,7 +32,11 @@ export const PlacePicker: React.FC<PlacePickerProps> = ({
         error && styles.containerError,
       ]}
     >
-      <View style={styles.iconStyle}>
+      <View
+        style={styles.iconStyle}
+        importantForAccessibility="no-hide-descendants"
+        accessibilityElementsHidden={true}
+      >
         <Icon width={25} height={25} fill={error ? COLORS.ERROR : theme.text} />
       </View>
       <Picker
@@ -41,6 +45,7 @@ export const PlacePicker: React.FC<PlacePickerProps> = ({
         itemStyle={Platform.OS === "ios" ? styles.iosHeight : undefined}
         style={[styles.picker, { color: theme.text }]}
         dropdownIconColor={theme.text}
+        accessibilityLabel={t("location")}
       >
         <Picker.Item label={t("choosePlace")} value="" />
         <Picker.Item label={t(FRIDGE)} value="fridge" />

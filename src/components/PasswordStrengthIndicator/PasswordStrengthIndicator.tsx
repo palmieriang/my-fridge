@@ -33,8 +33,17 @@ const PasswordStrengthIndicator: FC<PasswordStrengthIndicatorProps> = ({
   }
 
   return (
-    <View style={styles.passwordStrengthContainer}>
-      <View style={styles.strengthBarContainer}>
+    <View
+      style={styles.passwordStrengthContainer}
+      accessible={true}
+      accessibilityLiveRegion="polite"
+      accessibilityLabel={passwordStrength.text}
+    >
+      <View
+        style={styles.strengthBarContainer}
+        importantForAccessibility="no-hide-descendants"
+        accessibilityElementsHidden={true}
+      >
         {[1, 2, 3, 4].map((level) => (
           <View
             key={level}

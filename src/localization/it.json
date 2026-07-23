@@ -172,5 +172,9 @@
   "signInFailed": "Accesso non riuscito",
   "signInFailedMessage": "Controlla le credenziali e riprova.",
   "termsRequiredMessage": "Accetta i termini per creare un account.",
-  "termsText": "Accetto i Termini e Condizioni e l'Informativa sulla Privacy"
+  "termsText": "Accetto i Termini e Condizioni e l'Informativa sulla Privacy",
+  "loading": "Caricamento",
+  "clearSearch": "Cancella ricerca",
+  "expiredItems": "articoli scaduti",
+  "items": "articoli"
 }

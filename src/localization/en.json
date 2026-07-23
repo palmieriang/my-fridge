@@ -172,5 +172,9 @@
   "signInFailed": "Sign-in failed",
   "signInFailedMessage": "Please check your credentials and try again.",
   "termsRequiredMessage": "Please accept the terms to create an account.",
-  "termsText": "I accept the Terms and Conditions and Privacy Policy"
+  "termsText": "I accept the Terms and Conditions and Privacy Policy",
+  "loading": "Loading",
+  "clearSearch": "Clear search",
+  "expiredItems": "expired items",
+  "items": "items"
 }

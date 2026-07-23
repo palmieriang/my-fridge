@@ -16,8 +16,14 @@ export const OfflineIndicator = () => {
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: theme.primary }]}>
-      <Text style={styles.icon}>📡</Text>
+    <View
+      style={[styles.container, { backgroundColor: theme.primary }]}
+      accessibilityRole="alert"
+      accessibilityLiveRegion="assertive"
+    >
+      <Text style={styles.icon} accessibilityElementsHidden={true}>
+        📡
+      </Text>
       <Text style={styles.text}>{t("offlineMessage")}</Text>
     </View>
   );

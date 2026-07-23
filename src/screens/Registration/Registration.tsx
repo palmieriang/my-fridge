@@ -10,6 +10,7 @@ import {
   Platform,
   ScrollView,
   Text,
+  TouchableOpacity,
   View,
   ActivityIndicator,
   Alert,
@@ -214,12 +215,17 @@ const Registration = ({ navigation }: RegistrationProps) => {
         />
 
         <View style={styles.termsContainer}>
-          <Text
-            style={[styles.checkbox, acceptTerms && styles.checkboxChecked]}
+          <TouchableOpacity
             onPress={() => setAcceptTerms(!acceptTerms)}
+            accessibilityRole="checkbox"
+            accessibilityState={{ checked: acceptTerms }}
+            accessibilityLabel={t("termsText")}
+            style={[styles.checkbox, acceptTerms && styles.checkboxChecked]}
           >
-            {acceptTerms ? "✓" : ""}
-          </Text>
+            <Text accessibilityElementsHidden={true}>
+              {acceptTerms ? "\u2713" : ""}
+            </Text>
+          </TouchableOpacity>
           <Text style={styles.termsText}>
             {t("termsText")}
           </Text>
@@ -228,8 +234,15 @@ const Registration = ({ navigation }: RegistrationProps) => {
         <Button text={t("createAccount")} onPress={handleRegistration} />
 
         {isLoading && (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator size="small" color={COLORS.PRIMARY_BLUE} />
+          <View
+            style={styles.loadingContainer}
+            accessibilityLiveRegion="polite"
+          >
+            <ActivityIndicator
+              size="small"
+              color={COLORS.PRIMARY_BLUE}
+              accessibilityElementsHidden={true}
+            />
             <Text style={styles.loadingText}>{t("creatingAccount")}</Text>
           </View>
         )}
@@ -237,7 +250,11 @@ const Registration = ({ navigation }: RegistrationProps) => {
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
             {t("alreadyHaveAccount")}{" "}
-            <Text onPress={handleGoToLogin} style={styles.footerLink}>
+            <Text
+              onPress={handleGoToLogin}
+              style={styles.footerLink}
+              accessibilityRole="link"
+            >
               {t("signIn")}
             </Text>
           </Text>

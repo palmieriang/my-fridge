@@ -40,7 +40,11 @@ export const ThemePicker: FC<ThemePickerProps> = ({
         ]}
       >
         {Icon && (
-          <View style={styles.iconStyle}>
+          <View
+            style={styles.iconStyle}
+            importantForAccessibility="no-hide-descendants"
+            accessibilityElementsHidden={true}
+          >
             <Icon width={25} height={25} fill={theme.text} />
           </View>
         )}
@@ -55,6 +59,7 @@ export const ThemePicker: FC<ThemePickerProps> = ({
             },
           ]}
           dropdownIconColor={theme.text}
+          accessibilityLabel={t("changeTheme")}
         >
           {themeData.map((themeOption) => (
             <Picker.Item

@@ -2,7 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 
 import styles from "./styles";
-import { useTheme } from "../../store";
+import { useLocale, useTheme } from "../../store";
 
 type SortOrder = "default" | "earlier" | "later";
 
@@ -13,6 +13,7 @@ interface SortButtonProps {
 
 const SortButton = ({ sortOrder, onSortToggle }: SortButtonProps) => {
   const { theme } = useTheme();
+  const { t } = useLocale();
 
   const getSortIcon = () => {
     switch (sortOrder) {
@@ -27,10 +28,18 @@ const SortButton = ({ sortOrder, onSortToggle }: SortButtonProps) => {
     }
   };
 
+  const sortLabel = sortOrder === "earlier"
+    ? t("sortEarlier")
+    : sortOrder === "later"
+      ? t("sortLater")
+      : t("sortDefault");
+
   return (
     <TouchableOpacity
       style={[styles.sortButton, { backgroundColor: theme.foreground }]}
       onPress={onSortToggle}
+      accessibilityRole="button"
+      accessibilityLabel={sortLabel}
     >
       {getSortIcon()}
     </TouchableOpacity>

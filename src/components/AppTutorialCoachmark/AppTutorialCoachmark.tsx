@@ -139,6 +139,7 @@ const AppTutorialCoachmark: FC<AppTutorialCoachmarkProps> = ({
       pointerEvents="box-none"
       style={styles.modalRoot}
       onLayout={measureRoot}
+      accessibilityViewIsModal={true}
     >
       {highlightRect ? (
         <>
@@ -193,6 +194,7 @@ const AppTutorialCoachmark: FC<AppTutorialCoachmarkProps> = ({
               backgroundColor: theme.foreground,
             },
           ]}
+          accessibilityLiveRegion="polite"
         >
           <Text style={[styles.title, { color: theme.text }]}>{title}</Text>
           <Text style={[styles.description, { color: theme.text }]}>

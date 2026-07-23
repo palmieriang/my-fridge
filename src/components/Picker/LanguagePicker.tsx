@@ -44,7 +44,11 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
         ]}
       >
         {Icon && (
-          <View style={styles.iconStyle}>
+          <View
+            style={styles.iconStyle}
+            importantForAccessibility="no-hide-descendants"
+            accessibilityElementsHidden={true}
+          >
             <Icon width={25} height={25} fill={theme.text} />
           </View>
         )}
@@ -59,6 +63,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
             },
           ]}
           dropdownIconColor={theme.text}
+          accessibilityLabel={t("changeLanguage")}
         >
           {languageData.map((lang) => (
             <Picker.Item

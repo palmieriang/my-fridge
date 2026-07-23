@@ -78,7 +78,23 @@ const ProductCard = forwardRef<SwipeableMethods, ProductCardProps>(
         place={place}
       >
         <View>
-          <TouchableWithoutFeedback onPress={handleChange}>
+          <TouchableWithoutFeedback
+            onPress={handleChange}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={`${name}, ${expired ? t("expired") : `${days} ${t("days")}`}, ${displayDate}`}
+            accessibilityHint={t("modifyItem")}
+            accessibilityActions={[
+              { name: "modify", label: t("modify") },
+              { name: "delete", label: t("delete") },
+              { name: "freeze", label: place === FRIDGE ? t("freeze") : t("fridge") },
+            ]}
+            onAccessibilityAction={(event) => {
+              if (event.nativeEvent.actionName === "modify") handleChange();
+              if (event.nativeEvent.actionName === "delete") handleDelete();
+              if (event.nativeEvent.actionName === "freeze") handleFreeze();
+            }}
+          >
             <View style={[styles.card, { backgroundColor: theme.foreground }]}>
               <View>
                 <Text style={[styles.date, { color: theme.text }]}>

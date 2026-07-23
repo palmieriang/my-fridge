@@ -33,6 +33,8 @@ const SwipeAction = ({
       <RectButton
         style={[styles.actionButton, { backgroundColor: color }]}
         onPress={callback}
+        accessibilityRole="button"
+        accessibilityLabel={text}
       >
         <Text style={styles.actionText}>{text}</Text>
       </RectButton>

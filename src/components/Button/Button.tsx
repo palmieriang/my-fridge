@@ -57,6 +57,8 @@ const Button = forwardRef<TouchableOpacity, ButtonProps>(
         onPress={disabled ? undefined : onPress}
         style={getButtonStyle()}
         disabled={disabled}
+        accessibilityRole="button"
+        accessibilityState={{ disabled }}
       >
         <Text style={getTextStyle()}>{text}</Text>
       </TouchableOpacity>
