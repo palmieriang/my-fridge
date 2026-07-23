@@ -11,7 +11,9 @@ export type RootStackParamList = {
     tutorialMode?: boolean;
   };
   settings: undefined;
+  settingsScreen: undefined;
   shoppingList: undefined;
+  shoppingListScreen: undefined;
   signin: undefined;
   registration: undefined;
 };

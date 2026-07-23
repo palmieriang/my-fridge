@@ -117,7 +117,7 @@ export function SettingsStackScreen() {
       }}
     >
       <Stack.Screen
-        name="settings"
+        name="settingsScreen"
         component={Settings}
         options={{ title: t(SETTINGS) }}
       />
@@ -142,7 +142,7 @@ export function ShoppingListStackScreen() {
       }}
     >
       <Stack.Screen
-        name="shoppingList"
+        name="shoppingListScreen"
         component={ShoppingList}
         options={{ title: t(SHOPPING_LIST) }}
       />
