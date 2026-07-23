@@ -17,6 +17,16 @@ import { countExpiredItems } from "../utils";
 const Tab = createBottomTabNavigator();
 const SHOPPING_LIST_TAB = "shoppingListTab";
 
+const routeIconTypeMapping: Record<
+  string,
+  "fridge" | "freezer" | "settings" | "shoppingList"
+> = {
+  [FRIDGE]: FRIDGE,
+  [FREEZER]: FREEZER,
+  [SHOPPING_LIST]: SHOPPING_LIST,
+  [SETTINGS]: SETTINGS,
+};
+
 const TabNavigator = () => {
   const { t } = useLocale();
   const {
@@ -26,22 +36,12 @@ const TabNavigator = () => {
 
   const expiredCount = countExpiredItems(productsList);
 
-  const routeTypeMapping: Record<
-    string,
-    "fridge" | "freezer" | "settings" | "shoppingList"
-  > = {
-    [t(FRIDGE)]: FRIDGE,
-    [t(FREEZER)]: FREEZER,
-    [t(SHOPPING_LIST_TAB)]: SHOPPING_LIST,
-    [t(SETTINGS)]: SETTINGS,
-  };
-
   return (
     <Tab.Navigator
       screenOptions={({ route }): BottomTabNavigationOptions => ({
         tabBarIcon: ({ focused, color, size }) => (
           <Icon
-            type={routeTypeMapping[route.name]}
+            type={routeIconTypeMapping[route.name]}
             size={size}
             fill={color}
             focused={focused}
@@ -52,21 +52,31 @@ const TabNavigator = () => {
       })}
     >
       <Tab.Screen
-        name={t(FRIDGE)}
+        name={FRIDGE}
         component={FridgeStackScreen}
         options={{
+          tabBarLabel: t(FRIDGE),
           tabBarBadge: expiredCount || undefined,
           tabBarAccessibilityLabel: expiredCount
             ? `${t("fridge")}, ${expiredCount} ${t("expiredItems")}`
             : t("fridge"),
         }}
       />
-      <Tab.Screen name={t(FREEZER)} component={FreezerStackScreen} />
       <Tab.Screen
-        name={t(SHOPPING_LIST_TAB)}
-        component={ShoppingListStackScreen}
+        name={FREEZER}
+        component={FreezerStackScreen}
+        options={{ tabBarLabel: t(FREEZER) }}
       />
-      <Tab.Screen name={t(SETTINGS)} component={SettingsStackScreen} />
+      <Tab.Screen
+        name={SHOPPING_LIST}
+        component={ShoppingListStackScreen}
+        options={{ tabBarLabel: t(SHOPPING_LIST_TAB) }}
+      />
+      <Tab.Screen
+        name={SETTINGS}
+        component={SettingsStackScreen}
+        options={{ tabBarLabel: t(SETTINGS) }}
+      />
     </Tab.Navigator>
   );
 };

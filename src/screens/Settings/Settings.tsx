@@ -12,6 +12,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import { useAppTutorial, useAuth, useLocale, useTheme } from "../../store";
 import type { SupportedLocale } from "../../store/types";
+import { FRIDGE } from "../../constants";
 import Profile from "../Profile/Profile";
 
 const Settings = () => {
@@ -51,7 +52,7 @@ const Settings = () => {
 
   const handleOpenAppTutorial = () => {
     appTutorialContext.requestManualStart();
-    navigation.getParent()?.navigate(t("fridge"));
+    navigation.getParent()?.navigate(FRIDGE);
   };
 
   return (
