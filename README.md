@@ -175,7 +175,7 @@ eas login
 ### 3. Build for Android
 
 ```
-eas build -p android
+eas build -p android --profile production
 ```
 
 ### 4. Submit to Google Play
