@@ -8,7 +8,6 @@ export type RootStackParamList = {
     id?: string;
     product?: Product;
     title: string;
-    tutorialMode?: boolean;
   };
   settings: undefined;
   settingsScreen: undefined;

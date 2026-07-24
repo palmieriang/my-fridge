@@ -90,11 +90,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
   const tutorialStep = appTutorialState.currentStep;
   const isFridgeList = place === FRIDGE;
   const isTutorialVisibleOnList =
-    isFridgeList &&
-    appTutorialState.isActive &&
-    [LIST_ADD_BUTTON_STEP, LIST_SWIPE_STEP, LIST_DONE_STEP].includes(
-      tutorialStep,
-    );
+    isFridgeList && appTutorialState.isActive;
 
   useFocusEffect(
     useCallback(() => {
@@ -134,10 +130,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
     setSortOrder(nextOrder[sortOrder]);
   };
 
-  const navigateToProductForm = (params: {
-    title: string;
-    tutorialMode?: boolean;
-  }) => {
+  const navigateToProductForm = (params: { title: string }) => {
     navigation.navigate("form", params);
   };
 
@@ -216,48 +209,21 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
     ]),
   );
 
-  useEffect(() => {
-    if (!isFridgeList || !appTutorialState.isActive) {
-      return;
-    }
-
-    if (tutorialStep >= 1 && tutorialStep <= 4) {
-      navigateToProductForm({
-        title: t("addItem"),
-        tutorialMode: true,
-      });
-    }
-  }, [appTutorialState.isActive, isFridgeList, t, tutorialStep]);
-
   const handleTutorialSkip = () => {
     appTutorialContext.dismissTutorial();
   };
 
   const handleTutorialNext = () => {
-    if (tutorialStep === LIST_ADD_BUTTON_STEP) {
-      appTutorialContext.goToStep(1);
-      return;
-    }
-
-    if (tutorialStep === LIST_SWIPE_STEP) {
-      appTutorialContext.goToStep(LIST_DONE_STEP);
-      return;
-    }
-
     if (tutorialStep === LIST_DONE_STEP) {
       appTutorialContext.completeTutorial();
+      return;
     }
+
+    appTutorialContext.goToStep(tutorialStep + 1);
   };
 
   const handleTutorialBack = () => {
-    if (tutorialStep === LIST_SWIPE_STEP) {
-      appTutorialContext.goToStep(3);
-      return;
-    }
-
-    if (tutorialStep === LIST_DONE_STEP) {
-      appTutorialContext.goToStep(LIST_SWIPE_STEP);
-    }
+    appTutorialContext.goToStep(tutorialStep - 1);
   };
 
   const tutorialCopy = useMemo(() => {
@@ -266,6 +232,42 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
         title: t("appTutorialStepAddTitle"),
         description: t("appTutorialStepAddDescription"),
         targetRect: addButtonRect,
+        isLastStep: false,
+      };
+    }
+
+    if (tutorialStep === 1) {
+      return {
+        title: t("appTutorialStepNameTitle"),
+        description: t("appTutorialStepNameDescription"),
+        targetRect: null,
+        isLastStep: false,
+      };
+    }
+
+    if (tutorialStep === 2) {
+      return {
+        title: t("appTutorialStepDateTitle"),
+        description: t("appTutorialStepDateDescription"),
+        targetRect: null,
+        isLastStep: false,
+      };
+    }
+
+    if (tutorialStep === 3) {
+      return {
+        title: t("appTutorialStepPlaceTitle"),
+        description: t("appTutorialStepPlaceDescription"),
+        targetRect: null,
+        isLastStep: false,
+      };
+    }
+
+    if (tutorialStep === 4) {
+      return {
+        title: t("appTutorialStepSaveTitle"),
+        description: t("appTutorialStepSaveDescription"),
+        targetRect: null,
         isLastStep: false,
       };
     }
