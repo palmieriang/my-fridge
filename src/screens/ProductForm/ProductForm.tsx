@@ -22,6 +22,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
 import { useProductForm } from "./useProductForm";
+import { convertToLocalizedDisplayFormat } from "../../utils";
 import { lookupProductByBarcode } from "../../../api/openFoodFacts";
 import {
   FormScreenNavigationProp,
@@ -41,7 +42,7 @@ type ProductFormProps = {
 
 const ProductForm = ({ navigation, route }: ProductFormProps) => {
   const { params } = route;
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const { authState } = useAuth();
   const user = authState?.user;
   const { theme } = useTheme();
@@ -174,7 +175,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           {t("expirationDate")}
         </Text>
         <FormInput
-          labelValue={date}
+          labelValue={date ? convertToLocalizedDisplayFormat(date, locale) : ""}
           onChangeText={handleDatePress}
           placeholderText={t("datePickerPlaceholder")}
           Icon={CalendarIcon}
@@ -187,6 +188,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           date={new Date(initPickerDate)}
           isVisible={showDatePicker}
           mode="date"
+          locale={locale}
           onConfirm={handleDatePicked}
           onCancel={handleDatePickerHide}
         />

@@ -24,6 +24,19 @@ export function convertToCustomFormat(isoString) {
   return date.toLocaleDateString("en-GB", options);
 }
 
+export function convertToLocalizedDisplayFormat(dateString, locale) {
+  let date;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+    date = moment(dateString, "YYYY-MM-DD").toDate();
+  } else {
+    date = moment(dateString, "D MMM YYYY").toDate();
+  }
+  const options = { day: "numeric", month: "long", year: "numeric" };
+  // Use en-GB for English to keep day-first order (e.g., "29 July 2026")
+  const bcp47Locale = locale === "en" ? "en-GB" : locale;
+  return date.toLocaleDateString(bcp47Locale, options);
+}
+
 export function convertToFirestoreFormat(dateString) {
   // Convert from custom format (e.g., "25 Aug 2025") to YYYY-MM-DD format
   const date = moment(dateString, "D MMM YYYY");
