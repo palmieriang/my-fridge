@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
-import { FC } from "react";
-import { Text, View } from "react-native";
+import { FC, useRef } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import { generateThemeData } from "./generateThemeData";
@@ -20,6 +20,7 @@ export const ThemePicker: FC<ThemePickerProps> = ({
 }) => {
   const { t } = useLocale();
   const { theme, availableThemes } = useTheme();
+  const pickerRef = useRef<Picker<string>>(null);
 
   const themeData = generateThemeData({
     availableThemes,
@@ -40,15 +41,17 @@ export const ThemePicker: FC<ThemePickerProps> = ({
         ]}
       >
         {Icon && (
-          <View
+          <TouchableOpacity
             style={styles.iconStyle}
+            onPress={() => pickerRef.current?.focus()}
             importantForAccessibility="no-hide-descendants"
             accessibilityElementsHidden={true}
           >
             <Icon width={25} height={25} fill={theme.text} />
-          </View>
+          </TouchableOpacity>
         )}
         <Picker
+          ref={pickerRef}
           selectedValue={selectedTheme}
           onValueChange={onThemeChange}
           style={[

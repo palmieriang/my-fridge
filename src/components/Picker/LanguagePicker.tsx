@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
-import { FC } from "react";
-import { Text, View } from "react-native";
+import { FC, useRef } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
@@ -20,6 +20,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
 }) => {
   const { t } = useLocale();
   const { theme } = useTheme();
+  const pickerRef = useRef<Picker<string>>(null);
 
   const languageData = [
     { label: t("english"), value: "en", key: "english" },
@@ -44,15 +45,17 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
         ]}
       >
         {Icon && (
-          <View
+          <TouchableOpacity
             style={styles.iconStyle}
+            onPress={() => pickerRef.current?.focus()}
             importantForAccessibility="no-hide-descendants"
             accessibilityElementsHidden={true}
           >
             <Icon width={25} height={25} fill={theme.text} />
-          </View>
+          </TouchableOpacity>
         )}
         <Picker
+          ref={pickerRef}
           selectedValue={selectedLanguage}
           onValueChange={onLanguageChange}
           style={[
