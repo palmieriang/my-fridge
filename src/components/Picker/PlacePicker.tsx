@@ -1,6 +1,6 @@
 import { Picker } from "@react-native-picker/picker";
-import { FC } from "react";
-import { Platform, Text, View } from "react-native";
+import { FC, useRef } from "react";
+import { Platform, Text, TouchableOpacity, View } from "react-native";
 import { SvgProps } from "react-native-svg";
 
 import styles from "./styles";
@@ -23,6 +23,7 @@ export const PlacePicker: React.FC<PlacePickerProps> = ({
 }) => {
   const { t } = useLocale();
   const { theme } = useTheme();
+  const pickerRef = useRef<Picker<string>>(null);
 
   return (
     <View
@@ -32,14 +33,16 @@ export const PlacePicker: React.FC<PlacePickerProps> = ({
         error && styles.containerError,
       ]}
     >
-      <View
+      <TouchableOpacity
         style={styles.iconStyle}
+        onPress={() => pickerRef.current?.focus()}
         importantForAccessibility="no-hide-descendants"
         accessibilityElementsHidden={true}
       >
         <Icon width={25} height={25} fill={error ? COLORS.ERROR : theme.text} />
-      </View>
+      </TouchableOpacity>
       <Picker
+        ref={pickerRef}
         selectedValue={selectedPlace}
         onValueChange={onPlaceChange}
         itemStyle={Platform.OS === "ios" ? styles.iosHeight : undefined}

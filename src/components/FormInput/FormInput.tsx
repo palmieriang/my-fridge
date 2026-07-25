@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { FC, forwardRef } from "react";
+import { FC, forwardRef, useRef } from "react";
 import {
   View,
   TextInput,
@@ -24,6 +24,7 @@ type FormInputProps = TextInputProps & {
   isPasswordVisible?: boolean;
   onTogglePasswordVisibility?: () => void;
   containerOnLayout?: ViewProps["onLayout"];
+  onIconPress?: () => void;
 };
 
 const FormInput = forwardRef<View, FormInputProps>(
@@ -38,12 +39,22 @@ const FormInput = forwardRef<View, FormInputProps>(
       isPasswordVisible = false,
       onTogglePasswordVisibility,
       containerOnLayout,
+      onIconPress,
       ...rest
     },
     ref,
   ) => {
     const { theme } = useTheme();
     const { t } = useLocale();
+    const textInputRef = useRef<TextInput>(null);
+
+    const handleIconPress = () => {
+      if (onIconPress) {
+        onIconPress();
+      } else {
+        textInputRef.current?.focus();
+      }
+    };
 
     return (
       <View
@@ -55,8 +66,9 @@ const FormInput = forwardRef<View, FormInputProps>(
           showError && styles.inputError,
         ]}
       >
-        <View
+        <TouchableOpacity
           style={styles.iconStyle}
+          onPress={handleIconPress}
           importantForAccessibility="no-hide-descendants"
           accessibilityElementsHidden={true}
         >
@@ -65,8 +77,9 @@ const FormInput = forwardRef<View, FormInputProps>(
             height={25}
             fill={showError ? COLORS.ERROR : theme.text}
           />
-        </View>
+        </TouchableOpacity>
         <TextInput
+          ref={textInputRef}
           autoCapitalize="none"
           numberOfLines={1}
           placeholder={placeholderText}

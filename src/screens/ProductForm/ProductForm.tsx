@@ -181,6 +181,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           Icon={CalendarIcon}
           editable={!showDatePicker}
           onFocus={handleDatePress}
+          onIconPress={handleDatePress}
           error={errors.date}
           showError={!!errors.date}
         />
