@@ -1,9 +1,5 @@
 import { getApp } from "@react-native-firebase/app";
-import {
-  getAuth,
-  connectAuthEmulator,
-  onAuthStateChanged,
-} from "@react-native-firebase/auth";
+import { getAuth, connectAuthEmulator } from "@react-native-firebase/auth";
 import {
   getFirestore,
   connectFirestoreEmulator,
