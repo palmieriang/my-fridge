@@ -45,7 +45,7 @@ export const ThemePicker: FC<ThemePickerProps> = ({
             style={styles.iconStyle}
             onPress={() => pickerRef.current?.focus()}
             importantForAccessibility="no-hide-descendants"
-            accessibilityElementsHidden={true}
+            accessibilityElementsHidden
           >
             <Icon width={25} height={25} fill={theme.text} />
           </TouchableOpacity>

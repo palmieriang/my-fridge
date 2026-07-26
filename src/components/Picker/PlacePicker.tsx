@@ -37,7 +37,7 @@ export const PlacePicker: React.FC<PlacePickerProps> = ({
         style={styles.iconStyle}
         onPress={() => pickerRef.current?.focus()}
         importantForAccessibility="no-hide-descendants"
-        accessibilityElementsHidden={true}
+        accessibilityElementsHidden
       >
         <Icon width={25} height={25} fill={error ? COLORS.ERROR : theme.text} />
       </TouchableOpacity>

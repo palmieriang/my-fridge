@@ -139,7 +139,7 @@ const AppTutorialCoachmark: FC<AppTutorialCoachmarkProps> = ({
       pointerEvents="box-none"
       style={styles.modalRoot}
       onLayout={measureRoot}
-      accessibilityViewIsModal={true}
+      accessibilityViewIsModal
     >
       {highlightRect ? (
         <>

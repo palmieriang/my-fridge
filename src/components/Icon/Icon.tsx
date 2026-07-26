@@ -18,7 +18,9 @@ const Icon = ({ type, size, fill, focused }: IconProps) => {
     [FRIDGE]: <FridgeIcon height={size} width={size} fill={fill} />,
     [FREEZER]: <FreezerIcon height={size} width={size} fill={fill} />,
     [SETTINGS]: <SettingsIcon height={size} width={size} fill={fill} />,
-    [SHOPPING_LIST]: <ShoppingListIcon height={size} width={size} fill={fill} />,
+    [SHOPPING_LIST]: (
+      <ShoppingListIcon height={size} width={size} fill={fill} />
+    ),
   };
 
   return icons[type];

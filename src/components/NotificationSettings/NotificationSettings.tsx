@@ -31,7 +31,7 @@ const NotificationSettings = () => {
     <View style={styles.settingRow}>
       <View style={styles.settingContent}>
         <Text style={[styles.settingTitle, { color: theme.text }]}>
-          <Text accessibilityElementsHidden={true}>🔔 </Text>
+          <Text accessibilityElementsHidden>🔔 </Text>
           {t("notificationsPushNotifications")}
         </Text>
         <Text style={[styles.settingDescription, { color: theme.text }]}>
@@ -51,7 +51,10 @@ const NotificationSettings = () => {
           ios_backgroundColor={theme.text}
           accessibilityRole="switch"
           accessibilityLabel={t("notificationsPushNotifications")}
-          accessibilityState={{ checked: notificationsEnabled, disabled: loading }}
+          accessibilityState={{
+            checked: notificationsEnabled,
+            disabled: loading,
+          }}
         />
       </View>
     </View>

@@ -89,8 +89,7 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
 
   const tutorialStep = appTutorialState.currentStep;
   const isFridgeList = place === FRIDGE;
-  const isTutorialVisibleOnList =
-    isFridgeList && appTutorialState.isActive;
+  const isTutorialVisibleOnList = isFridgeList && appTutorialState.isActive;
 
   useFocusEffect(
     useCallback(() => {

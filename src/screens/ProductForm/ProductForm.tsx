@@ -22,18 +22,13 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { styles } from "./styles";
 import { useProductForm } from "./useProductForm";
-import { convertToLocalizedDisplayFormat } from "../../utils";
 import { lookupProductByBarcode } from "../../../api/openFoodFacts";
 import {
   FormScreenNavigationProp,
   FormScreenRouteProp,
 } from "../../navigation/navigation.d";
-import {
-  useAuth,
-  useLocale,
-  useProducts,
-  useTheme,
-} from "../../store";
+import { useAuth, useLocale, useProducts, useTheme } from "../../store";
+import { convertToLocalizedDisplayFormat } from "../../utils";
 
 type ProductFormProps = {
   navigation: FormScreenNavigationProp;
@@ -131,8 +126,15 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         {!params?.id && (
           <View style={styles.scanButtonContainer}>
             {isLookingUp ? (
-              <View style={styles.scanningContainer} accessibilityLiveRegion="polite">
-                <ActivityIndicator size="small" color={theme.primary} accessibilityElementsHidden={true} />
+              <View
+                style={styles.scanningContainer}
+                accessibilityLiveRegion="polite"
+              >
+                <ActivityIndicator
+                  size="small"
+                  color={theme.primary}
+                  accessibilityElementsHidden
+                />
                 <Text style={[styles.scanningText, { color: theme.text }]}>
                   {t("lookingUpProduct")}
                 </Text>
@@ -236,7 +238,6 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
         onClose={handleCloseScanner}
         onBarcodeScanned={handleBarcodeScanned}
       />
-
     </KeyboardAvoidingView>
   );
 };

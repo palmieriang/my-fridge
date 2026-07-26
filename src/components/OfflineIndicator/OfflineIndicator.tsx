@@ -21,7 +21,7 @@ export const OfflineIndicator = () => {
       accessibilityRole="alert"
       accessibilityLiveRegion="assertive"
     >
-      <Text style={styles.icon} accessibilityElementsHidden={true}>
+      <Text style={styles.icon} accessibilityElementsHidden>
         📡
       </Text>
       <Text style={styles.text}>{t("offlineMessage")}</Text>

@@ -114,11 +114,9 @@ const Registration = ({ navigation }: RegistrationProps) => {
     }
 
     if (!acceptTerms) {
-      Alert.alert(
-        t("attention"),
-        t("termsRequiredMessage"),
-        [{ text: t("ok") }],
-      );
+      Alert.alert(t("attention"), t("termsRequiredMessage"), [
+        { text: t("ok") },
+      ]);
       return;
     }
 
@@ -222,13 +220,11 @@ const Registration = ({ navigation }: RegistrationProps) => {
             accessibilityLabel={t("termsText")}
             style={[styles.checkbox, acceptTerms && styles.checkboxChecked]}
           >
-            <Text accessibilityElementsHidden={true}>
+            <Text accessibilityElementsHidden>
               {acceptTerms ? "\u2713" : ""}
             </Text>
           </TouchableOpacity>
-          <Text style={styles.termsText}>
-            {t("termsText")}
-          </Text>
+          <Text style={styles.termsText}>{t("termsText")}</Text>
         </View>
 
         <Button text={t("createAccount")} onPress={handleRegistration} />
@@ -241,7 +237,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
             <ActivityIndicator
               size="small"
               color={COLORS.PRIMARY_BLUE}
-              accessibilityElementsHidden={true}
+              accessibilityElementsHidden
             />
             <Text style={styles.loadingText}>{t("creatingAccount")}</Text>
           </View>

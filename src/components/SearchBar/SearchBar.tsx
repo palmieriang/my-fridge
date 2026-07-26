@@ -39,7 +39,7 @@ const SearchBar = ({ value, onChangeText, placeholder }: SearchBarProps) => {
           accessibilityRole="button"
           accessibilityLabel={t("clearSearch")}
         >
-          <Text style={styles.clearButtonText} accessibilityElementsHidden={true}>
+          <Text style={styles.clearButtonText} accessibilityElementsHidden>
             ✕
           </Text>
         </TouchableOpacity>

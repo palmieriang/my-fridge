@@ -74,7 +74,7 @@ export const BarcodeScanner = ({
       animationType="slide"
       onRequestClose={handleClose}
       onShow={handleModalShow}
-      accessibilityViewIsModal={true}
+      accessibilityViewIsModal
     >
       <View style={styles.container}>
         {!permission ? (

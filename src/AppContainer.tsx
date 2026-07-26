@@ -6,7 +6,6 @@ import { memo, useEffect, useRef, useState } from "react";
 import { Animated } from "react-native";
 
 import FridgeDoorTransition from "./animations/FridgeDoorTransition";
-
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import NotificationOnboardingModal from "./components/NotificationOnboardingModal/NotificationOnboardingModal";
 import { COLORS } from "./constants/colors";
@@ -85,9 +84,7 @@ const RootNavigator = () => {
       <NavigationContainer>
         {visibleToken ? <TabNavigator /> : <SignInStackScreen />}
       </NavigationContainer>
-      {showDoor && (
-        <FridgeDoorTransition onDone={() => setShowDoor(false)} />
-      )}
+      {showDoor && <FridgeDoorTransition onDone={() => setShowDoor(false)} />}
     </Animated.View>
   );
 };

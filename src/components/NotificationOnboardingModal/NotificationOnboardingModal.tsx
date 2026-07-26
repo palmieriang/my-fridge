@@ -13,7 +13,7 @@ const NotificationOnboardingModal: FC = () => {
       transparent
       animationType="slide"
       onRequestClose={hideOnboarding}
-      accessibilityViewIsModal={true}
+      accessibilityViewIsModal
     >
       <NotificationOnboarding onComplete={hideOnboarding} />
     </Modal>

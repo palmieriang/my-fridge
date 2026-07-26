@@ -87,7 +87,7 @@ const ShoppingListItem = forwardRef<SwipeableMethods, ShoppingListItemProps>(
                 name="checkmark"
                 size={13}
                 color="white"
-                accessibilityElementsHidden={true}
+                accessibilityElementsHidden
                 importantForAccessibility="no"
               />
             )}

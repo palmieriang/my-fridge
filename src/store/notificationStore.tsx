@@ -46,106 +46,120 @@ export const NotificationProvider = ({
     setNotificationsEnabled(enabled);
   }, []);
 
-  const toggleNotifications = useCallback(async (
-    userId: string,
-    t: (key: string) => string,
-  ) => {
-    if (!userId) {
-      Alert.alert(t("notificationsError"), t("notificationsUserNotFound"));
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      if (!notificationsEnabled) {
-        const result = await requestNotificationPermission(userId);
-
-        if (result.success) {
-          setNotificationsEnabled(true);
-          Alert.alert(
-            t("notificationsEnabled"),
-            t("notificationsEnabledMessage"),
-          );
-        } else {
-          Alert.alert(
-            t("notificationsPermissionRequired"),
-            t("notificationsPermissionRequiredMessage"),
-            [
-              { text: t("cancel"), style: "cancel" },
-              {
-                text: t("notificationsOpenSettings"),
-                onPress: () => {
-                  // You can add logic to open device settings here
-                },
-              },
-            ],
-          );
-        }
-      } else {
-        const result = await disableNotifications(userId);
-
-        if (result.success) {
-          setNotificationsEnabled(false);
-          Alert.alert(
-            t("notificationsDisabled"),
-            t("notificationsDisabledMessage"),
-          );
-        } else {
-          Alert.alert(
-            t("notificationsError"),
-            t("notificationsSomethingWentWrong"),
-          );
-        }
+  const toggleNotifications = useCallback(
+    async (userId: string, t: (key: string) => string) => {
+      if (!userId) {
+        Alert.alert(t("notificationsError"), t("notificationsUserNotFound"));
+        return;
       }
-    } catch (error) {
-      console.error("Error toggling notifications:", error);
+
+      setLoading(true);
+
+      try {
+        if (!notificationsEnabled) {
+          const result = await requestNotificationPermission(userId);
+
+          if (result.success) {
+            setNotificationsEnabled(true);
+            Alert.alert(
+              t("notificationsEnabled"),
+              t("notificationsEnabledMessage"),
+            );
+          } else {
+            Alert.alert(
+              t("notificationsPermissionRequired"),
+              t("notificationsPermissionRequiredMessage"),
+              [
+                { text: t("cancel"), style: "cancel" },
+                {
+                  text: t("notificationsOpenSettings"),
+                  onPress: () => {
+                    // You can add logic to open device settings here
+                  },
+                },
+              ],
+            );
+          }
+        } else {
+          const result = await disableNotifications(userId);
+
+          if (result.success) {
+            setNotificationsEnabled(false);
+            Alert.alert(
+              t("notificationsDisabled"),
+              t("notificationsDisabledMessage"),
+            );
+          } else {
+            Alert.alert(
+              t("notificationsError"),
+              t("notificationsSomethingWentWrong"),
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error toggling notifications:", error);
+        Alert.alert(
+          t("notificationsError"),
+          t("notificationsSomethingWentWrong"),
+        );
+      } finally {
+        setLoading(false);
+      }
+    },
+    [notificationsEnabled],
+  );
+
+  const showPermissionDialog = useCallback(
+    (onAccept: () => void, onDecline: () => void): void => {
       Alert.alert(
-        t("notificationsError"),
-        t("notificationsSomethingWentWrong"),
+        "🔔 Enable Notifications",
+        "Get notified when your food is about to expire so you never waste anything!",
+        [
+          {
+            text: "Not Now",
+            style: "cancel",
+            onPress: onDecline,
+          },
+          {
+            text: "Enable",
+            onPress: onAccept,
+          },
+        ],
       );
-    } finally {
-      setLoading(false);
-    }
-  }, [notificationsEnabled]);
+    },
+    [],
+  );
 
-  const showPermissionDialog = useCallback((
-    onAccept: () => void,
-    onDecline: () => void,
-  ): void => {
-    Alert.alert(
-      "🔔 Enable Notifications",
-      "Get notified when your food is about to expire so you never waste anything!",
-      [
-        {
-          text: "Not Now",
-          style: "cancel",
-          onPress: onDecline,
-        },
-        {
-          text: "Enable",
-          onPress: onAccept,
-        },
-      ],
-    );
-  }, []);
+  const notificationState: NotificationStateType = useMemo(
+    () => ({
+      notificationsEnabled,
+      loading,
+    }),
+    [notificationsEnabled, loading],
+  );
 
-  const notificationState: NotificationStateType = useMemo(() => ({
-    notificationsEnabled,
-    loading,
-  }), [notificationsEnabled, loading]);
+  const notificationContext: NotificationContextMethods = useMemo(
+    () => ({
+      loadNotificationSettings,
+      setNotificationsEnabled: updateNotificationsEnabled,
+      toggleNotifications,
+      showNotificationPermissionDialog: showPermissionDialog,
+    }),
+    [
+      loadNotificationSettings,
+      updateNotificationsEnabled,
+      toggleNotifications,
+      showPermissionDialog,
+    ],
+  );
 
-  const notificationContext: NotificationContextMethods = useMemo(() => ({
-    loadNotificationSettings,
-    setNotificationsEnabled: updateNotificationsEnabled,
-    toggleNotifications,
-    showNotificationPermissionDialog: showPermissionDialog,
-  }), [loadNotificationSettings, updateNotificationsEnabled, toggleNotifications, showPermissionDialog]);
-
-  const storeValue: NotificationStoreValue = useMemo(() => ({
-    notificationState,
-    notificationContext,
-  }), [notificationState, notificationContext]);
+  const storeValue: NotificationStoreValue = useMemo(
+    () => ({
+      notificationState,
+      notificationContext,
+    }),
+    [notificationState, notificationContext],
+  );
 
   return (
     <NotificationStoreContext.Provider value={storeValue}>

@@ -162,7 +162,9 @@ const Profile = () => {
         <TouchableOpacity
           onPress={handleImagePicker}
           accessibilityRole="button"
-          accessibilityLabel={profileImg ? "Change profile photo" : "Add profile photo"}
+          accessibilityLabel={
+            profileImg ? "Change profile photo" : "Add profile photo"
+          }
         >
           <View style={styles.pictureContainer}>
             {upload.isUploading ? (
@@ -212,35 +214,41 @@ const Profile = () => {
         )}
       </View>
       <View style={styles.infoContainer}>
-        <Text style={[styles.nameText, { color: theme.text }]} numberOfLines={1}>
+        <Text
+          style={[styles.nameText, { color: theme.text }]}
+          numberOfLines={1}
+        >
           {userData.fullName}
         </Text>
-        <Text style={[styles.emailText, { color: theme.text }]} numberOfLines={1}>
+        <Text
+          style={[styles.emailText, { color: theme.text }]}
+          numberOfLines={1}
+        >
           {userData.email}
         </Text>
       </View>
       <View style={styles.statsContainer}>
         <View
           style={styles.statBadge}
-          accessible={true}
+          accessible
           accessibilityLabel={`Fridge: ${fridgeProducts.length} items`}
         >
-          <Text style={styles.statEmoji} accessibilityElementsHidden={true}>
+          <Text style={styles.statEmoji} accessibilityElementsHidden>
             {"\uD83E\uDDCA"}
           </Text>
-          <Text style={styles.statCount} accessibilityElementsHidden={true}>
+          <Text style={styles.statCount} accessibilityElementsHidden>
             {fridgeProducts.length}
           </Text>
         </View>
         <View
           style={styles.statBadge}
-          accessible={true}
+          accessible
           accessibilityLabel={`Freezer: ${freezerProducts.length} items`}
         >
-          <Text style={styles.statEmoji} accessibilityElementsHidden={true}>
+          <Text style={styles.statEmoji} accessibilityElementsHidden>
             {"\u2744\uFE0F"}
           </Text>
-          <Text style={styles.statCount} accessibilityElementsHidden={true}>
+          <Text style={styles.statCount} accessibilityElementsHidden>
             {freezerProducts.length}
           </Text>
         </View>

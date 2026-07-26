@@ -28,11 +28,12 @@ const SortButton = ({ sortOrder, onSortToggle }: SortButtonProps) => {
     }
   };
 
-  const sortLabel = sortOrder === "earlier"
-    ? t("sortEarlier")
-    : sortOrder === "later"
-      ? t("sortLater")
-      : t("sortDefault");
+  const sortLabel =
+    sortOrder === "earlier"
+      ? t("sortEarlier")
+      : sortOrder === "later"
+        ? t("sortLater")
+        : t("sortDefault");
 
   return (
     <TouchableOpacity

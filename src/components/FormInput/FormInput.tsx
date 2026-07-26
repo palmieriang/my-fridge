@@ -70,7 +70,7 @@ const FormInput = forwardRef<View, FormInputProps>(
           style={styles.iconStyle}
           onPress={handleIconPress}
           importantForAccessibility="no-hide-descendants"
-          accessibilityElementsHidden={true}
+          accessibilityElementsHidden
         >
           <Icon
             width={25}

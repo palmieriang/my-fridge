@@ -10,9 +10,9 @@ import { useEffect, useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import styles from "./styles";
+import { FRIDGE } from "../../constants";
 import { useAppTutorial, useAuth, useLocale, useTheme } from "../../store";
 import type { SupportedLocale } from "../../store/types";
-import { FRIDGE } from "../../constants";
 import Profile from "../Profile/Profile";
 
 const Settings = () => {

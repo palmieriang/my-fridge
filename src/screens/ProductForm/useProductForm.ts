@@ -124,7 +124,13 @@ export const useProductForm = ({
     setIsSubmitting(true);
 
     try {
-      const validation = validateProductWithErrors({ name, date, place, quantity, t });
+      const validation = validateProductWithErrors({
+        name,
+        date,
+        place,
+        quantity,
+        t,
+      });
 
       if (!validation.isValid) {
         setErrors(validation.errors);
@@ -152,7 +158,17 @@ export const useProductForm = ({
     } finally {
       setIsSubmitting(false);
     }
-  }, [name, date, place, quantity, t, userID, existingId, onSuccess, productsContext]);
+  }, [
+    name,
+    date,
+    place,
+    quantity,
+    t,
+    userID,
+    existingId,
+    onSuccess,
+    productsContext,
+  ]);
 
   const handleDelete = useCallback(async () => {
     if (!existingId) {
