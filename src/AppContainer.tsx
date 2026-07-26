@@ -5,6 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import { memo, useEffect, useRef, useState } from "react";
 import { Animated } from "react-native";
 
+import FridgeDoorTransition from "./animations/FridgeDoorTransition";
+
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import NotificationOnboardingModal from "./components/NotificationOnboardingModal/NotificationOnboardingModal";
 import { COLORS } from "./constants/colors";
@@ -32,27 +34,41 @@ const RootNavigator = () => {
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const [visibleToken, setVisibleToken] = useState(userToken);
+  const [showDoor, setShowDoor] = useState(false);
   const isFirstRender = useRef(true);
+  const prevToken = useRef(userToken);
 
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
+      prevToken.current = userToken;
       setVisibleToken(userToken);
       return;
     }
 
-    Animated.timing(fadeAnim, {
-      toValue: 0,
-      duration: FADE_DURATION,
-      useNativeDriver: true,
-    }).start(() => {
+    const wasLoggedOut = prevToken.current == null;
+    const isNowLoggedIn = userToken != null;
+    prevToken.current = userToken;
+
+    if (wasLoggedOut && isNowLoggedIn) {
+      // Login: switch the navigator immediately, then open the fridge door on top
       setVisibleToken(userToken);
+      setShowDoor(true);
+    } else {
+      // Logout or token refresh: simple fade
       Animated.timing(fadeAnim, {
-        toValue: 1,
+        toValue: 0,
         duration: FADE_DURATION,
         useNativeDriver: true,
-      }).start();
-    });
+      }).start(() => {
+        setVisibleToken(userToken);
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: FADE_DURATION,
+          useNativeDriver: true,
+        }).start();
+      });
+    }
   }, [userToken]);
 
   if (isLoading) {
@@ -69,6 +85,9 @@ const RootNavigator = () => {
       <NavigationContainer>
         {visibleToken ? <TabNavigator /> : <SignInStackScreen />}
       </NavigationContainer>
+      {showDoor && (
+        <FridgeDoorTransition onDone={() => setShowDoor(false)} />
+      )}
     </Animated.View>
   );
 };

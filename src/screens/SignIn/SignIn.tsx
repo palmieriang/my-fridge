@@ -1,11 +1,12 @@
 import Button from "@components/Button/Button";
 import FormInput from "@components/FormInput/FormInput";
 import SocialIcon from "@components/SocialIcon/SocialIcon";
+import FridgeIcon from "@components/svg/FridgeIcon";
 import PadlockIcon from "@components/svg/PadlockIcon";
 import UsernameIcon from "@components/svg/UsernameIcon";
 import useToggle from "@components/utils/useToggle";
 import { useFocusEffect } from "@react-navigation/native";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Animated,
   KeyboardAvoidingView,
@@ -16,10 +17,17 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
+import Reanimated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+  withSpring,
+  withDelay,
+  Easing,
+} from "react-native-reanimated";
 import { COLORS } from "src/constants/colors";
 
 import styles from "./styles";
-import LottieAnimation from "../../animations/LottieAnimation";
 import { useAuth, useLocale } from "../../store";
 import { validateEmail, validatePassword } from "../../utils/validation";
 
@@ -32,8 +40,6 @@ interface SignInProps {
 const SignIn = ({ navigation }: SignInProps) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [playAnimation, setPlayAnimation] = useState(false);
-  const [resetAnimation, setResetAnimation] = useState(false);
   const [isToggled, toggle] = useToggle(true);
   const [isLoading, setIsLoading] = useState(false);
   const [emailError, setEmailError] = useState("");
@@ -45,7 +51,35 @@ const SignIn = ({ navigation }: SignInProps) => {
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const buttonScaleAnim = useRef(new Animated.Value(1)).current;
-  const isSigningIn = useRef(false);
+
+  // Header entrance animation
+  const iconScale = useSharedValue(0.6);
+  const iconOpacity = useSharedValue(0);
+  const titleOpacity = useSharedValue(0);
+  const titleTranslateY = useSharedValue(8);
+
+  useEffect(() => {
+    iconScale.value = withSpring(1, { damping: 14, stiffness: 120 });
+    iconOpacity.value = withTiming(1, {
+      duration: 500,
+      easing: Easing.out(Easing.quad),
+    });
+    titleOpacity.value = withDelay(180, withTiming(1, { duration: 400 }));
+    titleTranslateY.value = withDelay(
+      180,
+      withTiming(0, { duration: 400, easing: Easing.out(Easing.quad) }),
+    );
+  }, []);
+
+  const iconAnimStyle = useAnimatedStyle(() => ({
+    opacity: iconOpacity.value,
+    transform: [{ scale: iconScale.value }],
+  }));
+
+  const titleAnimStyle = useAnimatedStyle(() => ({
+    opacity: titleOpacity.value,
+    transform: [{ translateY: titleTranslateY.value }],
+  }));
 
   useFocusEffect(
     useCallback(() => {
@@ -111,22 +145,9 @@ const SignIn = ({ navigation }: SignInProps) => {
     setIsLoading(true);
     animateButtonPress();
 
-    setTimeout(() => {
-      setPlayAnimation(true);
-    }, 200);
-  };
-
-  const signInAfterAnimation = async () => {
-    // Prevent multiple sign-in calls from animation callbacks
-    if (isSigningIn.current) {
-      return;
-    }
-    isSigningIn.current = true;
-
     try {
       await authContext.signIn({ email, password });
-      setPlayAnimation(false);
-      setResetAnimation(true);
+      // On success the auth state change in AppContainer triggers the fridge door animation
     } catch (error: any) {
       Alert.alert(
         t("signInFailed"),
@@ -135,9 +156,6 @@ const SignIn = ({ navigation }: SignInProps) => {
       );
     } finally {
       setIsLoading(false);
-      setPlayAnimation(false);
-      setResetAnimation(true);
-      isSigningIn.current = false;
     }
   };
 
@@ -149,17 +167,13 @@ const SignIn = ({ navigation }: SignInProps) => {
     setIsLoading(true);
     try {
       await authContext.resetPassword(email);
-      Alert.alert(
-        t("passwordResetTitle"),
-        t("passwordResetMessage"),
-        [{ text: t("ok"), onPress: fadeIn }],
-      );
+      Alert.alert(t("passwordResetTitle"), t("passwordResetMessage"), [
+        { text: t("ok"), onPress: fadeIn },
+      ]);
     } catch (error: any) {
-      Alert.alert(
-        t("resetFailed"),
-        error?.message || t("resetFailedMessage"),
-        [{ text: t("ok") }],
-      );
+      Alert.alert(t("resetFailed"), error?.message || t("resetFailedMessage"), [
+        { text: t("ok") },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -191,15 +205,13 @@ const SignIn = ({ navigation }: SignInProps) => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <View style={styles.animationContainer}>
-          <LottieAnimation
-            animationEnd={signInAfterAnimation}
-            autoplay={false}
-            loop={false}
-            name="door"
-            play={playAnimation}
-            reset={resetAnimation}
-          />
+        <View style={styles.headerContainer}>
+          <Reanimated.View style={[styles.iconBadge, iconAnimStyle]}>
+            <FridgeIcon width={88} height={88} fill={COLORS.PRIMARY_BLUE} />
+          </Reanimated.View>
+          <Reanimated.Text style={[styles.appTitle, titleAnimStyle]}>
+            My Fridge
+          </Reanimated.Text>
         </View>
 
         <View style={styles.formContainer}>
@@ -259,7 +271,7 @@ const SignIn = ({ navigation }: SignInProps) => {
               <ActivityIndicator
                 size="small"
                 color={COLORS.PRIMARY_BLUE}
-                accessibilityElementsHidden={true}
+                accessibilityElementsHidden
               />
               <Text style={styles.loadingText}>
                 {isToggled ? t("signingIn") : t("sendingResetEmail")}

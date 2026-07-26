@@ -162,7 +162,7 @@ export function SignInStackScreen() {
       <Stack.Screen
         name="signin"
         component={SignIn}
-        options={{ title: t("signIn") }}
+        options={{ title: t("signIn"), headerShown: false }}
       />
       <Stack.Screen
         name="registration"
