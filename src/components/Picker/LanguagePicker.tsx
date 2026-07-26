@@ -20,7 +20,7 @@ export const LanguagePicker: FC<LanguagePickerProps> = ({
 }) => {
   const { t } = useLocale();
   const { theme } = useTheme();
-  const pickerRef = useRef<Picker<string>>(null);
+  const pickerRef = useRef<Picker<SupportedLocale>>(null);
 
   const languageData = [
     { label: t("english"), value: "en", key: "english" },
