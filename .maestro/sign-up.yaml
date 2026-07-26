@@ -1,0 +1,47 @@
+appId: com.myfridge.App
+---
+# E2E Test: Sign up with a new account
+# This test creates a brand-new account and verifies the app navigates to the fridge
+
+# Step 1: Launch the app (unauthenticated state)
+- launchApp:
+    clearState: true
+
+# Step 2: Wait for the sign-in screen and navigate to registration
+- assertVisible: "My Fridge"
+- tapOn: "Create an account"
+
+# Step 3: Verify the registration screen is shown
+- assertVisible: "Full Name"
+- assertVisible: "Email"
+
+# Step 4: Fill in the registration form
+- tapOn: "Full Name"
+- clearText
+- inputText: "Test User"
+
+- tapOn: "Email"
+- clearText
+# Use a timestamp-like suffix to avoid "email already in use" errors on reruns
+- inputText: "testuser+e2e@example.com"
+
+- tapOn: "Password"
+- clearText
+- inputText: "TestPass1"
+
+- tapOn: "Confirm password"
+- clearText
+- inputText: "TestPass1"
+
+# Step 5: Accept the terms and conditions
+- tapOn: "I accept the Terms and Conditions and Privacy Policy"
+
+# Step 6: Submit the form
+- tapOn: "Create an account"
+
+# Step 7: Confirm the app navigates to the main fridge screen
+- extendedWaitUntil:
+    visible: "FRIDGE"
+    timeout: 20000
+
+- assertVisible: "FRIDGE"

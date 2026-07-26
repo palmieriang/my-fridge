@@ -1,0 +1,32 @@
+appId: com.myfridge.App
+---
+# E2E Test: Sign in with email and password
+# Prerequisites: A valid account must exist in the backend / emulator
+
+# Step 1: Launch the app (unauthenticated state)
+- launchApp:
+    clearState: true
+
+# Step 2: Wait for the sign-in screen
+- assertVisible: "My Fridge"
+- assertVisible: "Email"
+
+# Step 3: Enter email
+- tapOn: "Email"
+- clearText
+- inputText: "test@example.com"
+
+# Step 4: Enter password
+- tapOn: "Password"
+- clearText
+- inputText: "TestPass1"
+
+# Step 5: Tap the sign-in button
+- tapOn: "Sign in"
+
+# Step 6: Wait for the fridge screen to appear
+- extendedWaitUntil:
+    visible: "FRIDGE"
+    timeout: 15000
+
+- assertVisible: "FRIDGE"

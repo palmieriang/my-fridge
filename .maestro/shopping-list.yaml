@@ -1,0 +1,54 @@
+appId: com.myfridge.App
+---
+# E2E Test: Shopping list – add, check off, and clear items
+# Prerequisites: User must be logged in
+
+# Step 1: Launch the app
+- launchApp
+
+# Step 2: Wait for main screen and navigate to the shopping list tab
+- extendedWaitUntil:
+    visible: "FRIDGE"
+    timeout: 15000
+
+- tapOn: "List"
+
+# Step 3: Verify the shopping list screen is shown
+- assertVisible: "Add an item..."
+
+# Step 4: Add the first item
+- tapOn: "Add an item..."
+- inputText: "Maestro Milk"
+- tapOn:
+    accessibilityLabel: "Add item"
+
+- assertVisible: "Maestro Milk"
+
+# Step 5: Add a second item
+- tapOn: "Add an item..."
+- inputText: "Maestro Eggs"
+- tapOn:
+    accessibilityLabel: "Add item"
+
+- assertVisible: "Maestro Eggs"
+
+# Step 6: Check off the first item
+- tapOn: "Maestro Milk"
+
+# Step 7: Verify the "Clear checked" button appears
+- assertVisible: "Clear checked"
+
+# Step 8: Clear all checked items
+- tapOn: "Clear checked"
+
+# Step 9: Verify "Maestro Milk" is gone and "Maestro Eggs" is still present
+- assertNotVisible: "Maestro Milk"
+- assertVisible: "Maestro Eggs"
+
+# Step 10: Swipe left on the remaining item to delete it
+- swipe:
+    label: "Maestro Eggs"
+    direction: LEFT
+
+# Step 11: Verify the empty state message is shown
+- assertVisible: "Your shopping list is empty."
