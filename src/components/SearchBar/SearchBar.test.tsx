@@ -32,20 +32,20 @@ describe("SearchBar", () => {
   it("shows clear button when value is not empty", () => {
     render(<SearchBar value="milk" onChangeText={() => {}} />);
 
-    expect(screen.getByText("✕")).toBeTruthy();
+    expect(screen.getByLabelText("clearSearch")).toBeTruthy();
   });
 
   it("does not show clear button when value is empty", () => {
     render(<SearchBar value="" onChangeText={() => {}} />);
 
-    expect(screen.queryByText("✕")).toBeNull();
+    expect(screen.queryByLabelText("clearSearch")).toBeNull();
   });
 
   it("clears input when clear button is pressed", () => {
     const onChangeTextMock = jest.fn();
     render(<SearchBar value="milk" onChangeText={onChangeTextMock} />);
 
-    fireEvent.press(screen.getByText("✕"));
+    fireEvent.press(screen.getByLabelText("clearSearch"));
 
     expect(onChangeTextMock).toHaveBeenCalledWith("");
   });

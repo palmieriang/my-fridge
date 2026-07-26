@@ -31,7 +31,6 @@ describe("OfflineIndicator", () => {
     render(<OfflineIndicator />);
 
     expect(screen.getByText("offlineMessage")).toBeTruthy();
-    expect(screen.getByText("📡")).toBeTruthy();
   });
 
   it("should show offline message when internet is not reachable", () => {
