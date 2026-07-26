@@ -1,5 +1,6 @@
 import { renderHook, act } from "@testing-library/react-native";
 import { Dimensions } from "react-native";
+
 import { useWindowDimensions } from "./useWindowDimensions";
 
 describe("useWindowDimensions", () => {
@@ -20,7 +21,9 @@ describe("useWindowDimensions", () => {
       const listeners = (Dimensions as any)._eventHandlers?.change;
       if (listeners) {
         listeners.forEach((listener: any) => {
-          listener({ window: { width: 800, height: 1200, scale: 2, fontScale: 1 } });
+          listener({
+            window: { width: 800, height: 1200, scale: 2, fontScale: 1 },
+          });
         });
       }
     });

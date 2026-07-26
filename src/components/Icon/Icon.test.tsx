@@ -1,6 +1,6 @@
 import Icon from "./Icon";
-import { render } from "../../test/test-utils";
 import { FRIDGE, FREEZER, SETTINGS, SHOPPING_LIST } from "../../constants";
+import { render } from "../../test/test-utils";
 
 describe("Icon", () => {
   it("renders a fridge icon when type is FRIDGE", () => {
@@ -33,7 +33,7 @@ describe("Icon", () => {
 
   it("uses the provided size when focused is true", () => {
     const { toJSON } = render(
-      <Icon type={FRIDGE} size={30} fill="#f00" focused={true} />,
+      <Icon type={FRIDGE} size={30} fill="#f00" focused />,
     );
     expect(toJSON()).toBeTruthy();
   });

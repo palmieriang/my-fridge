@@ -17,7 +17,12 @@ describe("measureViewInWindow", () => {
 
     measureViewInWindow(ref as any, onMeasure);
 
-    expect(onMeasure).toHaveBeenCalledWith({ x: 10, y: 20, width: 100, height: 50 });
+    expect(onMeasure).toHaveBeenCalledWith({
+      x: 10,
+      y: 20,
+      width: 100,
+      height: 50,
+    });
   });
 
   it("does not call onMeasure when width is zero", () => {

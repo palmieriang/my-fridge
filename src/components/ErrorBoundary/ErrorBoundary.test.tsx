@@ -1,6 +1,7 @@
-import { render, screen, fireEvent } from "../../test/test-utils";
-import ErrorBoundary from "./ErrorBoundary";
 import { Text } from "react-native";
+
+import ErrorBoundary from "./ErrorBoundary";
+import { render, screen, fireEvent } from "../../test/test-utils";
 
 // Suppress console.error noise from intentional error throws
 beforeEach(() => {
