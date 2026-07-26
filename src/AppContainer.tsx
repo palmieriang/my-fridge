@@ -2,8 +2,10 @@ import "react-native-gesture-handler";
 import Loading from "@components/Loading/Loading";
 import { NavigationContainer } from "@react-navigation/native";
 import { StatusBar } from "expo-status-bar";
-import { memo } from "react";
+import { memo, useEffect, useRef, useState } from "react";
+import { Animated } from "react-native";
 
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import NotificationOnboardingModal from "./components/NotificationOnboardingModal/NotificationOnboardingModal";
 import { COLORS } from "./constants/colors";
 import TabNavigator from "./navigation/TabNavigator";
@@ -21,49 +23,78 @@ import {
   useTheme,
 } from "./store";
 
+const FADE_DURATION = 200;
+
 const RootNavigator = () => {
   const { authState } = useAuth();
   const { theme } = useTheme();
   const { userToken, isLoading } = authState;
+
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const [visibleToken, setVisibleToken] = useState(userToken);
+  const isFirstRender = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      setVisibleToken(userToken);
+      return;
+    }
+
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: FADE_DURATION,
+      useNativeDriver: true,
+    }).start(() => {
+      setVisibleToken(userToken);
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: FADE_DURATION,
+        useNativeDriver: true,
+      }).start();
+    });
+  }, [userToken]);
 
   if (isLoading) {
     return <Loading />;
   }
 
   return (
-    <>
+    <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
       <StatusBar
         style="auto"
-        backgroundColor={userToken ? theme.primary : COLORS.WHITE}
+        backgroundColor={visibleToken ? theme.primary : COLORS.WHITE}
         translucent={false}
       />
       <NavigationContainer>
-        {userToken ? <TabNavigator /> : <SignInStackScreen />}
+        {visibleToken ? <TabNavigator /> : <SignInStackScreen />}
       </NavigationContainer>
-    </>
+    </Animated.View>
   );
 };
 
 const AppContainer = () => {
   return (
-    <NetworkProvider>
-      <AuthProvider>
-        <LocaleProvider>
-          <ThemeProvider>
-            <ProductsProvider>
-              <ShoppingListProvider>
-                <NotificationProvider>
-                  <AppTutorialProvider>
-                    <RootNavigator />
-                    <NotificationOnboardingModal />
-                  </AppTutorialProvider>
-                </NotificationProvider>
-              </ShoppingListProvider>
-            </ProductsProvider>
-          </ThemeProvider>
-        </LocaleProvider>
-      </AuthProvider>
-    </NetworkProvider>
+    <ErrorBoundary>
+      <NetworkProvider>
+        <AuthProvider>
+          <LocaleProvider>
+            <ThemeProvider>
+              <ProductsProvider>
+                <ShoppingListProvider>
+                  <NotificationProvider>
+                    <AppTutorialProvider>
+                      <RootNavigator />
+                      <NotificationOnboardingModal />
+                    </AppTutorialProvider>
+                  </NotificationProvider>
+                </ShoppingListProvider>
+              </ProductsProvider>
+            </ThemeProvider>
+          </LocaleProvider>
+        </AuthProvider>
+      </NetworkProvider>
+    </ErrorBoundary>
   );
 };
 
