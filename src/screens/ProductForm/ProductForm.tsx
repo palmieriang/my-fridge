@@ -122,7 +122,11 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={0}
     >
-      <ScrollView style={styles.container} keyboardShouldPersistTaps="handled">
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={styles.contentContainer}
+        keyboardShouldPersistTaps="handled"
+      >
         {!params?.id && (
           <View style={styles.scanButtonContainer}>
             {isLookingUp ? (

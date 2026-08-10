@@ -1,5 +1,7 @@
 import { StyleSheet } from "react-native";
 
+import { responsive } from "../../utils/responsive";
+
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -7,6 +9,9 @@ export default StyleSheet.create({
   },
   contentContainer: {
     paddingBottom: 28,
+    width: "100%",
+    maxWidth: responsive.contentMaxWidth,
+    alignSelf: "center",
   },
   tutorialRow: {
     paddingVertical: 16,

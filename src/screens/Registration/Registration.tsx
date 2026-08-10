@@ -154,7 +154,7 @@ const Registration = ({ navigation }: RegistrationProps) => {
     >
       <ScrollView
         style={styles.container}
-        contentContainerStyle={{ paddingBottom: 24 }} // move to style?
+        contentContainerStyle={styles.contentContainer}
         keyboardShouldPersistTaps="handled"
       >
         <FormInput

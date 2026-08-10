@@ -10,6 +10,9 @@ export default StyleSheet.create({
   },
   inner: {
     flex: 1,
+    width: "100%",
+    maxWidth: responsive.contentMaxWidth,
+    alignSelf: "center",
   },
   inputRow: {
     flexDirection: "row",

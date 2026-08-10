@@ -2,11 +2,18 @@ import { StyleSheet } from "react-native";
 import { COLORS } from "src/constants/colors";
 
 import { Typography } from "../../typography/responsive";
+import { responsive } from "../../utils/responsive";
 
 export default StyleSheet.create({
   container: {
     flex: 1,
     width: "100%",
+  },
+  contentContainer: {
+    paddingBottom: 24,
+    width: "100%",
+    maxWidth: responsive.contentMaxWidth,
+    alignSelf: "center",
   },
   loadingContainer: {
     flexDirection: "row",

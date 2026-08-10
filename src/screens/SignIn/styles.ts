@@ -15,6 +15,9 @@ export default StyleSheet.create({
   contentContainer: {
     flexGrow: 1,
     paddingBottom: responsive.containerPadding,
+    width: "100%",
+    maxWidth: responsive.contentMaxWidth,
+    alignSelf: "center",
   },
   headerContainer: {
     alignItems: "center",

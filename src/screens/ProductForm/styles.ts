@@ -8,6 +8,12 @@ export const styles = StyleSheet.create({
     flex: 1,
     width: "100%",
   },
+  contentContainer: {
+    width: "100%",
+    maxWidth: responsive.contentMaxWidth,
+    alignSelf: "center",
+    paddingBottom: 24,
+  },
   label: {
     fontSize: Typography.body,
     fontFamily: "OpenSans-SemiBold",

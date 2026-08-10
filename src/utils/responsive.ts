@@ -14,7 +14,13 @@ export const vh = (percentage: number): number => {
 };
 
 /**
- * Responsive dimensions based on screen size
+ * True when the device has a tablet-sized (sw600dp+) screen
+ */
+export const isTablet = Math.min(screenWidth, screenHeight) >= 600;
+
+/**
+ * Responsive dimensions based on screen size.
+ * Viewport-derived values are capped so they don't balloon on tablets.
  */
 export const responsive = {
   // Viewport units
@@ -22,18 +28,21 @@ export const responsive = {
   vh: (percentage: number) => vh(percentage),
 
   // Touch targets (Apple HIG & Material Design)
-  minTouchTarget: Math.max(44, vw(12)),
+  minTouchTarget: Math.min(Math.max(44, vw(12)), 56),
 
   // Spacing
-  containerPadding: vw(3.5),
-  containerMargin: vw(2.5),
+  containerPadding: Math.min(vw(3.5), 16),
+  containerMargin: Math.min(vw(2.5), 12),
 
   // Component sizes
-  buttonHeight: Math.max(48, vh(6)),
+  buttonHeight: Math.min(Math.max(48, vh(6)), 56),
   modalWidth: Math.min(vw(90), 400),
 
+  // Max width for screen content on large screens (forms, lists, settings)
+  contentMaxWidth: 640,
+
   // Avatar sizes
-  avatarSmall: vw(12),
-  avatarMedium: vw(20),
+  avatarSmall: Math.min(vw(12), 56),
+  avatarMedium: Math.min(vw(20), 96),
   avatarLarge: Math.min(vw(40), 150),
 } as const;

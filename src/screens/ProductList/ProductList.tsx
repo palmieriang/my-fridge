@@ -303,50 +303,55 @@ const ProductList = ({ navigation, route }: ProductListProps) => {
       onLayout={() => setLayoutRevision((revision) => revision + 1)}
     >
       <OfflineIndicator />
-      <View style={styles.controlsContainer}>
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder={t("search")}
-        />
-        <SortButton sortOrder={sortOrder} onSortToggle={handleSortToggle} />
-      </View>
-
-      {sortOrder !== "default" && (
-        <View
-          style={[styles.sortIndicator, { backgroundColor: theme.foreground }]}
-          accessibilityLiveRegion="polite"
-        >
-          <Text style={[styles.sortIndicatorText, { color: theme.text }]}>
-            {sortOrder === "earlier" && t("sortEarlier")}
-            {sortOrder === "later" && t("sortLater")}
-          </Text>
+      <View style={styles.content}>
+        <View style={styles.controlsContainer}>
+          <SearchBar
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder={t("search")}
+          />
+          <SortButton sortOrder={sortOrder} onSortToggle={handleSortToggle} />
         </View>
-      )}
 
-      {sortedList.length > 0 ? (
-        <FlatList
-          key="list"
-          style={[styles.list, { backgroundColor: theme.background }]}
-          data={sortedList}
-          renderItem={({ item, index }) => (
-            <ProductCard
-              product={item}
-              ref={(el) => {
-                swipeableRefs.current[index] = el;
-              }}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          accessibilityLabel={place === FRIDGE ? t("fridge") : t("freezer")}
-        />
-      ) : filteredList.length > 0 ? (
-        <Text style={[styles.noResultsText, { color: theme.text }]}>
-          {t("noSearchResults")}
-        </Text>
-      ) : (
-        <Text style={[styles.text, { color: theme.text }]}>{t("error")}</Text>
-      )}
+        {sortOrder !== "default" && (
+          <View
+            style={[
+              styles.sortIndicator,
+              { backgroundColor: theme.foreground },
+            ]}
+            accessibilityLiveRegion="polite"
+          >
+            <Text style={[styles.sortIndicatorText, { color: theme.text }]}>
+              {sortOrder === "earlier" && t("sortEarlier")}
+              {sortOrder === "later" && t("sortLater")}
+            </Text>
+          </View>
+        )}
+
+        {sortedList.length > 0 ? (
+          <FlatList
+            key="list"
+            style={[styles.list, { backgroundColor: theme.background }]}
+            data={sortedList}
+            renderItem={({ item, index }) => (
+              <ProductCard
+                product={item}
+                ref={(el) => {
+                  swipeableRefs.current[index] = el;
+                }}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            accessibilityLabel={place === FRIDGE ? t("fridge") : t("freezer")}
+          />
+        ) : filteredList.length > 0 ? (
+          <Text style={[styles.noResultsText, { color: theme.text }]}>
+            {t("noSearchResults")}
+          </Text>
+        ) : (
+          <Text style={[styles.text, { color: theme.text }]}>{t("error")}</Text>
+        )}
+      </View>
 
       <FloatingButton
         ref={addButtonRef}

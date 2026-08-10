@@ -5,6 +5,12 @@ import { Typography } from "../../typography/responsive";
 import { responsive } from "../../utils/responsive";
 
 export default StyleSheet.create({
+  content: {
+    flex: 1,
+    width: "100%",
+    maxWidth: responsive.contentMaxWidth,
+    alignSelf: "center",
+  },
   list: {
     flex: 1,
     paddingTop: 4,

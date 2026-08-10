@@ -4518,6 +4518,11 @@ expo-modules-core@3.0.30:
   dependencies:
     invariant "^2.2.4"
 
+expo-screen-orientation@~9.0.9:
+  version "9.0.9"
+  resolved "https://registry.npmjs.org/expo-screen-orientation/-/expo-screen-orientation-9.0.9.tgz#74ed82582006f72106b7165512cdfc01367433ba"
+  integrity sha512-UTU745XoqBvQJkZ820GTfMuOxlkppYqaeQ+x0wdu44cyrZiZugqe+egFF2+zC+SaxgAltU5EuO8GIj9xSF+YMw==
+
 expo-server@^1.0.7:
   version "1.0.7"
   resolved "https://registry.npmjs.org/expo-server/-/expo-server-1.0.7.tgz"

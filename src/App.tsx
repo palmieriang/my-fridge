@@ -1,16 +1,27 @@
 import "react-native-gesture-handler";
 import Loading from "@components/Loading/Loading";
 import { useFonts } from "expo-font";
+import * as ScreenOrientation from "expo-screen-orientation";
 import { useEffect, useState } from "react";
 
 import AppContainer from "./AppContainer";
 import { setupNotificationListeners } from "../api/api";
 import { initializeFirebaseServices } from "./firebase/config";
 import { customFonts } from "./typography/typography";
+import { isTablet } from "./utils/responsive";
 
 export default function App() {
   const [fontsLoaded] = useFonts(customFonts);
   const [firebaseReady, setFirebaseReady] = useState(false);
+
+  useEffect(() => {
+    // Tablets can rotate freely; phones stay locked to portrait
+    if (!isTablet) {
+      ScreenOrientation.lockAsync(
+        ScreenOrientation.OrientationLock.PORTRAIT_UP,
+      ).catch(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     let notificationUnsubscribe: (() => void) | null = null;
