@@ -48,6 +48,7 @@ import {
   getShoppingItemsRef,
   getStorageService,
 } from "../src/firebase/config";
+import { navigateToExpiringProducts } from "../src/navigation/navigationRef";
 import type {
   NewProduct,
   Product,
@@ -200,6 +201,8 @@ export function persistentLogin(
         callbackData(userData);
         callback({ type: ActionTypes.RESTORE_TOKEN, token: idToken, user });
         await getProfileImageFromFirebase(user.uid, callback);
+        // Catch tokens that rotated while the app was closed (onTokenRefresh won't fire)
+        syncFCMToken(user.uid);
       } catch (error: any) {
         console.log("Restoring token failed", error);
         Alert.alert("Authentication Failed", error.message);
@@ -593,7 +596,40 @@ export async function disableNotifications(
   }
 }
 
-export function setupNotificationListeners(navigation?: any): () => void {
+// Keeps the stored FCM token in sync with the device's current token so the
+// daily expiry Cloud Function keeps delivering to opted-in users.
+export async function syncFCMToken(userId?: string): Promise<void> {
+  try {
+    const uid = userId ?? getAuthService().currentUser?.uid;
+    if (!uid) {
+      return;
+    }
+
+    const snapshot = await getDoc(doc(getUsersRef(), uid));
+    if (!snapshot.exists()) {
+      return;
+    }
+
+    const userData = snapshot.data() as UserData;
+    // Only maintain a token for users who opted into notifications
+    if (!userData?.notificationsEnabled) {
+      return;
+    }
+
+    const fcmToken = await getToken(getMessaging());
+    if (fcmToken && fcmToken !== userData.fcmToken) {
+      await updateDoc(doc(getUsersRef(), uid), { fcmToken });
+      console.log("✅ FCM token synced for user:", uid);
+    }
+  } catch (error: any) {
+    // Silently ignore permission errors during logout transition
+    if (error?.code !== "firestore/permission-denied") {
+      console.error("❌ Error syncing FCM token:", error);
+    }
+  }
+}
+
+export function setupNotificationListeners(): () => void {
   const messagingInstance = getMessaging();
 
   // Handle foreground notifications
@@ -610,12 +646,7 @@ export function setupNotificationListeners(navigation?: any): () => void {
             { text: "Dismiss", style: "cancel" },
             {
               text: "View Products",
-              onPress: () => {
-                // Navigate to products screen
-                if (navigation) {
-                  navigation.navigate("ProductList");
-                }
-              },
+              onPress: () => navigateToExpiringProducts(),
             },
           ],
         );
@@ -630,21 +661,16 @@ export function setupNotificationListeners(navigation?: any): () => void {
       console.log("📱 Notification opened app:", remoteMessage);
 
       if (remoteMessage.data?.type === "expiring_products") {
-        if (navigation) {
-          navigation.navigate("ProductList");
-        }
+        navigateToExpiringProducts();
       }
     },
   );
 
   // Handle token refresh
-  const unsubscribeOnTokenRefresh = onTokenRefresh(
-    messagingInstance,
-    async (fcmToken) => {
-      console.log("🔄 FCM token refreshed");
-      // You'll need to pass userId and getUsersRef to update the token
-    },
-  );
+  const unsubscribeOnTokenRefresh = onTokenRefresh(messagingInstance, () => {
+    console.log("🔄 FCM token refreshed");
+    syncFCMToken();
+  });
 
   // Return cleanup function
   return () => {
@@ -652,21 +678,6 @@ export function setupNotificationListeners(navigation?: any): () => void {
     unsubscribeOnNotificationOpenedApp();
     unsubscribeOnTokenRefresh();
   };
-}
-
-export async function updateFCMToken(
-  userId: string,
-  newToken: string,
-): Promise<void> {
-  try {
-    await updateDoc(doc(getUsersRef(), userId), {
-      fcmToken: newToken,
-    });
-
-    console.log("✅ FCM token updated for user:", userId);
-  } catch (error: any) {
-    console.error("❌ Error updating FCM token:", error);
-  }
 }
 
 export async function markNotificationOnboardingCompleted(

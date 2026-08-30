@@ -11,6 +11,7 @@ import NotificationOnboardingModal from "./components/NotificationOnboardingModa
 import { COLORS } from "./constants/colors";
 import TabNavigator from "./navigation/TabNavigator";
 import { SignInStackScreen } from "./navigation/navigation";
+import { navigationRef } from "./navigation/navigationRef";
 import {
   AppTutorialProvider,
   AuthProvider,
@@ -81,7 +82,7 @@ const RootNavigator = () => {
         backgroundColor={visibleToken ? theme.primary : COLORS.WHITE}
         translucent={false}
       />
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         {visibleToken ? <TabNavigator /> : <SignInStackScreen />}
       </NavigationContainer>
       {showDoor && <FridgeDoorTransition onDone={() => setShowDoor(false)} />}

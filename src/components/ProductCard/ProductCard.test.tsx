@@ -5,6 +5,10 @@ jest.mock("@react-navigation/native", () => ({
   useNavigation: () => ({
     navigate: jest.fn(),
   }),
+  createNavigationContainerRef: () => ({
+    isReady: jest.fn(() => false),
+    navigate: jest.fn(),
+  }),
 }));
 
 describe("ProductCard", () => {
