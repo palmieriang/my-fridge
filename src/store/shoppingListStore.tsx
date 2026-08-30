@@ -11,6 +11,8 @@ import {
   deleteShoppingItem,
   clearCheckedShoppingItems,
 } from "../../api/api";
+import { SHOPPING_ITEM_NAME_MAX_LENGTH } from "../constants";
+import { clampName } from "../utils/validation";
 
 interface ShoppingListProviderProps {
   children: ReactNode;
@@ -45,8 +47,10 @@ const ShoppingListProvider = ({ children }: ShoppingListProviderProps) => {
     () => ({
       handleAddItem: async (name: string) => {
         if (!userID) return;
+        const cleaned = clampName(name, SHOPPING_ITEM_NAME_MAX_LENGTH);
+        if (!cleaned) return;
         try {
-          await saveShoppingItem({ name, checked: false }, userID);
+          await saveShoppingItem({ name: cleaned, checked: false }, userID);
         } catch (error) {
           console.log("Error adding shopping item:", error);
         }
@@ -61,8 +65,10 @@ const ShoppingListProvider = ({ children }: ShoppingListProviderProps) => {
       },
       handleUpdateItemName: async (id: string, name: string) => {
         if (!userID) return;
+        const cleaned = clampName(name, SHOPPING_ITEM_NAME_MAX_LENGTH);
+        if (!cleaned) return;
         try {
-          await updateShoppingItemName(id, name, userID);
+          await updateShoppingItemName(id, cleaned, userID);
         } catch (error) {
           console.log("Error updating shopping item name:", error);
         }

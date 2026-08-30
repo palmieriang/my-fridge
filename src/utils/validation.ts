@@ -137,6 +137,11 @@ export const validateMinLength = (
   return { isValid: true, error: "" };
 };
 
+// Trims surrounding whitespace and caps length to mirror the Firestore rules,
+// so item names can never trigger a rejected write.
+export const clampName = (value: string, maxLength: number): string =>
+  value.trim().slice(0, maxLength);
+
 export interface PasswordStrength {
   strength: number;
   text: string;

@@ -14,6 +14,7 @@ import {
 import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
+import { SHOPPING_ITEM_NAME_MAX_LENGTH } from "../../constants";
 import { useLocale, useShoppingList, useTheme } from "../../store";
 import { ShoppingItem } from "../../store/types";
 
@@ -82,6 +83,7 @@ const ShoppingList = () => {
               returnKeyType="done"
               onSubmitEditing={handleAdd}
               autoCapitalize="sentences"
+              maxLength={SHOPPING_ITEM_NAME_MAX_LENGTH}
               accessibilityLabel={t("shoppingListPlaceholder")}
             />
             <TouchableOpacity

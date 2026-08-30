@@ -23,6 +23,7 @@ import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { styles } from "./styles";
 import { useProductForm } from "./useProductForm";
 import { lookupProductByBarcode } from "../../../api/openFoodFacts";
+import { PRODUCT_NAME_MAX_LENGTH } from "../../constants";
 import {
   FormScreenNavigationProp,
   FormScreenRouteProp,
@@ -173,6 +174,7 @@ const ProductForm = ({ navigation, route }: ProductFormProps) => {
           placeholderText={t("productPlaceholder")}
           Icon={ShoppingBasketIcon}
           autoCapitalize="sentences"
+          maxLength={PRODUCT_NAME_MAX_LENGTH}
           underlineColorAndroid="transparent"
           error={errors.name}
           showError={!!errors.name}

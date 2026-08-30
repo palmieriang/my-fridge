@@ -6,6 +6,7 @@ import Swipeable, {
 } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 import styles from "./styles";
+import { SHOPPING_ITEM_NAME_MAX_LENGTH } from "../../constants";
 import { useLocale, useTheme } from "../../store";
 import { ShoppingItem } from "../../store/types";
 
@@ -101,6 +102,7 @@ const ShoppingListItem = forwardRef<SwipeableMethods, ShoppingListItemProps>(
               onBlur={onSaveEdit}
               onSubmitEditing={onSaveEdit}
               autoFocus
+              maxLength={SHOPPING_ITEM_NAME_MAX_LENGTH}
               returnKeyType="done"
               accessibilityLabel={t("modify")}
             />
