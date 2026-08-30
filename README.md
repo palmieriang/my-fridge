@@ -6,12 +6,19 @@ A React Native (Expo Bare Workflow) app to manage food inventory in your fridge 
 
 ## ✨ Features
 
-- 🔐 Firebase Authentication (email/password)
-- 🧃 Track fridge/freezer contents
-- 🗓️ Monitor expiry dates
+- 🔐 Firebase Authentication (email/password + Google Sign-In)
+- 🧃 Track fridge & freezer contents with quantities
+- 🗓️ Monitor expiry dates, with an expired-items badge
+- 📷 Barcode scanning with automatic product lookup (Open Food Facts)
+- 🔔 Push notifications for products expiring soon (opt-in)
+- 🛒 Shopping list with check-off and swipe-to-delete
+- 🎨 Multiple color themes
 - 🗂️ Upload profile images to Firebase Storage
-- 🌍 Multi-language support: 🇬🇧 English, 🇮🇹 Italian, 🇫🇷 French
+- 🌍 Multi-language support: 🇬🇧 English, 🇮🇹 Italian, 🇫🇷 French, 🇪🇸 Spanish, 🇵🇹 Portuguese, 🇩🇪 German
+- ♿ Accessibility support (screen readers, live regions, labelled controls)
+- 🌐 Offline detection
 - 🔁 Local development powered by Firebase Emulator Suite
+- ☁️ Firebase Cloud Functions for user lifecycle & scheduled expiry checks
 
 ---
 
@@ -200,10 +207,34 @@ For full instructions: https://docs.expo.dev/build/setup/
   * Firestore: 8080
   * Storage: 9199
 
+## 🧪 Testing
+
+Unit and component tests run with Jest and React Native Testing Library:
+
+```
+yarn test            # run once
+yarn test:watch      # watch mode
+yarn test:coverage   # with coverage report
+```
+
+Run the full quality gate (type-check, lint, format check, tests) before pushing:
+
+```
+yarn validate
+```
+
+End-to-end flows use [Maestro](https://maestro.mobile.dev/):
+
+```
+yarn test:e2e
+```
+
 ## ✅ Status
 
 * ✅ Firebase emulator support
 
 * ✅ EAS builds (Android tested)
 
-* 🔜 Tests
+* ✅ Unit & component tests (Jest + React Native Testing Library)
+
+* ✅ Push notifications for expiring products (opt-in)
